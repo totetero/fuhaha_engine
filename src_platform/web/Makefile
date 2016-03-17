@@ -1,7 +1,7 @@
 #EMCC = emcc -O3
 EMCC = emcc
 
-PLATSRCDIR = ../../src_client/web
+PLATSRCDIR = ../../src_client/platform_web
 CORESRCDIR = ../../src_client/core
 
 OUTDIR = obj
