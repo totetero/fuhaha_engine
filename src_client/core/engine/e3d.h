@@ -1,5 +1,4 @@
-#ifndef __e3d_h_
-#define __e3d_h_
+#pragma once
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -73,9 +72,9 @@ e3dVBOId e3dCreateVBO(uint32_t size, double *vertices);
 e3dIBOId e3dCreateIBO(uint32_t size, uint32_t *indexes);
 e3dTexId e3dCreateTex(char *src, enum e3dTexType type);
 
-uint32_t e3dGetGLIdVBO(e3dVBOId e3dId);
-uint32_t e3dGetGLIdIBO(e3dIBOId e3dId);
-uint32_t e3dGetGLIdTex(e3dTexId e3dId);
+GLint e3dGetGLIdVBO(e3dVBOId e3dId);
+GLint e3dGetGLIdIBO(e3dIBOId e3dId);
+GLint e3dGetGLIdTex(e3dTexId e3dId);
 
 void e3dDisposeVBO(e3dVBOId e3dId);
 void e3dDisposeIBO(e3dIBOId e3dId);
@@ -92,7 +91,7 @@ void e3dClearStencil();
 
 void e3dSetDrawMode(enum e3dModeDraw mode);
 void e3dSetStencilMode(enum e3dModeStencil mode);
-void e3dIgnoreDepthMode(boolean isIgnore);
+void e3dIgnoreDepthMode(bool isIgnore);
 
 void e3dBindTexture(e3dTexId e3dId);
 void e3dBindVertVBO(e3dVBOId e3dId);
@@ -156,6 +155,4 @@ void e3dBufferClean();
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
-
-#endif
 
