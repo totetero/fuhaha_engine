@@ -59,45 +59,53 @@ struct e3dVector3{union{struct{double x, y, z;}; double v[3];};};
 struct e3dVector4{union{struct{double x, y, z, w;}; struct{double r, g, b, a;}; double v[4];};};
 struct e3dMatrix44{union{struct{double m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33;}; double m[16];};};
 
+// 3Dオブジェクト識別子
+typedef uint32_t e3dObjectVBOId;
+typedef uint32_t e3dObjectIBOId;
+typedef uint32_t e3dObjectTexId;
+
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // 3Dオブジェクト
 
-typedef uint32_t e3dVBOId;
-typedef uint32_t e3dIBOId;
-typedef uint32_t e3dTexId;
+e3dObjectVBOId e3dObjectVBOCreate(uint32_t size, double *vertices);
+e3dObjectIBOId e3dObjectIBOCreate(uint32_t size, uint16_t *indexes);
+e3dObjectTexId e3dObjectTexCreate(char *src, enum e3dTexType type);
 
-e3dVBOId e3dCreateVBO(uint32_t size, double *vertices);
-e3dIBOId e3dCreateIBO(uint32_t size, uint32_t *indexes);
-e3dTexId e3dCreateTex(char *src, enum e3dTexType type);
+bool e3dObjectVBOGetGLId(e3dObjectVBOId e3dId, GLuint *glId);
+bool e3dObjectIBOGetGLId(e3dObjectIBOId e3dId, GLuint *glId);
+bool e3dObjectTexGetGLId(e3dObjectTexId e3dId, GLuint *glId, enum e3dTexType *type);
 
-GLint e3dGetGLIdVBO(e3dVBOId e3dId);
-GLint e3dGetGLIdIBO(e3dIBOId e3dId);
-GLint e3dGetGLIdTex(e3dTexId e3dId);
+void e3dObjectVBODispose(e3dObjectVBOId e3dId);
+void e3dObjectIBODispose(e3dObjectIBOId e3dId);
+void e3dObjectTexDispose(e3dObjectTexId e3dId);
 
-void e3dDisposeVBO(e3dVBOId e3dId);
-void e3dDisposeIBO(e3dIBOId e3dId);
-void e3dDisposeTex(e3dTexId e3dId);
+void e3dObjectReload();
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // 3Dエンジン
 
+void e3dEngineInit();
+
 void e3dClearAll();
 void e3dClearDepth();
 void e3dClearStencil();
+void e3dMemoryResetVBO();
+void e3dMemoryResetIBO();
+void e3dMemoryResetTex();
 
 void e3dSetDrawMode(enum e3dModeDraw mode);
 void e3dSetStencilMode(enum e3dModeStencil mode);
 void e3dIgnoreDepthMode(bool isIgnore);
 
-void e3dBindTexture(e3dTexId e3dId);
-void e3dBindVertVBO(e3dVBOId e3dId);
-void e3dBindClorVBO(e3dVBOId e3dId);
-void e3dBindTexcVBO(e3dVBOId e3dId);
-void e3dBindFaceIBO(e3dIBOId e3dId);
+void e3dBindTexture(e3dObjectTexId e3dId);
+void e3dBindVertVBO(e3dObjectVBOId e3dId);
+void e3dBindClorVBO(e3dObjectVBOId e3dId);
+void e3dBindTexcVBO(e3dObjectVBOId e3dId);
+void e3dBindFaceIBO(e3dObjectIBOId e3dId);
 
 void e3dSetMatrix(struct e3dMatrix44 *matrix);
 void e3dSetColor(double r, double g, double b, double a);
@@ -132,18 +140,18 @@ void vec3MultiplyMat4(struct e3dVector3 *dst, struct e3dVector3 *src, struct e3d
 
 // バッファ作成管理
 void e3dBufferBegin();
-void e3dBufferEnd(e3dVBOId *e3dIdVert, e3dVBOId *e3dIdClor, e3dVBOId *e3dIdTexc, e3dIBOId *e3dIdFace);
+void e3dBufferEnd(e3dObjectVBOId *e3dIdVert, e3dObjectVBOId *e3dIdClor, e3dObjectVBOId *e3dIdTexc, e3dObjectIBOId *e3dIdFace);
 
 // バッファ配列に要素追加
 void e3dBufferPushVert(double x, double y, double z);
 void e3dBufferPushClor(double r, double g, double b);
 void e3dBufferPushTexc(double u, double v);
-void e3dBufferPushFace(uint32_t index, uint32_t t0, uint32_t t1, uint32_t t2);
+void e3dBufferPushFace(uint16_t index, uint16_t t0, uint16_t t1, uint16_t t2);
 
 // バッファ配列に四角形の要素追加
 void e3dBufferPushTetraVert(double x, double y, double w, double h);
 void e3dBufferPushTetraTexc(uint16_t imgw, uint16_t imgh, double u, double v, double w, double h);
-void e3dBufferPushTetraFace(uint32_t index);
+void e3dBufferPushTetraFace(uint16_t index);
 
 // バッファ配列内の位置獲得
 uint32_t e3dBufferVretIndexGet();
