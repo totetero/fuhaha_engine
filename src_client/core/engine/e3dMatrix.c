@@ -117,10 +117,8 @@ void mat4Scale(struct e3dMatrix44 *mat, double x, double y, double z){
 
 // x軸回転
 void mat4RotateX(struct e3dMatrix44 *mat, double rad){
-	float c = 1.0;
-	float s = 0.0;
-	//double c = utilMathCos(rad);
-	//double s = utilMathSin(rad);
+	double c = mathCos(rad);
+	double s = mathSin(rad);
 	double m10 = mat->m10;
 	double m11 = mat->m11;
 	double m12 = mat->m12;
@@ -141,10 +139,8 @@ void mat4RotateX(struct e3dMatrix44 *mat, double rad){
 
 // y軸回転
 void mat4RotateY(struct e3dMatrix44 *mat, double rad){
-	float c = 1.0;
-	float s = 0.0;
-	//double c = utilMathCos(rad);
-	//double s = utilMathSin(rad);
+	double c = mathCos(rad);
+	double s = mathSin(rad);
 	double m00 = mat->m00;
 	double m01 = mat->m01;
 	double m02 = mat->m02;
@@ -165,10 +161,8 @@ void mat4RotateY(struct e3dMatrix44 *mat, double rad){
 
 // z軸回転
 void mat4RotateZ(struct e3dMatrix44 *mat, double rad){
-	float c = 1.0;
-	float s = 0.0;
-	//double c = utilMathCos(rad);
-	//double s = utilMathSin(rad);
+	double c = mathCos(rad);
+	double s = mathSin(rad);
 	double m00 = mat->m00;
 	double m01 = mat->m01;
 	double m02 = mat->m02;

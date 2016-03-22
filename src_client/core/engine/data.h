@@ -3,17 +3,10 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
+// base64処理
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stddef.h>
-#include <stdbool.h>
-#include "platform.h"
-
-#include "math.h"
-#include "data.h"
-#include "e3d.h"
+char *dataBase64encode(uint8_t *data, uint32_t length);
+uint8_t *dataBase64decode(char *data, uint32_t *length);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
