@@ -128,8 +128,8 @@ e3dObjectIBOId e3dObjectIBOCreate(uint32_t size, uint16_t *indexes){
 static struct e3dObjectTexData *e3dObjectTexDataCreate(char *src){
 	// 重複確認
 	struct e3dObjectTexData *temp = e3dObjectTexDataList;
-	while(temp->next != NULL){
-		if(!strncmp(src, temp->src, 256)){return temp;}
+	while(temp != NULL){
+		if(strcmp(temp->src, src) == 0){return temp;}
 		temp = temp->next;
 	}
 	// 重複がなければ新規作成
@@ -174,13 +174,13 @@ e3dObjectTexId e3dObjectTexCreate(char *src, enum e3dTexType type){
 // VBOID取得
 bool e3dObjectVBOGetGLId(e3dObjectVBOId e3dId, GLuint *glId){
 	if(glId == NULL){return false;}
-	struct e3dObjectVBO *obj = e3dObjectVBOList;
-	while(obj != NULL){
-		if(obj->e3dId == e3dId){
-			*glId = obj->glId;
+	struct e3dObjectVBO *temp = e3dObjectVBOList;
+	while(temp != NULL){
+		if(temp->e3dId == e3dId){
+			*glId = temp->glId;
 			return true;
 		}
-		obj = obj->next;
+		temp = temp->next;
 	}
 	return false;
 }
@@ -188,13 +188,13 @@ bool e3dObjectVBOGetGLId(e3dObjectVBOId e3dId, GLuint *glId){
 // IBOID取得
 bool e3dObjectIBOGetGLId(e3dObjectIBOId e3dId, GLuint *glId){
 	if(glId == NULL){return false;}
-	struct e3dObjectIBO *obj = e3dObjectIBOList;
-	while(obj != NULL){
-		if(obj->e3dId == e3dId){
-			*glId = obj->glId;
+	struct e3dObjectIBO *temp = e3dObjectIBOList;
+	while(temp != NULL){
+		if(temp->e3dId == e3dId){
+			*glId = temp->glId;
 			return true;
 		}
-		obj = obj->next;
+		temp = temp->next;
 	}
 	return false;
 }
@@ -202,15 +202,15 @@ bool e3dObjectIBOGetGLId(e3dObjectIBOId e3dId, GLuint *glId){
 // テクスチャID取得
 bool e3dObjectTexGetGLId(e3dObjectTexId e3dId, GLuint *glId, enum e3dTexType *type){
 	if(glId == NULL && type == NULL){return false;}
-	struct e3dObjectTex *obj = e3dObjectTexList;
-	while(obj != NULL){
-		if(obj->e3dId == e3dId){
-			if(obj->data == NULL){return false;}
-			if(glId != NULL){*glId = obj->data->glId;}
-			if(type != NULL){*type = obj->type;}
+	struct e3dObjectTex *temp = e3dObjectTexList;
+	while(temp != NULL){
+		if(temp->e3dId == e3dId){
+			if(temp->data == NULL){return false;}
+			if(glId != NULL){*glId = temp->data->glId;}
+			if(type != NULL){*type = temp->type;}
 			return true;
 		}
-		obj = obj->next;
+		temp = temp->next;
 	}
 	return false;
 }
@@ -219,44 +219,44 @@ bool e3dObjectTexGetGLId(e3dObjectTexId e3dId, GLuint *glId, enum e3dTexType *ty
 
 // 3DオブジェクトVBO除去
 void e3dObjectVBODispose(e3dObjectVBOId e3dId){
-	struct e3dObjectVBO *prevObj = NULL;
-	struct e3dObjectVBO *tempObj = e3dObjectVBOList;
-	while(tempObj != NULL){
-		if(tempObj->e3dId == e3dId){
+	struct e3dObjectVBO *prev = NULL;
+	struct e3dObjectVBO *temp = e3dObjectVBOList;
+	while(temp != NULL){
+		if(temp->e3dId == e3dId){
 			// リストから要素を外す
-			struct e3dObjectVBO *disposeObj = tempObj;
-			tempObj = tempObj->next;
-			if(prevObj == NULL){e3dObjectVBOList = tempObj;}
-			else{prevObj->next = tempObj;}
+			struct e3dObjectVBO *dispose = temp;
+			temp = temp->next;
+			if(prev == NULL){e3dObjectVBOList = temp;}
+			else{prev->next = temp;}
 			// 要素の除去
-			glDeleteBuffers(1, &disposeObj->glId);
-			free(disposeObj->vertices);
-			free(disposeObj);
+			glDeleteBuffers(1, &dispose->glId);
+			free(dispose->vertices);
+			free(dispose);
 		}else{
-			prevObj = tempObj;
-			tempObj = tempObj->next;
+			prev = temp;
+			temp = temp->next;
 		}
 	}
 }
 
 // 3DオブジェクトIBO除去
 void e3dObjectIBODispose(e3dObjectIBOId e3dId){
-	struct e3dObjectIBO *prevObj = NULL;
-	struct e3dObjectIBO *tempObj = e3dObjectIBOList;
-	while(tempObj != NULL){
-		if(tempObj->e3dId == e3dId){
+	struct e3dObjectIBO *prev = NULL;
+	struct e3dObjectIBO *temp = e3dObjectIBOList;
+	while(temp != NULL){
+		if(temp->e3dId == e3dId){
 			// リストから要素を外す
-			struct e3dObjectIBO *disposeObj = tempObj;
-			tempObj = tempObj->next;
-			if(prevObj == NULL){e3dObjectIBOList = tempObj;}
-			else{prevObj->next = tempObj;}
+			struct e3dObjectIBO *dispose = temp;
+			temp = temp->next;
+			if(prev == NULL){e3dObjectIBOList = temp;}
+			else{prev->next = temp;}
 			// 要素の除去
-			glDeleteBuffers(1, &disposeObj->glId);
-			free(disposeObj->indexes);
-			free(disposeObj);
+			glDeleteBuffers(1, &dispose->glId);
+			free(dispose->indexes);
+			free(dispose);
 		}else{
-			prevObj = tempObj;
-			tempObj = tempObj->next;
+			prev = temp;
+			temp = temp->next;
 		}
 	}
 }
@@ -264,24 +264,23 @@ void e3dObjectIBODispose(e3dObjectIBOId e3dId){
 // テクスチャ情報除去
 static void e3dObjectTexDataDispose(struct e3dObjectTexData *this){
 	// 使用中確認
-	struct e3dObjectTex *obj = e3dObjectTexList;
-	while(obj != NULL){
-		if(obj->data == this){return;}
-		obj = obj->next;
+	struct e3dObjectTex *tempTex = e3dObjectTexList;
+	while(tempTex != NULL){
+		if(tempTex->data == this){return;}
+		tempTex = tempTex->next;
 	}
 	// 誰も使っていなければ除去
-	struct e3dObjectTexData *prevObj = NULL;
-	struct e3dObjectTexData *tempObj = e3dObjectTexDataList;
-	while(tempObj != NULL){
-		if(tempObj == this){
+	struct e3dObjectTexData *prevData = NULL;
+	struct e3dObjectTexData *tempData = e3dObjectTexDataList;
+	while(tempData != NULL){
+		if(tempData == this){
 			// リストから要素を外す
-			tempObj = tempObj->next;
-			if(prevObj == NULL){e3dObjectTexDataList = tempObj;}
-			else{prevObj->next = tempObj;}
-			break;
+			tempData = tempData->next;
+			if(prevData == NULL){e3dObjectTexDataList = tempData;}
+			else{prevData->next = tempData;}
 		}else{
-			prevObj = tempObj;
-			tempObj = tempObj->next;
+			prevData = tempData;
+			tempData = tempData->next;
 		}
 	}
 	// 除去
@@ -292,21 +291,21 @@ static void e3dObjectTexDataDispose(struct e3dObjectTexData *this){
 
 // 3DオブジェクトTex除去
 void e3dObjectTexDispose(e3dObjectTexId e3dId){
-	struct e3dObjectTex *prevObj = NULL;
-	struct e3dObjectTex *tempObj = e3dObjectTexList;
-	while(tempObj != NULL){
-		if(tempObj->e3dId == e3dId){
+	struct e3dObjectTex *prev = NULL;
+	struct e3dObjectTex *temp = e3dObjectTexList;
+	while(temp != NULL){
+		if(temp->e3dId == e3dId){
 			// リストから要素を外す
-			struct e3dObjectTex *disposeObj = tempObj;
-			tempObj = tempObj->next;
-			if(prevObj == NULL){e3dObjectTexList = tempObj;}
-			else{prevObj->next = tempObj;}
+			struct e3dObjectTex *dispose = temp;
+			temp = temp->next;
+			if(prev == NULL){e3dObjectTexList = temp;}
+			else{prev->next = temp;}
 			// 要素の除去
-			e3dObjectTexDataDispose(disposeObj->data);
-			free(disposeObj);
+			e3dObjectTexDataDispose(dispose->data);
+			free(dispose);
 		}else{
-			prevObj = tempObj;
-			tempObj = tempObj->next;
+			prev = temp;
+			temp = temp->next;
 		}
 	}
 }
@@ -317,12 +316,12 @@ void e3dObjectTexDispose(e3dObjectTexId e3dId){
 
 // 全データロード再読み込み
 void e3dObjectReload(){
-	struct e3dObjectVBO *objVBO = e3dObjectVBOList;
-	struct e3dObjectIBO *objIBO = e3dObjectIBOList;
-	struct e3dObjectTexData *objTex = e3dObjectTexDataList;
-	while(objVBO != NULL){e3dObjectVBOLoad(objVBO); objVBO = objVBO->next;}
-	while(objIBO != NULL){e3dObjectIBOLoad(objIBO); objIBO = objIBO->next;}
-	while(objTex != NULL){e3dObjectTexDataLoad(objTex); objTex = objTex->next;}
+	struct e3dObjectVBO *tempVBO = e3dObjectVBOList;
+	struct e3dObjectIBO *tempIBO = e3dObjectIBOList;
+	struct e3dObjectTexData *tempTex = e3dObjectTexDataList;
+	while(tempVBO != NULL){e3dObjectVBOLoad(tempVBO); tempVBO = tempVBO->next;}
+	while(tempIBO != NULL){e3dObjectIBOLoad(tempIBO); tempIBO = tempIBO->next;}
+	while(tempTex != NULL){e3dObjectTexDataLoad(tempTex); tempTex = tempTex->next;}
 }
 
 // ----------------------------------------------------------------
