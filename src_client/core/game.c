@@ -8,18 +8,21 @@
 // ----------------------------------------------------------------
 
 void gameSurfaceCreated(){
+	e3dGameInit();
 }
 
 void gameSurfaceChanged(int width, int height, double pixelRatio){
 }
 
 void gameSurfaceDrawFrame(){
+	e3dSampleCode();
 }
 
 void gameSurfacePause(){
 }
 
 void gameSurfaceDestroy(){
+	e3dGameFinal();
 }
 
 // ----------------------------------------------------------------

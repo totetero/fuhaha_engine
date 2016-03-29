@@ -6,6 +6,7 @@
 
 void e3dGameInit();
 void e3dGameFinal();
+void e3dSampleCode();
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -14,7 +15,7 @@ void e3dGameFinal();
 // テクスチャタイプ列挙型
 enum e3dTexType{
 	E3DTEXTYPE_LINEAR,
-	E3DTEXTYPE_NEAREST
+	E3DTEXTYPE_NEAREST,
 };
 
 // e3d描画モード列挙型
@@ -23,7 +24,7 @@ enum e3dModeDraw{
 	E3DMODEDRAW_2D,
 	E3DMODEDRAW_ALPHA_ADD,
 	E3DMODEDRAW_HKNW,
-	E3DMODEDRAW_SPHERE
+	E3DMODEDRAW_SPHERE,
 };
 
 // ステンシルマスクモード列挙型
