@@ -23,10 +23,10 @@ static void tempBuffSetLength(uint32_t length){
 }
 // 一時バッファに挿入
 static void tempBuffPutChar(char c){tempBuffSetLength(1); tempBuff[tempBuffIndex++] = c;}
-static void tempBuffPutInt(int64_t value){size_t n = 64; tempBuffSetLength(n); tempBuffIndex += snprintf(tempBuff + tempBuffIndex, n, "%lld", value);}
-static void tempBuffPutFloat(double value){size_t n = 64; tempBuffSetLength(n); tempBuffIndex += snprintf(tempBuff + tempBuffIndex, n, "%lf", value);}
-static void tempBuffPutString1(char *value){size_t n = strlen(value)     + 1; tempBuffSetLength(n); tempBuffIndex += snprintf(tempBuff + tempBuffIndex, n,     "%s", value);}
-static void tempBuffPutString2(char *value){size_t n = strlen(value) + 2 + 1; tempBuffSetLength(n); tempBuffIndex += snprintf(tempBuff + tempBuffIndex, n, "\"%s\"", value);}
+static void tempBuffPutInt(int64_t value){size_t n = 64; tempBuffSetLength((uint32_t)n); tempBuffIndex += snprintf(tempBuff + tempBuffIndex, n, "%lld", value);}
+static void tempBuffPutFloat(double value){size_t n = 64; tempBuffSetLength((uint32_t)n); tempBuffIndex += snprintf(tempBuff + tempBuffIndex, n, "%lf", value);}
+static void tempBuffPutString1(char *value){size_t n = strlen(value)     + 1; tempBuffSetLength((uint32_t)n); tempBuffIndex += snprintf(tempBuff + tempBuffIndex, n,     "%s", value);}
+static void tempBuffPutString2(char *value){size_t n = strlen(value) + 2 + 1; tempBuffSetLength((uint32_t)n); tempBuffIndex += snprintf(tempBuff + tempBuffIndex, n, "\"%s\"", value);}
 
 // ----------------------------------------------------------------
 

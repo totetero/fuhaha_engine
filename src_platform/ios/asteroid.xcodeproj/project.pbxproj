@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9C6BB2EF1CAB52E400A995F1 /* dataBase64.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C6BB2DD1CAB52E400A995F1 /* dataBase64.c */; };
+		9C6BB2F01CAB52E400A995F1 /* dataJson.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C6BB2DE1CAB52E400A995F1 /* dataJson.c */; };
+		9C6BB2F11CAB52E400A995F1 /* e3dBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C6BB2E01CAB52E400A995F1 /* e3dBuffer.c */; };
+		9C6BB2F21CAB52E400A995F1 /* e3dEngine.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C6BB2E11CAB52E400A995F1 /* e3dEngine.c */; };
+		9C6BB2F31CAB52E400A995F1 /* e3dMain.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C6BB2E21CAB52E400A995F1 /* e3dMain.c */; };
+		9C6BB2F41CAB52E400A995F1 /* e3dMatrix.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C6BB2E31CAB52E400A995F1 /* e3dMatrix.c */; };
+		9C6BB2F51CAB52E400A995F1 /* e3dObject.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C6BB2E41CAB52E400A995F1 /* e3dObject.c */; };
+		9C6BB2F61CAB52E400A995F1 /* mathFunction.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C6BB2E71CAB52E400A995F1 /* mathFunction.c */; };
+		9C6BB2F71CAB52E400A995F1 /* mathXorshift.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C6BB2E81CAB52E400A995F1 /* mathXorshift.c */; };
+		9C6BB2F81CAB52E400A995F1 /* game.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C6BB2EA1CAB52E400A995F1 /* game.c */; };
+		9C6BB2F91CAB52E400A995F1 /* FuhahaGLViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6BB2ED1CAB52E400A995F1 /* FuhahaGLViewController.swift */; };
 		9C8D023D1C99CCEB00F2CFFB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C8D023C1C99CCEB00F2CFFB /* AppDelegate.swift */; };
 		9C8D023F1C99CCEB00F2CFFB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C8D023E1C99CCEB00F2CFFB /* ViewController.swift */; };
 		9C8D02421C99CCEB00F2CFFB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C8D02401C99CCEB00F2CFFB /* Main.storyboard */; };
@@ -15,6 +26,25 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9C6BB2DC1CAB52E400A995F1 /* data.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = data.h; sourceTree = "<group>"; };
+		9C6BB2DD1CAB52E400A995F1 /* dataBase64.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = dataBase64.c; sourceTree = "<group>"; };
+		9C6BB2DE1CAB52E400A995F1 /* dataJson.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = dataJson.c; sourceTree = "<group>"; };
+		9C6BB2DF1CAB52E400A995F1 /* e3d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = e3d.h; sourceTree = "<group>"; };
+		9C6BB2E01CAB52E400A995F1 /* e3dBuffer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = e3dBuffer.c; sourceTree = "<group>"; };
+		9C6BB2E11CAB52E400A995F1 /* e3dEngine.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = e3dEngine.c; sourceTree = "<group>"; };
+		9C6BB2E21CAB52E400A995F1 /* e3dMain.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = e3dMain.c; sourceTree = "<group>"; };
+		9C6BB2E31CAB52E400A995F1 /* e3dMatrix.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = e3dMatrix.c; sourceTree = "<group>"; };
+		9C6BB2E41CAB52E400A995F1 /* e3dObject.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = e3dObject.c; sourceTree = "<group>"; };
+		9C6BB2E51CAB52E400A995F1 /* engine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = engine.h; sourceTree = "<group>"; };
+		9C6BB2E61CAB52E400A995F1 /* math.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = math.h; sourceTree = "<group>"; };
+		9C6BB2E71CAB52E400A995F1 /* mathFunction.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mathFunction.c; sourceTree = "<group>"; };
+		9C6BB2E81CAB52E400A995F1 /* mathXorshift.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mathXorshift.c; sourceTree = "<group>"; };
+		9C6BB2E91CAB52E400A995F1 /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = util.h; sourceTree = "<group>"; };
+		9C6BB2EA1CAB52E400A995F1 /* game.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = game.c; sourceTree = "<group>"; };
+		9C6BB2EB1CAB52E400A995F1 /* game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = game.h; sourceTree = "<group>"; };
+		9C6BB2ED1CAB52E400A995F1 /* FuhahaGLViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FuhahaGLViewController.swift; sourceTree = "<group>"; };
+		9C6BB2EE1CAB52E400A995F1 /* platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = platform.h; sourceTree = "<group>"; };
+		9C8AA3F41CAC8841009ED69B /* asteroid-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "asteroid-Bridging-Header.h"; sourceTree = "<group>"; };
 		9C8D02391C99CCEB00F2CFFB /* asteroid.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = asteroid.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C8D023C1C99CCEB00F2CFFB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9C8D023E1C99CCEB00F2CFFB /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -35,10 +65,54 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9C6BB2DA1CAB52E400A995F1 /* core */ = {
+			isa = PBXGroup;
+			children = (
+				9C6BB2DB1CAB52E400A995F1 /* engine */,
+				9C6BB2EA1CAB52E400A995F1 /* game.c */,
+				9C6BB2EB1CAB52E400A995F1 /* game.h */,
+			);
+			name = core;
+			path = ../../src_client/core;
+			sourceTree = "<group>";
+		};
+		9C6BB2DB1CAB52E400A995F1 /* engine */ = {
+			isa = PBXGroup;
+			children = (
+				9C6BB2DC1CAB52E400A995F1 /* data.h */,
+				9C6BB2DD1CAB52E400A995F1 /* dataBase64.c */,
+				9C6BB2DE1CAB52E400A995F1 /* dataJson.c */,
+				9C6BB2DF1CAB52E400A995F1 /* e3d.h */,
+				9C6BB2E01CAB52E400A995F1 /* e3dBuffer.c */,
+				9C6BB2E11CAB52E400A995F1 /* e3dEngine.c */,
+				9C6BB2E21CAB52E400A995F1 /* e3dMain.c */,
+				9C6BB2E31CAB52E400A995F1 /* e3dMatrix.c */,
+				9C6BB2E41CAB52E400A995F1 /* e3dObject.c */,
+				9C6BB2E51CAB52E400A995F1 /* engine.h */,
+				9C6BB2E61CAB52E400A995F1 /* math.h */,
+				9C6BB2E71CAB52E400A995F1 /* mathFunction.c */,
+				9C6BB2E81CAB52E400A995F1 /* mathXorshift.c */,
+				9C6BB2E91CAB52E400A995F1 /* util.h */,
+			);
+			path = engine;
+			sourceTree = "<group>";
+		};
+		9C6BB2EC1CAB52E400A995F1 /* platform_ios */ = {
+			isa = PBXGroup;
+			children = (
+				9C6BB2ED1CAB52E400A995F1 /* FuhahaGLViewController.swift */,
+				9C6BB2EE1CAB52E400A995F1 /* platform.h */,
+			);
+			name = platform_ios;
+			path = ../../src_client/platform_ios;
+			sourceTree = "<group>";
+		};
 		9C8D02301C99CCEB00F2CFFB = {
 			isa = PBXGroup;
 			children = (
 				9C8D023B1C99CCEB00F2CFFB /* asteroid */,
+				9C6BB2DA1CAB52E400A995F1 /* core */,
+				9C6BB2EC1CAB52E400A995F1 /* platform_ios */,
 				9C8D023A1C99CCEB00F2CFFB /* Products */,
 			);
 			sourceTree = "<group>";
@@ -55,11 +129,12 @@
 			isa = PBXGroup;
 			children = (
 				9C8D023C1C99CCEB00F2CFFB /* AppDelegate.swift */,
-				9C8D023E1C99CCEB00F2CFFB /* ViewController.swift */,
-				9C8D02401C99CCEB00F2CFFB /* Main.storyboard */,
 				9C8D02431C99CCEB00F2CFFB /* Assets.xcassets */,
-				9C8D02451C99CCEB00F2CFFB /* LaunchScreen.storyboard */,
+				9C8AA3F41CAC8841009ED69B /* asteroid-Bridging-Header.h */,
 				9C8D02481C99CCEB00F2CFFB /* Info.plist */,
+				9C8D02451C99CCEB00F2CFFB /* LaunchScreen.storyboard */,
+				9C8D02401C99CCEB00F2CFFB /* Main.storyboard */,
+				9C8D023E1C99CCEB00F2CFFB /* ViewController.swift */,
 			);
 			path = asteroid;
 			sourceTree = "<group>";
@@ -135,8 +210,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C6BB2F21CAB52E400A995F1 /* e3dEngine.c in Sources */,
+				9C6BB2F61CAB52E400A995F1 /* mathFunction.c in Sources */,
+				9C6BB2EF1CAB52E400A995F1 /* dataBase64.c in Sources */,
 				9C8D023F1C99CCEB00F2CFFB /* ViewController.swift in Sources */,
+				9C6BB2F71CAB52E400A995F1 /* mathXorshift.c in Sources */,
+				9C6BB2F31CAB52E400A995F1 /* e3dMain.c in Sources */,
+				9C6BB2F11CAB52E400A995F1 /* e3dBuffer.c in Sources */,
+				9C6BB2F51CAB52E400A995F1 /* e3dObject.c in Sources */,
+				9C6BB2F41CAB52E400A995F1 /* e3dMatrix.c in Sources */,
+				9C6BB2F81CAB52E400A995F1 /* game.c in Sources */,
 				9C8D023D1C99CCEB00F2CFFB /* AppDelegate.swift in Sources */,
+				9C6BB2F91CAB52E400A995F1 /* FuhahaGLViewController.swift in Sources */,
+				9C6BB2F01CAB52E400A995F1 /* dataJson.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -202,6 +288,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "asteroid/asteroid-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -240,6 +327,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "asteroid/asteroid-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -286,6 +374,7 @@
 				9C8D024D1C99CCEB00F2CFFB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
