@@ -11,8 +11,10 @@ void e3dGameInit(){
 }
 
 // 3Dエンジン終了処理
-void e3dGameFinal(){
+void e3dGameExit(){
 	e3dBufferClean();
+	e3dObjectDispose();
+	e3dEngineExit();
 }
 
 // 3Dエンジン例文

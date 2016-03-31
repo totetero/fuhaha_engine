@@ -85,6 +85,14 @@ void e3dEngineInit(){
 	glEnable(GL_BLEND);
 }
 
+// 解放
+void e3dEngineExit(){
+	glDeleteProgram(e3dReserveShader1.program);
+	glDeleteProgram(e3dReserveShader2.program);
+	glDeleteProgram(e3dReserveShader3.program);
+	glDeleteProgram(e3dReserveShader4.program);
+}
+
 // ----------------------------------------------------------------
 
 // e3d命令 描画のクリア

@@ -5,7 +5,7 @@
 // ----------------------------------------------------------------
 
 void e3dGameInit();
-void e3dGameFinal();
+void e3dGameExit();
 void e3dSampleCode();
 
 // ----------------------------------------------------------------
@@ -81,6 +81,7 @@ bool e3dObjectTexGetGLId(e3dObjectTexId e3dId, GLuint *glId, enum e3dTexType *ty
 void e3dObjectVBODispose(e3dObjectVBOId e3dId);
 void e3dObjectIBODispose(e3dObjectIBOId e3dId);
 void e3dObjectTexDispose(e3dObjectTexId e3dId);
+void e3dObjectDispose();
 
 void e3dObjectReload();
 
@@ -90,6 +91,7 @@ void e3dObjectReload();
 // 3Dエンジン
 
 void e3dEngineInit();
+void e3dEngineExit();
 
 void e3dClearAll();
 void e3dClearDepth();

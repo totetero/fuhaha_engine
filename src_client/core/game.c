@@ -22,7 +22,7 @@ void gameSurfacePause(){
 }
 
 void gameSurfaceDestroy(){
-	e3dGameFinal();
+	e3dGameExit();
 }
 
 // ----------------------------------------------------------------
