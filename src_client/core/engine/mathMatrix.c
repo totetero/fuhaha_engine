@@ -5,14 +5,14 @@
 // ----------------------------------------------------------------
 
 // 行列複製
-void mat4Copy(struct e3dMatrix44 *dst, struct e3dMatrix44 *src){
-	memcpy(dst, src, sizeof(struct e3dMatrix44));
+void mathMat4Copy(struct mathMatrix44 *dst, struct mathMatrix44 *src){
+	memcpy(dst, src, sizeof(struct mathMatrix44));
 }
 
 // ----------------------------------------------------------------
 
 // 単位行列
-void mat4Identity(struct e3dMatrix44 *mat){
+void mathMat4Identity(struct mathMatrix44 *mat){
 	mat->m00 = 1.0; mat->m01 = 0.0; mat->m02 = 0.0; mat->m03 = 0.0;
 	mat->m10 = 0.0; mat->m11 = 1.0; mat->m12 = 0.0; mat->m13 = 0.0;
 	mat->m20 = 0.0; mat->m21 = 0.0; mat->m22 = 1.0; mat->m23 = 0.0;
@@ -20,7 +20,7 @@ void mat4Identity(struct e3dMatrix44 *mat){
 }
 
 // 正射影行列
-void mat4Ortho(struct e3dMatrix44 *mat, double left, double right, double bottom, double top, double near, double far){
+void mathMat4Ortho(struct mathMatrix44 *mat, double left, double right, double bottom, double top, double near, double far){
 	double rl = 1 / (right - left);
 	double tb = 1 / (top - bottom);
 	double nf = 1 / (near - far);
@@ -43,7 +43,7 @@ void mat4Ortho(struct e3dMatrix44 *mat, double left, double right, double bottom
 }
 
 // 透視射影行列
-void mat4Frustum(struct e3dMatrix44 *mat, double left, double right, double bottom, double top, double near, double far){
+void mathMat4Frustum(struct mathMatrix44 *mat, double left, double right, double bottom, double top, double near, double far){
 	double rl = 1 / (right - left);
 	double tb = 1 / (top - bottom);
 	double nf = 1 / (near - far);
@@ -68,11 +68,11 @@ void mat4Frustum(struct e3dMatrix44 *mat, double left, double right, double bott
 // ----------------------------------------------------------------
 
 // 行列の掛け合わせ
-void mat4Multiply(struct e3dMatrix44 *mat, struct e3dMatrix44 *m0, struct e3dMatrix44 *m1){
-	struct e3dMatrix44 a;
-	struct e3dMatrix44 b;
-	if(mat == m0){mat4Copy(&a, m0); m0 = &a;}
-	if(mat == m1){mat4Copy(&b, m1); m1 = &b;}
+void mathMat4Multiply(struct mathMatrix44 *mat, struct mathMatrix44 *m0, struct mathMatrix44 *m1){
+	struct mathMatrix44 a;
+	struct mathMatrix44 b;
+	if(mat == m0){mathMat4Copy(&a, m0); m0 = &a;}
+	if(mat == m1){mathMat4Copy(&b, m1); m1 = &b;}
     mat->m00 = m1->m00 * m0->m00 + m1->m01 * m0->m10 + m1->m02 * m0->m20 + m1->m03 * m0->m30;
     mat->m01 = m1->m00 * m0->m01 + m1->m01 * m0->m11 + m1->m02 * m0->m21 + m1->m03 * m0->m31;
     mat->m02 = m1->m00 * m0->m02 + m1->m01 * m0->m12 + m1->m02 * m0->m22 + m1->m03 * m0->m32;
@@ -92,7 +92,7 @@ void mat4Multiply(struct e3dMatrix44 *mat, struct e3dMatrix44 *m0, struct e3dMat
 }
 
 // 平行移動
-void mat4Translate(struct e3dMatrix44 *mat, double x, double y, double z){
+void mathMat4Translate(struct mathMatrix44 *mat, double x, double y, double z){
 	mat->m30 += mat->m00 * x + mat->m10 * y + mat->m20 * z;
 	mat->m31 += mat->m01 * x + mat->m11 * y + mat->m21 * z;
 	mat->m32 += mat->m02 * x + mat->m12 * y + mat->m22 * z;
@@ -100,7 +100,7 @@ void mat4Translate(struct e3dMatrix44 *mat, double x, double y, double z){
 }
 
 // 拡大縮小
-void mat4Scale(struct e3dMatrix44 *mat, double x, double y, double z){
+void mathMat4Scale(struct mathMatrix44 *mat, double x, double y, double z){
 	mat->m00 *= x;
 	mat->m01 *= x;
 	mat->m02 *= x;
@@ -116,7 +116,7 @@ void mat4Scale(struct e3dMatrix44 *mat, double x, double y, double z){
 }
 
 // x軸回転
-void mat4RotateX(struct e3dMatrix44 *mat, double rad){
+void mathMat4RotateX(struct mathMatrix44 *mat, double rad){
 	double c = mathCos(rad);
 	double s = mathSin(rad);
 	double m10 = mat->m10;
@@ -138,7 +138,7 @@ void mat4RotateX(struct e3dMatrix44 *mat, double rad){
 }
 
 // y軸回転
-void mat4RotateY(struct e3dMatrix44 *mat, double rad){
+void mathMat4RotateY(struct mathMatrix44 *mat, double rad){
 	double c = mathCos(rad);
 	double s = mathSin(rad);
 	double m00 = mat->m00;
@@ -160,7 +160,7 @@ void mat4RotateY(struct e3dMatrix44 *mat, double rad){
 }
 
 // z軸回転
-void mat4RotateZ(struct e3dMatrix44 *mat, double rad){
+void mathMat4RotateZ(struct mathMatrix44 *mat, double rad){
 	double c = mathCos(rad);
 	double s = mathSin(rad);
 	double m00 = mat->m00;
@@ -184,9 +184,9 @@ void mat4RotateZ(struct e3dMatrix44 *mat, double rad){
 // ----------------------------------------------------------------
 
 // 逆行列
-void mat4Invert(struct e3dMatrix44 *mat){
-	struct e3dMatrix44 a;
-	mat4Copy(&a, mat);
+void mathMat4Invert(struct mathMatrix44 *mat){
+	struct mathMatrix44 a;
+	mathMat4Copy(&a, mat);
 	double b00 = a.m00 * a.m11 - a.m01 * a.m10;
 	double b01 = a.m00 * a.m12 - a.m02 * a.m10;
 	double b02 = a.m00 * a.m13 - a.m03 * a.m10;
@@ -225,8 +225,8 @@ void mat4Invert(struct e3dMatrix44 *mat){
 // ----------------------------------------------------------------
 
 // ベクトル行列積
-void vec3MultiplyMat4(struct e3dVector3 *dst, struct e3dVector3 *src, struct e3dMatrix44 *mat){
-	struct e3dVector3 a;
+void mathVec3MultiplyMat4(struct mathVector3 *dst, struct mathVector3 *src, struct mathMatrix44 *mat){
+	struct mathVector3 a;
 	if(dst == src){
 		a.x = src->x;
 		a.y = src->y;

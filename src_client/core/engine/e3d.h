@@ -55,11 +55,6 @@ enum e3dModeStencil{
 	E3DMODESTENCIL_READ_LE1_WRITE_INCR,
 };
 
-// ベクトル行列構造体
-struct e3dVector3{union{struct{double x, y, z;}; double v[3];};};
-struct e3dVector4{union{struct{double x, y, z, w;}; struct{double r, g, b, a;}; double v[4];};};
-struct e3dMatrix44{union{struct{double m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33;}; double m[16];};};
-
 // 3Dオブジェクト識別子
 typedef uint32_t e3dObjectVBOId;
 typedef uint32_t e3dObjectIBOId;
@@ -110,31 +105,12 @@ void e3dBindClorVBO(e3dObjectVBOId e3dId);
 void e3dBindTexcVBO(e3dObjectVBOId e3dId);
 void e3dBindFaceIBO(e3dObjectIBOId e3dId);
 
-void e3dSetMatrix(struct e3dMatrix44 *matrix);
+void e3dSetMatrix(struct mathMatrix44 *matrix);
 void e3dSetColor(double r, double g, double b, double a);
 
 void e3dDrawIndex(uint32_t offset, uint32_t count);
 
 void e3dFlush();
-
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
-// 行列演算
-
-void mat4Copy(struct e3dMatrix44 *dst, struct e3dMatrix44 *src);
-void mat4Identity(struct e3dMatrix44 *mat);
-void mat4Ortho(struct e3dMatrix44 *mat, double left, double right, double bottom, double top, double near, double far);
-void mat4Frustum(struct e3dMatrix44 *mat, double left, double right, double bottom, double top, double near, double far);
-void mat4Multiply(struct e3dMatrix44 *mat, struct e3dMatrix44 *m0, struct e3dMatrix44 *m1);
-void mat4Translate(struct e3dMatrix44 *mat, double x, double y, double z);
-void mat4Scale(struct e3dMatrix44 *mat, double x, double y, double z);
-void mat4RotateX(struct e3dMatrix44 *mat, double rad);
-void mat4RotateY(struct e3dMatrix44 *mat, double rad);
-void mat4RotateZ(struct e3dMatrix44 *mat, double rad);
-void mat4Invert(struct e3dMatrix44 *mat);
-
-void vec3MultiplyMat4(struct e3dVector3 *dst, struct e3dVector3 *src, struct e3dMatrix44 *mat);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

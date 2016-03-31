@@ -51,10 +51,10 @@ void e3dSampleCode(){
 		e3dBufferEnd(&e3dIdVert, &e3dIdClor, &e3dIdTexc, &e3dIdFace);
 		e3dIdImage = e3dObjectTexCreate("test.png", E3DTEXTYPE_NEAREST);
 	}
-	struct e3dMatrix44 tempMat1;
-	mat4Frustum(&tempMat1, -2.0, 2.0, -3.0, 3.0, 2.0, 1000.0);
-	mat4Translate(&tempMat1, 0.0, 0.0, -3.0);
-	mat4RotateX(&tempMat1, step++ * 0.1);
+	struct mathMatrix44 tempMat1;
+	mathMat4Frustum(&tempMat1, -2.0, 2.0, -3.0, 3.0, 2.0, 1000.0);
+	mathMat4Translate(&tempMat1, 0.0, 0.0, -3.0);
+	mathMat4RotateX(&tempMat1, step++ * 0.1);
 	e3dClearAll();
 	e3dSetDrawMode(E3DMODEDRAW_2D);
 	e3dBindTexture(e3dIdImage);

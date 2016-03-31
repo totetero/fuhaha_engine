@@ -384,7 +384,7 @@ void e3dBindFaceIBO(e3dObjectIBOId e3dId){
 // ----------------------------------------------------------------
 
 // e3d命令 行列の設定
-void e3dSetMatrix(struct e3dMatrix44 *matrix){
+void e3dSetMatrix(struct mathMatrix44 *matrix){
 	GLfloat fmatrix[16] = {
 		(GLfloat)matrix->m00, (GLfloat)matrix->m01, (GLfloat)matrix->m02, (GLfloat)matrix->m03,
 		(GLfloat)matrix->m10, (GLfloat)matrix->m11, (GLfloat)matrix->m12, (GLfloat)matrix->m13,
