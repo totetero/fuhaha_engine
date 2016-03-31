@@ -4,18 +4,20 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-static double *e3dBufferVert;
-static double *e3dBufferClor;
-static double *e3dBufferTexc;
-static uint16_t *e3dBufferFace;
-static uint32_t e3dBufferVertIndex;
-static uint32_t e3dBufferClorIndex;
-static uint32_t e3dBufferTexcIndex;
-static uint32_t e3dBufferFaceIndex;
-static uint32_t e3dBufferVertLength = 0;
-static uint32_t e3dBufferClorLength = 0;
-static uint32_t e3dBufferTexcLength = 0;
-static uint32_t e3dBufferFaceLength = 0;
+static struct{
+	double *e3dBufferVert;
+	double *e3dBufferClor;
+	double *e3dBufferTexc;
+	uint16_t *e3dBufferFace;
+	uint32_t e3dBufferVertIndex;
+	uint32_t e3dBufferClorIndex;
+	uint32_t e3dBufferTexcIndex;
+	uint32_t e3dBufferFaceIndex;
+	uint32_t e3dBufferVertLength;
+	uint32_t e3dBufferClorLength;
+	uint32_t e3dBufferTexcLength;
+	uint32_t e3dBufferFaceLength;
+} localGlobal = {0};
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -23,87 +25,87 @@ static uint32_t e3dBufferFaceLength = 0;
 
 // バッファ作成開始
 void e3dBufferBegin(){
-	e3dBufferVertIndex = 0;
-	e3dBufferClorIndex = 0;
-	e3dBufferTexcIndex = 0;
-	e3dBufferFaceIndex = 0;
+	localGlobal.e3dBufferVertIndex = 0;
+	localGlobal.e3dBufferClorIndex = 0;
+	localGlobal.e3dBufferTexcIndex = 0;
+	localGlobal.e3dBufferFaceIndex = 0;
 }
 
 // バッファ作成完了
 void e3dBufferEnd(e3dObjectVBOId *e3dIdVert, e3dObjectVBOId *e3dIdClor, e3dObjectVBOId *e3dIdTexc, e3dObjectIBOId *e3dIdFace){
-	if(e3dIdVert != NULL){e3dObjectVBODispose(*e3dIdVert); *e3dIdVert = e3dObjectVBOCreate(e3dBufferVertIndex, e3dBufferVert);}
-	if(e3dIdClor != NULL){e3dObjectVBODispose(*e3dIdClor); *e3dIdClor = e3dObjectVBOCreate(e3dBufferClorIndex, e3dBufferClor);}
-	if(e3dIdTexc != NULL){e3dObjectVBODispose(*e3dIdTexc); *e3dIdTexc = e3dObjectVBOCreate(e3dBufferTexcIndex, e3dBufferTexc);}
-	if(e3dIdFace != NULL){e3dObjectIBODispose(*e3dIdFace); *e3dIdFace = e3dObjectIBOCreate(e3dBufferFaceIndex, e3dBufferFace);}
+	if(e3dIdVert != NULL){e3dObjectVBODispose(*e3dIdVert); *e3dIdVert = e3dObjectVBOCreate(localGlobal.e3dBufferVertIndex, localGlobal.e3dBufferVert);}
+	if(e3dIdClor != NULL){e3dObjectVBODispose(*e3dIdClor); *e3dIdClor = e3dObjectVBOCreate(localGlobal.e3dBufferClorIndex, localGlobal.e3dBufferClor);}
+	if(e3dIdTexc != NULL){e3dObjectVBODispose(*e3dIdTexc); *e3dIdTexc = e3dObjectVBOCreate(localGlobal.e3dBufferTexcIndex, localGlobal.e3dBufferTexc);}
+	if(e3dIdFace != NULL){e3dObjectIBODispose(*e3dIdFace); *e3dIdFace = e3dObjectIBOCreate(localGlobal.e3dBufferFaceIndex, localGlobal.e3dBufferFace);}
 }
 
 // ----------------------------------------------------------------
 
 // 頂点座標配列に要素追加
 void e3dBufferPushVert(double x, double y, double z){
-	if(e3dBufferVertLength < e3dBufferVertIndex + 3){
-		uint32_t length = e3dBufferVertLength + 300;
+	if(localGlobal.e3dBufferVertLength < localGlobal.e3dBufferVertIndex + 3){
+		uint32_t length = localGlobal.e3dBufferVertLength + 300;
 		double *array = (double*)malloc(length * sizeof(double));
-		if(e3dBufferVertLength > 0){
-			memcpy(array, e3dBufferVert, e3dBufferVertLength * sizeof(double));
-			free(e3dBufferVert);
+		if(localGlobal.e3dBufferVertLength > 0){
+			memcpy(array, localGlobal.e3dBufferVert, localGlobal.e3dBufferVertLength * sizeof(double));
+			free(localGlobal.e3dBufferVert);
 		}
-		e3dBufferVertLength = length;
-		e3dBufferVert = array;
+		localGlobal.e3dBufferVertLength = length;
+		localGlobal.e3dBufferVert = array;
 	}
-	*(e3dBufferVert + e3dBufferVertIndex++) = x;
-	*(e3dBufferVert + e3dBufferVertIndex++) = y;
-	*(e3dBufferVert + e3dBufferVertIndex++) = z;
+	*(localGlobal.e3dBufferVert + localGlobal.e3dBufferVertIndex++) = x;
+	*(localGlobal.e3dBufferVert + localGlobal.e3dBufferVertIndex++) = y;
+	*(localGlobal.e3dBufferVert + localGlobal.e3dBufferVertIndex++) = z;
 }
 
 // 色彩配列に要素追加
 void e3dBufferPushClor(double r, double g, double b){
-	if(e3dBufferClorLength < e3dBufferClorIndex + 3){
-		uint32_t length = e3dBufferClorLength + 300;
+	if(localGlobal.e3dBufferClorLength < localGlobal.e3dBufferClorIndex + 3){
+		uint32_t length = localGlobal.e3dBufferClorLength + 300;
 		double *array = (double*)malloc(length * sizeof(double));
-		if(e3dBufferClorLength > 0){
-			memcpy(array, e3dBufferClor, e3dBufferClorLength * sizeof(double));
-			free(e3dBufferClor);
+		if(localGlobal.e3dBufferClorLength > 0){
+			memcpy(array, localGlobal.e3dBufferClor, localGlobal.e3dBufferClorLength * sizeof(double));
+			free(localGlobal.e3dBufferClor);
 		}
-		e3dBufferClorLength = length;
-		e3dBufferClor = array;
+		localGlobal.e3dBufferClorLength = length;
+		localGlobal.e3dBufferClor = array;
 	}
-	*(e3dBufferClor + e3dBufferClorIndex++) = r;
-	*(e3dBufferClor + e3dBufferClorIndex++) = g;
-	*(e3dBufferClor + e3dBufferClorIndex++) = b;
+	*(localGlobal.e3dBufferClor + localGlobal.e3dBufferClorIndex++) = r;
+	*(localGlobal.e3dBufferClor + localGlobal.e3dBufferClorIndex++) = g;
+	*(localGlobal.e3dBufferClor + localGlobal.e3dBufferClorIndex++) = b;
 }
 
 // テクスチャ座標配列に要素追加
 void e3dBufferPushTexc(double u, double v){
-	if(e3dBufferTexcLength < e3dBufferTexcIndex + 2){
-		uint32_t length = e3dBufferTexcLength + 200;
+	if(localGlobal.e3dBufferTexcLength < localGlobal.e3dBufferTexcIndex + 2){
+		uint32_t length = localGlobal.e3dBufferTexcLength + 200;
 		double *array = (double*)malloc(length * sizeof(double));
-		if(e3dBufferTexcLength > 0){
-			memcpy(array, e3dBufferTexc, e3dBufferTexcLength * sizeof(double));
-			free(e3dBufferTexc);
+		if(localGlobal.e3dBufferTexcLength > 0){
+			memcpy(array, localGlobal.e3dBufferTexc, localGlobal.e3dBufferTexcLength * sizeof(double));
+			free(localGlobal.e3dBufferTexc);
 		}
-		e3dBufferTexcLength = length;
-		e3dBufferTexc = array;
+		localGlobal.e3dBufferTexcLength = length;
+		localGlobal.e3dBufferTexc = array;
 	}
-	*(e3dBufferTexc + e3dBufferTexcIndex++) = u;
-	*(e3dBufferTexc + e3dBufferTexcIndex++) = v;
+	*(localGlobal.e3dBufferTexc + localGlobal.e3dBufferTexcIndex++) = u;
+	*(localGlobal.e3dBufferTexc + localGlobal.e3dBufferTexcIndex++) = v;
 }
 
 // 頂点番号配配列に要素追加
 void e3dBufferPushFace(uint16_t index, uint16_t t0, uint16_t t1, uint16_t t2){
-	if(e3dBufferFaceLength < e3dBufferFaceIndex + 3){
-		uint32_t length = e3dBufferFaceLength + 150;
+	if(localGlobal.e3dBufferFaceLength < localGlobal.e3dBufferFaceIndex + 3){
+		uint32_t length = localGlobal.e3dBufferFaceLength + 150;
 		uint16_t *array = (uint16_t*)malloc(length * sizeof(uint16_t));
-		if(e3dBufferFaceLength > 0){
-			memcpy(array, e3dBufferFace, e3dBufferFaceLength * sizeof(uint16_t));
-			free(e3dBufferFace);
+		if(localGlobal.e3dBufferFaceLength > 0){
+			memcpy(array, localGlobal.e3dBufferFace, localGlobal.e3dBufferFaceLength * sizeof(uint16_t));
+			free(localGlobal.e3dBufferFace);
 		}
-		e3dBufferFaceLength = length;
-		e3dBufferFace = array;
+		localGlobal.e3dBufferFaceLength = length;
+		localGlobal.e3dBufferFace = array;
 	}
-	*(e3dBufferFace + e3dBufferFaceIndex++) = index + t0;
-	*(e3dBufferFace + e3dBufferFaceIndex++) = index + t1;
-	*(e3dBufferFace + e3dBufferFaceIndex++) = index + t2;
+	*(localGlobal.e3dBufferFace + localGlobal.e3dBufferFaceIndex++) = index + t0;
+	*(localGlobal.e3dBufferFace + localGlobal.e3dBufferFaceIndex++) = index + t1;
+	*(localGlobal.e3dBufferFace + localGlobal.e3dBufferFaceIndex++) = index + t2;
 }
 
 // ----------------------------------------------------------------
@@ -134,26 +136,26 @@ void e3dBufferPushTetraFace(uint16_t index){
 
 // VBOバッファ配列内の位置獲得
 uint32_t e3dBufferVretIndexGet(){
-	return e3dBufferVertIndex / 3;
+	return localGlobal.e3dBufferVertIndex / 3;
 }
 
 // IBOバッファ配列内の位置獲得
 uint32_t e3dBufferFaceIndexGet(){
-	return e3dBufferFaceIndex / 3;
+	return localGlobal.e3dBufferFaceIndex / 3;
 }
 
 // ----------------------------------------------------------------
 
 // バッファ片付け
 void e3dBufferClean(){
-	free(e3dBufferVert);
-	free(e3dBufferClor);
-	free(e3dBufferTexc);
-	free(e3dBufferFace);
-	e3dBufferVertLength = 0;
-	e3dBufferClorLength = 0;
-	e3dBufferTexcLength = 0;
-	e3dBufferFaceLength = 0;
+	free(localGlobal.e3dBufferVert);
+	free(localGlobal.e3dBufferClor);
+	free(localGlobal.e3dBufferTexc);
+	free(localGlobal.e3dBufferFace);
+	localGlobal.e3dBufferVertLength = 0;
+	localGlobal.e3dBufferClorLength = 0;
+	localGlobal.e3dBufferTexcLength = 0;
+	localGlobal.e3dBufferFaceLength = 0;
 }
 
 // ----------------------------------------------------------------

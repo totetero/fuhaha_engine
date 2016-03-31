@@ -4,18 +4,6 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-// 重複動作阻止のための状態記録
-static enum e3dModeDraw e3dMemoryModeDraw;
-static enum e3dModeStencil e3dMemoryModeStencil;
-static GLboolean e3dMemoryModeDepth;
-static enum e3dTexType e3dMemoryTexType;
-static GLuint e3dMemoryTexData;
-static GLfloat e3dMemoryColor[4];
-static e3dObjectVBOId e3dMemoryVertVBO;
-static e3dObjectVBOId e3dMemoryClorVBO;
-static e3dObjectVBOId e3dMemoryTexcVBO;
-static e3dObjectIBOId e3dMemoryFaceIBO;
-
 // e3dシェーダー構造体
 struct e3dShader{
 	GLint program;
@@ -26,12 +14,25 @@ struct e3dShader{
 	GLint unif_col;
 };
 
-// e3dシェーダー
-static struct e3dShader *e3dCurrentShader;
-static struct e3dShader e3dReserveShader1;
-static struct e3dShader e3dReserveShader2;
-static struct e3dShader e3dReserveShader3;
-static struct e3dShader e3dReserveShader4;
+static struct{
+	// e3dシェーダー
+	struct e3dShader *e3dCurrentShader;
+	struct e3dShader e3dReserveShader1;
+	struct e3dShader e3dReserveShader2;
+	struct e3dShader e3dReserveShader3;
+	struct e3dShader e3dReserveShader4;
+	// 重複動作阻止のための状態記録
+	enum e3dModeDraw e3dMemoryModeDraw;
+	enum e3dModeStencil e3dMemoryModeStencil;
+	GLboolean e3dMemoryModeDepth;
+	enum e3dTexType e3dMemoryTexType;
+	GLuint e3dMemoryTexData;
+	GLfloat e3dMemoryColor[4];
+	e3dObjectVBOId e3dMemoryVertVBO;
+	e3dObjectVBOId e3dMemoryClorVBO;
+	e3dObjectVBOId e3dMemoryTexcVBO;
+	e3dObjectIBOId e3dMemoryFaceIBO;
+} localGlobal = {0};
 
 // ----------------------------------------------------------------
 
@@ -64,15 +65,15 @@ void e3dEngineInit(){
 	char *fsh3_src = "precision highp float;uniform vec4 fs_unif_col;uniform sampler2D texture;varying vec4 color;varying vec2 texCoord;void main(){vec4 fragColor = texture2D(texture, texCoord) * fs_unif_col * color;if(fragColor.a > 0.8){gl_FragColor = fragColor;}else{discard;}}";
 	char *vsh4_src = "precision highp float;attribute vec3 vs_attr_pos;attribute vec3 vs_attr_col;uniform mat4 vs_unif_mat;varying vec4 color;void main(){color = vec4(vs_attr_col, 1.0);gl_Position = vs_unif_mat * vec4(vs_attr_pos, 1.0);}";
 	char *fsh4_src = "precision highp float;uniform vec4 fs_unif_col;varying vec4 color;void main(){gl_FragColor = fs_unif_col * color;}";
-	e3dShaderCreate(&e3dReserveShader1, vsh1_src, fsh1_src);
-	e3dShaderCreate(&e3dReserveShader2, vsh2_src, fsh2_src);
-	e3dShaderCreate(&e3dReserveShader3, vsh3_src, fsh3_src);
-	e3dShaderCreate(&e3dReserveShader4, vsh4_src, fsh4_src);
+	e3dShaderCreate(&localGlobal.e3dReserveShader1, vsh1_src, fsh1_src);
+	e3dShaderCreate(&localGlobal.e3dReserveShader2, vsh2_src, fsh2_src);
+	e3dShaderCreate(&localGlobal.e3dReserveShader3, vsh3_src, fsh3_src);
+	e3dShaderCreate(&localGlobal.e3dReserveShader4, vsh4_src, fsh4_src);
 
-	e3dMemoryModeDraw = -1;
-	e3dMemoryModeStencil = -1;
-	e3dMemoryModeDepth = GL_TRUE;
-	e3dMemoryColor[0] = -1;
+	localGlobal.e3dMemoryModeDraw = -1;
+	localGlobal.e3dMemoryModeStencil = -1;
+	localGlobal.e3dMemoryModeDepth = GL_TRUE;
+	localGlobal.e3dMemoryColor[0] = -1;
 	e3dMemoryResetVBO();
 	e3dMemoryResetIBO();
 	e3dMemoryResetTex();
@@ -87,17 +88,17 @@ void e3dEngineInit(){
 
 // 解放
 void e3dEngineExit(){
-	glDeleteProgram(e3dReserveShader1.program);
-	glDeleteProgram(e3dReserveShader2.program);
-	glDeleteProgram(e3dReserveShader3.program);
-	glDeleteProgram(e3dReserveShader4.program);
+	glDeleteProgram(localGlobal.e3dReserveShader1.program);
+	glDeleteProgram(localGlobal.e3dReserveShader2.program);
+	glDeleteProgram(localGlobal.e3dReserveShader3.program);
+	glDeleteProgram(localGlobal.e3dReserveShader4.program);
 }
 
 // ----------------------------------------------------------------
 
 // e3d命令 描画のクリア
 void e3dClearAll(){
-	glDepthMask(e3dMemoryModeDepth = GL_TRUE);
+	glDepthMask(localGlobal.e3dMemoryModeDepth = GL_TRUE);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	e3dSetStencilMode(E3DMODESTENCIL_NONE);
 }
@@ -114,91 +115,91 @@ void e3dClearStencil(){
 
 // 重複動作阻止のためのVBO状態記録をリセット
 void e3dMemoryResetVBO(){
-	e3dMemoryVertVBO = 0;
-	e3dMemoryClorVBO = 0;
-	e3dMemoryTexcVBO = 0;
+	localGlobal.e3dMemoryVertVBO = 0;
+	localGlobal.e3dMemoryClorVBO = 0;
+	localGlobal.e3dMemoryTexcVBO = 0;
 }
 
 // 重複動作阻止のためのIBO状態記録をリセット
 void e3dMemoryResetIBO(){
-	e3dMemoryFaceIBO = 0;
+	localGlobal.e3dMemoryFaceIBO = 0;
 }
 
 // 重複動作阻止のためのTex状態記録をリセット
 void e3dMemoryResetTex(){
-	e3dMemoryTexType = -1;
-	e3dMemoryTexData = ~0;
+	localGlobal.e3dMemoryTexType = -1;
+	localGlobal.e3dMemoryTexData = ~0;
 }
 
 // ----------------------------------------------------------------
 
 // e3d命令 描画モード設定
 void e3dSetDrawMode(enum e3dModeDraw mode){
-	if(e3dMemoryModeDraw == mode){return;}
-	e3dMemoryModeDraw = mode;
+	if(localGlobal.e3dMemoryModeDraw == mode){return;}
+	localGlobal.e3dMemoryModeDraw = mode;
 
-	if(e3dCurrentShader != NULL){
-		if(e3dCurrentShader->attr_pos >= 0){glDisableVertexAttribArray(e3dCurrentShader->attr_pos);}
-		if(e3dCurrentShader->attr_col >= 0){glDisableVertexAttribArray(e3dCurrentShader->attr_col);}
-		if(e3dCurrentShader->attr_uvc >= 0){glDisableVertexAttribArray(e3dCurrentShader->attr_uvc);}
+	if(localGlobal.e3dCurrentShader != NULL){
+		if(localGlobal.e3dCurrentShader->attr_pos >= 0){glDisableVertexAttribArray(localGlobal.e3dCurrentShader->attr_pos);}
+		if(localGlobal.e3dCurrentShader->attr_col >= 0){glDisableVertexAttribArray(localGlobal.e3dCurrentShader->attr_col);}
+		if(localGlobal.e3dCurrentShader->attr_uvc >= 0){glDisableVertexAttribArray(localGlobal.e3dCurrentShader->attr_uvc);}
 	}
 
 	switch(mode){
 		case E3DMODEDRAW_NORMAL:
 			// 汎用モード (VertBuf TexcBuf)
-			e3dCurrentShader = &e3dReserveShader1;
-			glDepthMask(e3dMemoryModeDepth = GL_TRUE);
+			localGlobal.e3dCurrentShader = &localGlobal.e3dReserveShader1;
+			glDepthMask(localGlobal.e3dMemoryModeDepth = GL_TRUE);
 			glEnable(GL_DEPTH_TEST);
 			glDisable(GL_CULL_FACE);
 			glBlendFuncSeparate(GL_ONE, GL_ZERO, GL_ZERO, GL_ONE);
 			break;
 		case E3DMODEDRAW_2D:
 			// 2D描画モード (VertBuf TexcBuf)
-			e3dCurrentShader = &e3dReserveShader2;
-			glDepthMask(e3dMemoryModeDepth = GL_FALSE);
+			localGlobal.e3dCurrentShader = &localGlobal.e3dReserveShader2;
+			glDepthMask(localGlobal.e3dMemoryModeDepth = GL_FALSE);
 			glDisable(GL_DEPTH_TEST);
 			glDisable(GL_CULL_FACE);
 			glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ZERO, GL_ONE); // 半透明アルファ合成
 			break;
 		case E3DMODEDRAW_ALPHA_ADD:
 			// アルファ合成モード (VertBuf TexcBuf)
-			e3dCurrentShader = &e3dReserveShader2;
-			glDepthMask(e3dMemoryModeDepth = GL_FALSE);
+			localGlobal.e3dCurrentShader = &localGlobal.e3dReserveShader2;
+			glDepthMask(localGlobal.e3dMemoryModeDepth = GL_FALSE);
 			glEnable(GL_DEPTH_TEST);
 			glDisable(GL_CULL_FACE);
 			glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE, GL_ZERO, GL_ONE); // 加算合成
 			break;
 		case E3DMODEDRAW_HKNW:
 			// ハコニワ地形モード (VertBuf Clor3Buf TexcBuf)
-			e3dCurrentShader = &e3dReserveShader3;
-			glDepthMask(e3dMemoryModeDepth = GL_TRUE);
+			localGlobal.e3dCurrentShader = &localGlobal.e3dReserveShader3;
+			glDepthMask(localGlobal.e3dMemoryModeDepth = GL_TRUE);
 			glEnable(GL_DEPTH_TEST);
 			glEnable(GL_CULL_FACE);
 			glBlendFuncSeparate(GL_ONE, GL_ZERO, GL_ZERO, GL_ONE);
 			break;
 		case E3DMODEDRAW_SPHERE:
 			// スフィア地形モード (VertBuf Clor3Buf)
-			e3dCurrentShader = &e3dReserveShader4;
-			glDepthMask(e3dMemoryModeDepth = GL_TRUE);
+			localGlobal.e3dCurrentShader = &localGlobal.e3dReserveShader4;
+			glDepthMask(localGlobal.e3dMemoryModeDepth = GL_TRUE);
 			glEnable(GL_DEPTH_TEST);
 			glEnable(GL_CULL_FACE);
 			glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ZERO, GL_ONE); // 半透明アルファ合成
 			break;
 	}
 
-	glUseProgram(e3dCurrentShader->program);
-	if(e3dCurrentShader->attr_pos >= 0){glEnableVertexAttribArray(e3dCurrentShader->attr_pos);}
-	if(e3dCurrentShader->attr_col >= 0){glEnableVertexAttribArray(e3dCurrentShader->attr_col);}
-	if(e3dCurrentShader->attr_uvc >= 0){glEnableVertexAttribArray(e3dCurrentShader->attr_uvc);}
+	glUseProgram(localGlobal.e3dCurrentShader->program);
+	if(localGlobal.e3dCurrentShader->attr_pos >= 0){glEnableVertexAttribArray(localGlobal.e3dCurrentShader->attr_pos);}
+	if(localGlobal.e3dCurrentShader->attr_col >= 0){glEnableVertexAttribArray(localGlobal.e3dCurrentShader->attr_col);}
+	if(localGlobal.e3dCurrentShader->attr_uvc >= 0){glEnableVertexAttribArray(localGlobal.e3dCurrentShader->attr_uvc);}
 
-	e3dMemoryColor[0] = -1;
+	localGlobal.e3dMemoryColor[0] = -1;
 	e3dMemoryResetVBO();
 }
 
 // e3d命令 ステンシルマスクモード設定
 void e3dSetStencilMode(enum e3dModeStencil mode){
-	if(e3dMemoryModeStencil == mode){return;}
-	e3dMemoryModeStencil = mode;
+	if(localGlobal.e3dMemoryModeStencil == mode){return;}
+	localGlobal.e3dMemoryModeStencil = mode;
 
 	// ステンシル有効設定
 	if(mode != E3DMODESTENCIL_NONE){glEnable(GL_STENCIL_TEST);}else{glDisable(GL_STENCIL_TEST);}
@@ -219,7 +220,7 @@ void e3dSetStencilMode(enum e3dModeStencil mode){
 			break;
 		default:
 			glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-			glDepthMask(e3dMemoryModeDepth);
+			glDepthMask(localGlobal.e3dMemoryModeDepth);
 			break;
 	}
 
@@ -295,7 +296,7 @@ void e3dSetStencilMode(enum e3dModeStencil mode){
 
 // e3d命令 深度バッファを一時的に無効化
 void e3dIgnoreDepthMode(bool isIgnore){
-	if(!e3dMemoryModeDepth){return;}
+	if(!localGlobal.e3dMemoryModeDepth){return;}
 	if(isIgnore){
 		glDepthMask(GL_FALSE);
 		glDisable(GL_DEPTH_TEST);
@@ -312,9 +313,9 @@ void e3dBindTexture(e3dObjectTexId e3dId){
 	GLuint glId;
 	enum e3dTexType type;
 	if(!e3dObjectTexGetGLId(e3dId, &glId, &type)){return;}
-	if(e3dMemoryTexType == type && e3dMemoryTexData == glId){return;}
+	if(localGlobal.e3dMemoryTexType == type && localGlobal.e3dMemoryTexData == glId){return;}
 
-	if(e3dMemoryTexData != glId){glBindTexture(GL_TEXTURE_2D, glId);}
+	if(localGlobal.e3dMemoryTexData != glId){glBindTexture(GL_TEXTURE_2D, glId);}
 
 	switch(type){
 		case E3DTEXTYPE_LINEAR:
@@ -333,47 +334,47 @@ void e3dBindTexture(e3dObjectTexId e3dId){
 			break;
 	}
 
-	e3dMemoryTexType = type;
-	e3dMemoryTexData = glId;
+	localGlobal.e3dMemoryTexType = type;
+	localGlobal.e3dMemoryTexData = glId;
 }
 
 // e3d命令 VBO登録 頂点座標
 void e3dBindVertVBO(e3dObjectVBOId e3dId){
-	if(e3dMemoryVertVBO == e3dId){return;}
-	e3dMemoryVertVBO = e3dId;
+	if(localGlobal.e3dMemoryVertVBO == e3dId){return;}
+	localGlobal.e3dMemoryVertVBO = e3dId;
 
 	GLuint glId;
 	if(!e3dObjectVBOGetGLId(e3dId, &glId)){return;}
 	glBindBuffer(GL_ARRAY_BUFFER, glId);
-	glVertexAttribPointer(e3dCurrentShader->attr_pos, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(localGlobal.e3dCurrentShader->attr_pos, 3, GL_FLOAT, GL_FALSE, 0, 0);
 }
 
 // e3d命令 VBO登録 カラーrgb
 void e3dBindClorVBO(e3dObjectVBOId e3dId){
-	if(e3dMemoryClorVBO == e3dId){return;}
-	e3dMemoryClorVBO = e3dId;
+	if(localGlobal.e3dMemoryClorVBO == e3dId){return;}
+	localGlobal.e3dMemoryClorVBO = e3dId;
 
 	GLuint glId;
 	if(!e3dObjectVBOGetGLId(e3dId, &glId)){return;}
 	glBindBuffer(GL_ARRAY_BUFFER, glId);
-	glVertexAttribPointer(e3dCurrentShader->attr_col, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(localGlobal.e3dCurrentShader->attr_col, 3, GL_FLOAT, GL_FALSE, 0, 0);
 }
 
 // e3d命令 VBO登録 テクスチャ座標
 void e3dBindTexcVBO(e3dObjectVBOId e3dId){
-	if(e3dMemoryTexcVBO == e3dId){return;}
-	e3dMemoryTexcVBO = e3dId;
+	if(localGlobal.e3dMemoryTexcVBO == e3dId){return;}
+	localGlobal.e3dMemoryTexcVBO = e3dId;
 
 	GLuint glId;
 	if(!e3dObjectVBOGetGLId(e3dId, &glId)){return;}
 	glBindBuffer(GL_ARRAY_BUFFER, glId);
-	glVertexAttribPointer(e3dCurrentShader->attr_uvc, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(localGlobal.e3dCurrentShader->attr_uvc, 2, GL_FLOAT, GL_FALSE, 0, 0);
 }
 
 // e3d命令 IBO登録 頂点インデックス
 void e3dBindFaceIBO(e3dObjectIBOId e3dId){
-	if(e3dMemoryFaceIBO == e3dId){return;}
-	e3dMemoryFaceIBO = e3dId;
+	if(localGlobal.e3dMemoryFaceIBO == e3dId){return;}
+	localGlobal.e3dMemoryFaceIBO = e3dId;
 
 	GLuint glId;
 	if(!e3dObjectIBOGetGLId(e3dId, &glId)){return;}
@@ -390,15 +391,15 @@ void e3dSetMatrix(struct e3dMatrix44 *matrix){
 		(GLfloat)matrix->m20, (GLfloat)matrix->m21, (GLfloat)matrix->m22, (GLfloat)matrix->m23,
 		(GLfloat)matrix->m30, (GLfloat)matrix->m31, (GLfloat)matrix->m32, (GLfloat)matrix->m33,
 	};
-	glUniformMatrix4fv(e3dCurrentShader->unif_mat, 1, GL_FALSE, fmatrix);
+	glUniformMatrix4fv(localGlobal.e3dCurrentShader->unif_mat, 1, GL_FALSE, fmatrix);
 }
 
 // e3d命令 色の設定
 void e3dSetColor(double r, double g, double b, double a){
 	GLfloat fcolor[4] = {(GLfloat)r, (GLfloat)g, (GLfloat)b, (GLfloat)a};
-	if(memcmp(e3dMemoryColor, fcolor, 4 * sizeof(GLfloat))){
-		memcpy(e3dMemoryColor, fcolor, 4 * sizeof(GLfloat));
-		glUniform4fv(e3dCurrentShader->unif_col, 1, fcolor);
+	if(memcmp(localGlobal.e3dMemoryColor, fcolor, 4 * sizeof(GLfloat))){
+		memcpy(localGlobal.e3dMemoryColor, fcolor, 4 * sizeof(GLfloat));
+		glUniform4fv(localGlobal.e3dCurrentShader->unif_col, 1, fcolor);
 	}
 }
 

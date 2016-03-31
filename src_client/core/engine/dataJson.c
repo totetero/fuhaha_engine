@@ -4,29 +4,32 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-// 一時バッファ
-static char *tempBuff;
-static uint32_t tempBuffIndex;
-static uint32_t tempBuffLength = 0;
+static struct{
+	// 一時バッファ
+	char *tempBuff;
+	uint32_t tempBuffIndex;
+	uint32_t tempBuffLength;
+} localGlobal = {0};
+
 // 一時バッファの長さ確保
 static void tempBuffSetLength(uint32_t length){
-	if(tempBuffLength < tempBuffIndex + length){
-		uint32_t newBuffLength = tempBuffLength + (length > 1024 ? length : 1024);
+	if(localGlobal.tempBuffLength < localGlobal.tempBuffIndex + length){
+		uint32_t newBuffLength = localGlobal.tempBuffLength + (length > 1024 ? length : 1024);
 		char *newBuff = (char*)malloc(newBuffLength * sizeof(char));
-		if(tempBuffLength > 0){
-			memcpy(newBuff, tempBuff, tempBuffLength * sizeof(char));
-			free(tempBuff);
+		if(localGlobal.tempBuffLength > 0){
+			memcpy(newBuff, localGlobal.tempBuff, localGlobal.tempBuffLength * sizeof(char));
+			free(localGlobal.tempBuff);
 		}
-		tempBuffLength = newBuffLength;
-		tempBuff = newBuff;
+		localGlobal.tempBuffLength = newBuffLength;
+		localGlobal.tempBuff = newBuff;
 	}
 }
 // 一時バッファに挿入
-static void tempBuffPutChar(char c){tempBuffSetLength(1); tempBuff[tempBuffIndex++] = c;}
-static void tempBuffPutInt(int64_t value){size_t n = 64; tempBuffSetLength((uint32_t)n); tempBuffIndex += snprintf(tempBuff + tempBuffIndex, n, "%lld", value);}
-static void tempBuffPutFloat(double value){size_t n = 64; tempBuffSetLength((uint32_t)n); tempBuffIndex += snprintf(tempBuff + tempBuffIndex, n, "%lf", value);}
-static void tempBuffPutString1(char *value){size_t n = strlen(value)     + 1; tempBuffSetLength((uint32_t)n); tempBuffIndex += snprintf(tempBuff + tempBuffIndex, n,     "%s", value);}
-static void tempBuffPutString2(char *value){size_t n = strlen(value) + 2 + 1; tempBuffSetLength((uint32_t)n); tempBuffIndex += snprintf(tempBuff + tempBuffIndex, n, "\"%s\"", value);}
+static void tempBuffPutChar(char c){tempBuffSetLength(1); localGlobal.tempBuff[localGlobal.tempBuffIndex++] = c;}
+static void tempBuffPutInt(int64_t value){size_t n = 64; tempBuffSetLength((uint32_t)n); localGlobal.tempBuffIndex += snprintf(localGlobal.tempBuff + localGlobal.tempBuffIndex, n, "%lld", value);}
+static void tempBuffPutFloat(double value){size_t n = 64; tempBuffSetLength((uint32_t)n); localGlobal.tempBuffIndex += snprintf(localGlobal.tempBuff + localGlobal.tempBuffIndex, n, "%lf", value);}
+static void tempBuffPutString1(char *value){size_t n = strlen(value)     + 1; tempBuffSetLength((uint32_t)n); localGlobal.tempBuffIndex += snprintf(localGlobal.tempBuff + localGlobal.tempBuffIndex, n,     "%s", value);}
+static void tempBuffPutString2(char *value){size_t n = strlen(value) + 2 + 1; tempBuffSetLength((uint32_t)n); localGlobal.tempBuffIndex += snprintf(localGlobal.tempBuff + localGlobal.tempBuffIndex, n, "\"%s\"", value);}
 
 // ----------------------------------------------------------------
 
@@ -58,7 +61,7 @@ static bool parseStringEscape(char **p){
 // 値文字列読み取り
 static bool parseString(struct dataJsonValue *this, char **p){
 	char *c = *p;
-	tempBuffIndex = 0;
+	localGlobal.tempBuffIndex = 0;
 
 	// ダブルクォーテーション開始
 	if(*(c++) != '\"'){return false;}
@@ -78,10 +81,10 @@ static bool parseString(struct dataJsonValue *this, char **p){
 	c++;
 
 	// 文字列登録
-	tempBuff[tempBuffIndex++] = '\0';
+	localGlobal.tempBuff[localGlobal.tempBuffIndex++] = '\0';
 	if(this != NULL){
 		this->type = DATAJSONTYPE_STRING;
-		this->jString = tempBuff;
+		this->jString = localGlobal.tempBuff;
 	}
 
 	*p = c;
@@ -91,7 +94,7 @@ static bool parseString(struct dataJsonValue *this, char **p){
 // キー文字列読み取り
 static bool parseKeyString(struct dataJsonValue *this, char **p){
 	char *c = *p;
-	tempBuffIndex = 0;
+	localGlobal.tempBuffIndex = 0;
 
 	// 文字列読み取り
 	while(('0' <= *c && *c <= '9') || ('a' <= *c && *c <= 'z') || ('A' <= *c && *c <= 'Z') || *c == '_'){
@@ -99,10 +102,10 @@ static bool parseKeyString(struct dataJsonValue *this, char **p){
 	}
 
 	// 文字列登録
-	tempBuff[tempBuffIndex++] = '\0';
+	localGlobal.tempBuff[localGlobal.tempBuffIndex++] = '\0';
 	if(this != NULL){
 		this->type = DATAJSONTYPE_STRING;
-		this->jString = tempBuff;
+		this->jString = localGlobal.tempBuff;
 	}
 
 	*p = c;
@@ -112,7 +115,7 @@ static bool parseKeyString(struct dataJsonValue *this, char **p){
 // 数字読み取り
 static bool parseNumber(struct dataJsonValue *this, char **p){
 	char *c = *p;
-	tempBuffIndex = 0;
+	localGlobal.tempBuffIndex = 0;
 
 	// 数字を表す文字列を読み込む
 	bool isFloat = false;
@@ -140,14 +143,14 @@ static bool parseNumber(struct dataJsonValue *this, char **p){
 	}
 
 	// 数字の確認
-	tempBuff[tempBuffIndex++] = '\0';
+	localGlobal.tempBuff[localGlobal.tempBuffIndex++] = '\0';
 	if(this != NULL){
 		if(isFloat){
 			this->type = DATAJSONTYPE_FLOAT;
-			sscanf(tempBuff, "%lf", &this->jFloat);
+			sscanf(localGlobal.tempBuff, "%lf", &this->jFloat);
 		}else{
 			this->type = DATAJSONTYPE_INT;
-			sscanf(tempBuff, "%lld", &this->jInt);
+			sscanf(localGlobal.tempBuff, "%lld", &this->jInt);
 		}
 	}
 
@@ -375,13 +378,13 @@ void dataJsonParse(struct dataJsonValue *this, char *json){
 // jsonを文字列に変換
 char *dataJsonStringify(struct dataJsonValue *this){
 	if(this == NULL){return NULL;}
-	tempBuffIndex = 0;
+	localGlobal.tempBuffIndex = 0;
 	jsonStringify(this, -1);
 	tempBuffPutChar('\0');
 
-	uint32_t length = (uint32_t)strlen(tempBuff);
+	uint32_t length = (uint32_t)strlen(localGlobal.tempBuff);
 	char *buff = (char*)malloc((length + 1) * sizeof(char));
-	strcpy(buff, tempBuff);
+	strcpy(buff, localGlobal.tempBuff);
 	return buff;
 }
 
@@ -390,10 +393,10 @@ char *dataJsonStringify(struct dataJsonValue *this){
 // jsonテスト出力
 void dataJsonTrace(struct dataJsonValue *this){
 	if(this == NULL){return;}
-	tempBuffIndex = 0;
+	localGlobal.tempBuffIndex = 0;
 	jsonStringify(this, 0);
 	tempBuffPutChar('\0');
-	trace("%s", tempBuff);
+	trace("%s", localGlobal.tempBuff);
 }
 
 // ----------------------------------------------------------------
