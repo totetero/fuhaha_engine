@@ -30,6 +30,12 @@ class FuhahaGLViewController: GLKViewController{
 		gameSurfaceChanged(Int32(self.view.frame.size.width), Int32(self.view.frame.size.height), 1.0);
 	}
 
+	static func applicationWillResignActive(){}
+	static func applicationDidEnterBackground(){}
+	static func applicationWillEnterForeground(){}
+	static func applicationDidBecomeActive(){}
+	static func applicationWillTerminate(){}
+
 	override func didReceiveMemoryWarning(){
 		super.didReceiveMemoryWarning();
 		gameSurfaceDestroy();
