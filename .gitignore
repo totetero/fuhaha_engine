@@ -11,6 +11,9 @@ src_platform/web/obj/MakeDepends.mk
 src_platform/web/obj/*.o
 src_platform/web/bin
 
+src_platform/android/.gradle
+src_platform/android/build
+
 # ----------------------------------------------------------------
 # ----------------------------------------------------------------
 # ----------------------------------------------------------------
