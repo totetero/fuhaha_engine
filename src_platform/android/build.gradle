@@ -1,15 +1,131 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-buildscript {
-    repositories {
-       jcenter()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle-experimental:0.4.0'
-    }
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+
+buildscript{
+	repositories{jcenter()}
+	dependencies{classpath("com.android.tools.build:gradle-experimental:0.7.0-alpha5")}
 }
 
-allprojects {
-    repositories {
-        jcenter()
-    }
+allprojects{
+	repositories{jcenter()}
 }
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+
+defaultTasks 'androidAllDebug'
+//defaultTasks 'assembleRelease'
+
+task(wrapper, type: Wrapper){gradleVersion = "2.10"}
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+
+gradle.projectsEvaluated{
+	tasks.withType(JavaCompile){
+		options.compilerArgs << "-Xlint:deprecation"
+	}
+}
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+
+apply plugin: "com.android.model.application"
+
+model{
+	android{
+		compileSdkVersion = 23
+		buildToolsVersion = "23.0.2"
+
+		defaultConfig.with{
+			applicationId = "com.totetero.asteroid"
+			minSdkVersion.apiLevel = 9
+			targetSdkVersion.apiLevel = 23
+			versionCode = 1
+			versionName = "0.0.1"
+		}
+	}
+
+	android.buildTypes{
+		debug{
+			//applicationIdSuffix ".debug"
+		}
+		release{
+			//minifyEnabled false
+			//proguardFiles.add(file("proguard-rules.pro"))
+			signingConfig = $("android.signingConfigs.signRelease")
+		}
+	}
+
+	android.sources{
+		main{
+			java.source{
+				srcDir("src")
+				srcDir("../../src_client/platform_android")
+			}
+			jni.source{
+				srcDir("../../src_client/core")
+				srcDir("../../src_client/platform_android")
+			}
+			manifest.source{
+				srcDir("src")
+			}
+			res.source{
+				srcDir("src/res")
+			}
+			assets.source{
+				srcDir("../../contents")
+			}
+		}
+	}
+
+	android.ndk{
+		moduleName = "fuhaha_native"
+		CFlags.add("-std=c99")
+		CFlags.add("-I${project.buildDir}/../../../src_client/platform_android".toString())
+		ldLibs.addAll(["log", "GLESv2"])
+		stl = "gnustl_static"
+	}
+
+	android.productFlavors{
+		//create("arm"){ndk.abiFilters.add("armeabi")}
+		//create("arm7"){ndk.abiFilters.add("armeabi-v7a")}
+		//create("arm8"){ndk.abiFilters.add("arm64-v8a")}
+		//create("x86"){ndk.abiFilters.add("x86")}
+		//create("x86-64"){ndk.abiFilters.add("x86_64")}
+		//create("mips"){ndk.abiFilters.add("mips")}
+		//create("mips-64"){ndk.abiFilters.add("mips64")}
+		create("all")
+	}
+
+	android.signingConfigs{
+		create("signRelease"){
+			storeFile = file(productKeystore)
+			keyAlias = productKeyAlias
+			storePassword = productKeyPass
+			keyPassword = productAliasPassword
+		}
+	}
+
+	android.lintOptions{
+		abortOnError(false)
+	}
+}
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+
+dependencies{
+	compile("com.google.android.gms:play-services:6.+")
+}
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+
