@@ -16,7 +16,7 @@ allprojects{
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-defaultTasks 'androidAllDebug'
+defaultTasks 'assembleDebug'
 //defaultTasks 'assembleRelease'
 
 task(wrapper, type: Wrapper){gradleVersion = "2.10"}
