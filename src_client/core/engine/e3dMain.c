@@ -30,7 +30,6 @@ void e3dSampleCode(){
 	static uint32_t step = 0;
 	if(!isInit){
 		isInit = true;
-		glViewport(0, 0, 320, 480);
 		uint32_t vertIndex = e3dBufferVretIndexGet();
 		faceIndex = e3dBufferFaceIndexGet();
 		e3dBufferBegin();

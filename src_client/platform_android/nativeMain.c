@@ -5,16 +5,25 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-static JavaVM *javaVM;
+static struct{
+	// バーチャルマシン
+	JavaVM *javaVM;
+	// ピクセルレシオの逆数
+	double iPixelRatio;
+} localGlobal = {0};
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
 
 jint JNI_OnLoad(JavaVM *vm, void* reserved){
-	javaVM = vm;
+	localGlobal.javaVM = vm;
 	return JNI_VERSION_1_6;
 }
 
 static JNIEnv *getJNIEnv(){
 	JNIEnv *env;
-	jint ret = (*javaVM)->GetEnv(javaVM, (void**)&env, JNI_VERSION_1_6);
+	jint ret = (*localGlobal.javaVM)->GetEnv(localGlobal.javaVM, (void**)&env, JNI_VERSION_1_6);
 	return (ret == JNI_OK) ? env : NULL;
 }
 
@@ -48,6 +57,10 @@ JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaGLView_nativeGlSetup(JNIEn
 
 // openGL画面サイズ変更時
 JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaGLView_nativeGlResize(JNIEnv *env, jobject obj, jint width, jint height){
+	localGlobal.iPixelRatio = 320.0 / (width < height ? width : height);
+	width *= localGlobal.iPixelRatio;
+	height *= localGlobal.iPixelRatio;
+	gameSurfaceChanged(width, height, 1 / localGlobal.iPixelRatio);
 }
 
 // openGL描画

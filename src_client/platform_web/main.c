@@ -4,6 +4,7 @@
 #include <emscripten/emscripten.h>
 
 #include "game.h"
+void webPlatformScreenInit(void);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -24,6 +25,7 @@ static void mainloop(){
 int main(){
 	if(init() == 0){
 		gameSurfaceCreated();
+		webPlatformScreenInit();
 		emscripten_set_main_loop(mainloop, 0, 1);
 	}
 	glfwTerminate();

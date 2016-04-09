@@ -1,4 +1,4 @@
 #!/bin/bash
 
-echo "['_main', ]"
+echo "['_main', '_gameSurfaceChanged']"
 
