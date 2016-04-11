@@ -53,11 +53,11 @@ model{
 
 	android.buildTypes{
 		debug{
-			//applicationIdSuffix ".debug"
+			applicationIdSuffix = ".debug"
 		}
 		release{
-			//minifyEnabled false
-			//proguardFiles.add(file("proguard-rules.pro"))
+			minifyEnabled = false
+			proguardFiles.add(file("proguard-rules.pro"))
 			signingConfig = $("android.signingConfigs.signRelease")
 		}
 	}

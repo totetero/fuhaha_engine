@@ -15,9 +15,18 @@ web:
 
 # --------------------------------
 
-android:
-	cd src_platform/android; ./gradlew
-	#adb install src_platform/android/build/outputs/apk/android-all-debug.apk
+android: android-debug
+	adb install -r src_platform/android/build/outputs/apk/android-all-debug.apk
+	adb logcat
+
+android-isIns:
+	adb shell pm list package | grep totetero
+
+android-debug:
+	cd src_platform/android; ./gradlew assembleDebug
+
+android-release:
+	cd src_platform/android; ./gradlew assembleRelease
 
 # --------------------------------
 
