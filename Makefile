@@ -10,6 +10,13 @@ clean:
 
 # --------------------------------
 
+copy:
+	rsync -av --delete contents/ src_platform/android/assets/ --exclude='*.ogg'
+	rsync -av --delete contents/ src_platform/ios/assets/ --exclude='*.ogg'
+	rsync -av --delete contents/ src_platform/web/bin/ --exclude='game.js' --exclude='game.js.mem' --exclude='game.html' --exclude='frame.html'
+
+# --------------------------------
+
 web:
 	$(MAKE) -C src_platform/web build
 

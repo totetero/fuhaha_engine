@@ -79,7 +79,7 @@ model{
 				srcDir("src/res")
 			}
 			assets.source{
-				srcDir("../../contents")
+				srcDir("assets")
 			}
 		}
 	}
