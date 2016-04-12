@@ -22,6 +22,11 @@ web:
 
 # --------------------------------
 
+node: web copy
+	node src_server/node/main.js
+
+# --------------------------------
+
 android: android-debug
 	adb install -r src_platform/android/build/outputs/apk/android-all-debug.apk
 	adb logcat
