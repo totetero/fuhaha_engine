@@ -17,17 +17,20 @@ copy:
 
 # --------------------------------
 
-web:
-	$(MAKE) -C src_platform/web build
+web: web-node
 
-# --------------------------------
-
-node: web copy
+web-node: web-debug copy
 	node src_server/node/main.js
 
+web-debug:
+	$(MAKE) -C src_platform/web debug
+
+web-release:
+	$(MAKE) -C src_platform/web release
+
 # --------------------------------
 
-android: android-debug
+android: copy android-debug
 	adb install -r src_platform/android/build/outputs/apk/android-all-debug.apk
 	adb logcat
 

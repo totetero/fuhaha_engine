@@ -1,4 +1,3 @@
-#EMCC = emcc -O3
 EMCC = emcc
 
 PLATSRCDIR = ../../src_client/platform_web
@@ -15,18 +14,25 @@ CFLAGS = -I$(PLATSRCDIR) -I$(CORESRCDIR)
 EXFLAGS = -s EXPORTED_FUNCTIONS="$(shell sh $(PLATSRCDIR)/exFuncs.sh)"
 JSFLAGS = $(addprefix --js-library , $(JSSRCS))
 
-.PHONY : default build clean
+.PHONY : default debug release build clean
 
-default: build 
+default: debug 
 
 # --------------------------------
+
+debug: build
+
+release: EMCC += -O3
+release: clean build
 
 build: $(TARGET)
 	mkdir -p bin
 	rsync -av $(TARGET) game.html frame.html bin/
+	[[ ! -f $(TARGET).mem ]] || rsync -av $(TARGET).mem bin/
 
 clean:
 	-rm $(TARGET) $(DEPEND) $(OBJS)
+	[[ ! -f $(TARGET).mem ]] || rm $(TARGET).mem
 
 # --------------------------------
 
