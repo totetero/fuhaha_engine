@@ -4,9 +4,7 @@ default: web
 
 # --------------------------------
 
-clean:
-	$(MAKE) -C src_platform/web clean
-	cd src_platform/android; ./gradlew clean
+clean: web-clean android-clean
 
 # --------------------------------
 
@@ -28,6 +26,9 @@ web-debug:
 web-release:
 	$(MAKE) -C src_platform/web release
 
+web-clean:
+	$(MAKE) -C src_platform/web clean
+
 # --------------------------------
 
 android: copy android-debug
@@ -42,6 +43,9 @@ android-debug:
 
 android-release:
 	cd src_platform/android; ./gradlew assembleRelease
+
+android-clean:
+	cd src_platform/android; ./gradlew clean
 
 # --------------------------------
 
