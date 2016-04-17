@@ -1,4 +1,4 @@
-#import "asteroid-Swift.h"
+#import "fuhaha-Swift.h"
 
 #include "native.h"
 #include "gamePluginUtil.h"
