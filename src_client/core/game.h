@@ -3,12 +3,17 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
-// ゲーム側で実装 プラットフォーム側から呼び出す
+// -------- ゲーム側で実装 プラットフォーム側から呼び出す
 
+// opengl初期化
 void gameSurfaceCreated();
+// opengl画面サイズ変更
 void gameSurfaceChanged(int width, int height, double pixelRatio);
+// opengl描画
 void gameSurfaceDrawFrame();
+// opengl中断
 void gameSurfacePause();
+// opengl終了
 void gameSurfaceDestroy();
 
 // ----------------------------------------------------------------

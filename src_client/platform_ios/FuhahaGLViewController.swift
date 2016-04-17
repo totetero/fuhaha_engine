@@ -8,6 +8,9 @@ import GLKit
 class FuhahaGLViewController: GLKViewController{
 	var context: EAGLContext? = nil;
 
+	// ----------------------------------------------------------------
+
+	// viewの始まり
 	override func viewDidLoad(){
 		super.viewDidLoad();
 
@@ -21,21 +24,44 @@ class FuhahaGLViewController: GLKViewController{
 		gameSurfaceCreated();
 	}
 
+	// 描画時
 	override func glkView(view: GLKView, drawInRect rect: CGRect){
 		gameSurfaceDrawFrame();
 	}
 
+	// 画面サイズ変更時
 	override func viewDidLayoutSubviews(){
 		super.viewDidLayoutSubviews();
 		gameSurfaceChanged(Int32(self.view.frame.size.width), Int32(self.view.frame.size.height), 1.0);
 	}
 
-	static func applicationWillResignActive(){}
-	static func applicationDidEnterBackground(){}
-	static func applicationWillEnterForeground(){}
-	static func applicationDidBecomeActive(){}
-	static func applicationWillTerminate(){}
+	// ----------------------------------------------------------------
 
+	// ライフタイムイベント アプリ閉じそう
+	static func applicationWillResignActive(){
+	}
+
+	// ライフタイムイベント アプリ閉じた
+	static func applicationDidEnterBackground(){
+		gameSurfacePause();
+	}
+
+	// ライフタイムイベント アプリ開きそう
+	static func applicationWillEnterForeground(){
+	}
+
+	// ライフタイムイベント アプリ開いた
+	static func applicationDidBecomeActive(){
+	}
+
+	// ライフタイムイベント フリックしてアプリを終了させた
+	static func applicationWillTerminate(){
+		gameSurfaceDestroy();
+	}
+
+	// ----------------------------------------------------------------
+
+	// メモリがやばい
 	override func didReceiveMemoryWarning(){
 		super.didReceiveMemoryWarning();
 		gameSurfaceDestroy();
@@ -48,12 +74,15 @@ class FuhahaGLViewController: GLKViewController{
 		}
 	}
 
+	// 解放時
 	deinit{
 		gameSurfaceDestroy();
 		if(EAGLContext.currentContext() === self.context){
 			EAGLContext.setCurrentContext(nil);
 		}
 	}
+
+	// ----------------------------------------------------------------
 }
 
 // ----------------------------------------------------------------

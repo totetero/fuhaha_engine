@@ -14,12 +14,14 @@ static struct{
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
+// JNIロード時に呼び出されるコールバック
 jint JNI_OnLoad(JavaVM *vm, void* reserved){
 	localGlobal.javaVM = vm;
 	return JNI_VERSION_1_6;
 }
 
-static JNIEnv *getJNIEnv(){
+// JNIEnvを取得する
+JNIEnv *getJNIEnv(){
 	JNIEnv *env;
 	jint ret = (*localGlobal.javaVM)->GetEnv(localGlobal.javaVM, (void**)&env, JNI_VERSION_1_6);
 	return (ret == JNI_OK) ? env : NULL;
@@ -28,22 +30,21 @@ static JNIEnv *getJNIEnv(){
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
-// javaから呼び出すc言語
 
-// ゲーム初期化時
+// ライフサイクル ゲーム初期化時
 JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaGLView_nativeOnCreate(JNIEnv *env, jobject obj){
 }
 
-// ゲーム開始時と一時停止解除時
+// ライフサイクル ゲーム開始時と一時停止解除時
 JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaGLView_nativeOnResume(JNIEnv *env, jobject obj){
 }
 
-// ゲーム一時停止時
+// ライフサイクル ゲーム一時停止時
 JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaGLView_nativeOnPause(JNIEnv *env, jobject obj){
 	gameSurfacePause();
 }
 
-// ゲーム終了時
+// ライフサイクル ゲーム終了時
 JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaGLView_nativeOnDestroy(JNIEnv *env, jobject obj){
 	gameSurfaceDestroy();
 }
@@ -62,11 +63,6 @@ JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaGLView_nativeGlResize(JNIE
 JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaGLView_nativeGlStep(JNIEnv *env, jobject obj){
 	gameSurfaceDrawFrame();
 }
-
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
-// c言語からよびだすjava
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
