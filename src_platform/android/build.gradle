@@ -43,11 +43,11 @@ model{
 		buildToolsVersion = "23.0.2"
 
 		defaultConfig.with{
-			applicationId = "com.totetero.asteroid"
+			applicationId = fuhahaApplicationId
+			versionCode = fuhahaVersionCode
+			versionName = fuhahaVersionName
 			minSdkVersion.apiLevel = 9
 			targetSdkVersion.apiLevel = 23
-			versionCode = 1
-			versionName = "0.0.1"
 		}
 	}
 

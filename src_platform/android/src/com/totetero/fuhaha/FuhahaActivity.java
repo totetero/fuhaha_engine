@@ -1,5 +1,4 @@
-package com.totetero.asteroid;
-import com.totetero.fuhaha.*;
+package com.totetero.fuhaha;
 
 import android.app.Activity;
 import android.os.Bundle;
