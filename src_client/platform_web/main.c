@@ -5,6 +5,7 @@
 
 #include "game.h"
 void webPlatformScreenInit(void);
+void webPluginUtilInit(void);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -24,6 +25,7 @@ static void mainloop(){
 // main関数 処理はここから始まる
 int main(){
 	if(init() == 0){
+		webPluginUtilInit();
 		gameSurfaceCreated();
 		webPlatformScreenInit();
 		emscripten_set_main_loop(mainloop, 0, 1);
