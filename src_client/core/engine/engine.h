@@ -11,9 +11,10 @@
 #include <stdbool.h>
 #include "platform.h"
 
-#include "math.h"
-#include "data.h"
-#include "e3d.h"
+#include "math/math.h"
+#include "util/util.h"
+#include "data/data.h"
+#include "e3d/e3d.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
