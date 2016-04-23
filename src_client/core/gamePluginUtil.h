@@ -8,6 +8,11 @@
 // url取得 返値文字列は解放禁止
 char *gamePluginUtilUrlGet(void);
 
+// コールバック関数ポインタの登録
+int gamePluginUtilCallbackSet(void *param, void(*callback)(void *param, void *buff));
+// コールバック関数の実行と解放
+int gamePluginUtilCallbackCall(int callbackId, void *buff);
+
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
