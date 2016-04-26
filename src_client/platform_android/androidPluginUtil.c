@@ -10,7 +10,8 @@
 JNIEXPORT jstring JNICALL Java_com_totetero_fuhaha_AndroidPluginUtil_gamePluginUtilUrlGet(JNIEnv *env, jobject obj){return (*env)->NewStringUTF(env, gamePluginUtilUrlGet());}
 
 // コールバックバイナリ
-JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginUtil_gamePluginUtilCallbackBinary(JNIEnv *env, jobject obj, jint callbackId, jbyteArray buff0, jint size){
+JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginUtil_gamePluginUtilCallbackBinary(JNIEnv *env, jobject obj, jint callbackId, jbyteArray buff0){
+	jsize size = (*env)->GetArrayLength(env, buff0);
 	jbyte *buff1 = (*env)->GetByteArrayElements(env, buff0, NULL);
 	void *buff2 = malloc(size); // バッファの開放はゲーム側で行う
 	memcpy(buff2, buff1, size);
