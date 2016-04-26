@@ -9,6 +9,25 @@
 // url取得
 JNIEXPORT jstring JNICALL Java_com_totetero_fuhaha_AndroidPluginUtil_gamePluginUtilUrlGet(JNIEnv *env, jobject obj){return (*env)->NewStringUTF(env, gamePluginUtilUrlGet());}
 
+// コールバックバイナリ
+JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginUtil_gamePluginUtilCallbackBinary(JNIEnv *env, jobject obj, jint callbackId, jbyteArray buff0, jint size){
+	jbyte *buff1 = (*env)->GetByteArrayElements(env, buff0, NULL);
+	void *buff2 = malloc(size); // バッファの開放はゲーム側で行う
+	memcpy(buff2, buff1, size);
+	(*env)->ReleaseByteArrayElements(env, buff0, buff1, 0);
+	gamePluginUtilCallbackCall(callbackId, buff2, size);
+}
+
+// コールバック文字列
+JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginUtil_gamePluginUtilCallbackString(JNIEnv *env, jobject obj, jint callbackId, jstring buff0){
+	jbyte *buff1 = (*env)->GetStringUTFChars(env, buff0, NULL);
+	size_t size = strlen(buff1) + 1;
+	char *buff2 = (char*)malloc(size); // バッファの開放はゲーム側で行う
+	strcpy(buff2, buff1);
+	(*env)->ReleaseStringUTFChars(env, buff0, buff1);
+	gamePluginUtilCallbackCall(callbackId, buff2, size);
+}
+
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

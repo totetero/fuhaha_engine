@@ -10,7 +10,7 @@ struct gamePluginUtilCallback{
 	struct gamePluginUtilCallback *next;
 	int callbackId;
 	void *param;
-	void (*callback)(void *param, void *buff);
+	void (*callback)(void *param, void *buff, size_t size);
 };
 
 static struct{
@@ -20,6 +20,11 @@ static struct{
 		struct gamePluginUtilCallback *list;
 		struct gamePluginUtilCallback *pool;
 	} callback;
+	// 揮発性一時バッファ
+	struct{
+		void *buff;
+		size_t size;
+	} temporary;
 } localGlobal = {0};
 
 // ----------------------------------------------------------------
@@ -35,7 +40,7 @@ char *gamePluginUtilUrlGet(){
 // ----------------------------------------------------------------
 
 // コールバック関数ポインタの登録
-int gamePluginUtilCallbackSet(void *param, void(*callback)(void *param, void *buff)){
+int gamePluginUtilCallbackSet(void *param, void(*callback)(void *param, void *buff, size_t size)){
 	struct gamePluginUtilCallback *new = NULL;
 
 	if(localGlobal.callback.pool != NULL){
@@ -66,7 +71,7 @@ int gamePluginUtilCallbackSet(void *param, void(*callback)(void *param, void *bu
 }
 
 // コールバック関数の実行
-int gamePluginUtilCallbackCall(int callbackId, void *buff){
+int gamePluginUtilCallbackCall(int callbackId, void *buff, size_t size){
 	struct gamePluginUtilCallback *prev = NULL;
 	struct gamePluginUtilCallback *temp = localGlobal.callback.list;
 	while(temp != NULL){
@@ -77,7 +82,7 @@ int gamePluginUtilCallbackCall(int callbackId, void *buff){
 			if(prev == NULL){localGlobal.callback.list = temp;}
 			else{prev->next = temp;}
 			// コールバック実行
-			use->callback(use->param, buff);
+			use->callback(use->param, buff, size);
 			use->callbackId = 0;
 			use->param = NULL;
 			use->callback = NULL;
@@ -114,6 +119,18 @@ int gamePluginUtilCallbackCall(int callbackId, void *buff){
 //	}
 //	localGlobal.callback.pool = NULL;
 //}
+
+// ----------------------------------------------------------------
+
+// 揮発性一時バッファ 返値領域は解放禁止
+void *gamePluginUtilTemporaryBuffer(size_t size){
+	if(localGlobal.temporary.size < size){
+		if(localGlobal.temporary.size > 0){free(localGlobal.temporary.buff);}
+		localGlobal.temporary.size = size;
+		localGlobal.temporary.buff = malloc(localGlobal.temporary.size);
+	}
+	return localGlobal.temporary.buff;
+}
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

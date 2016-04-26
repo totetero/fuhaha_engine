@@ -17,6 +17,8 @@ public class AndroidPluginUtil{
 	// JNI連携
 	static{System.loadLibrary("fuhaha_native");}
 	public static native String gamePluginUtilUrlGet();
+	public static native void gamePluginUtilCallbackBinary(int callbackId, byte[] buff, int size);
+	public static native void gamePluginUtilCallbackString(int callbackId, String buff);
 
 	// ----------------------------------------------------------------
 

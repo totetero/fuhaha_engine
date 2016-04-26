@@ -9,9 +9,12 @@
 char *gamePluginUtilUrlGet(void);
 
 // コールバック関数ポインタの登録
-int gamePluginUtilCallbackSet(void *param, void(*callback)(void *param, void *buff));
+int gamePluginUtilCallbackSet(void *param, void(*callback)(void *param, void *buff, size_t size));
 // コールバック関数の実行と解放
-int gamePluginUtilCallbackCall(int callbackId, void *buff);
+int gamePluginUtilCallbackCall(int callbackId, void *buff, size_t size);
+
+// 揮発性一時バッファ 返値領域は解放禁止
+void *gamePluginUtilTemporaryBuffer(size_t size);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
