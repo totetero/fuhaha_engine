@@ -77,18 +77,18 @@ int platformPluginUtilIsLoading(void){
 // ----------------------------------------------------------------
 
 // 読み込み中カウンタ加算
-void nativePluginUtilIncrementLoading(void){
+void nativePluginUtilLoadingIncrement(void){
 	JNIEnv *env = getJNIEnv();
 	jclass cls = (*env)->FindClass(env, "com/totetero/fuhaha/AndroidPluginUtil");
-	jmethodID mid = (*env)->GetStaticMethodID(env, cls, "nativePluginUtilIncrementLoading", "()V");
+	jmethodID mid = (*env)->GetStaticMethodID(env, cls, "nativePluginUtilLoadingIncrement", "()V");
 	(*env)->CallStaticVoidMethod(env, cls, mid);
 }
 
 // 読み込み中カウンタ減算
-void nativePluginUtilDecrementLoading(void){
+void nativePluginUtilLoadingDecrement(void){
 	JNIEnv *env = getJNIEnv();
 	jclass cls = (*env)->FindClass(env, "com/totetero/fuhaha/AndroidPluginUtil");
-	jmethodID mid = (*env)->GetStaticMethodID(env, cls, "nativePluginUtilDecrementLoading", "()V");
+	jmethodID mid = (*env)->GetStaticMethodID(env, cls, "nativePluginUtilLoadingDecrement", "()V");
 	(*env)->CallStaticVoidMethod(env, cls, mid);
 }
 

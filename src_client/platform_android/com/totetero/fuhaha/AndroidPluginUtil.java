@@ -46,12 +46,12 @@ public class AndroidPluginUtil{
 	}
 
 	// 読み込み中カウンタ加算
-	public static void nativePluginUtilIncrementLoading(){
+	public static void nativePluginUtilLoadingIncrement(){
 		synchronized(AndroidPluginUtil.lock){AndroidPluginUtil.counter++;}
 	}
 
 	// 読み込み中カウンタ減算
-	public static void nativePluginUtilDecrementLoading(){
+	public static void nativePluginUtilLoadingDecrement(){
 		synchronized(AndroidPluginUtil.lock){AndroidPluginUtil.counter--;}
 	}
 

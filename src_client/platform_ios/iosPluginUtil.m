@@ -44,13 +44,13 @@ int platformPluginUtilIsLoading(void){
 // ----------------------------------------------------------------
 
 // 読み込み中カウンタ加算
-void nativePluginUtilIncrementLoading(void){
-	[IosPluginUtil nativePluginUtilIncrementLoading];
+void nativePluginUtilLoadingIncrement(void){
+	[IosPluginUtil nativePluginUtilLoadingIncrement];
 }
 
 // 読み込み中カウンタ減算
-void nativePluginUtilDecrementLoading(void){
-	[IosPluginUtil nativePluginUtilDecrementLoading];
+void nativePluginUtilLoadingDecrement(void){
+	[IosPluginUtil nativePluginUtilLoadingDecrement];
 }
 
 // ----------------------------------------------------------------

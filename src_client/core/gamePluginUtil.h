@@ -38,9 +38,9 @@ int platformPluginUtilIsLoading(void);
 // -------- プラットフォーム側で実装 プラットフォーム側から呼び出す
 
 // 読み込み中カウンタ加算
-void nativePluginUtilIncrementLoading(void);
+void nativePluginUtilLoadingIncrement(void);
 // 読み込み中カウンタ減算
-void nativePluginUtilDecrementLoading(void);
+void nativePluginUtilLoadingDecrement(void);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

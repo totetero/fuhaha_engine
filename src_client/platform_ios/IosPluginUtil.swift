@@ -35,14 +35,14 @@ class IosPluginUtil: NSObject{
 	}
 
 	// 読み込み中カウンタ加算
-	static func nativePluginUtilIncrementLoading(){
+	static func nativePluginUtilLoadingIncrement(){
 		dispatch_semaphore_wait(IosPluginUtil.semaphore, DISPATCH_TIME_FOREVER);
 		IosPluginUtil.counter += 1;
 		dispatch_semaphore_signal(IosPluginUtil.semaphore);
 	}
 
 	// 読み込み中カウンタ減算
-	static func nativePluginUtilDecrementLoading(){
+	static func nativePluginUtilLoadingDecrement(){
 		dispatch_semaphore_wait(IosPluginUtil.semaphore, DISPATCH_TIME_FOREVER);
 		IosPluginUtil.counter -= 1;
 		dispatch_semaphore_signal(IosPluginUtil.semaphore);

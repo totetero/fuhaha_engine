@@ -26,12 +26,12 @@ mergeInto(LibraryManager.library, {
 		Module.privatePluginUtilCounter = 0;
 
 		// 読み込み中カウンタ加算
-		Module.nativePluginUtilIncrementLoading = function(){
+		Module.nativePluginUtilLoadingIncrement = function(){
 			Module.privatePluginUtilCounter++;
 		};
 
 		// 読み込み中カウンタ減算
-		Module.nativePluginUtilDecrementLoading = function(){
+		Module.nativePluginUtilLoadingDecrement = function(){
 			Module.privatePluginUtilCounter--;
 		};
 	},
@@ -76,8 +76,8 @@ mergeInto(LibraryManager.library, {
 	// ----------------------------------------------------------------
 	// ----------------------------------------------------------------
 
-	nativePluginUtilIncrementLoading: function(){return Module.nativePluginUtilIncrementLoading.apply(Module, arguments);},
-	nativePluginUtilDecrementLoading: function(){return Module.nativePluginUtilDecrementLoading.apply(Module, arguments);},
+	nativePluginUtilLoadingIncrement: function(){return Module.nativePluginUtilLoadingIncrement.apply(Module, arguments);},
+	nativePluginUtilLoadingDecrement: function(){return Module.nativePluginUtilLoadingDecrement.apply(Module, arguments);},
 
 	// ----------------------------------------------------------------
 });
