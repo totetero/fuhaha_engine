@@ -9,7 +9,7 @@
 // url取得
 JNIEXPORT jstring JNICALL Java_com_totetero_fuhaha_AndroidPluginUtil_gamePluginUtilUrlGet(JNIEnv *env, jobject obj){return (*env)->NewStringUTF(env, gamePluginUtilUrlGet());}
 
-// コールバックバイナリ
+// バイナリのコールバック
 JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginUtil_gamePluginUtilCallbackBinary(JNIEnv *env, jobject obj, jint callbackId, jbyteArray buff0){
 	jsize size = (*env)->GetArrayLength(env, buff0);
 	jbyte *buff1 = (*env)->GetByteArrayElements(env, buff0, NULL);
@@ -19,7 +19,7 @@ JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginUtil_gamePluginUtil
 	gamePluginUtilCallbackCall(callbackId, buff2, size);
 }
 
-// コールバック文字列
+// 文字列のコールバック
 JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginUtil_gamePluginUtilCallbackString(JNIEnv *env, jobject obj, jint callbackId, jstring buff0){
 	jbyte *buff1 = (*env)->GetStringUTFChars(env, buff0, NULL);
 	size_t size = strlen(buff1) + 1;
