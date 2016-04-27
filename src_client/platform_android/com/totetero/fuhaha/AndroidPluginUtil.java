@@ -39,10 +39,10 @@ public class AndroidPluginUtil{
 	// ----------------------------------------------------------------
 
 	// 読み込み中確認
-	public static int platformPluginUtilIsLoading(){
+	public static boolean platformPluginUtilIsLoading(){
 		boolean isLoading = false;
 		synchronized(AndroidPluginUtil.lock){isLoading = (AndroidPluginUtil.counter > 0);}
-		return isLoading ? 1 : 0;
+		return isLoading;
 	}
 
 	// 読み込み中カウンタ加算

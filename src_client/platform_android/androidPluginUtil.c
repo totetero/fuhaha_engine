@@ -65,11 +65,11 @@ long long int platformPluginUtilTimeGet(void){
 // ----------------------------------------------------------------
 
 // 読み込み中確認
-int platformPluginUtilIsLoading(void){
+bool platformPluginUtilIsLoading(void){
 	JNIEnv *env = getJNIEnv();
 	jclass cls = (*env)->FindClass(env, "com/totetero/fuhaha/AndroidPluginUtil");
-	jmethodID mid = (*env)->GetStaticMethodID(env, cls, "platformPluginUtilIsLoading", "()I");
-	return (*env)->CallStaticIntMethod(env, cls, mid);
+	jmethodID mid = (*env)->GetStaticMethodID(env, cls, "platformPluginUtilIsLoading", "()Z");
+	return (*env)->CallStaticBooleanMethod(env, cls, mid);
 }
 
 // ----------------------------------------------------------------

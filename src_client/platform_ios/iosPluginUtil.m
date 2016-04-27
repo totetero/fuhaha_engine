@@ -35,7 +35,7 @@ long long int platformPluginUtilTimeGet(void){
 // ----------------------------------------------------------------
 
 // 読み込み中確認
-int platformPluginUtilIsLoading(void){
+bool platformPluginUtilIsLoading(void){
 	return [IosPluginUtil platformPluginUtilIsLoading];
 }
 

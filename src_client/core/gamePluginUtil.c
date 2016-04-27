@@ -71,7 +71,7 @@ int gamePluginUtilCallbackSet(void *param, void(*callback)(void *param, void *bu
 }
 
 // コールバック関数の実行
-int gamePluginUtilCallbackCall(int callbackId, void *buff, size_t size){
+bool gamePluginUtilCallbackCall(int callbackId, void *buff, size_t size){
 	struct gamePluginUtilCallback *prev = NULL;
 	struct gamePluginUtilCallback *temp = localGlobal.callback.list;
 	while(temp != NULL){
@@ -89,13 +89,13 @@ int gamePluginUtilCallbackCall(int callbackId, void *buff, size_t size){
 			// 要素のプール
 			use->next = localGlobal.callback.pool;
 			localGlobal.callback.pool = use;
-			return 0;
+			return true;
 		}else{
 			prev = temp;
 			temp = temp->next;
 		}
 	}
-	return -1;
+	return false;
 }
 
 //// コールバック関数の全解放

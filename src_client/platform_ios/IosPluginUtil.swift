@@ -27,11 +27,11 @@ class IosPluginUtil: NSObject{
 	// ----------------------------------------------------------------
 
 	// 読み込み中確認
-	static func platformPluginUtilIsLoading() -> Int32{
+	static func platformPluginUtilIsLoading() -> Bool{
 		dispatch_semaphore_wait(IosPluginUtil.semaphore, DISPATCH_TIME_FOREVER);
 		let isLoading = (IosPluginUtil.counter > 0);
 		dispatch_semaphore_signal(IosPluginUtil.semaphore);
-		return isLoading ? 1 : 0;
+		return isLoading;
 	}
 
 	// 読み込み中カウンタ加算
