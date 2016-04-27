@@ -11,6 +11,7 @@ JNIEXPORT jstring JNICALL Java_com_totetero_fuhaha_AndroidPluginUtil_gamePluginU
 
 // バイナリのコールバック
 JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginUtil_gamePluginUtilCallbackBinary(JNIEnv *env, jobject obj, jint callbackId, jbyteArray buff0){
+	if(buff0 == NULL){gamePluginUtilCallbackCall(callbackId, NULL, 0); return;}
 	jsize size = (*env)->GetArrayLength(env, buff0);
 	jbyte *buff1 = (*env)->GetByteArrayElements(env, buff0, NULL);
 	void *buff2 = malloc(size); // バッファの開放はゲーム側で行う
@@ -21,6 +22,7 @@ JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginUtil_gamePluginUtil
 
 // 文字列のコールバック
 JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginUtil_gamePluginUtilCallbackString(JNIEnv *env, jobject obj, jint callbackId, jstring buff0){
+	if(buff0 == NULL){gamePluginUtilCallbackCall(callbackId, NULL, 0); return;}
 	jbyte *buff1 = (*env)->GetStringUTFChars(env, buff0, NULL);
 	size_t size = strlen(buff1) + 1;
 	char *buff2 = (char*)malloc(size); // バッファの開放はゲーム側で行う
