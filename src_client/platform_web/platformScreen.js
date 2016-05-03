@@ -21,7 +21,7 @@ mergeInto(LibraryManager.library, {
 			Module.canvas.style.height = h + "px";
 			Module.canvas.style.marginLeft = (w * -0.5) + "px";
 			Module.canvas.style.marginTop = (h * -0.5) + "px";
-			ccall("gameSurfaceChanged", "void", ["int", "int", "number"], [w, h, pixelRatio]);
+			ccall("gameSurfaceChanged", null, [null, null, null], [w, h, pixelRatio]);
 		};
 		var resizeTimer;
 		window.addEventListener("resize", function(e){
