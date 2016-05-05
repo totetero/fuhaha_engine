@@ -6,6 +6,7 @@
 #include "game.h"
 void webPlatformScreenInit(void);
 void webPluginUtilInit(void);
+void webPluginDataInit(void);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -26,6 +27,7 @@ static void mainloop(){
 int main(){
 	if(init() == 0){
 		webPluginUtilInit();
+		webPluginDataInit();
 		gameSurfaceCreated();
 		webPlatformScreenInit();
 		emscripten_set_main_loop(mainloop, 0, 1);
