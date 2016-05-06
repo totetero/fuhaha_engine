@@ -14,6 +14,9 @@ src_platform/web/bin
 
 src_platform/android/.gradle
 src_platform/android/build
+src_platform/android/assets
+
+src_platform/ios/assets
 
 # ----------------------------------------------------------------
 # ----------------------------------------------------------------
