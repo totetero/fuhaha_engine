@@ -15,7 +15,7 @@ class FuhahaGLViewController: GLKViewController{
 		super.viewDidLoad();
 
 		self.context = EAGLContext(API: .OpenGLES2);
-		let view = self.view as! GLKView;
+		let view: GLKView = self.view as! GLKView;
 		view.context = self.context!;
 		view.drawableDepthFormat = .Format24;
 		view.drawableStencilFormat = .Format8;
@@ -38,24 +38,24 @@ class FuhahaGLViewController: GLKViewController{
 	// ----------------------------------------------------------------
 
 	// ライフタイムイベント アプリ閉じそう
-	static func applicationWillResignActive(){
+	static internal func applicationWillResignActive(){
 	}
 
 	// ライフタイムイベント アプリ閉じた
-	static func applicationDidEnterBackground(){
+	static internal func applicationDidEnterBackground(){
 		gameSurfacePause();
 	}
 
 	// ライフタイムイベント アプリ開きそう
-	static func applicationWillEnterForeground(){
+	static internal func applicationWillEnterForeground(){
 	}
 
 	// ライフタイムイベント アプリ開いた
-	static func applicationDidBecomeActive(){
+	static internal func applicationDidBecomeActive(){
 	}
 
 	// ライフタイムイベント フリックしてアプリを終了させた
-	static func applicationWillTerminate(){
+	static internal func applicationWillTerminate(){
 		gameSurfaceDestroy();
 	}
 
