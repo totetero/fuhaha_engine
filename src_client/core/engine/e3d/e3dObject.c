@@ -41,6 +41,10 @@ struct e3dObjectTexData{
 };
 
 static struct{
+	// デフォルトテクスチャ
+	struct{
+		GLuint glId;
+	} defaultTexture;
 	// 3Dオブジェクトリスト
 	uint32_t e3dIdCount;
 	struct e3dObjectVBO *e3dObjectVBOList;
@@ -69,13 +73,8 @@ static void e3dObjectIBOLoad(struct e3dObjectIBO *this){
 
 // テクスチャ作成
 static void e3dObjectTexDataLoad(struct e3dObjectTexData *this){
-	// 読み込み中用のデフォルトテクスチャ作成
-	uint8_t data[4] = {0xff, 0xff, 0xff, 0xff};
-	glGenTextures(1, &this->glId);
-	glBindTexture(GL_TEXTURE_2D, this->glId);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-	glGenerateMipmap(GL_TEXTURE_2D);
-	e3dMemoryResetTex();
+	// 読み込み中のデフォルトテクスチャ設定
+	this->glId = localGlobal.defaultTexture.glId;
 	// テクスチャロード
 	//platformTextureLoad(this->glId, this->src); TODO e3dMemoryResetTexも?
 }
@@ -350,11 +349,14 @@ void e3dObjectDispose(){
 		struct e3dObjectTexData *dispose = tempData;
 		tempData = tempData->next;
 		// 要素の除去
-		glDeleteTextures(1, &dispose->glId);
+		if(dispose->glId != localGlobal.defaultTexture.glId){glDeleteTextures(1, &dispose->glId);}
 		free(dispose->src);
 		free(dispose);
 	}
 	localGlobal.e3dObjectTexDataList = NULL;
+
+	// デフォルトテクスチャ除去
+	glDeleteTextures(1, &localGlobal.defaultTexture.glId);
 }
 
 // ----------------------------------------------------------------
@@ -369,6 +371,13 @@ void e3dObjectReload(){
 	while(tempVBO != NULL){e3dObjectVBOLoad(tempVBO); tempVBO = tempVBO->next;}
 	while(tempIBO != NULL){e3dObjectIBOLoad(tempIBO); tempIBO = tempIBO->next;}
 	while(tempTex != NULL){e3dObjectTexDataLoad(tempTex); tempTex = tempTex->next;}
+
+	// 読み込み中に使うデフォルトテクスチャ作成
+	uint8_t data[4] = {0xff, 0xff, 0xff, 0xff};
+	glGenTextures(1, &localGlobal.defaultTexture.glId);
+	glBindTexture(GL_TEXTURE_2D, localGlobal.defaultTexture.glId);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	glGenerateMipmap(GL_TEXTURE_2D);
 }
 
 // ----------------------------------------------------------------
