@@ -25,7 +25,7 @@ public class AndroidPluginData{
 			byte[] buff = null;
 			HttpURLConnection connect = null;
 			try{
-				URL newUrl = new URL(AndroidPluginUtil.gamePluginUtilUrlGet() + "/" + url);
+				URL newUrl = new URL(AndroidPluginUtil.corePluginUtilUrlGet() + "/" + url);
 				connect = (HttpURLConnection)newUrl.openConnection();
 				connect.setRequestMethod("POST");
 				connect.setDoInput(true);

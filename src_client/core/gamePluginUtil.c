@@ -14,17 +14,17 @@ struct gamePluginUtilCallback{
 };
 
 static struct{
+	// 揮発性一時バッファ
+	struct{
+		void *buff;
+		size_t size;
+	} temporary;
 	// コールバック
 	struct{
 		int idCount;
 		struct gamePluginUtilCallback *list;
 		struct gamePluginUtilCallback *pool;
 	} callback;
-	// 揮発性一時バッファ
-	struct{
-		void *buff;
-		size_t size;
-	} temporary;
 } localGlobal = {0};
 
 // ----------------------------------------------------------------
@@ -32,11 +32,25 @@ static struct{
 // ----------------------------------------------------------------
 
 // url取得 返値文字列は解放禁止
-char *gamePluginUtilUrlGet(){
-	static const char* value = "http://example.com";
+char *corePluginUtilUrlGet(){
+	static const char* value = "http://totetero.com/cgi-bin/php";
 	return (char*)value;
 }
 
+// ----------------------------------------------------------------
+
+// 揮発性一時バッファ 返値領域は解放禁止
+void *corePluginUtilTemporaryBuffer(size_t size){
+	if(localGlobal.temporary.size < size){
+		if(localGlobal.temporary.size > 0){free(localGlobal.temporary.buff);}
+		localGlobal.temporary.size = size;
+		localGlobal.temporary.buff = malloc(localGlobal.temporary.size);
+	}
+	return localGlobal.temporary.buff;
+}
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
 // コールバック関数ポインタの登録
@@ -119,18 +133,6 @@ bool gamePluginUtilCallbackCall(int callbackId, void *buff, size_t size){
 //	}
 //	localGlobal.callback.pool = NULL;
 //}
-
-// ----------------------------------------------------------------
-
-// 揮発性一時バッファ 返値領域は解放禁止
-void *gamePluginUtilTemporaryBuffer(size_t size){
-	if(localGlobal.temporary.size < size){
-		if(localGlobal.temporary.size > 0){free(localGlobal.temporary.buff);}
-		localGlobal.temporary.size = size;
-		localGlobal.temporary.buff = malloc(localGlobal.temporary.size);
-	}
-	return localGlobal.temporary.buff;
-}
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

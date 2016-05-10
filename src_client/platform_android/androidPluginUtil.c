@@ -7,7 +7,7 @@
 // ----------------------------------------------------------------
 
 // url取得
-JNIEXPORT jstring JNICALL Java_com_totetero_fuhaha_AndroidPluginUtil_gamePluginUtilUrlGet(JNIEnv *env, jobject obj){return (*env)->NewStringUTF(env, gamePluginUtilUrlGet());}
+JNIEXPORT jstring JNICALL Java_com_totetero_fuhaha_AndroidPluginUtil_corePluginUtilUrlGet(JNIEnv *env, jobject obj){return (*env)->NewStringUTF(env, corePluginUtilUrlGet());}
 
 // バイナリのコールバック
 JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginUtil_gamePluginUtilCallbackBinary(JNIEnv *env, jobject obj, jint callbackId, jbyteArray buff0){

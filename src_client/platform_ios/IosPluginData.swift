@@ -13,7 +13,7 @@ class IosPluginData: NSObject{
 		IosPluginUtil.nativePluginUtilLoadingIncrement();
 
 		// 通信準備
-		let baseUrl: String = String.fromCString(UnsafePointer<CChar>(gamePluginUtilUrlGet()))!;
+		let baseUrl: String = String.fromCString(UnsafePointer<CChar>(corePluginUtilUrlGet()))!;
 		let nsurl: NSURL = NSURL(string: baseUrl + "/" + url)!;
 		let nsreq: NSMutableURLRequest = NSMutableURLRequest(URL: nsurl);
 		nsreq.HTTPMethod = "POST";

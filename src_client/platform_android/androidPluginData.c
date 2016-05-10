@@ -39,7 +39,7 @@ char *platformPluginDataPreferenceGet(char *key){
 
 	char* value = (char*)((*env)->GetStringUTFChars(env, str2, NULL));
 	if(value == NULL){return NULL;}
-	char *buff = (char*)gamePluginUtilTemporaryBuffer(strlen(value) + 1);
+	char *buff = (char*)corePluginUtilTemporaryBuffer(strlen(value) + 1);
 	strcpy(buff, value);
 	(*env)->ReleaseStringUTFChars(env, str2, value);
 

@@ -21,7 +21,7 @@ mergeInto(LibraryManager.library, {
 		var callbackId = ccall("gamePluginUtilCallbackSet", null, [null, null], [param, callback]);
 		var xhr = new XMLHttpRequest();
 		xhr.open("POST", "../" + Pointer_stringify(url), true);
-		//xhr.open("POST", Pointer_stringify(ccall("gamePluginUtilUrlGet")) + "/" + Pointer_stringify(url), true);
+		//xhr.open("POST", Pointer_stringify(ccall("corePluginUtilUrlGet")) + "/" + Pointer_stringify(url), true);
 		xhr.setRequestHeader("Content-Type", "application/octet-stream");
 		xhr.responseType = "arraybuffer";
 		xhr.onreadystatechange = function(e){
@@ -92,7 +92,7 @@ mergeInto(LibraryManager.library, {
 	platformPluginDataPreferenceGet: function(key){
 		var str = localStorage.getItem(Pointer_stringify(key));
 		if(str == null){return null;}
-		var buff = ccall("gamePluginUtilTemporaryBuffer", null, [null], [str.length + 1]);
+		var buff = ccall("corePluginUtilTemporaryBuffer", null, [null], [str.length + 1]);
 		Module.writeStringToMemory(str, buff);
 		return buff;
 	},

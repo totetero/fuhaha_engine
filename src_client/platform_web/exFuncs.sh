@@ -1,4 +1,4 @@
 #!/bin/bash
 
-echo "['_main', '_gameSurfaceChanged', '_gamePluginUtilUrlGet', '_gamePluginUtilCallbackSet', '_gamePluginUtilCallbackCall', '_gamePluginUtilTemporaryBuffer']"
+echo "['_main', '_gameSurfaceChanged', '_corePluginUtilUrlGet', '_corePluginUtilTemporaryBuffer', '_gamePluginUtilCallbackSet', '_gamePluginUtilCallbackCall']"
 
