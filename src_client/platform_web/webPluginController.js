@@ -1,17 +1,18 @@
-#pragma once
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
+"use strict";
 
-#include "native.h"
-#include "game.h"
-#include "gamePluginUtil.h"
-#include "gamePluginData.h"
-#include "gamePluginTexture.h"
-#include "gamePluginController.h"
-#include "gamePluginSound.h"
-#include "gamePluginEnpty.h"
+mergeInto(LibraryManager.library, {
+	// ----------------------------------------------------------------
+
+	// プラグイン初期化
+	webPluginControllerInit: function(){
+	},
+
+	// ----------------------------------------------------------------
+});
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

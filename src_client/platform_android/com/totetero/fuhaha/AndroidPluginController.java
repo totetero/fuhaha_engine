@@ -1,17 +1,16 @@
-#pragma once
+package com.totetero.fuhaha;
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-#include "native.h"
-#include "game.h"
-#include "gamePluginUtil.h"
-#include "gamePluginData.h"
-#include "gamePluginTexture.h"
-#include "gamePluginController.h"
-#include "gamePluginSound.h"
-#include "gamePluginEnpty.h"
+// プラグインクラス
+public class AndroidPluginController{
+	// ----------------------------------------------------------------
+
+
+	// ----------------------------------------------------------------
+}
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
