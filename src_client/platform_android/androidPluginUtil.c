@@ -13,13 +13,15 @@ JNIEXPORT jstring JNICALL Java_com_totetero_fuhaha_AndroidPluginUtil_gamePluginU
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-// プラットフォーム名取得 返値文字列は解放禁止
+// プラットフォーム名取得 返値文字列は揮発性バッファで解放禁止
 char *platformPluginUtilPlatformGet(void){
-	static const char* value = "and";
-	return (char*)value;
+	char *value = "and";
+	char *buff = (char*)corePluginUtilTemporaryBuffer(strlen(value) + 1);
+	strcpy(buff, value);
+	return buff;
 }
 
-// ユーザーID取得 返値文字列は解放禁止
+// ユーザーID取得 返値文字列は揮発性バッファで解放禁止
 char *platformPluginUtilUidGet(void){
 	JNIEnv *env = getJNIEnv();
 	jclass cls = (*env)->FindClass(env, "com/totetero/fuhaha/AndroidPluginUtil");
@@ -28,8 +30,8 @@ char *platformPluginUtilUidGet(void){
 	char* value = (char*)((*env)->GetStringUTFChars(env, str, NULL));
 	if(value == NULL){return NULL;}
 
-	static char buff[8];
-	strncpy(buff, value, sizeof(buff));
+	char *buff = (char*)corePluginUtilTemporaryBuffer(strlen(value) + 1);
+	strcpy(buff, value);
 	return buff;
 }
 

@@ -31,10 +31,12 @@ void *corePluginUtilTemporaryBuffer(size_t size){
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-// url取得 返値文字列は解放禁止
+// url取得 返値文字列は揮発性バッファで解放禁止
 char *gamePluginUtilUrlGet(){
-	static const char* value = "http://totetero.com/cgi-bin/php";
-	return (char*)value;
+	char *value = "http://totetero.com/cgi-bin/php";
+	char *buff = (char*)corePluginUtilTemporaryBuffer(strlen(value) + 1);
+	strcpy(buff, value);
+	return buff;
 }
 
 // ----------------------------------------------------------------

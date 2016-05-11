@@ -8,18 +8,19 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-// プラットフォーム名取得 返値文字列は解放禁止
+// プラットフォーム名取得 返値文字列は揮発性バッファで解放禁止
 char *platformPluginUtilPlatformGet(void){
-	static const char* value = "ios";
-	return (char*)value;
+	NSString *value = @"ios";
+	char *buff = (char*)corePluginUtilTemporaryBuffer([value length] + 1);
+	strcpy(buff, (char*)[value UTF8String]);
+	return buff;
 }
 
-// ユーザーID取得 返値文字列は解放禁止
+// ユーザーID取得 返値文字列は揮発性バッファで解放禁止
 char *platformPluginUtilUidGet(void){
 	NSString *value = [IosPluginUtil platformPluginUtilUidGet];
-
-	static char buff[8];
-	strncpy(buff, (char*)[value UTF8String], sizeof(buff));
+	char *buff = (char*)corePluginUtilTemporaryBuffer([value length] + 1);
+	strcpy(buff, (char*)[value UTF8String]);
 	return buff;
 }
 

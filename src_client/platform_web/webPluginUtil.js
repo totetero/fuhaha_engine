@@ -9,19 +9,6 @@ mergeInto(LibraryManager.library, {
 
 	// プラグイン初期化
 	webPluginUtilInit: function(){
-		// 文字列領域
-		var buff = null;
-
-		// 文字列領域作成関数
-		Module.privatePluginUtilPutBuff = function(value){
-			if(buff != null){Module._free(buff);}
-			buff = Module._malloc(value.length + 1);
-			Module.writeStringToMemory(value, buff);
-			return buff;
-		};
-
-		// ----------------------------------------------------------------
-
 		// 読み込み中カウンタ
 		Module.privatePluginUtilCounter = 0;
 
@@ -40,13 +27,15 @@ mergeInto(LibraryManager.library, {
 	// ----------------------------------------------------------------
 	// ----------------------------------------------------------------
 
-	// プラットフォーム名取得 返値文字列は解放禁止
+	// プラットフォーム名取得 返値文字列は揮発性バッファで解放禁止
 	platformPluginUtilPlatformGet: function(){
 		var value = "web";
-		return Module.privatePluginUtilPutBuff(value);
+		var buff = ccall("corePluginUtilTemporaryBuffer", null, [null], [value.length + 1]);
+		Module.writeStringToMemory(value, buff);
+		return buff;
 	},
 
-	// ユーザーID取得 返値文字列は解放禁止
+	// ユーザーID取得 返値文字列は揮発性バッファで解放禁止
 	platformPluginUtilUidGet: function(){
 		var key = "fuhaha_user_id";
 		var value = localStorage.getItem(key);
@@ -55,7 +44,9 @@ mergeInto(LibraryManager.library, {
 			value = (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
 			localStorage.setItem(key, value);
 		}
-		return Module.privatePluginUtilPutBuff(value);
+		var buff = ccall("corePluginUtilTemporaryBuffer", null, [null], [value.length + 1]);
+		Module.writeStringToMemory(value, buff);
+		return buff;
 	},
 
 	// ----------------------------------------------------------------
