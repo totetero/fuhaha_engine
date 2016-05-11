@@ -32,7 +32,7 @@ char *platformPluginDataPreferenceGet(char *key){
 	NSString *nsstr1 = [NSString stringWithCString: key encoding: NSUTF8StringEncoding];
 	NSString *nsstr2 = [IosPluginData platformPluginDataPreferenceGet: nsstr1];
 
-	char* value = (char*)[nsstr2 UTF8String];
+	char *value = (char*)[nsstr2 UTF8String];
 	if(value == NULL){return NULL;}
 	char *buff = (char*)corePluginUtilTemporaryBuffer(strlen(value) + 1);
 	strcpy(buff, value);
