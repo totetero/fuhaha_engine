@@ -13,7 +13,7 @@ class IosPluginData: NSObject{
 		IosPluginUtil.nativePluginUtilLoadingIncrement();
 
 		// 通信準備
-		let baseUrl: String = String.fromCString(UnsafePointer<CChar>(corePluginUtilUrlGet()))!;
+		let baseUrl: String = String.fromCString(UnsafePointer<CChar>(gamePluginUtilUrlGet()))!;
 		let nsurl: NSURL = NSURL(string: baseUrl + "/" + url)!;
 		let nsreq: NSMutableURLRequest = NSMutableURLRequest(URL: nsurl);
 		nsreq.HTTPMethod = "POST";
@@ -36,7 +36,7 @@ class IosPluginData: NSObject{
 			}
 			dispatch_async(dispatch_get_main_queue(), {
 				IosPluginUtil.nativePluginUtilLoadingDecrement();
-				gamePluginUtilCallbackCall(callbackId, buff, size);
+				gamePluginDataCallbackCall(callbackId, buff, size);
 			});
 		});
 		task.resume();
@@ -61,7 +61,7 @@ class IosPluginData: NSObject{
 			}
 			dispatch_async(dispatch_get_main_queue(), {
 				IosPluginUtil.nativePluginUtilLoadingDecrement();
-				gamePluginUtilCallbackCall(callbackId, buff, size);
+				gamePluginDataCallbackCall(callbackId, buff, size);
 			});
 		});
 	}

@@ -18,6 +18,13 @@ import android.content.SharedPreferences;
 public class AndroidPluginData{
 	// ----------------------------------------------------------------
 
+	// JNI連携
+	static{System.loadLibrary("fuhaha_native");}
+	public static native void gamePluginDataCallbackBinary(int callbackId, byte[] buff);
+	public static native void gamePluginDataCallbackString(int callbackId, String buff);
+
+	// ----------------------------------------------------------------
+
 	// HTTP通信
 	public static void platformPluginDataHttp(int callbackId, final String url, final String request){
 		final Callback callback = new Callback(callbackId);
@@ -25,7 +32,7 @@ public class AndroidPluginData{
 			byte[] buff = null;
 			HttpURLConnection connect = null;
 			try{
-				URL newUrl = new URL(AndroidPluginUtil.corePluginUtilUrlGet() + "/" + url);
+				URL newUrl = new URL(AndroidPluginUtil.gamePluginUtilUrlGet() + "/" + url);
 				connect = (HttpURLConnection)newUrl.openConnection();
 				connect.setRequestMethod("POST");
 				connect.setDoInput(true);
@@ -107,8 +114,8 @@ public class AndroidPluginData{
 		public void run(){
 			//if(this.binBuff == null && this.strBuff == null){this.strBuff = "failed";}
 			AndroidPluginUtil.nativePluginUtilLoadingDecrement();
-			if(this.binBuff == null && this.strBuff != null){AndroidPluginUtil.gamePluginUtilCallbackString(this.callbackId, this.strBuff);}
-			else{AndroidPluginUtil.gamePluginUtilCallbackBinary(this.callbackId, this.binBuff);}
+			if(this.binBuff == null && this.strBuff != null){AndroidPluginData.gamePluginDataCallbackString(this.callbackId, this.strBuff);}
+			else{AndroidPluginData.gamePluginDataCallbackBinary(this.callbackId, this.binBuff);}
 		}
 	}
 

@@ -5,9 +5,6 @@
 // ----------------------------------------------------------------
 // -------- ゲーム側で実装 主にゲーム側から呼び出す
 
-// url取得 返値文字列は解放禁止
-char *corePluginUtilUrlGet(void);
-
 // 揮発性一時バッファ 返値領域は解放禁止
 void *corePluginUtilTemporaryBuffer(size_t size);
 
@@ -16,10 +13,8 @@ void *corePluginUtilTemporaryBuffer(size_t size);
 // ----------------------------------------------------------------
 // -------- ゲーム側で実装 主にプラットフォーム側から呼び出す
 
-// コールバック関数ポインタの登録
-int gamePluginUtilCallbackSet(void *param, void(*callback)(void *param, void *buff, size_t size));
-// コールバック関数の実行と解放
-bool gamePluginUtilCallbackCall(int callbackId, void *buff, size_t size);
+// url取得 返値文字列は解放禁止
+char *gamePluginUtilUrlGet(void);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

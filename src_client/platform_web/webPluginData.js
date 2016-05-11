@@ -18,10 +18,10 @@ mergeInto(LibraryManager.library, {
 	// HTTP通信 コールバックバッファは要解放
 	platformPluginDataHttp: function(param, url, request, callback){
 		Module.nativePluginUtilLoadingIncrement();
-		var callbackId = ccall("gamePluginUtilCallbackSet", null, [null, null], [param, callback]);
+		var callbackId = ccall("gamePluginDataCallbackSet", null, [null, null], [param, callback]);
 		var xhr = new XMLHttpRequest();
 		xhr.open("POST", "../" + Pointer_stringify(url), true);
-		//xhr.open("POST", Pointer_stringify(ccall("corePluginUtilUrlGet")) + "/" + Pointer_stringify(url), true);
+		//xhr.open("POST", Pointer_stringify(ccall("gamePluginUtilUrlGet")) + "/" + Pointer_stringify(url), true);
 		xhr.setRequestHeader("Content-Type", "application/octet-stream");
 		xhr.responseType = "arraybuffer";
 		xhr.onreadystatechange = function(e){
@@ -44,7 +44,7 @@ mergeInto(LibraryManager.library, {
 					//Module.writeStringToMemory(message, buff);
 				}
 				Module.nativePluginUtilLoadingDecrement();
-				ccall("gamePluginUtilCallbackCall", null, [null, null, null], [callbackId, buff, size]);
+				ccall("gamePluginDataCallbackCall", null, [null, null, null], [callbackId, buff, size]);
 			}
 		};
 		xhr.send(Pointer_stringify(request));
@@ -55,7 +55,7 @@ mergeInto(LibraryManager.library, {
 	// ローカルデータ読み込み コールバックバッファは要解放
 	platformPluginDataLocal: function(param, src, callback){
 		Module.nativePluginUtilLoadingIncrement();
-		var callbackId = ccall("gamePluginUtilCallbackSet", null, [null, null], [param, callback]);
+		var callbackId = ccall("gamePluginDataCallbackSet", null, [null, null], [param, callback]);
 		var xhr = new XMLHttpRequest();
 		xhr.open("GET", Pointer_stringify(src), true);
 		xhr.setRequestHeader("Content-Type", "application/octet-stream");
@@ -80,7 +80,7 @@ mergeInto(LibraryManager.library, {
 					//Module.writeStringToMemory(message, buff);
 				}
 				Module.nativePluginUtilLoadingDecrement();
-				ccall("gamePluginUtilCallbackCall", null, [null, null, null], [callbackId, buff, size]);
+				ccall("gamePluginDataCallbackCall", null, [null, null, null], [callbackId, buff, size]);
 			}
 		};
 		xhr.send();
