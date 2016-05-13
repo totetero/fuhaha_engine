@@ -10,7 +10,7 @@
 // ----------------------------------------------------------------
 // -------- ゲーム側で実装 主にプラットフォーム側から呼び出す
 
-// コールバック関数ポインタの登録
+// コールバック関数の登録
 int gamePluginDataCallbackSet(void *param, void(*callback)(void *param, void *buff, size_t size));
 // コールバック関数の実行と解放
 bool gamePluginDataCallbackCall(int callbackId, void *buff, size_t size);
