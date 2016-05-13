@@ -91,30 +91,4 @@ uint8_t *dataBase64decode(char *data, uint32_t *length);
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
-// -------- 読み込み処理
-
-// リクエスト識別子
-typedef uint32_t dataRequestId;
-
-// ----------------------------------------------------------------
-
-// 読み込み完了確認
-bool dataRequestIsLoading();
-
-// 通信リクエスト
-dataRequestId dataRequestHttp(char *url, char *request);
-// ローカルファイルリクエスト
-dataRequestId dataRequestLocal(char *src);
-
-// リクエスト応答
-bool dataRequestResponse(dataRequestId reqId, void **buff, size_t *size);
-
-// リクエスト解放
-void dataRequestFree(dataRequestId reqId);
-// 全リクエスト解放
-void dataRequestFreeAll();
-
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
 

@@ -5,6 +5,22 @@
 // ----------------------------------------------------------------
 // -------- ゲーム側で実装 主にゲーム側から呼び出す
 
+// リクエスト識別子
+typedef int corePluginDataRequestId;
+
+// HTTP通信リクエスト
+corePluginDataRequestId corePluginDataRequestHttp(char *url, char *request);
+// ローカルデータリクエスト
+corePluginDataRequestId corePluginDataRequestLocal(char *src);
+
+// リクエスト応答 応答バッファは要開放
+bool corePluginDataRequestResponse(corePluginDataRequestId reqId, void **buff, size_t *size);
+
+// リクエスト開放
+void corePluginDataRequestFree(corePluginDataRequestId reqId);
+// 全リクエスト開放
+void corePluginDataRequestFreeAll();
+
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -22,9 +38,10 @@ bool gamePluginDataCallbackCall(int callbackId, void *buff, size_t size);
 
 // HTTP通信 コールバックバッファは要解放
 void platformPluginDataHttp(void *param, char *url, char *request, void(*callback)(void *param, void *buff, size_t size));
-
 // ローカルデータ読み込み コールバックバッファは要解放
 void platformPluginDataLocal(void *param, char *src, void(*callback)(void *param, void *buff, size_t size));
+
+// ----------------------------------------------------------------
 
 // 設定読み込み 返値文字列は揮発性バッファで解放禁止
 char *platformPluginDataPreferenceGet(char *key);

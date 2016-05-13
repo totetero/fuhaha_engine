@@ -1,6 +1,5 @@
-#include "../engine.h"
-#include "../../gamePluginUtil.h"
-#include "../../gamePluginData.h"
+#include "engine/engine.h"
+#include "gamePluginData.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -9,16 +8,16 @@
 static struct{
 	// リクエストリスト
 	uint32_t reqIdCount;
-	struct dataRequestUnit{
-		struct dataRequestUnit *next;
-		dataRequestId reqId;
+	struct corePluginDataRequestUnit{
+		struct corePluginDataRequestUnit *next;
+		corePluginDataRequestId reqId;
 		void *buff;
 		size_t size;
 		// ロード状態
-		enum dataRequestUnitStatus{
-			DATAREQUESTUNITSTATUS_LOADING,
-			DATAREQUESTUNITSTATUS_LOADED,
-			DATAREQUESTUNITSTATUS_CANCEL,
+		enum corePluginDataRequestUnitStatus{
+			COREPLUGINDATAREQUESTUNITSTATUS_LOADING,
+			COREPLUGINDATAREQUESTUNITSTATUS_LOADED,
+			COREPLUGINDATAREQUESTUNITSTATUS_CANCEL,
 		} status;
 	} *reqList;
 } localGlobal = {0};
@@ -26,13 +25,13 @@ static struct{
 // ----------------------------------------------------------------
 
 // リクエストデータ作成
-static struct dataRequestUnit *reqDataCreate(){
-	struct dataRequestUnit *this = (struct dataRequestUnit*)calloc(1, sizeof(struct dataRequestUnit));
+static struct corePluginDataRequestUnit *reqDataCreate(){
+	struct corePluginDataRequestUnit *this = (struct corePluginDataRequestUnit*)calloc(1, sizeof(struct corePluginDataRequestUnit));
 	// リストにデータ追加
 	if(localGlobal.reqList == NULL){
 		localGlobal.reqList = this;
 	}else{
-		struct dataRequestUnit *temp = localGlobal.reqList;
+		struct corePluginDataRequestUnit *temp = localGlobal.reqList;
 		while(temp->next != NULL){temp = temp->next;}
 		temp->next = this;
 	}
@@ -40,19 +39,19 @@ static struct dataRequestUnit *reqDataCreate(){
 	this->reqId = ++localGlobal.reqIdCount;
 	this->buff = NULL;
 	this->size = 0;
-	this->status = DATAREQUESTUNITSTATUS_LOADING;
+	this->status = COREPLUGINDATAREQUESTUNITSTATUS_LOADING;
 	return this;
 }
 
 // リクエストデータ解放
-static void reqDataFree(struct dataRequestUnit *this){
-	if(this->status == DATAREQUESTUNITSTATUS_LOADED){
+static void reqDataFree(struct corePluginDataRequestUnit *this){
+	if(this->status == COREPLUGINDATAREQUESTUNITSTATUS_LOADED){
 		// 解放
 		if(this->buff != NULL){free(this->buff);}
 		free(this);
 	}else{
 		// ロードが完了していないのでコールバックで破棄
-		this->status = DATAREQUESTUNITSTATUS_CANCEL;
+		this->status = COREPLUGINDATAREQUESTUNITSTATUS_CANCEL;
 	}
 }
 
@@ -60,14 +59,14 @@ static void reqDataFree(struct dataRequestUnit *this){
 
 // ロード完了時コールバック
 static void callback(void *param, void *buff, size_t size){
-	struct dataRequestUnit *this = (struct dataRequestUnit*)param;
+	struct corePluginDataRequestUnit *this = (struct corePluginDataRequestUnit*)param;
 
-	if(this->status == DATAREQUESTUNITSTATUS_LOADING){
+	if(this->status == COREPLUGINDATAREQUESTUNITSTATUS_LOADING){
 		// ロード完了
 		this->buff = buff;
 		this->size = size;
-		this->status = DATAREQUESTUNITSTATUS_LOADED;
-	}else if(this->status == DATAREQUESTUNITSTATUS_CANCEL){
+		this->status = COREPLUGINDATAREQUESTUNITSTATUS_LOADED;
+	}else if(this->status == COREPLUGINDATAREQUESTUNITSTATUS_CANCEL){
 		// ロード中止
 		if(this != NULL){free(this);}
 		if(buff != NULL){free(buff);}
@@ -78,23 +77,16 @@ static void callback(void *param, void *buff, size_t size){
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-// 読み込み完了確認
-bool dataRequestIsLoading(){
-	return platformPluginUtilIsLoading();
-}
-
-// ----------------------------------------------------------------
-
 // 通信リクエスト
-dataRequestId dataRequestHttp(char *url, char *request){
-	struct dataRequestUnit *this = reqDataCreate();
+corePluginDataRequestId corePluginDataRequestHttp(char *url, char *request){
+	struct corePluginDataRequestUnit *this = reqDataCreate();
 	platformPluginDataHttp(this, url, request, callback);
 	return this->reqId;
 }
 
 // ローカルファイルリクエスト
-dataRequestId dataRequestLocal(char *src){
-	struct dataRequestUnit *this = reqDataCreate();
+corePluginDataRequestId corePluginDataRequestLocal(char *src){
+	struct corePluginDataRequestUnit *this = reqDataCreate();
 	platformPluginDataLocal(this, src, callback);
 	return this->reqId;
 }
@@ -102,11 +94,11 @@ dataRequestId dataRequestLocal(char *src){
 // ----------------------------------------------------------------
 
 // リクエスト応答
-bool dataRequestResponse(dataRequestId reqId, void **buff, size_t *size){
-	struct dataRequestUnit *temp = localGlobal.reqList;
+bool corePluginDataRequestResponse(corePluginDataRequestId reqId, void **buff, size_t *size){
+	struct corePluginDataRequestUnit *temp = localGlobal.reqList;
 	while(temp != NULL){
 		if(temp->reqId == reqId){
-			if(temp->status == DATAREQUESTUNITSTATUS_LOADED){
+			if(temp->status == COREPLUGINDATAREQUESTUNITSTATUS_LOADED){
 				// データが存在した場合
 				if(buff != NULL){*buff = temp->buff;}
 				if(size != NULL){*size = temp->size;}
@@ -125,12 +117,12 @@ bool dataRequestResponse(dataRequestId reqId, void **buff, size_t *size){
 // ----------------------------------------------------------------
 
 // リクエスト解放
-void dataRequestFree(dataRequestId reqId){
-	struct dataRequestUnit *prev = NULL;
-	struct dataRequestUnit *temp = localGlobal.reqList;
+void corePluginDataRequestFree(corePluginDataRequestId reqId){
+	struct corePluginDataRequestUnit *prev = NULL;
+	struct corePluginDataRequestUnit *temp = localGlobal.reqList;
 	while(temp != NULL){
 		if(temp->reqId == reqId){
-			struct dataRequestUnit *dispose = temp;
+			struct corePluginDataRequestUnit *dispose = temp;
 			// 次のを装填
 			if(prev == NULL){localGlobal.reqList = temp->next;}
 			else{prev->next = temp->next;}
@@ -145,10 +137,10 @@ void dataRequestFree(dataRequestId reqId){
 }
 
 // 全リクエスト解放
-void dataRequestFreeAll(){
-	struct dataRequestUnit *temp = localGlobal.reqList;
+void corePluginDataRequestFreeAll(){
+	struct corePluginDataRequestUnit *temp = localGlobal.reqList;
 	while(temp != NULL){
-		struct dataRequestUnit *dispose = temp;
+		struct corePluginDataRequestUnit *dispose = temp;
 		temp = temp->next;
 		// 解放
 		reqDataFree(dispose);

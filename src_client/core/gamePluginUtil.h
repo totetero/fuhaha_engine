@@ -8,6 +8,8 @@
 // 揮発性一時バッファ 返値領域は解放禁止
 void *corePluginUtilTemporaryBuffer(size_t size);
 
+// ----------------------------------------------------------------
+
 // コールバック関数の登録 ひな形
 int corePluginUtilCallbackSet(void *param, void *callback);
 // コールバック関数の取得と解放 ひな形
