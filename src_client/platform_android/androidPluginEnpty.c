@@ -1,5 +1,7 @@
+#include "../core/library.h"
+#include "platform.h"
 #include "native.h"
-#include "../core/gamePluginEnpty.h"
+#include "../core/plugin/pluginEnpty.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

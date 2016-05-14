@@ -1,5 +1,7 @@
+#include "../core/library.h"
+#include "platform.h"
 #include "native.h"
-#include "../core/gamePluginUtil.h"
+#include "../core/plugin/pluginUtil.h"
 #include <time.h>
 
 // ----------------------------------------------------------------

@@ -1,3 +1,5 @@
+#include "../core/library.h"
+#include "platform.h"
 #include "native.h"
 #include "../core/game.h"
 

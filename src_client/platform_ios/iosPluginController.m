@@ -1,7 +1,7 @@
 #import "fuhaha-Swift.h"
-
-#include "native.h"
-#include "gamePluginController.h"
+#include "library.h"
+#include "platform.h"
+#include "pluginController.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

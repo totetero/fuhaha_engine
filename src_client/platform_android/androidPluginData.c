@@ -1,6 +1,8 @@
+#include "../core/library.h"
+#include "platform.h"
 #include "native.h"
-#include "../core/gamePluginUtil.h"
-#include "../core/gamePluginData.h"
+#include "../core/plugin/pluginUtil.h"
+#include "../core/plugin/pluginData.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -11,7 +13,7 @@ JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginData_gamePluginData
 	if(buff0 == NULL){gamePluginDataCallbackCall(callbackId, NULL, 0); return;}
 	jsize size = (*env)->GetArrayLength(env, buff0);
 	jbyte *buff1 = (*env)->GetByteArrayElements(env, buff0, NULL);
-	void *buff2 = malloc(size); // バッファの開放はゲーム側で行う
+	void *buff2 = malloc(size); // バッファの解放はゲーム側で行う
 	memcpy(buff2, buff1, size);
 	(*env)->ReleaseByteArrayElements(env, buff0, buff1, 0);
 	gamePluginDataCallbackCall(callbackId, buff2, size);
@@ -22,7 +24,7 @@ JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginData_gamePluginData
 	if(buff0 == NULL){gamePluginDataCallbackCall(callbackId, NULL, 0); return;}
 	jbyte *buff1 = (*env)->GetStringUTFChars(env, buff0, NULL);
 	size_t size = strlen(buff1) + 1;
-	char *buff2 = (char*)malloc(size); // バッファの開放はゲーム側で行う
+	char *buff2 = (char*)malloc(size); // バッファの解放はゲーム側で行う
 	strcpy(buff2, buff1);
 	(*env)->ReleaseStringUTFChars(env, buff0, buff1);
 	gamePluginDataCallbackCall(callbackId, buff2, size);

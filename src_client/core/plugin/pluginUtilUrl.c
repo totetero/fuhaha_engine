@@ -1,5 +1,6 @@
-#include "engine/engine.h"
-#include "gamePluginUtil.h"
+#include "../library.h"
+#include "platform.h"
+#include "pluginUtil.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

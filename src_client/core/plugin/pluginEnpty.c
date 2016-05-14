@@ -1,5 +1,6 @@
-#include "engine/engine.h"
-#include "gamePluginEnpty.h"
+#include "../library.h"
+#include "platform.h"
+#include "pluginEnpty.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

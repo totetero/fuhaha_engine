@@ -1,36 +1,29 @@
-#pragma once
-
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
-
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stddef.h>
-#include <stdbool.h>
+#include "../library.h"
 #include "platform.h"
-
-#include "math/math.h"
-#include "util/util.h"
-#include "data/data.h"
-#include "e3d/e3d.h"
+#include "pluginUtil.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-// グローバル変数
-extern struct global{
-	struct{
-		// ウインドウサイズ 画面全体
-		uint16_t ww;
-		uint16_t wh;
-		// スクリーンサイズ 主要描画領域
-		uint16_t sw;
-		uint16_t sh;
-	} ctrl;
-} global;
+static struct{
+	void *buff;
+	size_t size;
+} localGlobal = {0};
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+
+// 揮発性一時バッファ 返値領域は解放禁止
+void *corePluginUtilTemporaryBuffer(size_t size){
+	if(localGlobal.size < size){
+		if(localGlobal.size > 0){free(localGlobal.buff);}
+		localGlobal.size = size;
+		localGlobal.buff = malloc(localGlobal.size);
+	}
+	return localGlobal.buff;
+}
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

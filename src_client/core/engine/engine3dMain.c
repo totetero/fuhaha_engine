@@ -1,4 +1,7 @@
-#include "../engine.h"
+#include "../library.h"
+#include "platform.h"
+#include "engineMath.h"
+#include "engine3d.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

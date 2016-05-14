@@ -1,6 +1,9 @@
-#include "engine/engine.h"
-#include "game.h"
+#include "library.h"
 #include "platform.h"
+#include "plugin/pluginData.h"
+#include "engine/engineMath.h"
+#include "engine/engine3d.h"
+#include "game.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

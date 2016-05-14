@@ -1,13 +1,14 @@
-#include "engine/engine.h"
-#include "gamePluginUtil.h"
+#include "../library.h"
+#include "platform.h"
+#include "pluginUtil.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
 // コールバック構造体
-struct gamePluginUtilCallback{
-	struct gamePluginUtilCallback *next;
+struct pluginUtilCallbackUnit{
+	struct pluginUtilCallbackUnit *next;
 	int callbackId;
 	void *param;
 	void *callback;
@@ -15,8 +16,8 @@ struct gamePluginUtilCallback{
 
 static struct{
 	int callbackIdCount;
-	struct gamePluginUtilCallback *list;
-	struct gamePluginUtilCallback *pool;
+	struct pluginUtilCallbackUnit *list;
+	struct pluginUtilCallbackUnit *pool;
 } localGlobal = {0};
 
 // ----------------------------------------------------------------
@@ -25,7 +26,7 @@ static struct{
 
 // コールバック関数の登録 ひな形
 int corePluginUtilCallbackSet(void *param, void *callback){
-	struct gamePluginUtilCallback *new = NULL;
+	struct pluginUtilCallbackUnit *new = NULL;
 
 	if(localGlobal.pool != NULL){
 		// プールから要素をとってくる
@@ -33,7 +34,7 @@ int corePluginUtilCallbackSet(void *param, void *callback){
 		localGlobal.pool = new->next;
 	}else{
 		// 要素を新しく作成
-		new = (struct gamePluginUtilCallback*)calloc(1, sizeof(struct gamePluginUtilCallback));
+		new = (struct pluginUtilCallbackUnit*)calloc(1, sizeof(struct pluginUtilCallbackUnit));
 	}
 
 	// 要素の設定
@@ -44,7 +45,7 @@ int corePluginUtilCallbackSet(void *param, void *callback){
 
 	// 要素をリストに追加
 	if(localGlobal.list != NULL){
-		struct gamePluginUtilCallback *temp = localGlobal.list;
+		struct pluginUtilCallbackUnit *temp = localGlobal.list;
 		while(temp->next != NULL){temp = temp->next;}
 		temp->next = new;
 	}else{
@@ -56,12 +57,12 @@ int corePluginUtilCallbackSet(void *param, void *callback){
 
 // コールバック関数の取得と解放 ひな形
 void *corePluginUtilCallbackGet(int callbackId, void **param){
-	struct gamePluginUtilCallback *prev = NULL;
-	struct gamePluginUtilCallback *temp = localGlobal.list;
+	struct pluginUtilCallbackUnit *prev = NULL;
+	struct pluginUtilCallbackUnit *temp = localGlobal.list;
 	while(temp != NULL){
 		if(temp->callbackId == callbackId){
 			// リストから要素を外す
-			struct gamePluginUtilCallback *use = temp;
+			struct pluginUtilCallbackUnit *use = temp;
 			temp = temp->next;
 			if(prev == NULL){localGlobal.list = temp;}
 			else{prev->next = temp;}
@@ -86,9 +87,9 @@ void *corePluginUtilCallbackGet(int callbackId, void **param){
 
 //// コールバック関数の全解放
 //void corePluginUtilCallbackDispose(){
-//	struct gamePluginUtilCallback *tempList = localGlobal.list;
+//	struct pluginUtilCallbackUnit *tempList = localGlobal.list;
 //	while(tempList != NULL){
-//		struct gamePluginUtilCallback *dispose = tempList;
+//		struct pluginUtilCallbackUnit *dispose = tempList;
 //		tempList = tempList->next;
 //		// 要素の除去
 //		free(dispose->param);
@@ -96,9 +97,9 @@ void *corePluginUtilCallbackGet(int callbackId, void **param){
 //	}
 //	localGlobal.list = NULL;
 //
-//	struct gamePluginUtilCallback *tempPool = localGlobal.pool;
+//	struct pluginUtilCallbackUnit *tempPool = localGlobal.pool;
 //	while(tempPool != NULL){
-//		struct gamePluginUtilCallback *dispose = tempPool;
+//		struct pluginUtilCallbackUnit *dispose = tempPool;
 //		tempPool = tempPool->next;
 //		// 要素の除去
 //		free(dispose);

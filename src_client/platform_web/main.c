@@ -1,9 +1,8 @@
-#include <stdlib.h>
-#include <stdio.h>
+#include "library.h"
 #include <GL/glfw.h>
 #include <emscripten/emscripten.h>
-
 #include "game.h"
+
 void webPlatformScreenInit(void);
 void webPluginUtilInit(void);
 void webPluginDataInit(void);

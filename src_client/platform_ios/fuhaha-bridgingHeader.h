@@ -4,14 +4,15 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-#include "native.h"
+#include "library.h"
+#include "platform.h"
+#include "pluginUtil.h"
+#include "pluginData.h"
+#include "pluginTexture.h"
+#include "pluginController.h"
+#include "pluginSound.h"
+#include "pluginEnpty.h"
 #include "game.h"
-#include "gamePluginUtil.h"
-#include "gamePluginData.h"
-#include "gamePluginTexture.h"
-#include "gamePluginController.h"
-#include "gamePluginSound.h"
-#include "gamePluginEnpty.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

@@ -3,21 +3,25 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
-// -------- ゲーム側で実装 主にゲーム側から呼び出す
 
 // リクエスト識別子
-typedef int corePluginDataRequestId;
+typedef int pluginDataRequestId;
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// -------- ゲーム側で実装 主にゲーム側から呼び出す
 
 // HTTP通信リクエスト
-corePluginDataRequestId corePluginDataRequestHttp(char *url, char *request);
+pluginDataRequestId corePluginDataRequestHttp(char *url, char *request);
 // ローカルデータリクエスト
-corePluginDataRequestId corePluginDataRequestLocal(char *src);
+pluginDataRequestId corePluginDataRequestLocal(char *src);
 
 // リクエスト応答 応答バッファは要開放
-bool corePluginDataRequestResponse(corePluginDataRequestId reqId, void **buff, size_t *size);
+bool corePluginDataRequestResponse(pluginDataRequestId reqId, void **buff, size_t *size);
 
 // リクエスト開放
-void corePluginDataRequestFree(corePluginDataRequestId reqId);
+void corePluginDataRequestFree(pluginDataRequestId reqId);
 // 全リクエスト開放
 void corePluginDataRequestFreeAll();
 
