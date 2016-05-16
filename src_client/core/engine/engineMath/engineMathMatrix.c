@@ -1,4 +1,4 @@
-#include "../library.h"
+#include "../../library.h"
 #include "platform.h"
 #include "engineMath.h"
 
@@ -7,14 +7,14 @@
 // ----------------------------------------------------------------
 
 // 行列複製
-void mathMat4Copy(struct mathMatrix44 *dst, struct mathMatrix44 *src){
-	memcpy(dst, src, sizeof(struct mathMatrix44));
+void engineMathMat4Copy(struct engineMathMatrix44 *dst, struct engineMathMatrix44 *src){
+	memcpy(dst, src, sizeof(struct engineMathMatrix44));
 }
 
 // ----------------------------------------------------------------
 
 // 単位行列
-void mathMat4Identity(struct mathMatrix44 *mat){
+void engineMathMat4Identity(struct engineMathMatrix44 *mat){
 	mat->m00 = 1.0; mat->m01 = 0.0; mat->m02 = 0.0; mat->m03 = 0.0;
 	mat->m10 = 0.0; mat->m11 = 1.0; mat->m12 = 0.0; mat->m13 = 0.0;
 	mat->m20 = 0.0; mat->m21 = 0.0; mat->m22 = 1.0; mat->m23 = 0.0;
@@ -22,7 +22,7 @@ void mathMat4Identity(struct mathMatrix44 *mat){
 }
 
 // 正射影行列
-void mathMat4Ortho(struct mathMatrix44 *mat, double left, double right, double bottom, double top, double near, double far){
+void engineMathMat4Ortho(struct engineMathMatrix44 *mat, double left, double right, double bottom, double top, double near, double far){
 	double rl = 1 / (right - left);
 	double tb = 1 / (top - bottom);
 	double nf = 1 / (near - far);
@@ -45,7 +45,7 @@ void mathMat4Ortho(struct mathMatrix44 *mat, double left, double right, double b
 }
 
 // 透視射影行列
-void mathMat4Frustum(struct mathMatrix44 *mat, double left, double right, double bottom, double top, double near, double far){
+void engineMathMat4Frustum(struct engineMathMatrix44 *mat, double left, double right, double bottom, double top, double near, double far){
 	double rl = 1 / (right - left);
 	double tb = 1 / (top - bottom);
 	double nf = 1 / (near - far);
@@ -70,11 +70,11 @@ void mathMat4Frustum(struct mathMatrix44 *mat, double left, double right, double
 // ----------------------------------------------------------------
 
 // 行列の掛け合わせ
-void mathMat4Multiply(struct mathMatrix44 *mat, struct mathMatrix44 *m0, struct mathMatrix44 *m1){
-	struct mathMatrix44 a;
-	struct mathMatrix44 b;
-	if(mat == m0){mathMat4Copy(&a, m0); m0 = &a;}
-	if(mat == m1){mathMat4Copy(&b, m1); m1 = &b;}
+void engineMathMat4Multiply(struct engineMathMatrix44 *mat, struct engineMathMatrix44 *m0, struct engineMathMatrix44 *m1){
+	struct engineMathMatrix44 a;
+	struct engineMathMatrix44 b;
+	if(mat == m0){engineMathMat4Copy(&a, m0); m0 = &a;}
+	if(mat == m1){engineMathMat4Copy(&b, m1); m1 = &b;}
     mat->m00 = m1->m00 * m0->m00 + m1->m01 * m0->m10 + m1->m02 * m0->m20 + m1->m03 * m0->m30;
     mat->m01 = m1->m00 * m0->m01 + m1->m01 * m0->m11 + m1->m02 * m0->m21 + m1->m03 * m0->m31;
     mat->m02 = m1->m00 * m0->m02 + m1->m01 * m0->m12 + m1->m02 * m0->m22 + m1->m03 * m0->m32;
@@ -94,7 +94,7 @@ void mathMat4Multiply(struct mathMatrix44 *mat, struct mathMatrix44 *m0, struct 
 }
 
 // 平行移動
-void mathMat4Translate(struct mathMatrix44 *mat, double x, double y, double z){
+void engineMathMat4Translate(struct engineMathMatrix44 *mat, double x, double y, double z){
 	mat->m30 += mat->m00 * x + mat->m10 * y + mat->m20 * z;
 	mat->m31 += mat->m01 * x + mat->m11 * y + mat->m21 * z;
 	mat->m32 += mat->m02 * x + mat->m12 * y + mat->m22 * z;
@@ -102,7 +102,7 @@ void mathMat4Translate(struct mathMatrix44 *mat, double x, double y, double z){
 }
 
 // 拡大縮小
-void mathMat4Scale(struct mathMatrix44 *mat, double x, double y, double z){
+void engineMathMat4Scale(struct engineMathMatrix44 *mat, double x, double y, double z){
 	mat->m00 *= x;
 	mat->m01 *= x;
 	mat->m02 *= x;
@@ -118,9 +118,9 @@ void mathMat4Scale(struct mathMatrix44 *mat, double x, double y, double z){
 }
 
 // x軸回転
-void mathMat4RotateX(struct mathMatrix44 *mat, double rad){
-	double c = mathCos(rad);
-	double s = mathSin(rad);
+void engineMathMat4RotateX(struct engineMathMatrix44 *mat, double rad){
+	double c = engineMathCos(rad);
+	double s = engineMathSin(rad);
 	double m10 = mat->m10;
 	double m11 = mat->m11;
 	double m12 = mat->m12;
@@ -140,9 +140,9 @@ void mathMat4RotateX(struct mathMatrix44 *mat, double rad){
 }
 
 // y軸回転
-void mathMat4RotateY(struct mathMatrix44 *mat, double rad){
-	double c = mathCos(rad);
-	double s = mathSin(rad);
+void engineMathMat4RotateY(struct engineMathMatrix44 *mat, double rad){
+	double c = engineMathCos(rad);
+	double s = engineMathSin(rad);
 	double m00 = mat->m00;
 	double m01 = mat->m01;
 	double m02 = mat->m02;
@@ -162,9 +162,9 @@ void mathMat4RotateY(struct mathMatrix44 *mat, double rad){
 }
 
 // z軸回転
-void mathMat4RotateZ(struct mathMatrix44 *mat, double rad){
-	double c = mathCos(rad);
-	double s = mathSin(rad);
+void engineMathMat4RotateZ(struct engineMathMatrix44 *mat, double rad){
+	double c = engineMathCos(rad);
+	double s = engineMathSin(rad);
 	double m00 = mat->m00;
 	double m01 = mat->m01;
 	double m02 = mat->m02;
@@ -186,9 +186,9 @@ void mathMat4RotateZ(struct mathMatrix44 *mat, double rad){
 // ----------------------------------------------------------------
 
 // 逆行列
-void mathMat4Invert(struct mathMatrix44 *mat){
-	struct mathMatrix44 a;
-	mathMat4Copy(&a, mat);
+void engineMathMat4Invert(struct engineMathMatrix44 *mat){
+	struct engineMathMatrix44 a;
+	engineMathMat4Copy(&a, mat);
 	double b00 = a.m00 * a.m11 - a.m01 * a.m10;
 	double b01 = a.m00 * a.m12 - a.m02 * a.m10;
 	double b02 = a.m00 * a.m13 - a.m03 * a.m10;
@@ -227,8 +227,8 @@ void mathMat4Invert(struct mathMatrix44 *mat){
 // ----------------------------------------------------------------
 
 // ベクトル行列積
-void mathVec3MultiplyMat4(struct mathVector3 *dst, struct mathVector3 *src, struct mathMatrix44 *mat){
-	struct mathVector3 a;
+void engineMathVec3MultiplyMat4(struct engineMathVector3 *dst, struct engineMathVector3 *src, struct engineMathMatrix44 *mat){
+	struct engineMathVector3 a;
 	if(dst == src){
 		a.x = src->x;
 		a.y = src->y;

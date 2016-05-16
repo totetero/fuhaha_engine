@@ -1,8 +1,8 @@
 #include "library.h"
 #include "platform.h"
 #include "plugin/pluginData.h"
-#include "engine/engineMath.h"
-#include "engine/engine3d.h"
+#include "engine/engineMath/engineMath.h"
+#include "engine/engineGraphic/engineGraphic.h"
 #include "game.h"
 
 // ----------------------------------------------------------------
@@ -18,7 +18,7 @@ struct global global = {0};
 
 // opengl初期化
 void gameSurfaceCreated(){
-	e3dGameInit();
+	engineGraphicGameInit();
 }
 
 // opengl画面サイズ変更
@@ -38,7 +38,7 @@ void gameSurfaceChanged(int width, int height, double pixelRatio){
 
 // opengl描画
 void gameSurfaceDrawFrame(){
-	e3dSampleCode();
+	engineGraphicSampleCode();
 }
 
 // opengl中断
@@ -47,7 +47,7 @@ void gameSurfacePause(){
 
 // opengl終了
 void gameSurfaceDestroy(){
-	e3dGameExit();
+	engineGraphicGameExit();
 }
 
 // ----------------------------------------------------------------

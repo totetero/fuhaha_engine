@@ -1,10 +1,11 @@
-#include "../library.h"
+#include "../../library.h"
 #include "platform.h"
 #include "engineMath.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
+// Xorshift
 
 static struct{
 	uint64_t x;
@@ -14,7 +15,7 @@ static struct{
 } localGlobal = {0};
 
 // 乱数初期化
-void mathRandomInit(uint64_t seed){
+void engineMathRandomInit(uint64_t seed){
 	localGlobal.x = 123456789;
 	localGlobal.y = 362436069;
 	localGlobal.z = 521288629;
@@ -23,7 +24,7 @@ void mathRandomInit(uint64_t seed){
 }
 
 // 乱数獲得
-uint64_t mathRandomGet(){
+uint64_t engineMathRandomGet(){
 	uint64_t x = localGlobal.x;
 	uint64_t w = localGlobal.w;
 	uint64_t t = (x ^ (x << 11));
@@ -35,7 +36,7 @@ uint64_t mathRandomGet(){
 }
 
 // 乱数種取得
-void mathRandomGetSeed(uint64_t seed[]){
+void engineMathRandomGetSeed(uint64_t seed[]){
 	seed[0] = localGlobal.x;
 	seed[1] = localGlobal.y;
 	seed[2] = localGlobal.z;
@@ -43,7 +44,7 @@ void mathRandomGetSeed(uint64_t seed[]){
 }
 
 // 乱数種設定
-void mathRandomSetSeed(uint64_t seed[]){
+void engineMathRandomSetSeed(uint64_t seed[]){
 	localGlobal.x = seed[0];
 	localGlobal.y = seed[1];
 	localGlobal.z = seed[2];

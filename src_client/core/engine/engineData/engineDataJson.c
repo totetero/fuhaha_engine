@@ -1,4 +1,4 @@
-#include "../library.h"
+#include "../../library.h"
 #include "platform.h"
 #include "engineData.h"
 
@@ -61,7 +61,7 @@ static bool parseStringEscape(char **p){
 }
 
 // 値文字列読み取り
-static bool parseString(struct dataJsonValue *this, char **p){
+static bool parseString(struct engineDataJsonValue *this, char **p){
 	char *c = *p;
 	localGlobal.tempBuffIndex = 0;
 
@@ -85,7 +85,7 @@ static bool parseString(struct dataJsonValue *this, char **p){
 	// 文字列登録
 	localGlobal.tempBuff[localGlobal.tempBuffIndex++] = '\0';
 	if(this != NULL){
-		this->type = DATAJSONTYPE_STRING;
+		this->type = ENGINEDATAJSONTYPE_STRING;
 		this->jString = localGlobal.tempBuff;
 	}
 
@@ -94,7 +94,7 @@ static bool parseString(struct dataJsonValue *this, char **p){
 }
 
 // キー文字列読み取り
-static bool parseKeyString(struct dataJsonValue *this, char **p){
+static bool parseKeyString(struct engineDataJsonValue *this, char **p){
 	char *c = *p;
 	localGlobal.tempBuffIndex = 0;
 
@@ -106,7 +106,7 @@ static bool parseKeyString(struct dataJsonValue *this, char **p){
 	// 文字列登録
 	localGlobal.tempBuff[localGlobal.tempBuffIndex++] = '\0';
 	if(this != NULL){
-		this->type = DATAJSONTYPE_STRING;
+		this->type = ENGINEDATAJSONTYPE_STRING;
 		this->jString = localGlobal.tempBuff;
 	}
 
@@ -115,7 +115,7 @@ static bool parseKeyString(struct dataJsonValue *this, char **p){
 }
 
 // 数字読み取り
-static bool parseNumber(struct dataJsonValue *this, char **p){
+static bool parseNumber(struct engineDataJsonValue *this, char **p){
 	char *c = *p;
 	localGlobal.tempBuffIndex = 0;
 
@@ -148,10 +148,10 @@ static bool parseNumber(struct dataJsonValue *this, char **p){
 	localGlobal.tempBuff[localGlobal.tempBuffIndex++] = '\0';
 	if(this != NULL){
 		if(isFloat){
-			this->type = DATAJSONTYPE_FLOAT;
+			this->type = ENGINEDATAJSONTYPE_FLOAT;
 			sscanf(localGlobal.tempBuff, "%lf", &this->jFloat);
 		}else{
-			this->type = DATAJSONTYPE_INT;
+			this->type = ENGINEDATAJSONTYPE_INT;
 			sscanf(localGlobal.tempBuff, "%lld", &this->jInt);
 		}
 	}
@@ -161,7 +161,7 @@ static bool parseNumber(struct dataJsonValue *this, char **p){
 }
 
 // true読み取り
-static bool parseTrue(struct dataJsonValue *this, char **p){
+static bool parseTrue(struct engineDataJsonValue *this, char **p){
 	char *c = *p;
 
 	if(*(c++) != 't'){return false;}
@@ -169,7 +169,7 @@ static bool parseTrue(struct dataJsonValue *this, char **p){
 	if(*(c++) != 'u'){return false;}
 	if(*(c++) != 'e'){return false;}
 	if(this != NULL){
-		this->type = DATAJSONTYPE_BOOL;
+		this->type = ENGINEDATAJSONTYPE_BOOL;
 		this->jBool = true;
 	}
 
@@ -178,7 +178,7 @@ static bool parseTrue(struct dataJsonValue *this, char **p){
 }
 
 // false読み取り
-static bool parseFalse(struct dataJsonValue *this, char **p){
+static bool parseFalse(struct engineDataJsonValue *this, char **p){
 	char *c = *p;
 
 	if(*(c++) != 'f'){return false;}
@@ -187,7 +187,7 @@ static bool parseFalse(struct dataJsonValue *this, char **p){
 	if(*(c++) != 's'){return false;}
 	if(*(c++) != 'e'){return false;}
 	if(this != NULL){
-		this->type = DATAJSONTYPE_BOOL;
+		this->type = ENGINEDATAJSONTYPE_BOOL;
 		this->jBool = false;
 	}
 
@@ -196,7 +196,7 @@ static bool parseFalse(struct dataJsonValue *this, char **p){
 }
 
 // null読み取り
-static bool parseNull(struct dataJsonValue *this, char **p){
+static bool parseNull(struct engineDataJsonValue *this, char **p){
 	char *c = *p;
 
 	if(*(c++) != 'n'){return false;}
@@ -204,7 +204,7 @@ static bool parseNull(struct dataJsonValue *this, char **p){
 	if(*(c++) != 'l'){return false;}
 	if(*(c++) != 'l'){return false;}
 	if(this != NULL){
-		this->type = DATAJSONTYPE_NULL;
+		this->type = ENGINEDATAJSONTYPE_NULL;
 	}
 
 	*p = c;
@@ -236,18 +236,18 @@ static bool skipSpace(char **c){
 }
 
 // json要素読み込み
-static bool parseValue(struct dataJsonValue *this, char **c){
+static bool parseValue(struct engineDataJsonValue *this, char **c){
 	skipSpace(c);
 
 	if(**c == '{'){
 		(*c)++;
-		this->type = DATAJSONTYPE_OBJECT;
+		this->type = ENGINEDATAJSONTYPE_OBJECT;
 		this->jArray = NULL;
 		// 連想配列読み取り
 		skipSpace(c);
 		while(**c != '}'){
 			// 連想配列キー
-			struct dataJsonValue key;
+			struct engineDataJsonValue key;
 			bool isKey = false;
 			if(!isKey){isKey = parseString(&key, c);}
 			if(!isKey){isKey = parseKeyString(&key, c);}
@@ -257,7 +257,7 @@ static bool parseValue(struct dataJsonValue *this, char **c){
 			if(**c != ':'){return false;}
 			(*c)++;
 			// 連想配列値
-			struct dataJsonValue *value = dataJsonObjectCreateValue(this, key.jString);
+			struct engineDataJsonValue *value = engineDataJsonObjectCreateValue(this, key.jString);
 			if(!parseValue(value, c)){return false;}
 			// カンマ
 			skipSpace(c);
@@ -272,13 +272,13 @@ static bool parseValue(struct dataJsonValue *this, char **c){
 
 	if(**c == '['){
 		(*c)++;
-		this->type = DATAJSONTYPE_ARRAY;
+		this->type = ENGINEDATAJSONTYPE_ARRAY;
 		this->jArray = NULL;
 		// 配列読み取り
 		skipSpace(c);
 		while(**c != ']'){
 			// 配列値
-			struct dataJsonValue *value = dataJsonArrayCreateValue(this);
+			struct engineDataJsonValue *value = engineDataJsonArrayCreateValue(this);
 			if(!parseValue(value, c)){return false;}
 			// カンマ
 			skipSpace(c);
@@ -310,20 +310,20 @@ static bool parseValue(struct dataJsonValue *this, char **c){
 // ----------------------------------------------------------------
 
 // jsonの文字列化
-static void jsonStringify(struct dataJsonValue *this, int32_t indent){
+static void jsonStringify(struct engineDataJsonValue *this, int32_t indent){
 	if(this == NULL){return;}
 	switch(this->type){
-		case DATAJSONTYPE_INT: tempBuffPutInt(this->jInt); break;
-		case DATAJSONTYPE_FLOAT: tempBuffPutFloat(this->jFloat); break;
-		case DATAJSONTYPE_BOOL: tempBuffPutString1(this->jBool ? "true" : "false"); break;
-		case DATAJSONTYPE_STRING: tempBuffPutString2(this->jString); break;
-		case DATAJSONTYPE_NULL: tempBuffPutString1("null"); break;
-		case DATAJSONTYPE_OBJECT:
+		case ENGINEDATAJSONTYPE_INT: tempBuffPutInt(this->jInt); break;
+		case ENGINEDATAJSONTYPE_FLOAT: tempBuffPutFloat(this->jFloat); break;
+		case ENGINEDATAJSONTYPE_BOOL: tempBuffPutString1(this->jBool ? "true" : "false"); break;
+		case ENGINEDATAJSONTYPE_STRING: tempBuffPutString2(this->jString); break;
+		case ENGINEDATAJSONTYPE_NULL: tempBuffPutString1("null"); break;
+		case ENGINEDATAJSONTYPE_OBJECT:
 			tempBuffPutChar('{');
 			if(this->jArray != NULL){
 				if(indent >= 0){tempBuffPutChar('\n');}
 				if(indent >= 0){for(uint32_t i = 0; i < indent + 1; i++){tempBuffPutChar('\t');}}
-				struct dataJsonArray *tempObj = this->jArray;
+				struct engineDataJsonArray *tempObj = this->jArray;
 				while(tempObj != NULL){
 					tempBuffPutString1(tempObj->key);
 					tempBuffPutChar(':');
@@ -339,12 +339,12 @@ static void jsonStringify(struct dataJsonValue *this, int32_t indent){
 			}
 			tempBuffPutChar('}');
 			break;
-		case DATAJSONTYPE_ARRAY:
+		case ENGINEDATAJSONTYPE_ARRAY:
 			tempBuffPutChar('[');
 			if(this->jArray != NULL){
 				if(indent >= 0){tempBuffPutChar('\n');}
 				if(indent >= 0){for(uint32_t i = 0; i < indent + 1; i++){tempBuffPutChar('\t');}}
-				struct dataJsonArray *tempArr = this->jArray;
+				struct engineDataJsonArray *tempArr = this->jArray;
 				while(tempArr != NULL){
 					jsonStringify(&tempArr->value, indent + (indent < 0 ? 0 : 1));
 					tempArr = tempArr->next;
@@ -364,7 +364,7 @@ static void jsonStringify(struct dataJsonValue *this, int32_t indent){
 // ----------------------------------------------------------------
 
 // 文字列のjson解釈
-void dataJsonParse(struct dataJsonValue *this, char *json){
+void engineDataJsonParse(struct engineDataJsonValue *this, char *json){
 	char **c = &json;
 	if(parseValue(this, c)){
 		if(!skipSpace(c)){
@@ -373,12 +373,12 @@ void dataJsonParse(struct dataJsonValue *this, char *json){
 		}
 	}
 	// 読み取り失敗
-	dataJsonFree(this);
-	this->type = DATAJSONTYPE_NULL;
+	engineDataJsonFree(this);
+	this->type = ENGINEDATAJSONTYPE_NULL;
 }
 
 // jsonを文字列に変換
-char *dataJsonStringify(struct dataJsonValue *this){
+char *engineDataJsonStringify(struct engineDataJsonValue *this){
 	if(this == NULL){return NULL;}
 	localGlobal.tempBuffIndex = 0;
 	jsonStringify(this, -1);
@@ -393,7 +393,7 @@ char *dataJsonStringify(struct dataJsonValue *this){
 // ----------------------------------------------------------------
 
 // jsonテスト出力
-void dataJsonTrace(struct dataJsonValue *this){
+void engineDataJsonTrace(struct engineDataJsonValue *this){
 	if(this == NULL){return;}
 	localGlobal.tempBuffIndex = 0;
 	jsonStringify(this, 0);
@@ -404,54 +404,54 @@ void dataJsonTrace(struct dataJsonValue *this){
 // ----------------------------------------------------------------
 
 // 整数設定
-void dataJsonSetInt(struct dataJsonValue *this, int64_t value){
-	this->type = DATAJSONTYPE_INT;
+void engineDataJsonSetInt(struct engineDataJsonValue *this, int64_t value){
+	this->type = ENGINEDATAJSONTYPE_INT;
 	this->jInt = value;
 }
 
 // 浮動小数設定
-void dataJsonSetFloat(struct dataJsonValue *this, double value){
-	this->type = DATAJSONTYPE_FLOAT;
+void engineDataJsonSetFloat(struct engineDataJsonValue *this, double value){
+	this->type = ENGINEDATAJSONTYPE_FLOAT;
 	this->jFloat = value;
 }
 
 // 真偽値設定
-void dataJsonSetBool(struct dataJsonValue *this, bool value){
-	this->type = DATAJSONTYPE_BOOL;
+void engineDataJsonSetBool(struct engineDataJsonValue *this, bool value){
+	this->type = ENGINEDATAJSONTYPE_BOOL;
 	this->jBool = value;
 }
 
 // 文字列設定
-void dataJsonSetString(struct dataJsonValue *this, char *value){
+void engineDataJsonSetString(struct engineDataJsonValue *this, char *value){
 	uint32_t length = (uint32_t)strlen(value);
 	char *buff = (char*)malloc((length + 1) * sizeof(char));
 	strcpy(buff, this->jString);
-	this->type = DATAJSONTYPE_STRING;
+	this->type = ENGINEDATAJSONTYPE_STRING;
 	this->jString = buff;
 }
 
 // 連想配列要素作成
-static struct dataJsonArray *createObject(char *key){
+static struct engineDataJsonArray *createObject(char *key){
 	uint32_t length = (uint32_t)strlen(key);
-	struct dataJsonArray *array = (struct dataJsonArray*)malloc(sizeof(struct dataJsonArray) + length);
+	struct engineDataJsonArray *array = (struct engineDataJsonArray*)malloc(sizeof(struct engineDataJsonArray) + length * sizeof(char));
 	strcpy(array->key, key);
-	array->value.type = DATAJSONTYPE_NULL;
+	array->value.type = ENGINEDATAJSONTYPE_NULL;
 	array->next = NULL;
 	return array;
 }
 
 // 連想配列に要素を作成して追加
-struct dataJsonValue *dataJsonObjectCreateValue(struct dataJsonValue *this, char *key){
-	if(this->type == DATAJSONTYPE_NULL){
-		this->type = DATAJSONTYPE_OBJECT;
+struct engineDataJsonValue *engineDataJsonObjectCreateValue(struct engineDataJsonValue *this, char *key){
+	if(this->type == ENGINEDATAJSONTYPE_NULL){
+		this->type = ENGINEDATAJSONTYPE_OBJECT;
 		this->jArray = NULL;
-	}else if(this->type != DATAJSONTYPE_OBJECT){return NULL;}
+	}else if(this->type != ENGINEDATAJSONTYPE_OBJECT){return NULL;}
 
 	if(this->jArray == NULL){
 		this->jArray = createObject(key);
 		return &this->jArray->value;
 	}else{
-		struct dataJsonArray *temp = this->jArray;
+		struct engineDataJsonArray *temp = this->jArray;
 		while(temp->next != NULL){temp = temp->next;}
 		temp->next = createObject(key);
 		return &temp->next->value;
@@ -459,26 +459,26 @@ struct dataJsonValue *dataJsonObjectCreateValue(struct dataJsonValue *this, char
 }
 
 // 配列要素を作成
-static struct dataJsonArray *createArray(){
-	struct dataJsonArray *array = (struct dataJsonArray*)malloc(sizeof(struct dataJsonArray));
+static struct engineDataJsonArray *createArray(){
+	struct engineDataJsonArray *array = (struct engineDataJsonArray*)malloc(sizeof(struct engineDataJsonArray));
 	array->key[0] = '\0';
-	array->value.type = DATAJSONTYPE_NULL;
+	array->value.type = ENGINEDATAJSONTYPE_NULL;
 	array->next = NULL;
 	return array;
 }
 
 // 配列に要素を作成して追加
-struct dataJsonValue *dataJsonArrayCreateValue(struct dataJsonValue *this){
-	if(this->type == DATAJSONTYPE_NULL){
-		this->type = DATAJSONTYPE_ARRAY;
+struct engineDataJsonValue *engineDataJsonArrayCreateValue(struct engineDataJsonValue *this){
+	if(this->type == ENGINEDATAJSONTYPE_NULL){
+		this->type = ENGINEDATAJSONTYPE_ARRAY;
 		this->jArray = NULL;
-	}else if(this->type != DATAJSONTYPE_ARRAY){return NULL;}
+	}else if(this->type != ENGINEDATAJSONTYPE_ARRAY){return NULL;}
 
 	if(this->jArray == NULL){
 		this->jArray = createArray();
 		return &this->jArray->value;
 	}else{
-		struct dataJsonArray *temp = this->jArray;
+		struct engineDataJsonArray *temp = this->jArray;
 		while(temp->next != NULL){temp = temp->next;}
 		temp->next = createArray();
 		return &temp->next->value;
@@ -488,38 +488,38 @@ struct dataJsonValue *dataJsonArrayCreateValue(struct dataJsonValue *this){
 // ----------------------------------------------------------------
 
 // 整数読み取り
-int64_t dataJsonGetInt(struct dataJsonValue *this, int64_t defaultValue){
+int64_t engineDataJsonGetInt(struct engineDataJsonValue *this, int64_t defaultValue){
 	if(this != NULL){
-		if(this->type == DATAJSONTYPE_INT){return this->jInt;}
-		if(this->type == DATAJSONTYPE_FLOAT){return (int64_t)this->jFloat;}
+		if(this->type == ENGINEDATAJSONTYPE_INT){return this->jInt;}
+		if(this->type == ENGINEDATAJSONTYPE_FLOAT){return (int64_t)this->jFloat;}
 	}
 	return defaultValue;
 }
 
 // 浮動小数読み取り
-double dataJsonGetFloat(struct dataJsonValue *this, double defaultValue){
+double engineDataJsonGetFloat(struct engineDataJsonValue *this, double defaultValue){
 	if(this != NULL){
-		if(this->type == DATAJSONTYPE_INT){return (double)this->jInt;}
-		if(this->type == DATAJSONTYPE_FLOAT){return this->jFloat;}
+		if(this->type == ENGINEDATAJSONTYPE_INT){return (double)this->jInt;}
+		if(this->type == ENGINEDATAJSONTYPE_FLOAT){return this->jFloat;}
 	}
 	return defaultValue;
 }
 
 // 真偽値読み取り
-bool dataJsonGetBool(struct dataJsonValue *this, bool defaultValue){
-	return (this != NULL && this->type == DATAJSONTYPE_BOOL) ? this->jBool : defaultValue;
+bool engineDataJsonGetBool(struct engineDataJsonValue *this, bool defaultValue){
+	return (this != NULL && this->type == ENGINEDATAJSONTYPE_BOOL) ? this->jBool : defaultValue;
 }
 
 // 文字列読み取り
-char *dataJsonGetString(struct dataJsonValue *this, char *defaultValue){
-	return (this != NULL && this->type == DATAJSONTYPE_STRING) ? this->jString : defaultValue;
+char *engineDataJsonGetString(struct engineDataJsonValue *this, char *defaultValue){
+	return (this != NULL && this->type == ENGINEDATAJSONTYPE_STRING) ? this->jString : defaultValue;
 }
 
 // 連想配列から要素取得
-struct dataJsonValue *dataJsonObjectGetValue(struct dataJsonValue *this, char *key){
-	if(this == NULL || this->type != DATAJSONTYPE_OBJECT){return NULL;}
-	struct dataJsonArray *temp = this->jArray;
-	struct dataJsonValue *value = NULL;
+struct engineDataJsonValue *engineDataJsonObjectGetValue(struct engineDataJsonValue *this, char *key){
+	if(this == NULL || this->type != ENGINEDATAJSONTYPE_OBJECT){return NULL;}
+	struct engineDataJsonArray *temp = this->jArray;
+	struct engineDataJsonValue *value = NULL;
 	while(temp != NULL){
 		if(strcmp(temp->key, key) == 0){value = &temp->value;}
 		temp = temp->next;
@@ -528,11 +528,11 @@ struct dataJsonValue *dataJsonObjectGetValue(struct dataJsonValue *this, char *k
 }
 
 // 配列から要素取得
-struct dataJsonValue *dataJsonArrayGetValue(struct dataJsonValue *this, uint32_t index){
-	if(this == NULL || this->type != DATAJSONTYPE_ARRAY){return NULL;}
+struct engineDataJsonValue *engineDataJsonArrayGetValue(struct engineDataJsonValue *this, uint32_t index){
+	if(this == NULL || this->type != ENGINEDATAJSONTYPE_ARRAY){return NULL;}
 	uint32_t length = 0;
-	struct dataJsonArray *temp = this->jArray;
-	struct dataJsonValue *value = NULL;
+	struct engineDataJsonArray *temp = this->jArray;
+	struct engineDataJsonValue *value = NULL;
 	while(temp != NULL){
 		if(index == length++){value = &temp->value; break;}
 		temp = temp->next;
@@ -541,10 +541,10 @@ struct dataJsonValue *dataJsonArrayGetValue(struct dataJsonValue *this, uint32_t
 }
 
 // 配列の長さ取得
-uint32_t dataJsonArrayGetLength(struct dataJsonValue *this){
+uint32_t engineDataJsonArrayGetLength(struct engineDataJsonValue *this){
 	uint32_t length = 0;
-	if(this != NULL && (this->type == DATAJSONTYPE_OBJECT || this->type == DATAJSONTYPE_ARRAY)){
-		struct dataJsonArray *temp = this->jArray;
+	if(this != NULL && (this->type == ENGINEDATAJSONTYPE_OBJECT || this->type == ENGINEDATAJSONTYPE_ARRAY)){
+		struct engineDataJsonArray *temp = this->jArray;
 		while(temp != NULL){
 			length++;
 			temp = temp->next;
@@ -556,11 +556,11 @@ uint32_t dataJsonArrayGetLength(struct dataJsonValue *this){
 // ----------------------------------------------------------------
 
 // 連想配列から要素削除
-void dataJsonObjectRemoveValue(struct dataJsonValue *this, char *key){
-	if(this == NULL || this->type != DATAJSONTYPE_OBJECT){return;}
-	struct dataJsonArray *prev = NULL;
-	struct dataJsonArray *temp = this->jArray;
-	struct dataJsonArray *dispose = NULL;
+void engineDataJsonObjectRemoveValue(struct engineDataJsonValue *this, char *key){
+	if(this == NULL || this->type != ENGINEDATAJSONTYPE_OBJECT){return;}
+	struct engineDataJsonArray *prev = NULL;
+	struct engineDataJsonArray *temp = this->jArray;
+	struct engineDataJsonArray *dispose = NULL;
 	while(temp != NULL){
 		if(strcmp(temp->key, key) == 0){
 			// リストから要素を外す
@@ -569,7 +569,7 @@ void dataJsonObjectRemoveValue(struct dataJsonValue *this, char *key){
 			if(prev == NULL){this->jArray = temp;}
 			else{prev->next = temp;}
 			// 要素の除去
-			dataJsonFree(&dispose->value);
+			engineDataJsonFree(&dispose->value);
 			free(dispose);
 		}else{
 			prev = temp;
@@ -579,12 +579,12 @@ void dataJsonObjectRemoveValue(struct dataJsonValue *this, char *key){
 }
 
 // 配列から要素削除
-void dataJsonArrayRemoveValue(struct dataJsonValue *this, uint32_t index){
-	if(this == NULL || this->type != DATAJSONTYPE_ARRAY){return;}
+void engineDataJsonArrayRemoveValue(struct engineDataJsonValue *this, uint32_t index){
+	if(this == NULL || this->type != ENGINEDATAJSONTYPE_ARRAY){return;}
 	uint32_t length = 0;
-	struct dataJsonArray *prev = NULL;
-	struct dataJsonArray *temp = this->jArray;
-	struct dataJsonArray *dispose = NULL;
+	struct engineDataJsonArray *prev = NULL;
+	struct engineDataJsonArray *temp = this->jArray;
+	struct engineDataJsonArray *dispose = NULL;
 	while(temp != NULL){
 		if(index == length++){
 			// リストから要素を外す
@@ -593,7 +593,7 @@ void dataJsonArrayRemoveValue(struct dataJsonValue *this, uint32_t index){
 			if(prev == NULL){this->jArray = temp;}
 			else{prev->next = temp;}
 			// 要素の除去
-			dataJsonFree(&dispose->value);
+			engineDataJsonFree(&dispose->value);
 			free(dispose);
 			return;
 		}else{
@@ -604,20 +604,20 @@ void dataJsonArrayRemoveValue(struct dataJsonValue *this, uint32_t index){
 }
 
 // json解放
-void dataJsonFree(struct dataJsonValue *this){
+void engineDataJsonFree(struct engineDataJsonValue *this){
 	if(this == NULL){return;}
 	switch(this->type){
-		case DATAJSONTYPE_STRING:
+		case ENGINEDATAJSONTYPE_STRING:
 			free(this->jString);
 			break;
-		case DATAJSONTYPE_OBJECT:
-		case DATAJSONTYPE_ARRAY:
+		case ENGINEDATAJSONTYPE_OBJECT:
+		case ENGINEDATAJSONTYPE_ARRAY:
 			{
-				struct dataJsonArray *temp = this->jArray;
+				struct engineDataJsonArray *temp = this->jArray;
 				while(temp != NULL){
-					struct dataJsonArray *dispose = temp;
+					struct engineDataJsonArray *dispose = temp;
 					temp = temp->next;
-					dataJsonFree(&dispose->value);
+					engineDataJsonFree(&dispose->value);
 					free(dispose);
 				}
 				this->jArray = NULL;
@@ -625,7 +625,7 @@ void dataJsonFree(struct dataJsonValue *this){
 			break;
 		default: break;
 	}
-	this->type = DATAJSONTYPE_NULL;
+	this->type = ENGINEDATAJSONTYPE_NULL;
 }
 
 // ----------------------------------------------------------------

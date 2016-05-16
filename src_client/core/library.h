@@ -19,10 +19,10 @@
 //#include "plugin/pluginController.h"
 //#include "plugin/pluginSound.h"
 //#include "plugin/pluginEnpty.h"
-//#include "engine/engineMath.h"
-//#include "engine/engineUtil.h"
-//#include "engine/engineData.h"
-//#include "engine/engine3d.h"
+//#include "engine/engineMath/engineMath.h"
+//#include "engine/engineUtil/engineUtil.h"
+//#include "engine/engineData/engineData.h"
+//#include "engine/engineGraphic/engineGraphic.h"
 //#include "game.h"
 
 // ----------------------------------------------------------------

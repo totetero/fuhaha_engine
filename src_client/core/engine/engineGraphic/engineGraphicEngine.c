@@ -1,0 +1,428 @@
+#include "../../library.h"
+#include "platform.h"
+#include "../engineMath/engineMath.h"
+#include "engineGraphic.h"
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+
+// グラフィックエンジンシェーダー構造体
+struct engineGraphicEngineShader{
+	GLint program;
+	GLint attr_pos;
+	GLint attr_col;
+	GLint attr_uvc;
+	GLint unif_mat;
+	GLint unif_col;
+};
+
+static struct{
+	// グラフィックエンジンシェーダー
+	struct{
+		struct engineGraphicEngineShader *current;
+		struct engineGraphicEngineShader reserve1;
+		struct engineGraphicEngineShader reserve2;
+		struct engineGraphicEngineShader reserve3;
+		struct engineGraphicEngineShader reserve4;
+	} shader;
+	// 重複動作阻止のための状態記録
+	struct{
+		enum engineGraphicEngineModeDraw modeDraw;
+		enum engineGraphicEngineModeStencil modeStencil;
+		GLboolean modeDepth;
+		enum engineGraphicObjectTexType texType;
+		GLuint texData;
+		GLfloat color[4];
+		engineGraphicObjectVBOId vertVBO;
+		engineGraphicObjectVBOId clorVBO;
+		engineGraphicObjectVBOId texcVBO;
+		engineGraphicObjectIBOId faceIBO;
+	} memory;
+} localGlobal = {0};
+
+// ----------------------------------------------------------------
+
+// シェーダープログラム作成関数
+static void engineGraphicEngineShaderCreate(struct engineGraphicEngineShader *shader, char *vssrc, char *fsstr){
+	shader->program = glCreateProgram();
+	GLint vshader = glCreateShader(GL_VERTEX_SHADER);
+	GLint fshader = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(vshader, 1, (const GLchar**)&vssrc, NULL);
+	glShaderSource(fshader, 1, (const GLchar**)&fsstr, NULL);
+	glCompileShader(vshader);
+	glCompileShader(fshader);
+	glAttachShader(shader->program, vshader);
+	glAttachShader(shader->program, fshader);
+	glLinkProgram(shader->program);
+	shader->attr_pos = glGetAttribLocation(shader->program, "vs_attr_pos");
+	shader->attr_col = glGetAttribLocation(shader->program, "vs_attr_col");
+	shader->attr_uvc = glGetAttribLocation(shader->program, "vs_attr_uvc");
+	shader->unif_mat = glGetUniformLocation(shader->program, "vs_unif_mat");
+	shader->unif_col = glGetUniformLocation(shader->program, "fs_unif_col");
+}
+
+// 初期化
+void engineGraphicEngineInit(){
+	char *vsh1_src = "precision highp float;attribute vec3 vs_attr_pos;attribute vec2 vs_attr_uvc;uniform mat4 vs_unif_mat;varying vec2 texCoord;void main(){texCoord = vs_attr_uvc;gl_Position = vs_unif_mat * vec4(vs_attr_pos, 1.0);}";
+	char *fsh1_src = "precision highp float;uniform vec4 fs_unif_col;uniform sampler2D texture;varying vec2 texCoord;void main(){vec4 fragColor = texture2D(texture, texCoord) * fs_unif_col;if(fragColor.a > 0.8){gl_FragColor = fragColor;}else{discard;}}";
+	char *vsh2_src = "precision highp float;attribute vec3 vs_attr_pos;attribute vec2 vs_attr_uvc;uniform mat4 vs_unif_mat;varying vec2 texCoord;void main(){texCoord = vs_attr_uvc;gl_Position = vs_unif_mat * vec4(vs_attr_pos, 1.0);}";
+	char *fsh2_src = "precision highp float;uniform vec4 fs_unif_col;uniform sampler2D texture;varying vec2 texCoord;void main(){vec4 fragColor = texture2D(texture, texCoord) * fs_unif_col;gl_FragColor = fragColor;}";
+	char *vsh3_src = "precision highp float;attribute vec3 vs_attr_pos;attribute vec3 vs_attr_col;attribute vec2 vs_attr_uvc;uniform mat4 vs_unif_mat;varying vec4 color;varying vec2 texCoord;void main(){color = vec4(vs_attr_col, 1.0);texCoord = vs_attr_uvc;gl_Position = vs_unif_mat * vec4(vs_attr_pos, 1.0);}";
+	char *fsh3_src = "precision highp float;uniform vec4 fs_unif_col;uniform sampler2D texture;varying vec4 color;varying vec2 texCoord;void main(){vec4 fragColor = texture2D(texture, texCoord) * fs_unif_col * color;if(fragColor.a > 0.8){gl_FragColor = fragColor;}else{discard;}}";
+	char *vsh4_src = "precision highp float;attribute vec3 vs_attr_pos;attribute vec3 vs_attr_col;uniform mat4 vs_unif_mat;varying vec4 color;void main(){color = vec4(vs_attr_col, 1.0);gl_Position = vs_unif_mat * vec4(vs_attr_pos, 1.0);}";
+	char *fsh4_src = "precision highp float;uniform vec4 fs_unif_col;varying vec4 color;void main(){gl_FragColor = fs_unif_col * color;}";
+	engineGraphicEngineShaderCreate(&localGlobal.shader.reserve1, vsh1_src, fsh1_src);
+	engineGraphicEngineShaderCreate(&localGlobal.shader.reserve2, vsh2_src, fsh2_src);
+	engineGraphicEngineShaderCreate(&localGlobal.shader.reserve3, vsh3_src, fsh3_src);
+	engineGraphicEngineShaderCreate(&localGlobal.shader.reserve4, vsh4_src, fsh4_src);
+
+	localGlobal.memory.modeDraw = -1;
+	localGlobal.memory.modeStencil = -1;
+	localGlobal.memory.modeDepth = GL_TRUE;
+	localGlobal.memory.color[0] = -1;
+	engineGraphicEngineMemoryResetVBO();
+	engineGraphicEngineMemoryResetIBO();
+	engineGraphicEngineMemoryResetTex();
+
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClearDepthf(1.0f);
+	glClearStencil(0);
+	glCullFace(GL_BACK);
+	//glEnable(GL_TEXTURE_2D); // コメントを外すとブラウザでなんか警告が出る
+	glEnable(GL_BLEND);
+}
+
+// 解放
+void engineGraphicEngineExit(){
+	glDeleteProgram(localGlobal.shader.reserve1.program);
+	glDeleteProgram(localGlobal.shader.reserve2.program);
+	glDeleteProgram(localGlobal.shader.reserve3.program);
+	glDeleteProgram(localGlobal.shader.reserve4.program);
+}
+
+// ----------------------------------------------------------------
+
+// グラフィックエンジン命令 描画のクリア
+void engineGraphicEngineClearAll(){
+	glDepthMask(localGlobal.memory.modeDepth = GL_TRUE);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	engineGraphicEngineSetStencilMode(ENGINEGRAPHICENGINEMODESTENCIL_NONE);
+}
+
+// グラフィックエンジン命令 深度バッファのクリア
+void engineGraphicEngineClearDepth(){
+	glClear(GL_DEPTH_BUFFER_BIT);
+}
+
+// グラフィックエンジン命令 ステンシルバッファのクリア
+void engineGraphicEngineClearStencil(){
+	glClear(GL_STENCIL_BUFFER_BIT);
+}
+
+// 重複動作阻止のためのVBO状態記録をリセット
+void engineGraphicEngineMemoryResetVBO(){
+	localGlobal.memory.vertVBO = 0;
+	localGlobal.memory.clorVBO = 0;
+	localGlobal.memory.texcVBO = 0;
+}
+
+// 重複動作阻止のためのIBO状態記録をリセット
+void engineGraphicEngineMemoryResetIBO(){
+	localGlobal.memory.faceIBO = 0;
+}
+
+// 重複動作阻止のためのTex状態記録をリセット
+void engineGraphicEngineMemoryResetTex(){
+	localGlobal.memory.texType = -1;
+	localGlobal.memory.texData = ~0;
+}
+
+// ----------------------------------------------------------------
+
+// グラフィックエンジン命令 描画モード設定
+void engineGraphicEngineSetDrawMode(enum engineGraphicEngineModeDraw mode){
+	if(localGlobal.memory.modeDraw == mode){return;}
+	localGlobal.memory.modeDraw = mode;
+
+	if(localGlobal.shader.current != NULL){
+		if(localGlobal.shader.current->attr_pos >= 0){glDisableVertexAttribArray(localGlobal.shader.current->attr_pos);}
+		if(localGlobal.shader.current->attr_col >= 0){glDisableVertexAttribArray(localGlobal.shader.current->attr_col);}
+		if(localGlobal.shader.current->attr_uvc >= 0){glDisableVertexAttribArray(localGlobal.shader.current->attr_uvc);}
+	}
+
+	switch(mode){
+		case ENGINEGRAPHICENGINEMODEDRAW_NORMAL:
+			// 汎用モード (VertBuf TexcBuf)
+			localGlobal.shader.current = &localGlobal.shader.reserve1;
+			glDepthMask(localGlobal.memory.modeDepth = GL_TRUE);
+			glEnable(GL_DEPTH_TEST);
+			glDisable(GL_CULL_FACE);
+			glBlendFuncSeparate(GL_ONE, GL_ZERO, GL_ZERO, GL_ONE);
+			break;
+		case ENGINEGRAPHICENGINEMODEDRAW_2D:
+			// 2D描画モード (VertBuf TexcBuf)
+			localGlobal.shader.current = &localGlobal.shader.reserve2;
+			glDepthMask(localGlobal.memory.modeDepth = GL_FALSE);
+			glDisable(GL_DEPTH_TEST);
+			glDisable(GL_CULL_FACE);
+			glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ZERO, GL_ONE); // 半透明アルファ合成
+			break;
+		case ENGINEGRAPHICENGINEMODEDRAW_ALPHA_ADD:
+			// アルファ合成モード (VertBuf TexcBuf)
+			localGlobal.shader.current = &localGlobal.shader.reserve2;
+			glDepthMask(localGlobal.memory.modeDepth = GL_FALSE);
+			glEnable(GL_DEPTH_TEST);
+			glDisable(GL_CULL_FACE);
+			glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE, GL_ZERO, GL_ONE); // 加算合成
+			break;
+		case ENGINEGRAPHICENGINEMODEDRAW_HKNW:
+			// ハコニワ地形モード (VertBuf Clor3Buf TexcBuf)
+			localGlobal.shader.current = &localGlobal.shader.reserve3;
+			glDepthMask(localGlobal.memory.modeDepth = GL_TRUE);
+			glEnable(GL_DEPTH_TEST);
+			glEnable(GL_CULL_FACE);
+			glBlendFuncSeparate(GL_ONE, GL_ZERO, GL_ZERO, GL_ONE);
+			break;
+		case ENGINEGRAPHICENGINEMODEDRAW_SPHERE:
+			// スフィア地形モード (VertBuf Clor3Buf)
+			localGlobal.shader.current = &localGlobal.shader.reserve4;
+			glDepthMask(localGlobal.memory.modeDepth = GL_TRUE);
+			glEnable(GL_DEPTH_TEST);
+			glEnable(GL_CULL_FACE);
+			glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ZERO, GL_ONE); // 半透明アルファ合成
+			break;
+	}
+
+	glUseProgram(localGlobal.shader.current->program);
+	if(localGlobal.shader.current->attr_pos >= 0){glEnableVertexAttribArray(localGlobal.shader.current->attr_pos);}
+	if(localGlobal.shader.current->attr_col >= 0){glEnableVertexAttribArray(localGlobal.shader.current->attr_col);}
+	if(localGlobal.shader.current->attr_uvc >= 0){glEnableVertexAttribArray(localGlobal.shader.current->attr_uvc);}
+
+	localGlobal.memory.color[0] = -1;
+	engineGraphicEngineMemoryResetVBO();
+}
+
+// グラフィックエンジン命令 ステンシルマスクモード設定
+void engineGraphicEngineSetStencilMode(enum engineGraphicEngineModeStencil mode){
+	if(localGlobal.memory.modeStencil == mode){return;}
+	localGlobal.memory.modeStencil = mode;
+
+	// ステンシル有効設定
+	if(mode != ENGINEGRAPHICENGINEMODESTENCIL_NONE){glEnable(GL_STENCIL_TEST);}else{glDisable(GL_STENCIL_TEST);}
+
+	// ステンシル以外の描画制限設定
+	switch(mode){
+		case ENGINEGRAPHICENGINEMODESTENCIL_MASK_0:
+		case ENGINEGRAPHICENGINEMODESTENCIL_MASK_1:
+		case ENGINEGRAPHICENGINEMODESTENCIL_MASK_2:
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ1_MASK_0:
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ1_MASK_2:
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_GE1_MASK_0:
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_GE1_MASK_INCR:
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_LE1_MASK_0:
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_LE1_MASK_INCR:
+			glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+			glDepthMask(GL_FALSE);
+			break;
+		default:
+			glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+			glDepthMask(localGlobal.memory.modeDepth);
+			break;
+	}
+
+	// ステンシル条件設定
+	switch(mode){
+		case ENGINEGRAPHICENGINEMODESTENCIL_NONE: break;
+		case ENGINEGRAPHICENGINEMODESTENCIL_MASK_0:              glStencilFunc(GL_ALWAYS, 0, ~0); break;
+		case ENGINEGRAPHICENGINEMODESTENCIL_MASK_1:              glStencilFunc(GL_ALWAYS, 1, ~0); break;
+		case ENGINEGRAPHICENGINEMODESTENCIL_MASK_2:              glStencilFunc(GL_ALWAYS, 2, ~0); break;
+		case ENGINEGRAPHICENGINEMODESTENCIL_WRITE_0:             glStencilFunc(GL_ALWAYS, 0, ~0); break;
+		case ENGINEGRAPHICENGINEMODESTENCIL_WRITE_1:             glStencilFunc(GL_ALWAYS, 1, ~0); break;
+		case ENGINEGRAPHICENGINEMODESTENCIL_WRITE_2:             glStencilFunc(GL_ALWAYS, 2, ~0); break;
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ0:            glStencilFunc(GL_EQUAL,  0, ~0); break;
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ1:            glStencilFunc(GL_EQUAL,  1, ~0); break;
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ2:            glStencilFunc(GL_EQUAL,  2, ~0); break;
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ1_MASK_0:     glStencilFunc(GL_EQUAL,  1, ~0); break;
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ1_WRITE_0:    glStencilFunc(GL_EQUAL,  1, ~0); break;
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ1_MASK_2:     glStencilFunc(GL_EQUAL,  1, ~0); break;
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ1_WRITE_2:    glStencilFunc(GL_EQUAL,  1, ~0); break;
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_GE1:            glStencilFunc(GL_LEQUAL, 1, ~0); break;
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_GE1_MASK_0:     glStencilFunc(GL_LEQUAL, 1, ~0); break;
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_GE1_WRITE_0:    glStencilFunc(GL_LEQUAL, 1, ~0); break;
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_GE1_MASK_INCR:  glStencilFunc(GL_LEQUAL, 1, ~0); break;
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_GE1_WRITE_INCR: glStencilFunc(GL_LEQUAL, 1, ~0); break;
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_LE1:            glStencilFunc(GL_GEQUAL, 1, ~0); break;
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_LE1_MASK_0:     glStencilFunc(GL_GEQUAL, 1, ~0); break;
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_LE1_WRITE_0:    glStencilFunc(GL_GEQUAL, 1, ~0); break;
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_LE1_MASK_INCR:  glStencilFunc(GL_GEQUAL, 1, ~0); break;
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_LE1_WRITE_INCR: glStencilFunc(GL_GEQUAL, 1, ~0); break;
+	}
+
+	// ステンシル条件設定
+	switch(mode){
+		case ENGINEGRAPHICENGINEMODESTENCIL_MASK_0:
+		case ENGINEGRAPHICENGINEMODESTENCIL_MASK_1:
+		case ENGINEGRAPHICENGINEMODESTENCIL_MASK_2:
+		case ENGINEGRAPHICENGINEMODESTENCIL_WRITE_0:
+		case ENGINEGRAPHICENGINEMODESTENCIL_WRITE_1:
+		case ENGINEGRAPHICENGINEMODESTENCIL_WRITE_2:
+			// マスクの書き込み
+			glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+			break;
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ0:
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ1:
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ2:
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_GE1:
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_LE1:
+			// マスク使用
+			glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+			break;
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ1_MASK_0:
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ1_WRITE_0:
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_GE1_MASK_0:
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_GE1_WRITE_0:
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_LE1_MASK_0:
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_LE1_WRITE_0:
+			// マスク書き換え 0にする
+			glStencilOp(GL_KEEP, GL_KEEP, GL_ZERO);
+			break;
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ1_MASK_2:
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ1_WRITE_2:
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_GE1_MASK_INCR:
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_GE1_WRITE_INCR:
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_LE1_MASK_INCR:
+		case ENGINEGRAPHICENGINEMODESTENCIL_READ_LE1_WRITE_INCR:
+			// マスク書き換え 1増加
+			glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
+			break;
+		default:
+			break;
+	}
+}
+
+// グラフィックエンジン命令 深度バッファを一時的に無効化
+void engineGraphicEngineIgnoreDepthMode(bool isIgnore){
+	if(!localGlobal.memory.modeDepth){return;}
+	if(isIgnore){
+		glDepthMask(GL_FALSE);
+		glDisable(GL_DEPTH_TEST);
+	}else{
+		glDepthMask(GL_TRUE);
+		glEnable(GL_DEPTH_TEST);
+	}
+}
+
+// ----------------------------------------------------------------
+
+// グラフィックエンジン命令 テクスチャを指定
+void engineGraphicEngineBindTexture(engineGraphicObjectTexId egoId){
+	GLuint glId;
+	enum engineGraphicObjectTexType type;
+	if(!engineGraphicObjectTexGetGLId(egoId, &glId, &type)){return;}
+	if(localGlobal.memory.texType == type && localGlobal.memory.texData == glId){return;}
+
+	if(localGlobal.memory.texData != glId){glBindTexture(GL_TEXTURE_2D, glId);}
+
+	switch(type){
+		case ENGINEGRAPHICOBJECTTEXTYPE_LINEAR:
+			// 線形補完 汎用
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			break;
+		case ENGINEGRAPHICOBJECTTEXTYPE_NEAREST:
+			// 最近傍法 ドット絵地形用
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			break;
+	}
+
+	localGlobal.memory.texType = type;
+	localGlobal.memory.texData = glId;
+}
+
+// グラフィックエンジン命令 VBO登録 頂点座標
+void engineGraphicEngineBindVertVBO(engineGraphicObjectVBOId egoId){
+	if(localGlobal.memory.vertVBO == egoId){return;}
+	localGlobal.memory.vertVBO = egoId;
+
+	GLuint glId;
+	if(!engineGraphicObjectVBOGetGLId(egoId, &glId)){return;}
+	glBindBuffer(GL_ARRAY_BUFFER, glId);
+	glVertexAttribPointer(localGlobal.shader.current->attr_pos, 3, GL_FLOAT, GL_FALSE, 0, 0);
+}
+
+// グラフィックエンジン命令 VBO登録 カラーrgb
+void engineGraphicEngineBindClorVBO(engineGraphicObjectVBOId egoId){
+	if(localGlobal.memory.clorVBO == egoId){return;}
+	localGlobal.memory.clorVBO = egoId;
+
+	GLuint glId;
+	if(!engineGraphicObjectVBOGetGLId(egoId, &glId)){return;}
+	glBindBuffer(GL_ARRAY_BUFFER, glId);
+	glVertexAttribPointer(localGlobal.shader.current->attr_col, 3, GL_FLOAT, GL_FALSE, 0, 0);
+}
+
+// グラフィックエンジン命令 VBO登録 テクスチャ座標
+void engineGraphicEngineBindTexcVBO(engineGraphicObjectVBOId egoId){
+	if(localGlobal.memory.texcVBO == egoId){return;}
+	localGlobal.memory.texcVBO = egoId;
+
+	GLuint glId;
+	if(!engineGraphicObjectVBOGetGLId(egoId, &glId)){return;}
+	glBindBuffer(GL_ARRAY_BUFFER, glId);
+	glVertexAttribPointer(localGlobal.shader.current->attr_uvc, 2, GL_FLOAT, GL_FALSE, 0, 0);
+}
+
+// グラフィックエンジン命令 IBO登録 頂点インデックス
+void engineGraphicEngineBindFaceIBO(engineGraphicObjectIBOId egoId){
+	if(localGlobal.memory.faceIBO == egoId){return;}
+	localGlobal.memory.faceIBO = egoId;
+
+	GLuint glId;
+	if(!engineGraphicObjectIBOGetGLId(egoId, &glId)){return;}
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, glId);
+}
+
+// ----------------------------------------------------------------
+
+// グラフィックエンジン命令 行列の設定
+void engineGraphicEngineSetMatrix(struct engineMathMatrix44 *matrix){
+	GLfloat fmatrix[16] = {
+		(GLfloat)matrix->m00, (GLfloat)matrix->m01, (GLfloat)matrix->m02, (GLfloat)matrix->m03,
+		(GLfloat)matrix->m10, (GLfloat)matrix->m11, (GLfloat)matrix->m12, (GLfloat)matrix->m13,
+		(GLfloat)matrix->m20, (GLfloat)matrix->m21, (GLfloat)matrix->m22, (GLfloat)matrix->m23,
+		(GLfloat)matrix->m30, (GLfloat)matrix->m31, (GLfloat)matrix->m32, (GLfloat)matrix->m33,
+	};
+	glUniformMatrix4fv(localGlobal.shader.current->unif_mat, 1, GL_FALSE, fmatrix);
+}
+
+// グラフィックエンジン命令 色の設定
+void engineGraphicEngineSetColor(double r, double g, double b, double a){
+	GLfloat fcolor[4] = {(GLfloat)r, (GLfloat)g, (GLfloat)b, (GLfloat)a};
+	if(memcmp(localGlobal.memory.color, fcolor, 4 * sizeof(GLfloat))){
+		memcpy(localGlobal.memory.color, fcolor, 4 * sizeof(GLfloat));
+		glUniform4fv(localGlobal.shader.current->unif_col, 1, fcolor);
+	}
+}
+
+// ----------------------------------------------------------------
+
+// グラフィックエンジン命令 頂点インデックスを元に描画
+void engineGraphicEngineDrawIndex(uint32_t offset, uint32_t count){
+	glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_SHORT, (GLushort*)NULL + offset);
+}
+
+// グラフィックエンジン命令クラス 描画確定
+void engineGraphicEngineFlush(){
+	glFlush();
+}
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+
