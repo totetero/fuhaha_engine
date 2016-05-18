@@ -76,11 +76,11 @@ engineGraphicObjectIBOId engineGraphicObjectIBOCreate(uint32_t size, uint16_t *i
 engineGraphicObjectTexId engineGraphicObjectTexCreate(char *src, enum engineGraphicObjectTexType type);
 
 // VBOID取得
-bool engineGraphicObjectVBOGetGLId(engineGraphicObjectVBOId engineGraphicId, GLuint *glId);
+bool engineGraphicObjectVBOGetGLId(engineGraphicObjectVBOId egoId, GLuint *glId);
 // IBOID取得
-bool engineGraphicObjectIBOGetGLId(engineGraphicObjectIBOId engineGraphicId, GLuint *glId);
+bool engineGraphicObjectIBOGetGLId(engineGraphicObjectIBOId egoId, GLuint *glId);
 // テクスチャID取得
-bool engineGraphicObjectTexGetGLId(engineGraphicObjectTexId engineGraphicId, GLuint *glId, enum engineGraphicObjectTexType *type);
+bool engineGraphicObjectTexGetGLId(engineGraphicObjectTexId egoId, GLuint *glId, enum engineGraphicObjectTexType *type);
 
 // 3DオブジェクトVBO除去
 void engineGraphicObjectVBODispose(engineGraphicObjectVBOId egoId);
@@ -104,11 +104,11 @@ void engineGraphicEngineInit();
 // 解放
 void engineGraphicEngineExit();
 
-// engineGraphic命令 描画のクリア
+// グラフィックエンジン命令 描画のクリア
 void engineGraphicEngineClearAll();
-// engineGraphic命令 深度バッファのクリア
+// グラフィックエンジン命令 深度バッファのクリア
 void engineGraphicEngineClearDepth();
-// engineGraphic命令 ステンシルバッファのクリア
+// グラフィックエンジン命令 ステンシルバッファのクリア
 void engineGraphicEngineClearStencil();
 // 重複動作阻止のためのVBO状態記録をリセット
 void engineGraphicEngineMemoryResetVBO();
@@ -117,33 +117,33 @@ void engineGraphicEngineMemoryResetIBO();
 // 重複動作阻止のためのTex状態記録をリセット
 void engineGraphicEngineMemoryResetTex();
 
-// engineGraphic命令 描画モード設定
+// グラフィックエンジン命令 描画モード設定
 void engineGraphicEngineSetDrawMode(enum engineGraphicEngineModeDraw mode);
-// engineGraphic命令 ステンシルマスクモード設定
+// グラフィックエンジン命令 ステンシルマスクモード設定
 void engineGraphicEngineSetStencilMode(enum engineGraphicEngineModeStencil mode);
-// engineGraphic命令 深度バッファを一時的に無効化
+// グラフィックエンジン命令 深度バッファを一時的に無効化
 void engineGraphicEngineIgnoreDepthMode(bool isIgnore);
 
-// engineGraphic命令 テクスチャを指定
+// グラフィックエンジン命令 テクスチャを指定
 void engineGraphicEngineBindTexture(engineGraphicObjectTexId egoId);
-// engineGraphic命令 VBO登録 頂点座標
+// グラフィックエンジン命令 VBO登録 頂点座標
 void engineGraphicEngineBindVertVBO(engineGraphicObjectVBOId egoId);
-// engineGraphic命令 VBO登録 カラーrgb
+// グラフィックエンジン命令 VBO登録 カラーrgb
 void engineGraphicEngineBindClorVBO(engineGraphicObjectVBOId egoId);
-// engineGraphic命令 VBO登録 テクスチャ座標
+// グラフィックエンジン命令 VBO登録 テクスチャ座標
 void engineGraphicEngineBindTexcVBO(engineGraphicObjectVBOId egoId);
-// engineGraphic命令 IBO登録 頂点インデックス
+// グラフィックエンジン命令 IBO登録 頂点インデックス
 void engineGraphicEngineBindFaceIBO(engineGraphicObjectIBOId egoId);
 
-// engineGraphic命令 行列の設定
+// グラフィックエンジン命令 行列の設定
 void engineGraphicEngineSetMatrix(struct engineMathMatrix44 *matrix);
-// engineGraphic命令 色の設定
+// グラフィックエンジン命令 色の設定
 void engineGraphicEngineSetColor(double r, double g, double b, double a);
 
-// engineGraphic命令 頂点インデックスを元に描画
+// グラフィックエンジン命令 頂点インデックスを元に描画
 void engineGraphicEngineDrawIndex(uint32_t offset, uint32_t count);
 
-// engineGraphic命令クラス 描画確定
+// グラフィックエンジン命令クラス 描画確定
 void engineGraphicEngineFlush();
 
 // ----------------------------------------------------------------
