@@ -1,5 +1,6 @@
 #include "../../library.h"
 #include "platform.h"
+#include "../../plugin/pluginTexture.h"
 #include "../engineMath/engineMath.h"
 #include "engineGraphic.h"
 
@@ -41,6 +42,11 @@ struct engineGraphicObjectTexData{
 	struct engineGraphicObjectTexData *next;
 	GLuint glId;
 	char *src;
+	enum engineGraphicObjectTexDataStatus{
+		ENGINEGRAPHICOBJECTTEXDATASTATUS_LOADING,
+		ENGINEGRAPHICOBJECTTEXDATASTATUS_LOADED,
+		ENGINEGRAPHICOBJECTTEXDATASTATUS_CANCEL,
+	} status;
 };
 
 static struct{
@@ -58,8 +64,55 @@ static struct{
 
 // ----------------------------------------------------------------
 
+// 3DオブジェクトVBO解放
+static void egoVBOFree(struct engineGraphicObjectVBO *this){
+	glDeleteBuffers(1, &this->glId);
+	free(this->vertices);
+	free(this);
+}
+
+// 3DオブジェクトIBO解放
+static void egoIBOFree(struct engineGraphicObjectIBO *this){
+	glDeleteBuffers(1, &this->glId);
+	free(this->indexes);
+	free(this);
+}
+
+// テクスチャ情報解放
+static void texDataFree(struct engineGraphicObjectTexData *this){
+	if(this->status == ENGINEGRAPHICOBJECTTEXDATASTATUS_LOADED){
+		// 解放
+		if(this->glId != localGlobal.defaultTexture.glId){glDeleteTextures(1, &this->glId);}
+		free(this->src);
+		free(this);
+	}else{
+		// ロードが完了していないのでコールバックで破棄
+		this->status = ENGINEGRAPHICOBJECTTEXDATASTATUS_CANCEL;
+	}
+}
+
+// 3DオブジェクトTex解放
+static void egoTexFree(struct engineGraphicObjectTex *this){
+	free(this);
+}
+
+// ----------------------------------------------------------------
+
+// ロード完了時コールバック
+static void texDataLocalCallback(void *param, int glId, int texw, int texh, int imgw, int imgh){
+	struct engineGraphicObjectTexData *this = (struct engineGraphicObjectTexData*)param;
+	enum engineGraphicObjectTexDataStatus beforeStatus = this->status;
+	this->glId = glId;
+	this->status = ENGINEGRAPHICOBJECTTEXDATASTATUS_LOADED;
+
+	// ロード中止時の解放処理
+	if(beforeStatus == ENGINEGRAPHICOBJECTTEXDATASTATUS_CANCEL){texDataFree(this);}
+}
+
+// ----------------------------------------------------------------
+
 // VBO作成
-static void engineGraphicObjectVBOLoad(struct engineGraphicObjectVBO *this){
+static void egoVBOLoad(struct engineGraphicObjectVBO *this){
 	glGenBuffers(1, &this->glId);
 	glBindBuffer(GL_ARRAY_BUFFER, this->glId);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * this->size, this->vertices, GL_STATIC_DRAW);
@@ -67,7 +120,7 @@ static void engineGraphicObjectVBOLoad(struct engineGraphicObjectVBO *this){
 }
 
 // IBO作成
-static void engineGraphicObjectIBOLoad(struct engineGraphicObjectIBO *this){
+static void egoIBOLoad(struct engineGraphicObjectIBO *this){
 	glGenBuffers(1, &this->glId);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->glId);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort) * this->size, this->indexes, GL_STATIC_DRAW);
@@ -75,11 +128,12 @@ static void engineGraphicObjectIBOLoad(struct engineGraphicObjectIBO *this){
 }
 
 // テクスチャ作成
-static void engineGraphicObjectTexDataLoad(struct engineGraphicObjectTexData *this){
+static void texDataLoad(struct engineGraphicObjectTexData *this){
 	// 読み込み中のデフォルトテクスチャ設定
 	this->glId = localGlobal.defaultTexture.glId;
 	// テクスチャロード
-	//platformTextureLoad(this->glId, this->src);
+	this->status = ENGINEGRAPHICOBJECTTEXDATASTATUS_LOADING;
+	platformPluginTextureLocal(this, this->src, texDataLocalCallback);
 }
 
 // ----------------------------------------------------------------
@@ -93,7 +147,7 @@ engineGraphicObjectVBOId engineGraphicObjectVBOCreate(uint32_t size, double *ver
 	uint32_t memsize = size * sizeof(GLfloat);
 	obj->vertices = (GLfloat*)malloc(memsize);
 	for(uint32_t i = 0; i < size; i++){obj->vertices[i] = (GLfloat)vertices[i];}
-	engineGraphicObjectVBOLoad(obj);
+	egoVBOLoad(obj);
 	// リスト登録
 	if(localGlobal.egoVBOList == NULL){
 		localGlobal.egoVBOList = obj;
@@ -115,7 +169,7 @@ engineGraphicObjectIBOId engineGraphicObjectIBOCreate(uint32_t size, uint16_t *i
 	uint32_t memsize = size * sizeof(GLushort);
 	obj->indexes = (GLushort*)malloc(memsize);
 	for(uint32_t i = 0; i < size; i++){obj->indexes[i] = (GLushort)indexes[i];}
-	engineGraphicObjectIBOLoad(obj);
+	egoIBOLoad(obj);
 	// リスト登録
 	if(localGlobal.egoIBOList == NULL){
 		localGlobal.egoIBOList = obj;
@@ -129,7 +183,7 @@ engineGraphicObjectIBOId engineGraphicObjectIBOCreate(uint32_t size, uint16_t *i
 }
 
 // テクスチャ情報作成
-static struct engineGraphicObjectTexData *engineGraphicObjectTexDataCreate(char *src){
+static struct engineGraphicObjectTexData *texDataCreate(char *src){
 	// 重複確認
 	struct engineGraphicObjectTexData *temp = localGlobal.texDataList;
 	while(temp != NULL){
@@ -141,7 +195,7 @@ static struct engineGraphicObjectTexData *engineGraphicObjectTexDataCreate(char 
 	uint32_t memsize = ((uint32_t)strlen(src) + 1) * sizeof(char);
 	obj->src = (char*)malloc(memsize);
 	memmove(obj->src, src, memsize);
-	engineGraphicObjectTexDataLoad(obj);
+	texDataLoad(obj);
 	// リスト登録
 	if(localGlobal.texDataList == NULL){
 		localGlobal.texDataList = obj;
@@ -159,7 +213,7 @@ engineGraphicObjectTexId engineGraphicObjectTexCreate(char *src, enum engineGrap
 	// データ作成
 	struct engineGraphicObjectTex *obj = (struct engineGraphicObjectTex*)calloc(1, sizeof(struct engineGraphicObjectTex));
 	obj->egoId = ++localGlobal.egoIdCount;
-	obj->data = engineGraphicObjectTexDataCreate(src);
+	obj->data = texDataCreate(src);
 	obj->type = type;
 	// リスト登録
 	if(localGlobal.egoTexList == NULL){
@@ -233,9 +287,7 @@ void engineGraphicObjectVBODispose(engineGraphicObjectVBOId egoId){
 			if(prev == NULL){localGlobal.egoVBOList = temp;}
 			else{prev->next = temp;}
 			// 要素の除去
-			glDeleteBuffers(1, &dispose->glId);
-			free(dispose->vertices);
-			free(dispose);
+			egoVBOFree(dispose);
 		}else{
 			prev = temp;
 			temp = temp->next;
@@ -255,9 +307,7 @@ void engineGraphicObjectIBODispose(engineGraphicObjectIBOId egoId){
 			if(prev == NULL){localGlobal.egoIBOList = temp;}
 			else{prev->next = temp;}
 			// 要素の除去
-			glDeleteBuffers(1, &dispose->glId);
-			free(dispose->indexes);
-			free(dispose);
+			egoIBOFree(dispose);
 		}else{
 			prev = temp;
 			temp = temp->next;
@@ -266,7 +316,7 @@ void engineGraphicObjectIBODispose(engineGraphicObjectIBOId egoId){
 }
 
 // テクスチャ情報除去
-static void engineGraphicObjectTexDataDispose(struct engineGraphicObjectTexData *this){
+static void texDataDispose(struct engineGraphicObjectTexData *this){
 	// 使用中確認
 	struct engineGraphicObjectTex *tempTex = localGlobal.egoTexList;
 	while(tempTex != NULL){
@@ -288,9 +338,7 @@ static void engineGraphicObjectTexDataDispose(struct engineGraphicObjectTexData 
 		}
 	}
 	// 除去
-	glDeleteTextures(1, &this->glId);
-	free(this->src);
-	free(this);
+	texDataFree(this);
 }
 
 // 3DオブジェクトTex除去
@@ -305,8 +353,8 @@ void engineGraphicObjectTexDispose(engineGraphicObjectTexId egoId){
 			if(prev == NULL){localGlobal.egoTexList = temp;}
 			else{prev->next = temp;}
 			// 要素の除去
-			engineGraphicObjectTexDataDispose(dispose->data);
-			free(dispose);
+			texDataDispose(dispose->data);
+			egoTexFree(dispose);
 		}else{
 			prev = temp;
 			temp = temp->next;
@@ -321,9 +369,7 @@ void engineGraphicObjectDispose(){
 		struct engineGraphicObjectVBO *dispose = tempVBO;
 		tempVBO = tempVBO->next;
 		// 要素の除去
-		glDeleteBuffers(1, &dispose->glId);
-		free(dispose->vertices);
-		free(dispose);
+		egoVBOFree(dispose);
 	}
 	localGlobal.egoVBOList = NULL;
 
@@ -332,9 +378,7 @@ void engineGraphicObjectDispose(){
 		struct engineGraphicObjectIBO *dispose = tempIBO;
 		tempIBO = tempIBO->next;
 		// 要素の除去
-		glDeleteBuffers(1, &dispose->glId);
-		free(dispose->indexes);
-		free(dispose);
+		egoIBOFree(dispose);
 	}
 	localGlobal.egoIBOList = NULL;
 
@@ -343,7 +387,7 @@ void engineGraphicObjectDispose(){
 		struct engineGraphicObjectTex *dispose = tempTex;
 		tempTex = tempTex->next;
 		// 要素の除去
-		free(dispose);
+		egoTexFree(dispose);
 	}
 	localGlobal.egoTexList = NULL;
 
@@ -352,9 +396,7 @@ void engineGraphicObjectDispose(){
 		struct engineGraphicObjectTexData *dispose = tempData;
 		tempData = tempData->next;
 		// 要素の除去
-		if(dispose->glId != localGlobal.defaultTexture.glId){glDeleteTextures(1, &dispose->glId);}
-		free(dispose->src);
-		free(dispose);
+		texDataFree(dispose);
 	}
 	localGlobal.texDataList = NULL;
 
@@ -371,9 +413,9 @@ void engineGraphicObjectReload(){
 	struct engineGraphicObjectVBO *tempVBO = localGlobal.egoVBOList;
 	struct engineGraphicObjectIBO *tempIBO = localGlobal.egoIBOList;
 	struct engineGraphicObjectTexData *tempTex = localGlobal.texDataList;
-	while(tempVBO != NULL){engineGraphicObjectVBOLoad(tempVBO); tempVBO = tempVBO->next;}
-	while(tempIBO != NULL){engineGraphicObjectIBOLoad(tempIBO); tempIBO = tempIBO->next;}
-	while(tempTex != NULL){engineGraphicObjectTexDataLoad(tempTex); tempTex = tempTex->next;}
+	while(tempVBO != NULL){egoVBOLoad(tempVBO); tempVBO = tempVBO->next;}
+	while(tempIBO != NULL){egoIBOLoad(tempIBO); tempIBO = tempIBO->next;}
+	while(tempTex != NULL){texDataLoad(tempTex); tempTex = tempTex->next;}
 
 	// 読み込み中に使うデフォルトテクスチャ作成
 	uint8_t data[4] = {0xff, 0xff, 0xff, 0xff};
