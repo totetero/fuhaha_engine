@@ -8,8 +8,6 @@ import java.io.DataOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import android.content.SharedPreferences;
-
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -73,29 +71,6 @@ public class AndroidPluginData{
 			}catch(Exception e){e.printStackTrace();}
 			FuhahaGLView.surfaceView.queueEvent(callback.setBinBuff(buff));
 		}}).start();
-	}
-
-	// ----------------------------------------------------------------
-
-	// 設定準備
-	private static SharedPreferences pref = null;
-	private static SharedPreferences.Editor editor = null;
-	private static SharedPreferences getPref(){if(AndroidPluginData.pref == null){AndroidPluginData.pref = FuhahaGLView.activity.getSharedPreferences("fuhaha", FuhahaGLView.activity.MODE_PRIVATE);} return AndroidPluginData.pref;}
-	private static SharedPreferences.Editor getEdit(){if(AndroidPluginData.editor == null){AndroidPluginData.editor = AndroidPluginData.getPref().edit();} return AndroidPluginData.editor;}
-
-	// 設定読み込み
-	public static String platformPluginDataPreferenceGet(String key){
-		return AndroidPluginData.getPref().getString(key, null);
-	}
-
-	// 設定書き込み
-	public static void platformPluginDataPreferenceSet(String key, String value){
-		AndroidPluginData.getEdit().putString(key, value);
-	}
-
-	// 設定保存
-	public static void platformPluginDataPreferenceCommit(){
-		AndroidPluginData.getEdit().commit();
 	}
 
 	// ----------------------------------------------------------------

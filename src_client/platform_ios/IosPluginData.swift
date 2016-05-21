@@ -66,24 +66,6 @@ class IosPluginData: NSObject{
 		});
 	}
 
-	// 設定読み込み
-	static internal func platformPluginDataPreferenceGet(key: String) -> NSString?{
-		let userDefaults = NSUserDefaults.standardUserDefaults();
-		return userDefaults.objectForKey(key) as! String?;
-	}
-
-	// 設定書き込み
-	static internal func platformPluginDataPreferenceSet(key: String, value: String){
-		let userDefaults = NSUserDefaults.standardUserDefaults();
-		userDefaults.setObject(value, forKey: key);
-	}
-
-	// 設定保存
-	static internal func platformPluginDataPreferenceCommit(){
-		let userDefaults = NSUserDefaults.standardUserDefaults();
-		userDefaults.synchronize();
-	}
-
 	// ----------------------------------------------------------------
 }
 

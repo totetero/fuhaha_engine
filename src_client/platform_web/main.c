@@ -7,6 +7,7 @@ void webPlatformScreenInit(void);
 void webPluginUtilInit(void);
 void webPluginDataInit(void);
 void webPluginTextureInit(void);
+void webPluginPreferenceInit(void);
 void webPluginControllerInit(void);
 void webPluginSoundInit(void);
 void webPluginEnptyInit(void);
@@ -32,6 +33,7 @@ int main(){
 		webPluginUtilInit();
 		webPluginDataInit();
 		webPluginTextureInit();
+		webPluginPreferenceInit();
 		webPluginControllerInit();
 		webPluginSoundInit();
 		webPluginEnptyInit();

@@ -1,7 +1,6 @@
 #import "fuhaha-Swift.h"
 #include "library.h"
 #include "platform.h"
-#include "pluginUtil.h"
 #include "pluginData.h"
 
 // ----------------------------------------------------------------
@@ -23,33 +22,6 @@ void platformPluginDataLocal(void *param, char *src, void(*callback)(void *param
 	int callbackId = gamePluginDataCallbackSet(param, callback);
 	NSString *nsstr1 = [NSString stringWithCString: src encoding: NSUTF8StringEncoding];
 	[IosPluginData platformPluginDataLocal: callbackId src: nsstr1];
-}
-
-// ----------------------------------------------------------------
-
-// 設定読み込み 返値文字列は揮発性バッファで解放禁止
-char *platformPluginDataPreferenceGet(char *key){
-	NSString *nsstr1 = [NSString stringWithCString: key encoding: NSUTF8StringEncoding];
-	NSString *nsstr2 = [IosPluginData platformPluginDataPreferenceGet: nsstr1];
-
-	char *value = (char*)[nsstr2 UTF8String];
-	if(value == NULL){return NULL;}
-	char *buff = (char*)corePluginUtilTemporaryBuffer(strlen(value) + 1);
-	strcpy(buff, value);
-
-	return buff;
-}
-
-// 設定書き込み
-void platformPluginDataPreferenceSet(char *key, char *value){
-	NSString *nsstr1 = [NSString stringWithCString: key encoding: NSUTF8StringEncoding];
-	NSString *nsstr2 = [NSString stringWithCString: value encoding: NSUTF8StringEncoding];
-	[IosPluginData platformPluginDataPreferenceSet: nsstr1 value: nsstr2];
-}
-
-// 設定保存
-void platformPluginDataPreferenceCommit(void){
-	[IosPluginData platformPluginDataPreferenceCommit];
 }
 
 // ----------------------------------------------------------------
