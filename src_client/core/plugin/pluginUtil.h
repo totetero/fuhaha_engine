@@ -3,6 +3,13 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
+
+// コールバック識別子
+typedef uint32_t pluginUtilCallbackId;
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
 // -------- ゲーム側で実装 主にゲーム側から呼び出す
 
 // 揮発性一時バッファ 返値領域は解放禁止
@@ -11,9 +18,9 @@ void *corePluginUtilTemporaryBuffer(size_t size);
 // ----------------------------------------------------------------
 
 // コールバック関数の登録 ひな形
-int corePluginUtilCallbackSet(void *param, void *callback);
+pluginUtilCallbackId corePluginUtilCallbackSet(void *param, void *callback);
 // コールバック関数の取得と解放 ひな形
-void *corePluginUtilCallbackGet(int callbackId, void **param);
+void *corePluginUtilCallbackGet(pluginUtilCallbackId callbackId, void **param);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -34,7 +41,7 @@ char *platformPluginUtilPlatformGet(void);
 char *platformPluginUtilUidGet(void);
 
 // unix時間取得
-long long int platformPluginUtilTimeGet(void);
+int64_t platformPluginUtilTimeGet(void);
 
 // 読み込み中確認
 bool platformPluginUtilIsLoading(void);

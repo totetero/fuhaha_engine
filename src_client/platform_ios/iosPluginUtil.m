@@ -27,10 +27,10 @@ char *platformPluginUtilUidGet(void){
 // ----------------------------------------------------------------
 
 // unix時間取得
-long long int platformPluginUtilTimeGet(void){
+int64_t platformPluginUtilTimeGet(void){
 	time_t timer;
 	time(&timer);
-	return (long long int)timer;
+	return (int64_t)timer;
 }
 
 // ----------------------------------------------------------------

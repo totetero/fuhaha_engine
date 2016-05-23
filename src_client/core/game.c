@@ -22,7 +22,7 @@ void gameSurfaceCreated(){
 }
 
 // opengl画面サイズ変更
-void gameSurfaceChanged(int width, int height, double pixelRatio){
+void gameSurfaceChanged(uint16_t width, uint16_t height, double pixelRatio){
 	global.ctrl.ww = width;
 	global.ctrl.wh = height;
 	glViewport(0, 0, width * pixelRatio, height * pixelRatio);

@@ -29,7 +29,7 @@ extern struct global{
 // opengl初期化
 void gameSurfaceCreated();
 // opengl画面サイズ変更
-void gameSurfaceChanged(int width, int height, double pixelRatio);
+void gameSurfaceChanged(uint16_t width, uint16_t height, double pixelRatio);
 // opengl描画
 void gameSurfaceDrawFrame();
 // opengl中断

@@ -32,7 +32,7 @@ class FuhahaGLViewController: GLKViewController{
 	// 画面サイズ変更時
 	override func viewDidLayoutSubviews(){
 		super.viewDidLayoutSubviews();
-		gameSurfaceChanged(Int32(self.view.frame.size.width), Int32(self.view.frame.size.height), 1.0);
+		gameSurfaceChanged(UInt16(self.view.frame.size.width), UInt16(self.view.frame.size.height), 1.0);
 	}
 
 	// ----------------------------------------------------------------

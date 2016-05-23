@@ -5,7 +5,10 @@
 // ----------------------------------------------------------------
 
 // リクエスト識別子
-typedef int pluginDataRequestId;
+typedef uint32_t pluginDataRequestId;
+
+// コールバック識別子
+typedef uint32_t pluginDataCallbackId;
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -31,9 +34,9 @@ void corePluginDataRequestFreeAll();
 // -------- ゲーム側で実装 主にプラットフォーム側から呼び出す
 
 // コールバック関数の登録
-int gamePluginDataCallbackSet(void *param, void(*callback)(void *param, void *buff, size_t size));
+pluginDataCallbackId gamePluginDataCallbackSet(void *param, void(*callback)(void *param, void *buff, size_t size));
 // コールバック関数の実行と解放
-bool gamePluginDataCallbackCall(int callbackId, void *buff, size_t size);
+bool gamePluginDataCallbackCall(pluginDataCallbackId callbackId, void *buff, size_t size);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

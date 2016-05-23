@@ -9,13 +9,13 @@
 // コールバック構造体
 struct pluginUtilCallbackUnit{
 	struct pluginUtilCallbackUnit *next;
-	int callbackId;
+	pluginUtilCallbackId callbackId;
 	void *param;
 	void *callback;
 };
 
 static struct{
-	int callbackIdCount;
+	uint32_t callbackIdCount;
 	struct pluginUtilCallbackUnit *list;
 	struct pluginUtilCallbackUnit *pool;
 } localGlobal = {0};
@@ -25,7 +25,7 @@ static struct{
 // ----------------------------------------------------------------
 
 // コールバック関数の登録 ひな形
-int corePluginUtilCallbackSet(void *param, void *callback){
+pluginUtilCallbackId corePluginUtilCallbackSet(void *param, void *callback){
 	struct pluginUtilCallbackUnit *new = NULL;
 
 	if(localGlobal.pool != NULL){
@@ -56,7 +56,7 @@ int corePluginUtilCallbackSet(void *param, void *callback){
 }
 
 // コールバック関数の取得と解放 ひな形
-void *corePluginUtilCallbackGet(int callbackId, void **param){
+void *corePluginUtilCallbackGet(pluginUtilCallbackId callbackId, void **param){
 	struct pluginUtilCallbackUnit *prev = NULL;
 	struct pluginUtilCallbackUnit *temp = localGlobal.list;
 	while(temp != NULL){
