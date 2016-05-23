@@ -26,7 +26,7 @@ bool corePluginDataRequestResponse(pluginDataRequestId reqId, void **buff, size_
 // リクエスト開放
 void corePluginDataRequestFree(pluginDataRequestId reqId);
 // 全リクエスト開放
-void corePluginDataRequestFreeAll();
+void corePluginDataRequestFreeAll(void);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
