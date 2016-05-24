@@ -12,6 +12,40 @@ mergeInto(LibraryManager.library, {
 	},
 
 	// ----------------------------------------------------------------
+	// ----------------------------------------------------------------
+	// ----------------------------------------------------------------
+
+	// BGM読込
+	platformPluginSoundBgmLoad: function(bgmId, src){
+	},
+
+	// BGM再生
+	platformPluginSoundBgmPlay: function(bgmId){
+	},
+
+	// BGM音量
+	platformPluginSoundBgmVolume: function(volume){
+	},
+
+	// BGMトーンダウン
+	platformPluginSoundBgmToneDown: function(volume){
+	},
+
+	// ----------------------------------------------------------------
+
+	// SE読込
+	platformPluginSoundSeLoad: function(seId, src){
+	},
+
+	// SE再生
+	platformPluginSoundSePlay: function(seId){
+	},
+
+	// SE音量
+	platformPluginSoundSeVolume: function(volume){
+	},
+
+	// ----------------------------------------------------------------
 });
 
 // ----------------------------------------------------------------
