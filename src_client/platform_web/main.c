@@ -3,14 +3,11 @@
 #include <emscripten/emscripten.h>
 #include "game.h"
 
-void webPlatformScreenInit(void);
 void webPluginUtilInit(void);
-void webPluginDataInit(void);
-void webPluginTextureInit(void);
-void webPluginPreferenceInit(void);
 void webPluginControllerInit(void);
 void webPluginSoundInit(void);
 void webPluginEnptyInit(void);
+void webPlatformScreenInit(void);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -31,9 +28,6 @@ static void mainloop(){
 int main(){
 	if(init() == 0){
 		webPluginUtilInit();
-		webPluginDataInit();
-		webPluginTextureInit();
-		webPluginPreferenceInit();
 		webPluginControllerInit();
 		webPluginSoundInit();
 		webPluginEnptyInit();

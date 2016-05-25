@@ -7,14 +7,6 @@
 mergeInto(LibraryManager.library, {
 	// ----------------------------------------------------------------
 
-	// プラグイン初期化
-	webPluginTextureInit: function(){
-	},
-
-	// ----------------------------------------------------------------
-	// ----------------------------------------------------------------
-	// ----------------------------------------------------------------
-
 	// ローカルデータ読み込み
 	platformPluginTextureLocal: function(param, src, callback){
 		Module.nativePluginUtilLoadingIncrement();

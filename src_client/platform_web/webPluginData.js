@@ -7,14 +7,6 @@
 mergeInto(LibraryManager.library, {
 	// ----------------------------------------------------------------
 
-	// プラグイン初期化
-	webPluginDataInit: function(){
-	},
-
-	// ----------------------------------------------------------------
-	// ----------------------------------------------------------------
-	// ----------------------------------------------------------------
-
 	// HTTP通信 コールバックバッファは要解放
 	platformPluginDataHttp: function(param, url, request, callback){
 		Module.nativePluginUtilLoadingIncrement();
