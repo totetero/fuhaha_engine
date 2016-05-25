@@ -28,12 +28,12 @@ public class AndroidPluginSound{
 	public static void platformPluginSoundBgmPlay(int bgmId){
 	}
 
-	// JNI連携 BGM音量
-	public static void platformPluginSoundBgmVolume(double volume){
-	}
-
 	// JNI連携 BGMトーンダウン
 	public static void platformPluginSoundBgmToneDown(double volume){
+	}
+
+	// JNI連携 BGM設定音量
+	public static void platformPluginSoundBgmVolume(double volume){
 	}
 
 	// ----------------------------------------------------------------
@@ -46,7 +46,7 @@ public class AndroidPluginSound{
 	public static void platformPluginSoundSePlay(int seId){
 	}
 
-	// JNI連携 SE音量
+	// JNI連携 SE設定音量
 	public static void platformPluginSoundSeVolume(double volume){
 	}
 

@@ -24,19 +24,19 @@ void platformPluginSoundBgmPlay(pluginSoundBgmId bgmId){
 	(*env)->CallStaticVoidMethod(env, cls, mid, bgmId);
 }
 
-// BGM音量
-void platformPluginSoundBgmVolume(double volume){
-	JNIEnv *env = getJNIEnv();
-	jclass cls = (*env)->FindClass(env, "com/totetero/fuhaha/AndroidPluginSound");
-	jmethodID mid = (*env)->GetStaticMethodID(env, cls, "platformPluginSoundBgmVolume", "(D)V");
-	(*env)->CallStaticVoidMethod(env, cls, mid, volume);
-}
-
 // BGMトーンダウン
 void platformPluginSoundBgmToneDown(double volume){
 	JNIEnv *env = getJNIEnv();
 	jclass cls = (*env)->FindClass(env, "com/totetero/fuhaha/AndroidPluginSound");
 	jmethodID mid = (*env)->GetStaticMethodID(env, cls, "platformPluginSoundBgmToneDown", "(D)V");
+	(*env)->CallStaticVoidMethod(env, cls, mid, volume);
+}
+
+// BGM設定音量
+void platformPluginSoundBgmVolume(double volume){
+	JNIEnv *env = getJNIEnv();
+	jclass cls = (*env)->FindClass(env, "com/totetero/fuhaha/AndroidPluginSound");
+	jmethodID mid = (*env)->GetStaticMethodID(env, cls, "platformPluginSoundBgmVolume", "(D)V");
 	(*env)->CallStaticVoidMethod(env, cls, mid, volume);
 }
 
@@ -59,7 +59,7 @@ void platformPluginSoundSePlay(pluginSoundSeId seId){
 	(*env)->CallStaticVoidMethod(env, cls, mid, seId);
 }
 
-// SE音量
+// SE設定音量
 void platformPluginSoundSeVolume(double volume){
 	JNIEnv *env = getJNIEnv();
 	jclass cls = (*env)->FindClass(env, "com/totetero/fuhaha/AndroidPluginSound");

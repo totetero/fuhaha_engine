@@ -28,16 +28,16 @@ typedef uint32_t pluginSoundSeId;
 void platformPluginSoundBgmLoad(pluginSoundBgmId bgmId, char *src);
 // BGM再生
 void platformPluginSoundBgmPlay(pluginSoundBgmId bgmId);
-// BGM音量
-void platformPluginSoundBgmVolume(double volume);
 // BGMトーンダウン
 void platformPluginSoundBgmToneDown(double volume);
+// BGM設定音量
+void platformPluginSoundBgmVolume(double volume);
 
 // SE読込
 void platformPluginSoundSeLoad(pluginSoundSeId seId, char *src);
 // SE再生
 void platformPluginSoundSePlay(pluginSoundSeId seId);
-// SE音量
+// SE設定音量
 void platformPluginSoundSeVolume(double volume);
 
 // ----------------------------------------------------------------

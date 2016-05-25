@@ -23,12 +23,12 @@ mergeInto(LibraryManager.library, {
 	platformPluginSoundBgmPlay: function(bgmId){
 	},
 
-	// BGM音量
-	platformPluginSoundBgmVolume: function(volume){
-	},
-
 	// BGMトーンダウン
 	platformPluginSoundBgmToneDown: function(volume){
+	},
+
+	// BGM設定音量
+	platformPluginSoundBgmVolume: function(volume){
 	},
 
 	// ----------------------------------------------------------------
@@ -41,7 +41,7 @@ mergeInto(LibraryManager.library, {
 	platformPluginSoundSePlay: function(seId){
 	},
 
-	// SE音量
+	// SE設定音量
 	platformPluginSoundSeVolume: function(volume){
 	},
 

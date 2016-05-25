@@ -24,12 +24,12 @@ class IosPluginSound: NSObject{
 	static internal func platformPluginSoundBgmPlay(bgmId: UInt32){
 	}
 
-	// BGM音量
-	static internal func platformPluginSoundBgmVolume(volume: Double){
-	}
-
 	// BGMトーンダウン
 	static internal func platformPluginSoundBgmToneDown(volume: Double){
+	}
+
+	// BGM設定音量
+	static internal func platformPluginSoundBgmVolume(volume: Double){
 	}
 
 	// ----------------------------------------------------------------
@@ -42,7 +42,7 @@ class IosPluginSound: NSObject{
 	static internal func platformPluginSoundSePlay(seId: UInt32){
 	}
 
-	// SE音量
+	// SE設定音量
 	static internal func platformPluginSoundSeVolume(volume: Double){
 	}
 
