@@ -13,19 +13,19 @@ void webPlatformScreenInit(void);
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-static int32_t init(){
+static int32_t init(void){
 	if(glfwInit() != GL_TRUE){return -1;}
 	if(glfwOpenWindow(320, 480, 5, 6, 5, 0, 16, 1, GLFW_WINDOW) != GL_TRUE){return -1;}
     return 0;
 }
 
-static void mainloop(){	
+static void mainloop(void){	
 	gameSurfaceDrawFrame();
 	glfwSwapBuffers();
 }
 
 // main関数 処理はここから始まる
-int main(){
+int main(void){
 	if(init() == 0){
 		webPluginUtilInit();
 		webPluginControllerInit();

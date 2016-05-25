@@ -5,11 +5,11 @@
 // ----------------------------------------------------------------
 
 // 3Dエンジン初期化処理
-void engineGraphicGameInit();
+void engineGraphicGameInit(void);
 // 3Dエンジン終了処理
-void engineGraphicGameExit();
+void engineGraphicGameExit(void);
 // 3Dエンジン例文
-void engineGraphicSampleCode();
+void engineGraphicSampleCode(void);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -89,10 +89,10 @@ void engineGraphicObjectIBODispose(engineGraphicObjectIBOId egoId);
 // 3DオブジェクトTex除去
 void engineGraphicObjectTexDispose(engineGraphicObjectTexId egoId);
 // 全3Dオブジェクト除去
-void engineGraphicObjectDispose();
+void engineGraphicObjectDispose(void);
 
 // 全データロード再読み込み
-void engineGraphicObjectReload();
+void engineGraphicObjectReload(void);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -100,22 +100,22 @@ void engineGraphicObjectReload();
 // -------- 3Dエンジン
 
 // 初期化
-void engineGraphicEngineInit();
+void engineGraphicEngineInit(void);
 // 解放
-void engineGraphicEngineExit();
+void engineGraphicEngineExit(void);
 
 // グラフィックエンジン命令 描画のクリア
-void engineGraphicEngineClearAll();
+void engineGraphicEngineClearAll(void);
 // グラフィックエンジン命令 深度バッファのクリア
-void engineGraphicEngineClearDepth();
+void engineGraphicEngineClearDepth(void);
 // グラフィックエンジン命令 ステンシルバッファのクリア
-void engineGraphicEngineClearStencil();
+void engineGraphicEngineClearStencil(void);
 // 重複動作阻止のためのVBO状態記録をリセット
-void engineGraphicEngineMemoryResetVBO();
+void engineGraphicEngineMemoryResetVBO(void);
 // 重複動作阻止のためのIBO状態記録をリセット
-void engineGraphicEngineMemoryResetIBO();
+void engineGraphicEngineMemoryResetIBO(void);
 // 重複動作阻止のためのTex状態記録をリセット
-void engineGraphicEngineMemoryResetTex();
+void engineGraphicEngineMemoryResetTex(void);
 
 // グラフィックエンジン命令 描画モード設定
 void engineGraphicEngineSetDrawMode(enum engineGraphicEngineModeDraw mode);
@@ -144,7 +144,7 @@ void engineGraphicEngineSetColor(double r, double g, double b, double a);
 void engineGraphicEngineDrawIndex(uint32_t offset, uint32_t count);
 
 // グラフィックエンジン命令クラス 描画確定
-void engineGraphicEngineFlush();
+void engineGraphicEngineFlush(void);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -152,7 +152,7 @@ void engineGraphicEngineFlush();
 // -------- 3Dエンジンバッファ作成支援
 
 // バッファ作成開始
-void engineGraphicBufferBegin();
+void engineGraphicBufferBegin(void);
 // バッファ作成完了
 void engineGraphicBufferEnd(engineGraphicObjectVBOId *egoIdVert, engineGraphicObjectVBOId *egoIdClor, engineGraphicObjectVBOId *egoIdTexc, engineGraphicObjectIBOId *egoIdFace);
 
@@ -173,12 +173,12 @@ void engineGraphicBufferPushTetraTexc(uint16_t imgw, uint16_t imgh, double u, do
 void engineGraphicBufferPushTetraFace(uint16_t index);
 
 // VBOバッファ配列内の位置獲得
-uint32_t engineGraphicBufferVretIndexGet();
+uint32_t engineGraphicBufferVretIndexGet(void);
 // IBOバッファ配列内の位置獲得
-uint32_t engineGraphicBufferFaceIndexGet();
+uint32_t engineGraphicBufferFaceIndexGet(void);
 
 // バッファ片付け
-void engineGraphicBufferClean();
+void engineGraphicBufferClean(void);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

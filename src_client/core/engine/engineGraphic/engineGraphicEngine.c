@@ -63,7 +63,7 @@ static void engineGraphicEngineShaderCreate(struct engineGraphicEngineShader *sh
 }
 
 // 初期化
-void engineGraphicEngineInit(){
+void engineGraphicEngineInit(void){
 	char *vsh1_src = "precision highp float;attribute vec3 vs_attr_pos;attribute vec2 vs_attr_uvc;uniform mat4 vs_unif_mat;varying vec2 texCoord;void main(){texCoord = vs_attr_uvc;gl_Position = vs_unif_mat * vec4(vs_attr_pos, 1.0);}";
 	char *fsh1_src = "precision highp float;uniform vec4 fs_unif_col;uniform sampler2D texture;varying vec2 texCoord;void main(){vec4 fragColor = texture2D(texture, texCoord) * fs_unif_col;if(fragColor.a > 0.8){gl_FragColor = fragColor;}else{discard;}}";
 	char *vsh2_src = "precision highp float;attribute vec3 vs_attr_pos;attribute vec2 vs_attr_uvc;uniform mat4 vs_unif_mat;varying vec2 texCoord;void main(){texCoord = vs_attr_uvc;gl_Position = vs_unif_mat * vec4(vs_attr_pos, 1.0);}";
@@ -94,7 +94,7 @@ void engineGraphicEngineInit(){
 }
 
 // 解放
-void engineGraphicEngineExit(){
+void engineGraphicEngineExit(void){
 	glDeleteProgram(localGlobal.shader.reserve1.program);
 	glDeleteProgram(localGlobal.shader.reserve2.program);
 	glDeleteProgram(localGlobal.shader.reserve3.program);
@@ -104,36 +104,36 @@ void engineGraphicEngineExit(){
 // ----------------------------------------------------------------
 
 // グラフィックエンジン命令 描画のクリア
-void engineGraphicEngineClearAll(){
+void engineGraphicEngineClearAll(void){
 	glDepthMask(localGlobal.memory.modeDepth = GL_TRUE);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	engineGraphicEngineSetStencilMode(ENGINEGRAPHICENGINEMODESTENCIL_NONE);
 }
 
 // グラフィックエンジン命令 深度バッファのクリア
-void engineGraphicEngineClearDepth(){
+void engineGraphicEngineClearDepth(void){
 	glClear(GL_DEPTH_BUFFER_BIT);
 }
 
 // グラフィックエンジン命令 ステンシルバッファのクリア
-void engineGraphicEngineClearStencil(){
+void engineGraphicEngineClearStencil(void){
 	glClear(GL_STENCIL_BUFFER_BIT);
 }
 
 // 重複動作阻止のためのVBO状態記録をリセット
-void engineGraphicEngineMemoryResetVBO(){
+void engineGraphicEngineMemoryResetVBO(void){
 	localGlobal.memory.vertVBO = 0;
 	localGlobal.memory.clorVBO = 0;
 	localGlobal.memory.texcVBO = 0;
 }
 
 // 重複動作阻止のためのIBO状態記録をリセット
-void engineGraphicEngineMemoryResetIBO(){
+void engineGraphicEngineMemoryResetIBO(void){
 	localGlobal.memory.faceIBO = 0;
 }
 
 // 重複動作阻止のためのTex状態記録をリセット
-void engineGraphicEngineMemoryResetTex(){
+void engineGraphicEngineMemoryResetTex(void){
 	localGlobal.memory.texType = -1;
 	localGlobal.memory.texData = ~0;
 }
@@ -418,7 +418,7 @@ void engineGraphicEngineDrawIndex(uint32_t offset, uint32_t count){
 }
 
 // グラフィックエンジン命令クラス 描画確定
-void engineGraphicEngineFlush(){
+void engineGraphicEngineFlush(void){
 	glFlush();
 }
 

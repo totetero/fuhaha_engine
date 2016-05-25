@@ -24,7 +24,7 @@ void engineMathRandomInit(uint64_t seed){
 }
 
 // 乱数獲得
-uint64_t engineMathRandomGet(){
+uint64_t engineMathRandomGet(void){
 	uint64_t x = localGlobal.x;
 	uint64_t w = localGlobal.w;
 	uint64_t t = (x ^ (x << 11));

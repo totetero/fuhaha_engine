@@ -27,7 +27,7 @@ static struct{
 // ----------------------------------------------------------------
 
 // バッファ作成開始
-void engineGraphicBufferBegin(){
+void engineGraphicBufferBegin(void){
 	localGlobal.buffVertIndex = 0;
 	localGlobal.buffClorIndex = 0;
 	localGlobal.buffTexcIndex = 0;
@@ -138,19 +138,19 @@ void engineGraphicBufferPushTetraFace(uint16_t index){
 // ----------------------------------------------------------------
 
 // VBOバッファ配列内の位置獲得
-uint32_t engineGraphicBufferVretIndexGet(){
+uint32_t engineGraphicBufferVretIndexGet(void){
 	return localGlobal.buffVertIndex / 3;
 }
 
 // IBOバッファ配列内の位置獲得
-uint32_t engineGraphicBufferFaceIndexGet(){
+uint32_t engineGraphicBufferFaceIndexGet(void){
 	return localGlobal.buffFaceIndex / 3;
 }
 
 // ----------------------------------------------------------------
 
 // バッファ片付け
-void engineGraphicBufferClean(){
+void engineGraphicBufferClean(void){
 	free(localGlobal.buffVert);
 	free(localGlobal.buffClor);
 	free(localGlobal.buffTexc);

@@ -27,15 +27,15 @@ extern struct global{
 // -------- ゲーム側で実装 主にプラットフォーム側から呼び出す
 
 // opengl初期化
-void gameSurfaceCreated();
+void gameSurfaceCreated(void);
 // opengl画面サイズ変更
 void gameSurfaceChanged(uint16_t width, uint16_t height, double pixelRatio);
 // opengl描画
-void gameSurfaceDrawFrame();
+void gameSurfaceDrawFrame(void);
 // opengl中断
-void gameSurfacePause();
+void gameSurfacePause(void);
 // opengl終了
-void gameSurfaceDestroy();
+void gameSurfaceDestroy(void);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

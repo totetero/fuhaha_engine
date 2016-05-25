@@ -17,7 +17,7 @@ struct global global = {0};
 // ----------------------------------------------------------------
 
 // opengl初期化
-void gameSurfaceCreated(){
+void gameSurfaceCreated(void){
 	engineGraphicGameInit();
 }
 
@@ -37,16 +37,16 @@ void gameSurfaceChanged(uint16_t width, uint16_t height, double pixelRatio){
 }
 
 // opengl描画
-void gameSurfaceDrawFrame(){
+void gameSurfaceDrawFrame(void){
 	engineGraphicSampleCode();
 }
 
 // opengl中断
-void gameSurfacePause(){
+void gameSurfacePause(void){
 }
 
 // opengl終了
-void gameSurfaceDestroy(){
+void gameSurfaceDestroy(void){
 	engineGraphicGameExit();
 }
 

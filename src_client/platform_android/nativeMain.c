@@ -23,7 +23,7 @@ jint JNI_OnLoad(JavaVM *vm, void* reserved){
 }
 
 // JNIEnvを取得する
-JNIEnv *getJNIEnv(){
+JNIEnv *getJNIEnv(void){
 	JNIEnv *env;
 	jint ret = (*localGlobal.javaVM)->GetEnv(localGlobal.javaVM, (void**)&env, JNI_VERSION_1_6);
 	return (ret == JNI_OK) ? env : NULL;

@@ -86,7 +86,7 @@ void *corePluginUtilCallbackGet(pluginUtilCallbackId callbackId, void **param){
 }
 
 //// コールバック関数の全解放
-//void corePluginUtilCallbackDispose(){
+//void corePluginUtilCallbackDispose(void){
 //	struct pluginUtilCallbackUnit *tempList = localGlobal.list;
 //	while(tempList != NULL){
 //		struct pluginUtilCallbackUnit *dispose = tempList;

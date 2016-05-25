@@ -8,20 +8,20 @@
 // ----------------------------------------------------------------
 
 // 3Dエンジン初期化処理
-void engineGraphicGameInit(){
+void engineGraphicGameInit(void){
 	engineGraphicEngineInit();
 	engineGraphicObjectReload();
 }
 
 // 3Dエンジン終了処理
-void engineGraphicGameExit(){
+void engineGraphicGameExit(void){
 	engineGraphicBufferClean();
 	engineGraphicObjectDispose();
 	engineGraphicEngineExit();
 }
 
 // 3Dエンジン例文
-void engineGraphicSampleCode(){
+void engineGraphicSampleCode(void){
 	static bool isInit = false;
 	static engineGraphicObjectTexId egoIdImage = 0;
 	static engineGraphicObjectVBOId egoIdVert = 0;

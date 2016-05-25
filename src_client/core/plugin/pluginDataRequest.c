@@ -26,7 +26,7 @@ static struct{
 // ----------------------------------------------------------------
 
 // リクエストデータ作成
-static struct pluginDataRequestUnit *reqDataCreate(){
+static struct pluginDataRequestUnit *reqDataCreate(void){
 	struct pluginDataRequestUnit *this = (struct pluginDataRequestUnit*)calloc(1, sizeof(struct pluginDataRequestUnit));
 	// リストにデータ追加
 	if(localGlobal.reqList == NULL){
@@ -138,7 +138,7 @@ void corePluginDataRequestFree(pluginDataRequestId reqId){
 }
 
 // 全リクエスト解放
-void corePluginDataRequestFreeAll(){
+void corePluginDataRequestFreeAll(void){
 	struct pluginDataRequestUnit *temp = localGlobal.reqList;
 	while(temp != NULL){
 		struct pluginDataRequestUnit *dispose = temp;

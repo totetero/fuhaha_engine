@@ -363,7 +363,7 @@ void engineGraphicObjectTexDispose(engineGraphicObjectTexId egoId){
 }
 
 // 全3Dオブジェクト除去
-void engineGraphicObjectDispose(){
+void engineGraphicObjectDispose(void){
 	struct engineGraphicObjectVBO *tempVBO = localGlobal.egoVBOList;
 	while(tempVBO != NULL){
 		struct engineGraphicObjectVBO *dispose = tempVBO;
@@ -409,7 +409,7 @@ void engineGraphicObjectDispose(){
 // ----------------------------------------------------------------
 
 // 全データロード再読み込み
-void engineGraphicObjectReload(){
+void engineGraphicObjectReload(void){
 	struct engineGraphicObjectVBO *tempVBO = localGlobal.egoVBOList;
 	struct engineGraphicObjectIBO *tempIBO = localGlobal.egoIBOList;
 	struct engineGraphicObjectTexData *tempTex = localGlobal.texDataList;

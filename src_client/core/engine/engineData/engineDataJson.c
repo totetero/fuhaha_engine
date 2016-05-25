@@ -459,7 +459,7 @@ struct engineDataJsonValue *engineDataJsonObjectCreateValue(struct engineDataJso
 }
 
 // 配列要素を作成
-static struct engineDataJsonArray *createArray(){
+static struct engineDataJsonArray *createArray(void){
 	struct engineDataJsonArray *array = (struct engineDataJsonArray*)malloc(sizeof(struct engineDataJsonArray));
 	array->key[0] = '\0';
 	array->value.type = ENGINEDATAJSONTYPE_NULL;
