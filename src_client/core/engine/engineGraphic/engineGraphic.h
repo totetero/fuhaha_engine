@@ -97,6 +97,20 @@ void engineGraphicObjectReload(void);
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
+// -------- シェーダー
+
+extern char *externGlobal_vsh1_src;
+extern char *externGlobal_fsh1_src;
+extern char *externGlobal_vsh2_src;
+extern char *externGlobal_fsh2_src;
+extern char *externGlobal_vsh3_src;
+extern char *externGlobal_fsh3_src;
+extern char *externGlobal_vsh4_src;
+extern char *externGlobal_fsh4_src;
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
 // -------- 3Dエンジン
 
 // 初期化

@@ -64,18 +64,10 @@ static void engineGraphicEngineShaderCreate(struct engineGraphicEngineShader *sh
 
 // 初期化
 void engineGraphicEngineInit(void){
-	char *vsh1_src = "precision highp float;attribute vec3 vs_attr_pos;attribute vec2 vs_attr_uvc;uniform mat4 vs_unif_mat;varying vec2 texCoord;void main(){texCoord = vs_attr_uvc;gl_Position = vs_unif_mat * vec4(vs_attr_pos, 1.0);}";
-	char *fsh1_src = "precision highp float;uniform vec4 fs_unif_col;uniform sampler2D texture;varying vec2 texCoord;void main(){vec4 fragColor = texture2D(texture, texCoord) * fs_unif_col;if(fragColor.a > 0.8){gl_FragColor = fragColor;}else{discard;}}";
-	char *vsh2_src = "precision highp float;attribute vec3 vs_attr_pos;attribute vec2 vs_attr_uvc;uniform mat4 vs_unif_mat;varying vec2 texCoord;void main(){texCoord = vs_attr_uvc;gl_Position = vs_unif_mat * vec4(vs_attr_pos, 1.0);}";
-	char *fsh2_src = "precision highp float;uniform vec4 fs_unif_col;uniform sampler2D texture;varying vec2 texCoord;void main(){vec4 fragColor = texture2D(texture, texCoord) * fs_unif_col;gl_FragColor = fragColor;}";
-	char *vsh3_src = "precision highp float;attribute vec3 vs_attr_pos;attribute vec3 vs_attr_col;attribute vec2 vs_attr_uvc;uniform mat4 vs_unif_mat;varying vec4 color;varying vec2 texCoord;void main(){color = vec4(vs_attr_col, 1.0);texCoord = vs_attr_uvc;gl_Position = vs_unif_mat * vec4(vs_attr_pos, 1.0);}";
-	char *fsh3_src = "precision highp float;uniform vec4 fs_unif_col;uniform sampler2D texture;varying vec4 color;varying vec2 texCoord;void main(){vec4 fragColor = texture2D(texture, texCoord) * fs_unif_col * color;if(fragColor.a > 0.8){gl_FragColor = fragColor;}else{discard;}}";
-	char *vsh4_src = "precision highp float;attribute vec3 vs_attr_pos;attribute vec3 vs_attr_col;uniform mat4 vs_unif_mat;varying vec4 color;void main(){color = vec4(vs_attr_col, 1.0);gl_Position = vs_unif_mat * vec4(vs_attr_pos, 1.0);}";
-	char *fsh4_src = "precision highp float;uniform vec4 fs_unif_col;varying vec4 color;void main(){gl_FragColor = fs_unif_col * color;}";
-	engineGraphicEngineShaderCreate(&localGlobal.shader.reserve1, vsh1_src, fsh1_src);
-	engineGraphicEngineShaderCreate(&localGlobal.shader.reserve2, vsh2_src, fsh2_src);
-	engineGraphicEngineShaderCreate(&localGlobal.shader.reserve3, vsh3_src, fsh3_src);
-	engineGraphicEngineShaderCreate(&localGlobal.shader.reserve4, vsh4_src, fsh4_src);
+	engineGraphicEngineShaderCreate(&localGlobal.shader.reserve1, externGlobal_vsh1_src, externGlobal_fsh1_src);
+	engineGraphicEngineShaderCreate(&localGlobal.shader.reserve2, externGlobal_vsh2_src, externGlobal_fsh2_src);
+	engineGraphicEngineShaderCreate(&localGlobal.shader.reserve3, externGlobal_vsh3_src, externGlobal_fsh3_src);
+	engineGraphicEngineShaderCreate(&localGlobal.shader.reserve4, externGlobal_vsh4_src, externGlobal_fsh4_src);
 
 	localGlobal.memory.modeDraw = -1;
 	localGlobal.memory.modeStencil = -1;
@@ -145,16 +137,31 @@ void engineGraphicEngineSetDrawMode(enum engineGraphicEngineModeDraw mode){
 	if(localGlobal.memory.modeDraw == mode){return;}
 	localGlobal.memory.modeDraw = mode;
 
-	if(localGlobal.shader.current != NULL){
-		if(localGlobal.shader.current->attr_pos >= 0){glDisableVertexAttribArray(localGlobal.shader.current->attr_pos);}
-		if(localGlobal.shader.current->attr_col >= 0){glDisableVertexAttribArray(localGlobal.shader.current->attr_col);}
-		if(localGlobal.shader.current->attr_uvc >= 0){glDisableVertexAttribArray(localGlobal.shader.current->attr_uvc);}
+	// シェーダー差し替え
+	struct engineGraphicEngineShader *oldShader = localGlobal.shader.current;
+	switch(mode){
+		case ENGINEGRAPHICENGINEMODEDRAW_NORMAL:    localGlobal.shader.current = &localGlobal.shader.reserve1; break;
+		case ENGINEGRAPHICENGINEMODEDRAW_2D:        localGlobal.shader.current = &localGlobal.shader.reserve2; break;
+		case ENGINEGRAPHICENGINEMODEDRAW_ALPHA_ADD: localGlobal.shader.current = &localGlobal.shader.reserve2; break;
+		case ENGINEGRAPHICENGINEMODEDRAW_HKNW:      localGlobal.shader.current = &localGlobal.shader.reserve3; break;
+		case ENGINEGRAPHICENGINEMODEDRAW_SPHERE:    localGlobal.shader.current = &localGlobal.shader.reserve4; break;
+	}
+	if(localGlobal.shader.current != oldShader){
+		if(oldShader != NULL && oldShader->attr_pos >= 0){glDisableVertexAttribArray(oldShader->attr_pos);}
+		if(oldShader != NULL && oldShader->attr_col >= 0){glDisableVertexAttribArray(oldShader->attr_col);}
+		if(oldShader != NULL && oldShader->attr_uvc >= 0){glDisableVertexAttribArray(oldShader->attr_uvc);}
+		glUseProgram(localGlobal.shader.current->program);
+		if(localGlobal.shader.current->attr_pos >= 0){glEnableVertexAttribArray(localGlobal.shader.current->attr_pos);}
+		if(localGlobal.shader.current->attr_col >= 0){glEnableVertexAttribArray(localGlobal.shader.current->attr_col);}
+		if(localGlobal.shader.current->attr_uvc >= 0){glEnableVertexAttribArray(localGlobal.shader.current->attr_uvc);}
+		localGlobal.memory.color[0] = -1;
+		engineGraphicEngineMemoryResetVBO();
 	}
 
+	// oprnGL設定
 	switch(mode){
 		case ENGINEGRAPHICENGINEMODEDRAW_NORMAL:
 			// 汎用モード (VertBuf TexcBuf)
-			localGlobal.shader.current = &localGlobal.shader.reserve1;
 			glDepthMask(localGlobal.memory.modeDepth = GL_TRUE);
 			glEnable(GL_DEPTH_TEST);
 			glDisable(GL_CULL_FACE);
@@ -162,7 +169,6 @@ void engineGraphicEngineSetDrawMode(enum engineGraphicEngineModeDraw mode){
 			break;
 		case ENGINEGRAPHICENGINEMODEDRAW_2D:
 			// 2D描画モード (VertBuf TexcBuf)
-			localGlobal.shader.current = &localGlobal.shader.reserve2;
 			glDepthMask(localGlobal.memory.modeDepth = GL_FALSE);
 			glDisable(GL_DEPTH_TEST);
 			glDisable(GL_CULL_FACE);
@@ -170,7 +176,6 @@ void engineGraphicEngineSetDrawMode(enum engineGraphicEngineModeDraw mode){
 			break;
 		case ENGINEGRAPHICENGINEMODEDRAW_ALPHA_ADD:
 			// アルファ合成モード (VertBuf TexcBuf)
-			localGlobal.shader.current = &localGlobal.shader.reserve2;
 			glDepthMask(localGlobal.memory.modeDepth = GL_FALSE);
 			glEnable(GL_DEPTH_TEST);
 			glDisable(GL_CULL_FACE);
@@ -178,7 +183,6 @@ void engineGraphicEngineSetDrawMode(enum engineGraphicEngineModeDraw mode){
 			break;
 		case ENGINEGRAPHICENGINEMODEDRAW_HKNW:
 			// ハコニワ地形モード (VertBuf Clor3Buf TexcBuf)
-			localGlobal.shader.current = &localGlobal.shader.reserve3;
 			glDepthMask(localGlobal.memory.modeDepth = GL_TRUE);
 			glEnable(GL_DEPTH_TEST);
 			glEnable(GL_CULL_FACE);
@@ -186,21 +190,12 @@ void engineGraphicEngineSetDrawMode(enum engineGraphicEngineModeDraw mode){
 			break;
 		case ENGINEGRAPHICENGINEMODEDRAW_SPHERE:
 			// スフィア地形モード (VertBuf Clor3Buf)
-			localGlobal.shader.current = &localGlobal.shader.reserve4;
 			glDepthMask(localGlobal.memory.modeDepth = GL_TRUE);
 			glEnable(GL_DEPTH_TEST);
 			glEnable(GL_CULL_FACE);
 			glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ZERO, GL_ONE); // 半透明アルファ合成
 			break;
 	}
-
-	glUseProgram(localGlobal.shader.current->program);
-	if(localGlobal.shader.current->attr_pos >= 0){glEnableVertexAttribArray(localGlobal.shader.current->attr_pos);}
-	if(localGlobal.shader.current->attr_col >= 0){glEnableVertexAttribArray(localGlobal.shader.current->attr_col);}
-	if(localGlobal.shader.current->attr_uvc >= 0){glEnableVertexAttribArray(localGlobal.shader.current->attr_uvc);}
-
-	localGlobal.memory.color[0] = -1;
-	engineGraphicEngineMemoryResetVBO();
 }
 
 // グラフィックエンジン命令 ステンシルマスクモード設定
