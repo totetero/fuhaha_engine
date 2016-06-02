@@ -14,8 +14,6 @@ class FuhahaGLViewController: GLKViewController{
 	override func viewDidLoad(){
 		super.viewDidLoad();
 
-		IosPluginSound.iosPluginSoundInit();
-
 		self.context = EAGLContext(API: .OpenGLES2);
 		let view: GLKView = self.view as! GLKView;
 		view.context = self.context!;
