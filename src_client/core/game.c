@@ -23,16 +23,22 @@ void gameSurfaceCreated(void){
 
 // opengl画面サイズ変更
 void gameSurfaceChanged(uint16_t width, uint16_t height, double pixelRatio){
-	global.ctrl.ww = width;
-	global.ctrl.wh = height;
+	global.window.w = width;
+	global.window.h = height;
 	glViewport(0, 0, width * pixelRatio, height * pixelRatio);
-	if(true){
-		global.ctrl.sw = 320;
-		global.ctrl.sh = global.ctrl.sw * global.ctrl.wh / global.ctrl.ww;
-		if(global.ctrl.sh < global.ctrl.sw){global.ctrl.sh = global.ctrl.sw;}
+	if(false){
+		// スクリーンサイズ固定 
+		global.screen.w = 320;
+		global.screen.h = 480;
+	}else if(true){
+		// スクリーン横幅固定
+		global.screen.w = 320;
+		global.screen.h = global.screen.w * global.window.h / global.window.w;
+		if(global.screen.h < global.screen.w){global.screen.h = global.screen.w;}
 	}else{
-		global.ctrl.sw = width;
-		global.ctrl.sh = height;
+		// スクリーンサイズをウインドウサイズに合わせる
+		global.screen.w = width;
+		global.screen.h = height;
 	}
 }
 

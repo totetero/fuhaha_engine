@@ -8,12 +8,14 @@
 extern struct global{
 	struct{
 		// ウインドウサイズ 画面全体
-		uint16_t ww;
-		uint16_t wh;
+		uint16_t w;
+		uint16_t h;
+	} window;
+	struct{
 		// スクリーンサイズ 主要描画領域
-		uint16_t sw;
-		uint16_t sh;
-	} ctrl;
+		uint16_t w;
+		uint16_t h;
+	} screen;
 } global;
 
 // ----------------------------------------------------------------
