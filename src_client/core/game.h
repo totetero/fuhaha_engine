@@ -14,12 +14,12 @@ struct activatable{
 // タッチ状態構造体
 struct touch{
 	struct{
-		int16_t x;
-		int16_t y;
+		int x;
+		int y;
 	} window;
 	struct{
-		int16_t x;
-		int16_t y;
+		int x;
+		int y;
 	} screen;
 	struct activatable dn;
 };
@@ -28,13 +28,13 @@ struct touch{
 extern struct global{
 	// ウインドウ 画面全体
 	struct{
-		uint16_t w;
-		uint16_t h;
+		int w;
+		int h;
 	} window;
 	// スクリーン 主要描画領域
 	struct{
-		uint16_t w;
-		uint16_t h;
+		int w;
+		int h;
 		// スクリーン比率
 		struct{
 			double x;
@@ -83,7 +83,7 @@ void coreEventActivatableUpdate(struct activatable *this, bool isActive);
 // opengl初期化
 void gameSurfaceCreated(void);
 // opengl画面サイズ変更
-void gameSurfaceChanged(uint16_t width, uint16_t height, double pixelRatio);
+void gameSurfaceChanged(int width, int height, double pixelRatio);
 // opengl描画
 void gameSurfaceDrawFrame(void);
 // opengl中断
@@ -92,7 +92,7 @@ void gameSurfacePause(void);
 void gameSurfaceDestroy(void);
 
 // タッチの状態を報告する
-void gameEvenTouch(uint8_t index, int16_t tx, int16_t ty, bool tdn);
+void gameEvenTouch(int index, int tx, int ty, bool tdn);
 // キーボードの押下状態変化を報告する
 void gameEventKey(bool kup, bool kdn, bool krt, bool klt, bool kzb, bool kxb, bool kcb, bool ksb);
 // 傾きの状態を報告する

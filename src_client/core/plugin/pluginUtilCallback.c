@@ -15,7 +15,7 @@ struct pluginUtilCallbackUnit{
 };
 
 static struct{
-	uint32_t callbackIdCount;
+	int callbackIdCount;
 	struct pluginUtilCallbackUnit *list;
 	struct pluginUtilCallbackUnit *pool;
 } localGlobal = {0};

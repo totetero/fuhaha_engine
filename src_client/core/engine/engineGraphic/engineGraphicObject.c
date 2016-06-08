@@ -14,7 +14,7 @@ struct engineGraphicObjectVBO{
 	engineGraphicObjectVBOId egoId;
 	// VBOデータ
 	GLuint glId;
-	uint32_t size;
+	int size;
 	GLfloat *vertices;
 };
 
@@ -24,7 +24,7 @@ struct engineGraphicObjectIBO{
 	engineGraphicObjectIBOId egoId;
 	// IBOデータ
 	GLuint glId;
-	uint32_t size;
+	int size;
 	GLushort *indexes;
 };
 
@@ -55,7 +55,7 @@ static struct{
 		GLuint glId;
 	} defaultTexture;
 	// 3Dオブジェクトリスト
-	uint32_t egoIdCount;
+	int egoIdCount;
 	struct engineGraphicObjectVBO *egoVBOList;
 	struct engineGraphicObjectIBO *egoIBOList;
 	struct engineGraphicObjectTex *egoTexList;
@@ -99,7 +99,7 @@ static void egoTexFree(struct engineGraphicObjectTex *this){
 // ----------------------------------------------------------------
 
 // ロード完了時コールバック
-static void texDataLocalCallback(void *param, uint32_t glId, uint16_t texw, uint16_t texh, uint16_t imgw, uint16_t imgh){
+static void texDataLocalCallback(void *param, int glId, int texw, int texh, int imgw, int imgh){
 	struct engineGraphicObjectTexData *this = (struct engineGraphicObjectTexData*)param;
 	enum engineGraphicObjectTexDataStatus beforeStatus = this->status;
 	this->glId = glId;
@@ -139,14 +139,14 @@ static void texDataLoad(struct engineGraphicObjectTexData *this){
 // ----------------------------------------------------------------
 
 // 3DオブジェクトVBO作成
-engineGraphicObjectVBOId engineGraphicObjectVBOCreate(uint32_t size, double *vertices){
+engineGraphicObjectVBOId engineGraphicObjectVBOCreate(int size, double *vertices){
 	// データ作成
 	struct engineGraphicObjectVBO *obj = (struct engineGraphicObjectVBO*)calloc(1, sizeof(struct engineGraphicObjectVBO));
 	obj->egoId = ++localGlobal.egoIdCount;
 	obj->size = size;
-	uint32_t memsize = size * sizeof(GLfloat);
+	int memsize = size * sizeof(GLfloat);
 	obj->vertices = (GLfloat*)malloc(memsize);
-	for(uint32_t i = 0; i < size; i++){obj->vertices[i] = (GLfloat)vertices[i];}
+	for(int i = 0; i < size; i++){obj->vertices[i] = (GLfloat)vertices[i];}
 	egoVBOLoad(obj);
 	// リスト登録
 	if(localGlobal.egoVBOList == NULL){
@@ -161,14 +161,14 @@ engineGraphicObjectVBOId engineGraphicObjectVBOCreate(uint32_t size, double *ver
 }
 
 // 3DオブジェクトIBO作成
-engineGraphicObjectIBOId engineGraphicObjectIBOCreate(uint32_t size, uint16_t *indexes){
+engineGraphicObjectIBOId engineGraphicObjectIBOCreate(int size, int *indexes){
 	// データ作成
 	struct engineGraphicObjectIBO *obj = (struct engineGraphicObjectIBO*)calloc(1, sizeof(struct engineGraphicObjectIBO));
 	obj->egoId = ++localGlobal.egoIdCount;
 	obj->size = size;
-	uint32_t memsize = size * sizeof(GLushort);
+	int memsize = size * sizeof(GLushort);
 	obj->indexes = (GLushort*)malloc(memsize);
-	for(uint32_t i = 0; i < size; i++){obj->indexes[i] = (GLushort)indexes[i];}
+	for(int i = 0; i < size; i++){obj->indexes[i] = (GLushort)indexes[i];}
 	egoIBOLoad(obj);
 	// リスト登録
 	if(localGlobal.egoIBOList == NULL){
@@ -192,7 +192,7 @@ static struct engineGraphicObjectTexData *texDataCreate(char *src){
 	}
 	// 重複がなければ新規作成
 	struct engineGraphicObjectTexData *obj = (struct engineGraphicObjectTexData*)calloc(1, sizeof(struct engineGraphicObjectTexData));
-	uint32_t memsize = ((uint32_t)strlen(src) + 1) * sizeof(char);
+	int memsize = ((int)strlen(src) + 1) * sizeof(char);
 	obj->src = (char*)malloc(memsize);
 	memmove(obj->src, src, memsize);
 	texDataLoad(obj);
@@ -418,7 +418,7 @@ void engineGraphicObjectReload(void){
 	while(tempTex != NULL){texDataLoad(tempTex); tempTex = tempTex->next;}
 
 	// 読み込み中に使うデフォルトテクスチャ作成
-	uint8_t data[4] = {0xff, 0xff, 0xff, 0xff};
+	byte data[4] = {0xff, 0xff, 0xff, 0xff};
 	glGenTextures(1, &localGlobal.defaultTexture.glId);
 	glBindTexture(GL_TEXTURE_2D, localGlobal.defaultTexture.glId);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);

@@ -36,7 +36,7 @@ class IosPluginData: NSObject{
 			}
 			dispatch_async(dispatch_get_main_queue(), {
 				IosPluginUtil.nativePluginUtilLoadingDecrement();
-				gamePluginDataCallbackCall(UInt32(callbackId), buff, size);
+				gamePluginDataCallbackCall(Int32(callbackId), buff, size);
 			});
 		});
 		task.resume();
@@ -61,7 +61,7 @@ class IosPluginData: NSObject{
 			}
 			dispatch_async(dispatch_get_main_queue(), {
 				IosPluginUtil.nativePluginUtilLoadingDecrement();
-				gamePluginDataCallbackCall(UInt32(callbackId), buff, size);
+				gamePluginDataCallbackCall(Int32(callbackId), buff, size);
 			});
 		});
 	}

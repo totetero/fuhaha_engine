@@ -5,10 +5,10 @@
 // ----------------------------------------------------------------
 
 // リクエスト識別子
-typedef uint32_t pluginDataRequestId;
+typedef int pluginDataRequestId;
 
 // コールバック識別子
-typedef uint32_t pluginDataCallbackId;
+typedef int pluginDataCallbackId;
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

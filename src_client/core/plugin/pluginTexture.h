@@ -5,7 +5,7 @@
 // ----------------------------------------------------------------
 
 // コールバック識別子
-typedef uint32_t pluginTextureCallbackId;
+typedef int pluginTextureCallbackId;
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -18,9 +18,9 @@ typedef uint32_t pluginTextureCallbackId;
 // -------- ゲーム側で実装 主にプラットフォーム側から呼び出す
 
 // コールバック関数の登録
-pluginTextureCallbackId gamePluginTextureCallbackSet(void *param, void(*callback)(void *param, uint32_t glId, uint16_t texw, uint16_t texh, uint16_t imgw, uint16_t imgh));
+pluginTextureCallbackId gamePluginTextureCallbackSet(void *param, void(*callback)(void *param, int glId, int texw, int texh, int imgw, int imgh));
 // コールバック関数の実行と解放
-bool gamePluginTextureCallbackCall(pluginTextureCallbackId callbackId, uint32_t glId, uint16_t texw, uint16_t texh, uint16_t imgw, uint16_t imgh);
+bool gamePluginTextureCallbackCall(pluginTextureCallbackId callbackId, int glId, int texw, int texh, int imgw, int imgh);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -28,7 +28,7 @@ bool gamePluginTextureCallbackCall(pluginTextureCallbackId callbackId, uint32_t 
 // -------- プラットフォーム側で実装 主にゲーム側から呼び出す
 
 // ローカルデータ読み込み
-void platformPluginTextureLocal(void *param, char *src, void(*callback)(void *param, uint32_t glId, uint16_t texw, uint16_t texh, uint16_t imgw, uint16_t imgh));
+void platformPluginTextureLocal(void *param, char *src, void(*callback)(void *param, int glId, int texw, int texh, int imgw, int imgh));
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

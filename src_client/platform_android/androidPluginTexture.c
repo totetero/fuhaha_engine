@@ -17,7 +17,7 @@ JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginTexture_gamePluginT
 // ----------------------------------------------------------------
 
 // ローカルデータ読み込み
-void platformPluginTextureLocal(void *param, char *src, void(*callback)(void *param, uint32_t glId, uint16_t texw, uint16_t texh, uint16_t imgw, uint16_t imgh)){
+void platformPluginTextureLocal(void *param, char *src, void(*callback)(void *param, int glId, int texw, int texh, int imgw, int imgh)){
 	JNIEnv *env = getJNIEnv();
 	jclass cls = (*env)->FindClass(env, "com/totetero/fuhaha/AndroidPluginTexture");
 	jmethodID mid = (*env)->GetStaticMethodID(env, cls, "platformPluginTextureLocal", "(ILjava/lang/String;)V");

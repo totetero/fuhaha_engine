@@ -12,8 +12,8 @@ static struct{
 		struct engineCtrlTouch touch;
 		enum engineCtrlTouchId touchId;
 		struct{
-			int16_t tempx;
-			int16_t tempy;
+			int tempx;
+			int tempy;
 		} screen;
 		bool trigger;
 		bool free;
@@ -26,7 +26,7 @@ static struct{
 
 // コントローラ状態メインループ計算
 void engineCtrlTouchCalc(void){
-	for(uint32_t i = 0; i < (sizeof(localGlobal.list) / sizeof(*localGlobal.list)); i++){
+	for(int i = 0; i < (sizeof(localGlobal.list) / sizeof(*localGlobal.list)); i++){
 		struct engineCtrlTouchLocal *localTouch = &localGlobal.list[i];
 		struct touch *globalTouch = &global.touch[i];
 		if(globalTouch->dn.triggerActive){
@@ -51,8 +51,8 @@ void engineCtrlTouchCalc(void){
 			localTouch->touch.screen.y = globalTouch->screen.y;
 			if(!localTouch->touch.mv){
 				// タッチ移動の確認
-				int32_t x = localTouch->touch.screen.x - localTouch->screen.tempx;
-				int32_t y = localTouch->touch.screen.y - localTouch->screen.tempy;
+				int x = localTouch->touch.screen.x - localTouch->screen.tempx;
+				int y = localTouch->touch.screen.y - localTouch->screen.tempy;
 				localTouch->touch.mv = (x * x + y * y > 30 * 30);
 			}
 		}
@@ -69,7 +69,7 @@ void engineCtrlTouchCalc(void){
 struct engineCtrlTouch *engineCtrlTouchGet(enum engineCtrlTouchId touchId){
 	localGlobal.tempTouchId = touchId;
 	// 自分で占有済みのタッチ情報を探す
-	for(uint32_t i = 0; i < (sizeof(localGlobal.list) / sizeof(*localGlobal.list)); i++){
+	for(int i = 0; i < (sizeof(localGlobal.list) / sizeof(*localGlobal.list)); i++){
 		localGlobal.tempTouch = &localGlobal.list[i];
 		if(!localGlobal.tempTouch->trigger && localGlobal.tempTouch->touchId == touchId){
 			localGlobal.tempTouch->touch.active = true;
@@ -77,7 +77,7 @@ struct engineCtrlTouch *engineCtrlTouchGet(enum engineCtrlTouchId touchId){
 		}
 	}
 	// 占有されていないタッチ情報を探す
-	for(uint32_t i = 0; i < (sizeof(localGlobal.list) / sizeof(*localGlobal.list)); i++){
+	for(int i = 0; i < (sizeof(localGlobal.list) / sizeof(*localGlobal.list)); i++){
 		localGlobal.tempTouch = &localGlobal.list[i];
 		if(localGlobal.tempTouch->trigger){
 			localGlobal.tempTouch->touch.active = false;

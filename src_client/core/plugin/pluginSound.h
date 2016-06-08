@@ -5,9 +5,9 @@
 // ----------------------------------------------------------------
 
 // BGM識別子
-typedef uint32_t pluginSoundBgmId;
+typedef int pluginSoundBgmId;
 // SE識別子
-typedef uint32_t pluginSoundSeId;
+typedef int pluginSoundSeId;
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

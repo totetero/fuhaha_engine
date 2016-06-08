@@ -28,7 +28,7 @@ void gameSurfaceCreated(void){
 }
 
 // opengl画面サイズ変更
-void gameSurfaceChanged(uint16_t width, uint16_t height, double pixelRatio){
+void gameSurfaceChanged(int width, int height, double pixelRatio){
 	global.window.w = width;
 	global.window.h = height;
 	glViewport(0, 0, width * pixelRatio, height * pixelRatio);
@@ -86,13 +86,13 @@ void coreEventActivatableUpdate(struct activatable *this, bool isActive){
 }
 
 // タッチの状態を報告する
-void gameEvenTouch(uint8_t index, int16_t tx, int16_t ty, bool tdn){
+void gameEvenTouch(int index, int tx, int ty, bool tdn){
 	if(index >= (sizeof(global.touch) / sizeof(*global.touch))){return;}
 	struct touch *touch = &global.touch[index];
 	touch->window.x = tx;
 	touch->window.y = ty;
-	touch->screen.x = (int16_t)(global.screen.aspect.x * global.screen.w * tx / global.window.w - global.screen.offset.x);
-	touch->screen.y = (int16_t)(global.screen.aspect.y * global.screen.h * ty / global.window.h - global.screen.offset.y);
+	touch->screen.x = (int)(global.screen.aspect.x * global.screen.w * tx / global.window.w - global.screen.offset.x);
+	touch->screen.y = (int)(global.screen.aspect.y * global.screen.h * ty / global.window.h - global.screen.offset.y);
 	coreEventActivatableUpdate(&touch->dn, tdn);
 }
 

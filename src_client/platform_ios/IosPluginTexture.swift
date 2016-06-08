@@ -33,7 +33,7 @@ class IosPluginTexture: NSObject{
 				buff.dealloc(buffSize);
 				glGenerateMipmap(GLenum(GL_TEXTURE_2D));
 				IosPluginUtil.nativePluginUtilLoadingDecrement();
-				gamePluginTextureCallbackCall(UInt32(callbackId), UInt32(glId), UInt16(width), UInt16(height), UInt16(width), UInt16(height));
+				gamePluginTextureCallbackCall(callbackId, Int32(glId), Int32(width), Int32(height), Int32(width), Int32(height));
 			});
 		});
 	}

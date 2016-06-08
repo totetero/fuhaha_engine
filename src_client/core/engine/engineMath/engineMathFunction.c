@@ -24,7 +24,7 @@ double engineMathSqrt(double x){
 	if(x == 0){return 0;}
 	// ニュートン法で求める
 	double t = x * 0.5;
-	for(uint32_t i = 1; i < 20; i++){
+	for(int i = 1; i < 20; i++){
 		t = (t + x / t) * 0.5;
 	}
 	return t;
@@ -32,11 +32,11 @@ double engineMathSqrt(double x){
 
 // 三角関数を求める
 double engineMathSin(double x){
-	x -= (int32_t)(x / (2 * ENGINEMATH_PI)) * (2 * ENGINEMATH_PI);
+	x -= (int)(x / (2 * ENGINEMATH_PI)) * (2 * ENGINEMATH_PI);
 	// テイラー展開を行う
 	double sum = x;
 	double t = x;
-	for(uint32_t i = 1; i < 10; i++){
+	for(int i = 1; i < 10; i++){
 		t *= - (x * x) / ((2 * i + 1) * (2 * i));
 		sum += t;
 	}
@@ -52,7 +52,7 @@ static double engineMathAtan1(double x){
 	if(x >  1){return  ENGINEMATH_PI * 0.5 - engineMathAtan1(1 / x);}
 	if(x < -1){return -ENGINEMATH_PI * 0.5 - engineMathAtan1(1 / x);}
 	double a = 0;
-	for(uint32_t i = 24; i >= 1; i--){
+	for(int i = 24; i >= 1; i--){
 		a = (i * i * x * x) / (2 * i + 1 + a);
 	}
 	return x / (1 + a);

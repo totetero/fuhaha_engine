@@ -11,6 +11,9 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+// 型定義
+typedef unsigned char byte;
+
 //// ゲーム本体における共通部分インクルード順番の例
 //#include "platform.h"
 //#include "plugin/pluginUtil.h"

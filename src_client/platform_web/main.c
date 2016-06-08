@@ -13,7 +13,7 @@ void webPlatformScreenInit(void);
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-static int32_t init(void){
+static int init(void){
 	if(glfwInit() != GL_TRUE){return -1;}
 	if(glfwOpenWindow(320, 480, 5, 6, 5, 0, 16, 1, GLFW_WINDOW) != GL_TRUE){return -1;}
     return 0;

@@ -9,14 +9,14 @@
 static struct{
 	// 一時バッファ
 	char *tempBuff;
-	uint32_t tempBuffIndex;
-	uint32_t tempBuffLength;
+	int tempBuffIndex;
+	int tempBuffLength;
 } localGlobal = {0};
 
 // 一時バッファの長さ確保
-static void tempBuffSetLength(uint32_t length){
+static void tempBuffSetLength(int length){
 	if(localGlobal.tempBuffLength < localGlobal.tempBuffIndex + length){
-		uint32_t newBuffLength = localGlobal.tempBuffLength + (length > 1024 ? length : 1024);
+		int newBuffLength = localGlobal.tempBuffLength + (length > 1024 ? length : 1024);
 		char *newBuff = (char*)malloc(newBuffLength * sizeof(char));
 		if(localGlobal.tempBuffLength > 0){
 			memcpy(newBuff, localGlobal.tempBuff, localGlobal.tempBuffLength * sizeof(char));
@@ -28,10 +28,10 @@ static void tempBuffSetLength(uint32_t length){
 }
 // 一時バッファに挿入
 static void tempBuffPutChar(char c){tempBuffSetLength(1); localGlobal.tempBuff[localGlobal.tempBuffIndex++] = c;}
-static void tempBuffPutInt(int64_t value){size_t n = 64; tempBuffSetLength((uint32_t)n); localGlobal.tempBuffIndex += snprintf(localGlobal.tempBuff + localGlobal.tempBuffIndex, n, "%lld", value);}
-static void tempBuffPutFloat(double value){size_t n = 64; tempBuffSetLength((uint32_t)n); localGlobal.tempBuffIndex += snprintf(localGlobal.tempBuff + localGlobal.tempBuffIndex, n, "%lf", value);}
-static void tempBuffPutString1(char *value){size_t n = strlen(value)     + 1; tempBuffSetLength((uint32_t)n); localGlobal.tempBuffIndex += snprintf(localGlobal.tempBuff + localGlobal.tempBuffIndex, n,     "%s", value);}
-static void tempBuffPutString2(char *value){size_t n = strlen(value) + 2 + 1; tempBuffSetLength((uint32_t)n); localGlobal.tempBuffIndex += snprintf(localGlobal.tempBuff + localGlobal.tempBuffIndex, n, "\"%s\"", value);}
+static void tempBuffPutInt(int64_t value){size_t n = 64; tempBuffSetLength((int)n); localGlobal.tempBuffIndex += snprintf(localGlobal.tempBuff + localGlobal.tempBuffIndex, n, "%lld", value);}
+static void tempBuffPutFloat(double value){size_t n = 64; tempBuffSetLength((int)n); localGlobal.tempBuffIndex += snprintf(localGlobal.tempBuff + localGlobal.tempBuffIndex, n, "%lf", value);}
+static void tempBuffPutString1(char *value){size_t n = strlen(value)     + 1; tempBuffSetLength((int)n); localGlobal.tempBuffIndex += snprintf(localGlobal.tempBuff + localGlobal.tempBuffIndex, n,     "%s", value);}
+static void tempBuffPutString2(char *value){size_t n = strlen(value) + 2 + 1; tempBuffSetLength((int)n); localGlobal.tempBuffIndex += snprintf(localGlobal.tempBuff + localGlobal.tempBuffIndex, n, "\"%s\"", value);}
 
 // ----------------------------------------------------------------
 
@@ -293,7 +293,7 @@ static bool parseValue(struct engineDataJsonValue *this, char **c){
 
 	if(parseString(this, c)){
 		// 文字列読み取り成功 メモリ領域確保
-		uint32_t length = (uint32_t)strlen(this->jString);
+		int length = (int)strlen(this->jString);
 		char *buff = (char*)malloc((length + 1) * sizeof(char));
 		strcpy(buff, this->jString);
 		this->jString = buff;
@@ -310,7 +310,7 @@ static bool parseValue(struct engineDataJsonValue *this, char **c){
 // ----------------------------------------------------------------
 
 // jsonの文字列化
-static void jsonStringify(struct engineDataJsonValue *this, int32_t indent){
+static void jsonStringify(struct engineDataJsonValue *this, int indent){
 	if(this == NULL){return;}
 	switch(this->type){
 		case ENGINEDATAJSONTYPE_INT: tempBuffPutInt(this->jInt); break;
@@ -322,7 +322,7 @@ static void jsonStringify(struct engineDataJsonValue *this, int32_t indent){
 			tempBuffPutChar('{');
 			if(this->jArray != NULL){
 				if(indent >= 0){tempBuffPutChar('\n');}
-				if(indent >= 0){for(uint32_t i = 0; i < indent + 1; i++){tempBuffPutChar('\t');}}
+				if(indent >= 0){for(int i = 0; i < indent + 1; i++){tempBuffPutChar('\t');}}
 				struct engineDataJsonArray *tempObj = this->jArray;
 				while(tempObj != NULL){
 					tempBuffPutString1(tempObj->key);
@@ -335,7 +335,7 @@ static void jsonStringify(struct engineDataJsonValue *this, int32_t indent){
 					if(indent >= 0){tempBuffPutChar(' ');}
 				}
 				if(indent >= 0){tempBuffPutChar('\n');}
-				if(indent >= 0){for(uint32_t i = 0; i < indent; i++){tempBuffPutChar('\t');}}
+				if(indent >= 0){for(int i = 0; i < indent; i++){tempBuffPutChar('\t');}}
 			}
 			tempBuffPutChar('}');
 			break;
@@ -343,7 +343,7 @@ static void jsonStringify(struct engineDataJsonValue *this, int32_t indent){
 			tempBuffPutChar('[');
 			if(this->jArray != NULL){
 				if(indent >= 0){tempBuffPutChar('\n');}
-				if(indent >= 0){for(uint32_t i = 0; i < indent + 1; i++){tempBuffPutChar('\t');}}
+				if(indent >= 0){for(int i = 0; i < indent + 1; i++){tempBuffPutChar('\t');}}
 				struct engineDataJsonArray *tempArr = this->jArray;
 				while(tempArr != NULL){
 					jsonStringify(&tempArr->value, indent + (indent < 0 ? 0 : 1));
@@ -353,7 +353,7 @@ static void jsonStringify(struct engineDataJsonValue *this, int32_t indent){
 					if(indent >= 0){tempBuffPutChar(' ');}
 				}
 				if(indent >= 0){tempBuffPutChar('\n');}
-				if(indent >= 0){for(uint32_t i = 0; i < indent; i++){tempBuffPutChar('\t');}}
+				if(indent >= 0){for(int i = 0; i < indent; i++){tempBuffPutChar('\t');}}
 			}
 			tempBuffPutChar(']');
 			break;
@@ -384,7 +384,7 @@ char *engineDataJsonStringify(struct engineDataJsonValue *this){
 	jsonStringify(this, -1);
 	tempBuffPutChar('\0');
 
-	uint32_t length = (uint32_t)strlen(localGlobal.tempBuff);
+	int length = (int)strlen(localGlobal.tempBuff);
 	char *buff = (char*)malloc((length + 1) * sizeof(char));
 	strcpy(buff, localGlobal.tempBuff);
 	return buff;
@@ -423,7 +423,7 @@ void engineDataJsonSetBool(struct engineDataJsonValue *this, bool value){
 
 // 文字列設定
 void engineDataJsonSetString(struct engineDataJsonValue *this, char *value){
-	uint32_t length = (uint32_t)strlen(value);
+	int length = (int)strlen(value);
 	char *buff = (char*)malloc((length + 1) * sizeof(char));
 	strcpy(buff, this->jString);
 	this->type = ENGINEDATAJSONTYPE_STRING;
@@ -432,7 +432,7 @@ void engineDataJsonSetString(struct engineDataJsonValue *this, char *value){
 
 // 連想配列要素作成
 static struct engineDataJsonArray *createObject(char *key){
-	uint32_t length = (uint32_t)strlen(key);
+	int length = (int)strlen(key);
 	struct engineDataJsonArray *array = (struct engineDataJsonArray*)malloc(sizeof(struct engineDataJsonArray) + length * sizeof(char));
 	strcpy(array->key, key);
 	array->value.type = ENGINEDATAJSONTYPE_NULL;
@@ -528,9 +528,9 @@ struct engineDataJsonValue *engineDataJsonObjectGetValue(struct engineDataJsonVa
 }
 
 // 配列から要素取得
-struct engineDataJsonValue *engineDataJsonArrayGetValue(struct engineDataJsonValue *this, uint32_t index){
+struct engineDataJsonValue *engineDataJsonArrayGetValue(struct engineDataJsonValue *this, int index){
 	if(this == NULL || this->type != ENGINEDATAJSONTYPE_ARRAY){return NULL;}
-	uint32_t length = 0;
+	int length = 0;
 	struct engineDataJsonArray *temp = this->jArray;
 	struct engineDataJsonValue *value = NULL;
 	while(temp != NULL){
@@ -541,8 +541,8 @@ struct engineDataJsonValue *engineDataJsonArrayGetValue(struct engineDataJsonVal
 }
 
 // 配列の長さ取得
-uint32_t engineDataJsonArrayGetLength(struct engineDataJsonValue *this){
-	uint32_t length = 0;
+int engineDataJsonArrayGetLength(struct engineDataJsonValue *this){
+	int length = 0;
 	if(this != NULL && (this->type == ENGINEDATAJSONTYPE_OBJECT || this->type == ENGINEDATAJSONTYPE_ARRAY)){
 		struct engineDataJsonArray *temp = this->jArray;
 		while(temp != NULL){
@@ -579,9 +579,9 @@ void engineDataJsonObjectRemoveValue(struct engineDataJsonValue *this, char *key
 }
 
 // 配列から要素削除
-void engineDataJsonArrayRemoveValue(struct engineDataJsonValue *this, uint32_t index){
+void engineDataJsonArrayRemoveValue(struct engineDataJsonValue *this, int index){
 	if(this == NULL || this->type != ENGINEDATAJSONTYPE_ARRAY){return;}
-	uint32_t length = 0;
+	int length = 0;
 	struct engineDataJsonArray *prev = NULL;
 	struct engineDataJsonArray *temp = this->jArray;
 	struct engineDataJsonArray *dispose = NULL;

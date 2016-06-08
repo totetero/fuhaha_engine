@@ -11,15 +11,15 @@ static struct{
 	double *buffVert;
 	double *buffClor;
 	double *buffTexc;
-	uint16_t *buffFace;
-	uint32_t buffVertIndex;
-	uint32_t buffClorIndex;
-	uint32_t buffTexcIndex;
-	uint32_t buffFaceIndex;
-	uint32_t buffVertLength;
-	uint32_t buffClorLength;
-	uint32_t buffTexcLength;
-	uint32_t buffFaceLength;
+	int *buffFace;
+	int buffVertIndex;
+	int buffClorIndex;
+	int buffTexcIndex;
+	int buffFaceIndex;
+	int buffVertLength;
+	int buffClorLength;
+	int buffTexcLength;
+	int buffFaceLength;
 } localGlobal = {0};
 
 // ----------------------------------------------------------------
@@ -47,7 +47,7 @@ void engineGraphicBufferEnd(engineGraphicObjectVBOId *egoIdVert, engineGraphicOb
 // 頂点座標配列に要素追加
 void engineGraphicBufferPushVert(double x, double y, double z){
 	if(localGlobal.buffVertLength < localGlobal.buffVertIndex + 3){
-		uint32_t length = localGlobal.buffVertLength + 300;
+		int length = localGlobal.buffVertLength + 300;
 		double *array = (double*)malloc(length * sizeof(double));
 		if(localGlobal.buffVertLength > 0){
 			memcpy(array, localGlobal.buffVert, localGlobal.buffVertLength * sizeof(double));
@@ -64,7 +64,7 @@ void engineGraphicBufferPushVert(double x, double y, double z){
 // 色彩配列に要素追加
 void engineGraphicBufferPushClor(double r, double g, double b){
 	if(localGlobal.buffClorLength < localGlobal.buffClorIndex + 3){
-		uint32_t length = localGlobal.buffClorLength + 300;
+		int length = localGlobal.buffClorLength + 300;
 		double *array = (double*)malloc(length * sizeof(double));
 		if(localGlobal.buffClorLength > 0){
 			memcpy(array, localGlobal.buffClor, localGlobal.buffClorLength * sizeof(double));
@@ -81,7 +81,7 @@ void engineGraphicBufferPushClor(double r, double g, double b){
 // テクスチャ座標配列に要素追加
 void engineGraphicBufferPushTexc(double u, double v){
 	if(localGlobal.buffTexcLength < localGlobal.buffTexcIndex + 2){
-		uint32_t length = localGlobal.buffTexcLength + 200;
+		int length = localGlobal.buffTexcLength + 200;
 		double *array = (double*)malloc(length * sizeof(double));
 		if(localGlobal.buffTexcLength > 0){
 			memcpy(array, localGlobal.buffTexc, localGlobal.buffTexcLength * sizeof(double));
@@ -95,12 +95,12 @@ void engineGraphicBufferPushTexc(double u, double v){
 }
 
 // 頂点番号配配列に要素追加
-void engineGraphicBufferPushFace(uint16_t index, uint16_t t0, uint16_t t1, uint16_t t2){
+void engineGraphicBufferPushFace(int index, int t0, int t1, int t2){
 	if(localGlobal.buffFaceLength < localGlobal.buffFaceIndex + 3){
-		uint32_t length = localGlobal.buffFaceLength + 150;
-		uint16_t *array = (uint16_t*)malloc(length * sizeof(uint16_t));
+		int length = localGlobal.buffFaceLength + 150;
+		int *array = (int*)malloc(length * sizeof(int));
 		if(localGlobal.buffFaceLength > 0){
-			memcpy(array, localGlobal.buffFace, localGlobal.buffFaceLength * sizeof(uint16_t));
+			memcpy(array, localGlobal.buffFace, localGlobal.buffFaceLength * sizeof(int));
 			free(localGlobal.buffFace);
 		}
 		localGlobal.buffFaceLength = length;
@@ -122,7 +122,7 @@ void engineGraphicBufferPushTetraVert(double x, double y, double w, double h){
 }
 
 // テクスチャ座標配列に要素追加
-void engineGraphicBufferPushTetraTexc(uint16_t imgw, uint16_t imgh, double u, double v, double w, double h){
+void engineGraphicBufferPushTetraTexc(int imgw, int imgh, double u, double v, double w, double h){
 	engineGraphicBufferPushTexc((u + 0) / imgw, (v + 0) / imgh);
 	engineGraphicBufferPushTexc((u + 0) / imgw, (v + h) / imgh);
 	engineGraphicBufferPushTexc((u + w) / imgw, (v + h) / imgh);
@@ -130,7 +130,7 @@ void engineGraphicBufferPushTetraTexc(uint16_t imgw, uint16_t imgh, double u, do
 }
 
 // 頂点番号配配列に要素追加
-void engineGraphicBufferPushTetraFace(uint16_t index){
+void engineGraphicBufferPushTetraFace(int index){
 	engineGraphicBufferPushFace(index, 0, 1, 2);
 	engineGraphicBufferPushFace(index, 2, 3, 0);
 }
@@ -138,12 +138,12 @@ void engineGraphicBufferPushTetraFace(uint16_t index){
 // ----------------------------------------------------------------
 
 // VBOバッファ配列内の位置獲得
-uint32_t engineGraphicBufferVretIndexGet(void){
+int engineGraphicBufferVretIndexGet(void){
 	return localGlobal.buffVertIndex / 3;
 }
 
 // IBOバッファ配列内の位置獲得
-uint32_t engineGraphicBufferFaceIndexGet(void){
+int engineGraphicBufferFaceIndexGet(void){
 	return localGlobal.buffFaceIndex / 3;
 }
 

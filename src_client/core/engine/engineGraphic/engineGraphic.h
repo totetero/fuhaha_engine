@@ -59,9 +59,9 @@ enum engineGraphicEngineModeStencil{
 };
 
 // 3Dオブジェクト識別子
-typedef uint32_t engineGraphicObjectVBOId;
-typedef uint32_t engineGraphicObjectIBOId;
-typedef uint32_t engineGraphicObjectTexId;
+typedef int engineGraphicObjectVBOId;
+typedef int engineGraphicObjectIBOId;
+typedef int engineGraphicObjectTexId;
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -69,9 +69,9 @@ typedef uint32_t engineGraphicObjectTexId;
 // -------- 3Dオブジェクト
 
 // 3DオブジェクトVBO作成
-engineGraphicObjectVBOId engineGraphicObjectVBOCreate(uint32_t size, double *vertices);
+engineGraphicObjectVBOId engineGraphicObjectVBOCreate(int size, double *vertices);
 // 3DオブジェクトIBO作成
-engineGraphicObjectIBOId engineGraphicObjectIBOCreate(uint32_t size, uint16_t *indexes);
+engineGraphicObjectIBOId engineGraphicObjectIBOCreate(int size, int *indexes);
 // 3DオブジェクトTex作成
 engineGraphicObjectTexId engineGraphicObjectTexCreate(char *src, enum engineGraphicObjectTexType type);
 
@@ -155,7 +155,7 @@ void engineGraphicEngineSetMatrix(struct engineMathMatrix44 *matrix);
 void engineGraphicEngineSetColor(double r, double g, double b, double a);
 
 // グラフィックエンジン命令 頂点インデックスを元に描画
-void engineGraphicEngineDrawIndex(uint32_t offset, uint32_t count);
+void engineGraphicEngineDrawIndex(int offset, int count);
 
 // グラフィックエンジン命令クラス 描画確定
 void engineGraphicEngineFlush(void);
@@ -177,19 +177,19 @@ void engineGraphicBufferPushClor(double r, double g, double b);
 // テクスチャ座標配列に要素追加
 void engineGraphicBufferPushTexc(double u, double v);
 // 頂点番号配配列に要素追加
-void engineGraphicBufferPushFace(uint16_t index, uint16_t t0, uint16_t t1, uint16_t t2);
+void engineGraphicBufferPushFace(int index, int t0, int t1, int t2);
 
 // 頂点座標配列に四角形の要素追加
 void engineGraphicBufferPushTetraVert(double x, double y, double w, double h);
 // テクスチャ座標配列に要素追加
-void engineGraphicBufferPushTetraTexc(uint16_t imgw, uint16_t imgh, double u, double v, double w, double h);
+void engineGraphicBufferPushTetraTexc(int imgw, int imgh, double u, double v, double w, double h);
 // 頂点番号配配列に要素追加
-void engineGraphicBufferPushTetraFace(uint16_t index);
+void engineGraphicBufferPushTetraFace(int index);
 
 // VBOバッファ配列内の位置獲得
-uint32_t engineGraphicBufferVretIndexGet(void);
+int engineGraphicBufferVretIndexGet(void);
 // IBOバッファ配列内の位置獲得
-uint32_t engineGraphicBufferFaceIndexGet(void);
+int engineGraphicBufferFaceIndexGet(void);
 
 // バッファ片付け
 void engineGraphicBufferClean(void);

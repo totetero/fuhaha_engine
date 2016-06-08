@@ -408,7 +408,7 @@ void engineGraphicEngineSetColor(double r, double g, double b, double a){
 // ----------------------------------------------------------------
 
 // グラフィックエンジン命令 頂点インデックスを元に描画
-void engineGraphicEngineDrawIndex(uint32_t offset, uint32_t count){
+void engineGraphicEngineDrawIndex(int offset, int count){
 	glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_SHORT, (GLushort*)NULL + offset);
 }
 

@@ -8,7 +8,7 @@
 
 static struct{
 	// リクエストリスト
-	uint32_t reqIdCount;
+	int reqIdCount;
 	struct pluginDataRequestUnit{
 		struct pluginDataRequestUnit *next;
 		pluginDataRequestId reqId;

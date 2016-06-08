@@ -67,14 +67,14 @@ char *engineDataJsonGetString(struct engineDataJsonValue *this, char *defaultVal
 // 連想配列から要素取得
 struct engineDataJsonValue *engineDataJsonObjectGetValue(struct engineDataJsonValue *this, char *key);
 // 配列から要素取得
-struct engineDataJsonValue *engineDataJsonArrayGetValue(struct engineDataJsonValue *this, uint32_t index);
+struct engineDataJsonValue *engineDataJsonArrayGetValue(struct engineDataJsonValue *this, int index);
 // 配列の長さ取得
-uint32_t engineDataJsonArrayGetLength(struct engineDataJsonValue *this);
+int engineDataJsonArrayGetLength(struct engineDataJsonValue *this);
 
 // 連想配列から要素削除
 void engineDataJsonObjectRemoveValue(struct engineDataJsonValue *this, char *key);
 // 配列から要素削除
-void engineDataJsonArrayRemoveValue(struct engineDataJsonValue *this, uint32_t index);
+void engineDataJsonArrayRemoveValue(struct engineDataJsonValue *this, int index);
 // json解放
 void engineDataJsonFree(struct engineDataJsonValue *this);
 
@@ -84,9 +84,9 @@ void engineDataJsonFree(struct engineDataJsonValue *this);
 // -------- base64処理
 
 // base64形式に変換 引数非破壊 返値は解放必要
-char *engineDataBase64encode(uint8_t *data, uint32_t length);
+char *engineDataBase64encode(byte *data, int length);
 // base64形式から解読 引数破壊 返値は解放不要
-uint8_t *engineDataBase64decode(char *data, uint32_t *length);
+byte *engineDataBase64decode(char *data, int *length);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

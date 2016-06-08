@@ -9,13 +9,13 @@
 struct engineCtrlTouch{
 	struct{
 		// ウインドウ内位置
-		int16_t x;
-		int16_t y;
+		int x;
+		int y;
 	} window;
 	struct{
 		// スクリーン内位置
-		int16_t x;
-		int16_t y;
+		int x;
+		int y;
 	} screen;
 	// 押下中フラグ
 	bool dn;

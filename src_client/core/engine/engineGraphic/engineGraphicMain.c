@@ -28,12 +28,12 @@ void engineGraphicSampleCode(void){
 	static engineGraphicObjectVBOId egoIdClor = 0;
 	static engineGraphicObjectVBOId egoIdTexc = 0;
 	static engineGraphicObjectIBOId egoIdFace = 0;
-	static uint32_t faceIndex = 0;
-	static uint32_t faceNum = 0;
-	static uint32_t step = 0;
+	static int faceIndex = 0;
+	static int faceNum = 0;
+	static int step = 0;
 	if(!isInit){
 		isInit = true;
-		uint32_t vertIndex = engineGraphicBufferVretIndexGet();
+		int vertIndex = engineGraphicBufferVretIndexGet();
 		faceIndex = engineGraphicBufferFaceIndexGet();
 		engineGraphicBufferBegin();
 		engineGraphicBufferPushVert(-1.0, -1.0, 0.0);
