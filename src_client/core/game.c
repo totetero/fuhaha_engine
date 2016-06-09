@@ -74,6 +74,9 @@ void gameSurfaceDestroy(void){
 // ----------------------------------------------------------------
 
 // 押下状態更新
+// データ使用までの間に1往復以上の更新がかかると取り逃がしが発生する
+// データ使用時に非活性トリガーよりも活性トリガーを先に確認してトリガーを下げるようにすれば
+// 活性なのに非活性と判断されることはあっても逆はない
 void coreEventActivatableUpdate(struct activatable *this, bool isActive){
 	if(this->isActive != isActive){
 		if(isActive){

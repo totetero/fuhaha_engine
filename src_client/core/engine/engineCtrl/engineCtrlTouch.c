@@ -39,10 +39,6 @@ void engineCtrlTouchCalc(void){
 			localTouch->touch.screen.x = localTouch->screen.tempx = globalTouch->screen.x;
 			localTouch->touch.screen.y = localTouch->screen.tempy = globalTouch->screen.y;
 			localTouch->trigger = true;
-		}else if(globalTouch->dn.triggerInactive){
-			// 離した直後
-			globalTouch->dn.triggerInactive = false;
-			localTouch->touch.dn = false;
 		}else if(globalTouch->dn.isActive){
 			// 押下中
 			localTouch->touch.window.x = globalTouch->window.x;
@@ -55,6 +51,10 @@ void engineCtrlTouchCalc(void){
 				int y = localTouch->touch.screen.y - localTouch->screen.tempy;
 				localTouch->touch.mv = (x * x + y * y > 30 * 30);
 			}
+		}else if(globalTouch->dn.triggerInactive){
+			// 離した直後
+			globalTouch->dn.triggerInactive = false;
+			localTouch->touch.dn = false;
 		}
 
 		if(localTouch->free){
