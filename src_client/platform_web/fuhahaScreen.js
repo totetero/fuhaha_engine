@@ -8,7 +8,7 @@ mergeInto(LibraryManager.library, {
 	// ----------------------------------------------------------------
 
 	// ゲーム初期化完了後のプラットフォーム初期化
-	webPlatformScreenInit: function(){
+	webFuhahaScreenInit: function(){
 		// 画面サイズ変更処理初期化
 		var resizeCanvas = function(){
 			var w = window.innerWidth;

@@ -7,6 +7,7 @@ import GLKit
 
 class FuhahaGLViewController: GLKViewController{
 	var context: EAGLContext? = nil;
+	var fuhahaController: FuhahaController? = nil;
 
 	// ----------------------------------------------------------------
 
@@ -14,12 +15,16 @@ class FuhahaGLViewController: GLKViewController{
 	override func viewDidLoad(){
 		super.viewDidLoad();
 
+		// openGL
 		self.context = EAGLContext(API: .OpenGLES2);
 		let view: GLKView = self.view as! GLKView;
 		view.context = self.context!;
 		view.drawableDepthFormat = .Format24;
 		view.drawableStencilFormat = .Format8;
 		EAGLContext.setCurrentContext(self.context);
+
+		// controller
+		self.fuhahaController = FuhahaController();
 
 		gameSurfaceCreated();
 	}
@@ -57,6 +62,28 @@ class FuhahaGLViewController: GLKViewController{
 	// ライフタイムイベント フリックしてアプリを終了させた
 	static internal func applicationWillTerminate(){
 		gameSurfaceDestroy();
+	}
+
+	// ----------------------------------------------------------------
+
+	// タッチ開始
+	override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?){
+		self.fuhahaController!.touchesBegan(self.view, touches: touches, withEvent: event);
+	}
+
+	// タッチ移動
+	override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?){
+		self.fuhahaController!.touchesMoved(self.view, touches: touches, withEvent: event);
+	}
+
+	// タッチ完了
+	override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?){
+		self.fuhahaController!.touchesEnded(self.view, touches: touches, withEvent: event);
+	}
+
+	// タッチ中止
+	override func touchesCancelled(touches: Set<UITouch>!, withEvent event: UIEvent?){
+		self.fuhahaController!.touchesCancelled(self.view, touches: touches, withEvent: event);
 	}
 
 	// ----------------------------------------------------------------

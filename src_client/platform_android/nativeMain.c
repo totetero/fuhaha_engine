@@ -67,6 +67,23 @@ JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaGLView_nativeGlStep(JNIEnv
 }
 
 // ----------------------------------------------------------------
+
+// タッチの状態を報告する
+JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaController_gameEvenTouch(JNIEnv *env, jobject obj, jint index, jint tx, jint ty, jboolean tdn){
+	gameEvenTouch(index, tx, ty, tdn);
+}
+
+// キーボードの押下状態変化を報告する
+JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaController_gameEventKey(JNIEnv *env, jobject obj, jboolean kup, jboolean kdn, jboolean krt, jboolean klt, jboolean kzb, jboolean kxb, jboolean kcb, jboolean ksb){
+	gameEventKey(kup, kdn, krt, klt, kzb, kxb, kcb, ksb);
+}
+
+// 傾きの状態を報告する
+JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaController_gameEventAcceleration(JNIEnv *env, jobject obj, jdouble accx, jdouble accy, jdouble accz){
+	gameEventAcceleration(accx, accy, accz);
+}
+
+// ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
