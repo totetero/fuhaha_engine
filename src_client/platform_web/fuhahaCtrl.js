@@ -8,7 +8,7 @@ mergeInto(LibraryManager.library, {
 	// ----------------------------------------------------------------
 
 	// ゲーム初期化完了後のプラットフォーム初期化
-	webFuhahaControllerInit: function(){
+	webFuhahaCtrlInit: function(){
 		// ----------------------------------------------------------------
 		// タッチ入力イベント処理初期化
 

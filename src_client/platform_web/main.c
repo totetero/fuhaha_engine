@@ -4,11 +4,10 @@
 #include "game.h"
 
 void webPluginUtilInit(void);
-void webPluginControllerInit(void);
 void webPluginSoundInit(void);
 void webPluginEnptyInit(void);
 void webFuhahaScreenInit(void);
-void webFuhahaControllerInit(void);
+void webFuhahaCtrlInit(void);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -29,12 +28,11 @@ static void mainloop(void){
 int main(void){
 	if(init() == 0){
 		webPluginUtilInit();
-		webPluginControllerInit();
 		webPluginSoundInit();
 		webPluginEnptyInit();
 		gameSurfaceCreated();
 		webFuhahaScreenInit();
-		webFuhahaControllerInit();
+		webFuhahaCtrlInit();
 		emscripten_set_main_loop(mainloop, 0, 1);
 	}
 	glfwTerminate();

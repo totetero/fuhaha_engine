@@ -20,7 +20,6 @@ typedef unsigned char byte;
 //#include "plugin/pluginData.h"
 //#include "plugin/pluginTexture.h"
 //#include "plugin/pluginPreference.h"
-//#include "plugin/pluginController.h"
 //#include "plugin/pluginSound.h"
 //#include "plugin/pluginEnpty.h"
 //#include "engine/engineMath/engineMath.h"

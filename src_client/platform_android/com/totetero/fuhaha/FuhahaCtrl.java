@@ -13,7 +13,7 @@ import android.hardware.SensorManager;
 // ----------------------------------------------------------------
 
 // openGL描画クラス
-public class FuhahaController implements SensorEventListener{
+public class FuhahaCtrl implements SensorEventListener{
 	// タッチ1情報
 	public int t1id = -1;
 	public int t1x = 0;
@@ -37,7 +37,7 @@ public class FuhahaController implements SensorEventListener{
 	// ----------------------------------------------------------------
 
 	// コンストラクタ
-	public FuhahaController(){
+	public FuhahaCtrl(){
 		// 加速度センサー
 		this.sensorManager = (SensorManager)FuhahaGLView.activity.getSystemService(FuhahaGLView.activity.SENSOR_SERVICE);
 	}
@@ -102,8 +102,8 @@ public class FuhahaController implements SensorEventListener{
 		}
 
 		// タッチ情報をjniに送信
-		FuhahaController.gameEvenTouch(0, this.t1x, this.t1y, (this.t1id >= 0));
-		FuhahaController.gameEvenTouch(1, this.t2x, this.t2y, (this.t2id >= 0));
+		FuhahaCtrl.gameEvenTouch(0, this.t1x, this.t1y, (this.t1id >= 0));
+		FuhahaCtrl.gameEvenTouch(1, this.t2x, this.t2y, (this.t2id >= 0));
 
 		return true;
 	}
@@ -117,7 +117,7 @@ public class FuhahaController implements SensorEventListener{
 	public void onSensorChanged(SensorEvent event){
 		if(event.sensor.getType() == Sensor.TYPE_ACCELEROMETER){
 			// androidの軸方向を基準とする、最大値は知らん
-			FuhahaController.gameEventAcceleration(event.values[0], event.values[1], event.values[2]);
+			FuhahaCtrl.gameEventAcceleration(event.values[0], event.values[1], event.values[2]);
 		}
 	}
 
