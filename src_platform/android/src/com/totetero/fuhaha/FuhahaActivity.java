@@ -3,6 +3,7 @@ package com.totetero.fuhaha;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Window;
+import android.view.KeyEvent;
 import android.widget.LinearLayout;
 
 // ----------------------------------------------------------------
@@ -41,6 +42,10 @@ public class FuhahaActivity extends Activity{
 	protected void onDestroy(){
 		this.glView.onDestroy();
 		super.onDestroy();
+	}
+
+	public boolean dispatchKeyEvent(KeyEvent event){
+		return this.glView.dispatchKeyEvent(event) || super.dispatchKeyEvent(event);
 	}
 }
 

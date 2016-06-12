@@ -24,15 +24,19 @@ mergeInto(LibraryManager.library, {
 		var t1y = 0;
 		var t1dn = false;
 		var t1id = -1;
+		var t1trigger = false;
 		// タッチ2状態
 		var t2x = 0;
 		var t2y = 0;
 		var t2dn = false;
 		var t2id = -1;
+		var t2trigger = false;
 
 		function onTouch(){
-			ccall("gameEvenTouch", "null", ["null", "null", "null", "null"], [0, t1x, t1y, t1dn]);
-			ccall("gameEvenTouch", "null", ["null", "null", "null", "null"], [1, t2x, t2y, t2dn]);
+			if(t1trigger){ccall("gameEvenTouch", "null", ["null", "null", "null", "null"], [0, t1x, t1y, t1dn])};
+			if(t2trigger){ccall("gameEvenTouch", "null", ["null", "null", "null", "null"], [1, t2x, t2y, t2dn])};
+			t1trigger = false;
+			t2trigger = false;
 		}
 
 		// タッチ開始関数
@@ -46,18 +50,21 @@ mergeInto(LibraryManager.library, {
 						t1x = tinfo.clientX - rect.left;
 						t1y = tinfo.clientY - rect.top;
 						t1dn = true;
+						t1trigger = true;
 					}
 					if(t2id < 0 && t1id != tinfo.identifier && t2id != tinfo.identifier){
 						t2id = tinfo.identifier;
 						t2x = tinfo.clientX - rect.left;
 						t2y = tinfo.clientY - rect.top;
 						t2dn = true;
+						t2trigger = false;
 					}
 				}
 			}else{
 				t1x = e.clientX - rect.left;
 				t1y = e.clientY - rect.top;
 				t1dn = true;
+				t1trigger = true;
 			}
 			onTouch();
 			e.preventDefault();
@@ -76,15 +83,18 @@ mergeInto(LibraryManager.library, {
 					if(t1id == tinfo.identifier){
 						t1x = tinfo.clientX - rect.left;
 						t1y = tinfo.clientY - rect.top;
+						t1trigger = true;
 					}
 					if(t2id == tinfo.identifier){
 						t2x = tinfo.clientX - rect.left;
 						t2y = tinfo.clientY - rect.top;
+						t2trigger = true;
 					}
 				}
 			}else{
 				t1x = e.clientX - rect.left;
 				t1y = e.clientY - rect.top;
+				t1trigger = true;
 			}
 			onTouch();
 			e.preventDefault();
@@ -102,18 +112,21 @@ mergeInto(LibraryManager.library, {
 						t1x = tinfo.clientX - rect.left;
 						t1y = tinfo.clientY - rect.top;
 						t1dn = false;
+						t1trigger = true;
 					}
 					if(t2id == tinfo.identifier){
 						t2id = -1;
 						t2x = tinfo.clientX - rect.left;
 						t2y = tinfo.clientY - rect.top;
 						t2dn = false;
+						t2trigger = true;
 					}
 				}
 			}else{
 				t1x = e.clientX - rect.left;
 				t1y = e.clientY - rect.top;
 				t1dn = false;
+				t1trigger = true;
 			}
 			onTouch();
 			e.preventDefault();
@@ -144,6 +157,7 @@ mergeInto(LibraryManager.library, {
 		// キー入力イベント処理初期化
 
 		// キー押下状態
+		var kbk = false;
 		var kup = false;
 		var kdn = false;
 		var krt = false;
@@ -151,23 +165,28 @@ mergeInto(LibraryManager.library, {
 		var kzb = false;
 		var kxb = false;
 		var kcb = false;
-		var ksb = false;
+		var kvb = false;
 
-		function onKey(){ccall("gameEventKey", "null", ["null", "null", "null", "null", "null", "null", "null", "null"], [kup, kdn, krt, klt, kzb, kxb, kcb, ksb]);}
+		function onKeyBack(){ccall("gameEventKeyBack", "null", ["null"], [kbk]);}
+		function onKeyArrow(){ccall("gameEventKeyArrow", "null", ["null", "null", "null", "null"], [kup, kdn, krt, klt]);}
+		function onKeyZxcv(){ccall("gameEventKeyZxcv", "null", ["null", "null", "null", "null"], [kzb, kxb, kcb, kvb]);}
 
 		// キーを押し込む
 		document.addEventListener("keydown", function(e){
+			var isChangeKeyArrow = false;
+			var isChangeKeyZxcv = false;
 			switch(e.keyCode){
-				case 37: klt = true; break;
-				case 38: kup = true; break;
-				case 39: krt = true; break;
-				case 40: kdn = true; break;
-				case 88: kxb = true; break;
-				case 90: kzb = true; break;
-				case 67: kcb = true; break;
-				case 32: ksb = true; break;
+				case 37: klt = true; isChangeKeyArrow = true; break;
+				case 38: kup = true; isChangeKeyArrow = true; break;
+				case 39: krt = true; isChangeKeyArrow = true; break;
+				case 40: kdn = true; isChangeKeyArrow = true; break;
+				case 90: kzb = true; isChangeKeyZxcv = true; break;
+				case 88: kxb = true; isChangeKeyZxcv = true; break;
+				case 67: kcb = true; isChangeKeyZxcv = true; break;
+				case 86: kvb = true; isChangeKeyZxcv = true; break;
 			}
-			onKey();
+			if(isChangeKeyArrow){onKeyArrow();}
+			if(isChangeKeyZxcv){onKeyZxcv();}
 			// キーイベント終了
 			e.preventDefault();
 			e.stopPropagation();
@@ -175,21 +194,40 @@ mergeInto(LibraryManager.library, {
 
 		// キーを離す
 		document.addEventListener("keyup", function(e){
+			var isChangeKeyArrow = false;
+			var isChangeKeyZxcv = false;
 			switch(e.keyCode){
-				case 37: klt = false; break;
-				case 38: kup = false; break;
-				case 39: krt = false; break;
-				case 40: kdn = false; break;
-				case 88: kxb = false; break;
-				case 90: kzb = false; break;
-				case 67: kcb = false; break;
-				case 32: ksb = false; break;
+				case 37: klt = false; isChangeKeyArrow = true; break;
+				case 38: kup = false; isChangeKeyArrow = true; break;
+				case 39: krt = false; isChangeKeyArrow = true; break;
+				case 40: kdn = false; isChangeKeyArrow = true; break;
+				case 90: kzb = false; isChangeKeyZxcv = true; break;
+				case 88: kxb = false; isChangeKeyZxcv = true; break;
+				case 67: kcb = false; isChangeKeyZxcv = true; break;
+				case 86: kvb = false; isChangeKeyZxcv = true; break;
 			}
-			onKey();
+			if(isChangeKeyArrow){onKeyArrow();}
+			if(isChangeKeyZxcv){onKeyZxcv();}
 			// キーイベント終了
 			e.preventDefault();
 			e.stopPropagation();
 		});
+
+		// 戻るためのハッシュタグ監視
+		(function hashObservation(){
+			var currHash = window.parent.location.hash;
+			var firstHash = "#h0";
+			var secondHash = "#h1";
+			if(currHash == secondHash){
+			}else if(currHash == firstHash){
+				window.parent.location.hash = secondHash;
+				kbk = true; onKeyBack();
+				kbk = false; onKeyBack();
+			}else{
+				window.parent.location.hash = firstHash;
+			}
+			setTimeout(hashObservation, 100);
+		})();
 
 		// ----------------------------------------------------------------
 		// 加速度イベント

@@ -99,16 +99,21 @@ void gameEvenTouch(int index, int tx, int ty, bool tdn){
 	coreEventActivatableUpdate(&touch->dn, tdn);
 }
 
-// キーボードの押下状態変化を報告する
-void gameEventKey(bool kup, bool kdn, bool krt, bool klt, bool kzb, bool kxb, bool kcb, bool ksb){
+// キーの押下状態変化を報告する
+void gameEventKeyBack(bool kbk){
+	coreEventActivatableUpdate(&global.key.bk, kbk);
+}
+void gameEventKeyArrow(bool kup, bool kdn, bool krt, bool klt){
 	coreEventActivatableUpdate(&global.key.up, kup);
 	coreEventActivatableUpdate(&global.key.dn, kdn);
 	coreEventActivatableUpdate(&global.key.rt, krt);
 	coreEventActivatableUpdate(&global.key.lt, klt);
+}
+void gameEventKeyZxcv(bool kzb, bool kxb, bool kcb, bool kvb){
 	coreEventActivatableUpdate(&global.key.zb, kzb);
 	coreEventActivatableUpdate(&global.key.xb, kxb);
 	coreEventActivatableUpdate(&global.key.cb, kcb);
-	coreEventActivatableUpdate(&global.key.sb, ksb);
+	coreEventActivatableUpdate(&global.key.vb, kvb);
 }
 
 // 傾きの状態を報告する

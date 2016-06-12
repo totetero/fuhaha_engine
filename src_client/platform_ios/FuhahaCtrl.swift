@@ -10,10 +10,12 @@ class FuhahaCtrl{
 	internal var t1id: Int = -1;
 	internal var t1x: Int32 = 0;
 	internal var t1y: Int32 = 0;
+	internal var t1trigger: Bool = false;
 	// タッチ2情報
 	internal var t2id: Int = -1;
 	internal var t2x: Int32 = 0;
 	internal var t2y: Int32 = 0;
+	internal var t2trigger: Bool = false;
 	// 加速度センサー
 	internal let motionManager: CMMotionManager;
 
@@ -34,8 +36,10 @@ class FuhahaCtrl{
 	// ----------------------------------------------------------------
 
 	func onTouch(){
-		gameEvenTouch(0, t1x, t1y, (t1id >= 0));
-		gameEvenTouch(1, t2x, t2y, (t2id >= 0));
+		if(self.t1trigger){gameEvenTouch(0, self.t1x, self.t1y, (self.t1id >= 0))};
+		if(self.t2trigger){gameEvenTouch(1, self.t2x, self.t2y, (self.t2id >= 0))};
+		self.t1trigger = false;
+		self.t2trigger = false;
 	}
 
 	// タッチ開始
@@ -43,14 +47,16 @@ class FuhahaCtrl{
 		for touch: UITouch in touches{
 			let tid: Int = touch.hash;
 			let point: CGPoint = touch.locationInView(view);
-			if(t1id < 0){
-				t1x = Int32(point.x);
-				t1y = Int32(point.y);
-				t1id = tid;
-			}else if(t2id < 0){
-				t2x = Int32(point.x);
-				t2y = Int32(point.y);
-				t2id = tid;
+			if(self.t1id < 0){
+				self.t1x = Int32(point.x);
+				self.t1y = Int32(point.y);
+				self.t1id = tid;
+				self.t1trigger = true;
+			}else if(self.t2id < 0){
+				self.t2x = Int32(point.x);
+				self.t2y = Int32(point.y);
+				self.t2id = tid;
+				self.t2trigger = true;
 			}
 		}
 		self.onTouch();
@@ -61,12 +67,14 @@ class FuhahaCtrl{
 		for touch: UITouch in touches{
 			let tid: Int = touch.hash;
 			let point: CGPoint = touch.locationInView(view);
-			if(t1id == tid){
-				t1x = Int32(point.x);
-				t1y = Int32(point.y);
-			}else if(t2id == tid){
-				t2x = Int32(point.x);
-				t2y = Int32(point.y);
+			if(self.t1id == tid){
+				self.t1x = Int32(point.x);
+				self.t1y = Int32(point.y);
+				self.t1trigger = true;
+			}else if(self.t2id == tid){
+				self.t2x = Int32(point.x);
+				self.t2y = Int32(point.y);
+				self.t2trigger = true;
 			}
 		}
 		self.onTouch();
@@ -77,14 +85,16 @@ class FuhahaCtrl{
 		for touch: UITouch in touches{
 			let tid: Int = touch.hash;
 			let point: CGPoint = touch.locationInView(view);
-			if(t1id == tid){
-				t1x = Int32(point.x);
-				t1y = Int32(point.y);
-				t1id = -1;
-			}else if(t2id == tid){
-				t2x = Int32(point.x);
-				t2y = Int32(point.y);
-				t2id = -1;
+			if(self.t1id == tid){
+				self.t1x = Int32(point.x);
+				self.t1y = Int32(point.y);
+				self.t1id = -1;
+				self.t1trigger = true;
+			}else if(self.t2id == tid){
+				self.t2x = Int32(point.x);
+				self.t2y = Int32(point.y);
+				self.t2id = -1;
+				self.t2trigger = true;
 			}
 		}
 		self.onTouch();
@@ -95,14 +105,16 @@ class FuhahaCtrl{
 		for touch: UITouch in touches{
 			let tid: Int = touch.hash;
 			let point: CGPoint = touch.locationInView(view);
-			if(t1id == tid){
-				t1x = Int32(point.x);
-				t1y = Int32(point.y);
-				t1id = -1;
-			}else if(t2id == tid){
-				t2x = Int32(point.x);
-				t2y = Int32(point.y);
-				t2id = -1;
+			if(self.t1id == tid){
+				self.t1x = Int32(point.x);
+				self.t1y = Int32(point.y);
+				self.t1id = -1;
+				self.t1trigger = true;
+			}else if(self.t2id == tid){
+				self.t2x = Int32(point.x);
+				self.t2y = Int32(point.y);
+				self.t2id = -1;
+				self.t2trigger = true;
 			}
 		}
 		self.onTouch();

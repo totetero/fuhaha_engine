@@ -73,9 +73,15 @@ JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaCtrl_gameEvenTouch(JNIEnv 
 	gameEvenTouch(index, tx, ty, tdn);
 }
 
-// キーボードの押下状態変化を報告する
-JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaCtrl_gameEventKey(JNIEnv *env, jobject obj, jboolean kup, jboolean kdn, jboolean krt, jboolean klt, jboolean kzb, jboolean kxb, jboolean kcb, jboolean ksb){
-	gameEventKey(kup, kdn, krt, klt, kzb, kxb, kcb, ksb);
+// キーの押下状態変化を報告する
+JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaCtrl_gameEventKeyBack(JNIEnv *env, jobject obj, jboolean kbk){
+	gameEventKeyBack(kbk);
+}
+JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaCtrl_gameEventKeyArrow(JNIEnv *env, jobject obj, jboolean kup, jboolean kdn, jboolean krt, jboolean klt){
+	gameEventKeyArrow(kup, kdn, krt, klt);
+}
+JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaCtrl_gameEventKeyZxcv(JNIEnv *env, jobject obj, jboolean kzb, jboolean kxb, jboolean kcb, jboolean kvb){
+	gameEventKeyZxcv(kzb, kxb, kcb, kvb);
 }
 
 // 傾きの状態を報告する

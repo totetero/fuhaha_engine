@@ -2,6 +2,7 @@ package com.totetero.fuhaha;
 
 import android.app.Activity;
 import android.view.MotionEvent;
+import android.view.KeyEvent;
 
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
@@ -89,7 +90,12 @@ public class FuhahaGLView extends GLSurfaceView implements Renderer{
 
 	// タッチイベント
 	public boolean onTouchEvent(MotionEvent event){
-		return this.fuhahaCtrl.onTouchEvent(event);
+		return this.fuhahaCtrl.onTouchEvent(event) || super.onTouchEvent(event);
+	}
+
+	// キーイベント
+	public boolean dispatchKeyEvent(KeyEvent event){
+		return this.fuhahaCtrl.dispatchKeyEvent(event) || super.dispatchKeyEvent(event);
 	}
 
 	// ----------------------------------------------------------------

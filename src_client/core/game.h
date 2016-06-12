@@ -48,8 +48,9 @@ extern struct global{
 	} screen;
 	// タッチ状態
 	struct touch touch[2];
-	// キーボード状態
+	// キー状態
 	struct{
+		struct activatable bk;
 		struct activatable up;
 		struct activatable dn;
 		struct activatable rt;
@@ -57,7 +58,7 @@ extern struct global{
 		struct activatable zb;
 		struct activatable xb;
 		struct activatable cb;
-		struct activatable sb;
+		struct activatable vb;
 	} key;
 	// 加速度状態
 	struct{
@@ -93,8 +94,10 @@ void gameSurfaceDestroy(void);
 
 // タッチの状態を報告する
 void gameEvenTouch(int index, int tx, int ty, bool tdn);
-// キーボードの押下状態変化を報告する
-void gameEventKey(bool kup, bool kdn, bool krt, bool klt, bool kzb, bool kxb, bool kcb, bool ksb);
+// キーの押下状態変化を報告する
+void gameEventKeyBack(bool kbk);
+void gameEventKeyArrow(bool kup, bool kdn, bool krt, bool klt);
+void gameEventKeyZxcv(bool kzb, bool kxb, bool kcb, bool kvb);
 // 傾きの状態を報告する
 void gameEventAcceleration(double accx, double accy, double accz);
 
