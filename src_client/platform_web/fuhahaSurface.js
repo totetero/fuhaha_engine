@@ -41,6 +41,8 @@ mergeInto(LibraryManager.library, {
 	// アプリ終了命令
 	platformSurfaceExit: function(){
 		globalWebFuhahaSurface.isExit = true;
+		Module['noExitRuntime'] = false;
+		Module['exit'](1);
 	},
 
 	// ----------------------------------------------------------------
