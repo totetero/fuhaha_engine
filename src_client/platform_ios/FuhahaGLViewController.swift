@@ -88,6 +88,13 @@ class FuhahaGLViewController: GLKViewController{
 
 	// ----------------------------------------------------------------
 
+	// アプリ終了命令
+	static internal func platformSurfaceExit(){
+		exit(1);
+	}
+
+	// ----------------------------------------------------------------
+
 	// メモリがやばい
 	override func didReceiveMemoryWarning(){
 		super.didReceiveMemoryWarning();

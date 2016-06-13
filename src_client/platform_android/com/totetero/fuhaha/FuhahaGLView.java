@@ -99,6 +99,13 @@ public class FuhahaGLView extends GLSurfaceView implements Renderer{
 	}
 
 	// ----------------------------------------------------------------
+
+	// アプリ終了命令
+	public static void platformSurfaceExit(){
+		FuhahaGLView.activity.finish();
+	}
+
+	// ----------------------------------------------------------------
 }
 
 // ----------------------------------------------------------------

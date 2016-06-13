@@ -1,8 +1,4 @@
-#import "fuhaha-Swift.h"
-#include "library.h"
-#include "platform.h"
-#include "native.h"
-#include "pluginEnpty.h"
+#pragma once
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

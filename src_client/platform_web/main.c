@@ -6,7 +6,7 @@
 void webPluginUtilInit(void);
 void webPluginSoundInit(void);
 void webPluginEnptyInit(void);
-void webFuhahaScreenInit(void);
+void webFuhahaSurfaceInit(void);
 void webFuhahaCtrlInit(void);
 
 // ----------------------------------------------------------------
@@ -31,7 +31,7 @@ int main(void){
 		webPluginSoundInit();
 		webPluginEnptyInit();
 		gameSurfaceCreated();
-		webFuhahaScreenInit();
+		webFuhahaSurfaceInit();
 		webFuhahaCtrlInit();
 		emscripten_set_main_loop(mainloop, 0, 1);
 	}

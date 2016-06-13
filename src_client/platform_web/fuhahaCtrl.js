@@ -71,7 +71,7 @@ mergeInto(LibraryManager.library, {
 			e.stopPropagation();
 
 			// タッチしないと音を再生開始しない端末のための無音再生
-			if(platformSound && platformSound.soundTouch){platformSound.soundTouch();}
+			if(globalWebPluginSound && globalWebPluginSound.soundTouch){globalWebPluginSound.soundTouch();}
 		}
 
 		// タッチ移動関数
@@ -218,15 +218,24 @@ mergeInto(LibraryManager.library, {
 			var currHash = window.parent.location.hash;
 			var firstHash = "#h0";
 			var secondHash = "#h1";
-			if(currHash == secondHash){
-			}else if(currHash == firstHash){
-				window.parent.location.hash = secondHash;
-				kbk = true; onKeyBack();
-				kbk = false; onKeyBack();
+			if(!(globalWebFuhahaSurface && globalWebFuhahaSurface.isExit)){
+				if(currHash == secondHash){
+				}else if(currHash == firstHash){
+					window.parent.location.hash = secondHash;
+					kbk = true; onKeyBack();
+					kbk = false; onKeyBack();
+				}else{
+					window.parent.location.hash = firstHash;
+				}
+				setTimeout(hashObservation, 100);
 			}else{
-				window.parent.location.hash = firstHash;
+				// 終了状態なので監視をやめる
+				if(currHash == secondHash){
+					window.parent.history.back();
+				}else if(currHash == firstHash){
+				}else{
+				}
 			}
-			setTimeout(hashObservation, 100);
 		})();
 
 		// ----------------------------------------------------------------

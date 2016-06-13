@@ -90,6 +90,16 @@ JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaCtrl_gameEventAcceleration
 }
 
 // ----------------------------------------------------------------
+
+// アプリ終了命令
+void platformSurfaceExit(void){
+	JNIEnv *env = getJNIEnv();
+	jclass cls = (*env)->FindClass(env, "com/totetero/fuhaha/FuhahaGLView");
+	jmethodID mid = (*env)->GetStaticMethodID(env, cls, "platformSurfaceExit", "()V");
+	(*env)->CallStaticVoidMethod(env, cls, mid);
+}
+
+// ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
