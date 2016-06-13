@@ -15,6 +15,7 @@ mergeInto(LibraryManager.library, {
 
 		// 画面サイズ変更処理初期化
 		var resizeCanvas = function(){
+			if(globalWebFuhahaSurface && globalWebFuhahaSurface.isExit){return;}
 			var w = window.innerWidth;
 			var h = window.innerHeight;
 			var pixelRatio = window.devicePixelRatio;

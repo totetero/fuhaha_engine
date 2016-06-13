@@ -41,6 +41,7 @@ mergeInto(LibraryManager.library, {
 
 		// タッチ開始関数
 		function tdnfn(e){
+			if(globalWebFuhahaSurface && globalWebFuhahaSurface.isExit){return;}
 			var rect = Module.canvas.getBoundingClientRect();
 			if(isTouch){
 				for(var i = 0; i < e.changedTouches.length; i++){
@@ -76,6 +77,7 @@ mergeInto(LibraryManager.library, {
 
 		// タッチ移動関数
 		function tmvfn(e){
+			if(globalWebFuhahaSurface && globalWebFuhahaSurface.isExit){return;}
 			var rect = Module.canvas.getBoundingClientRect();
 			if(isTouch){
 				for(var i = 0; i < e.changedTouches.length; i++){
@@ -103,6 +105,7 @@ mergeInto(LibraryManager.library, {
 
 		// タッチ完了関数
 		function tupfn(e){
+			if(globalWebFuhahaSurface && globalWebFuhahaSurface.isExit){return;}
 			var rect = Module.canvas.getBoundingClientRect();
 			if(isTouch){
 				for(var i = 0; i < e.changedTouches.length; i++){
@@ -173,6 +176,7 @@ mergeInto(LibraryManager.library, {
 
 		// キーを押し込む
 		document.addEventListener("keydown", function(e){
+			if(globalWebFuhahaSurface && globalWebFuhahaSurface.isExit){return;}
 			var isChangeKeyArrow = false;
 			var isChangeKeyZxcv = false;
 			switch(e.keyCode){
@@ -194,6 +198,7 @@ mergeInto(LibraryManager.library, {
 
 		// キーを離す
 		document.addEventListener("keyup", function(e){
+			if(globalWebFuhahaSurface && globalWebFuhahaSurface.isExit){return;}
 			var isChangeKeyArrow = false;
 			var isChangeKeyZxcv = false;
 			switch(e.keyCode){
@@ -215,33 +220,26 @@ mergeInto(LibraryManager.library, {
 
 		// 戻るためのハッシュタグ監視
 		(function hashObservation(){
+			if(globalWebFuhahaSurface && globalWebFuhahaSurface.isExit){return;}
 			var currHash = window.parent.location.hash;
 			var firstHash = "#h0";
 			var secondHash = "#h1";
-			if(!(globalWebFuhahaSurface && globalWebFuhahaSurface.isExit)){
-				if(currHash == secondHash){
-				}else if(currHash == firstHash){
-					window.parent.location.hash = secondHash;
-					kbk = true; onKeyBack();
-					kbk = false; onKeyBack();
-				}else{
-					window.parent.location.hash = firstHash;
-				}
-				setTimeout(hashObservation, 100);
+			if(currHash == secondHash){
+			}else if(currHash == firstHash){
+				window.parent.location.hash = secondHash;
+				kbk = true; onKeyBack();
+				kbk = false; onKeyBack();
 			}else{
-				// 終了状態なので監視をやめる
-				if(currHash == secondHash){
-					window.parent.history.back();
-				}else if(currHash == firstHash){
-				}else{
-				}
+				window.parent.location.hash = firstHash;
 			}
+			setTimeout(hashObservation, 100);
 		})();
 
 		// ----------------------------------------------------------------
 		// 加速度イベント
 
 		window.addEventListener("devicemotion", function(e){
+			if(globalWebFuhahaSurface && globalWebFuhahaSurface.isExit){return;}
 			var accx = e.accelerationIncludingGravity.x;
 			var accy = e.accelerationIncludingGravity.y;
 			var accz = e.accelerationIncludingGravity.z;
