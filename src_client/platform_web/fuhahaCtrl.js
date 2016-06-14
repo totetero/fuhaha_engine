@@ -229,22 +229,26 @@ mergeInto(LibraryManager.library, {
 		}
 		// 戻るためのハッシュタグ監視
 		(function hashObservation(){
-			if(globalWebFuhahaSurface && globalWebFuhahaSurface.isExit){return;}
-			var currHash = window.parent.location.hash;
-			if(currHash == thirdHash){
-			}else if(currHash == secondHash){
-				window.parent.location.hash = thirdHash;
-				if(isHashInit){
-					// 戻るコマンド
-					kbk = true; onKeyBack();
-					kbk = false; onKeyBack();
+			if(!(globalWebFuhahaSurface && globalWebFuhahaSurface.isExit)){
+				var currHash = window.parent.location.hash;
+				if(currHash == thirdHash){
+				}else if(currHash == secondHash){
+					window.parent.location.hash = thirdHash;
+					if(isHashInit){
+						// 戻るコマンド
+						kbk = true; onKeyBack();
+						kbk = false; onKeyBack();
+					}else{
+						isHashInit = true;
+					}
 				}else{
-					isHashInit = true;
+					window.parent.location.hash = secondHash;
 				}
+				setTimeout(hashObservation, 100);
 			}else{
-				window.parent.location.hash = secondHash;
+				// 終了状態処理 とりあえず一つ戻っておく
+				window.parent.history.back();
 			}
-			setTimeout(hashObservation, 100);
 		})();
 
 		// ----------------------------------------------------------------
