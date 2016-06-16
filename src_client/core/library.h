@@ -10,6 +10,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <float.h>
 
 // 型定義
 typedef unsigned char byte;

@@ -14,6 +14,13 @@ CFLAGS = -I$(PLATSRCDIR) -I$(CORESRCDIR)
 EXFLAGS = -s EXPORTED_FUNCTIONS="$(shell sh $(PLATSRCDIR)/exFuncs.sh)"
 JSFLAGS = $(addprefix --js-library , $(JSSRCS))
 
+CFLAGS += -Wall -Wextra -Wpedantic -Werror 
+CFLAGS += -Wfloat-equal
+CFLAGS += -Wno-missing-field-initializers
+CFLAGS += -Wno-missing-braces
+CFLAGS += -Wno-char-subscripts
+CFLAGS += -Wno-unused-parameter
+
 .PHONY : default debug release build clean
 
 default: debug 

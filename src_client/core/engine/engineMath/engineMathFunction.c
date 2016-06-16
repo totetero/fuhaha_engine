@@ -21,7 +21,7 @@ double engineMathFloor(double x){return floor(x);}
 // 平方根を求める
 double engineMathSqrt(double x){
 	if(x < 0){return NAN;}
-	if(x == 0){return 0;}
+	if(engineMathAbs(x) < DBL_EPSILON){return 0;}
 	// ニュートン法で求める
 	double t = x * 0.5;
 	for(int i = 1; i < 20; i++){
@@ -46,7 +46,7 @@ double engineMathCos(double x){return engineMathSin(ENGINEMATH_PI * 0.5 - x);}
 
 // 逆三角関数を求める
 static double engineMathAtan1(double x){
-	if(x == 0){return 0;}
+	if(engineMathAbs(x) < DBL_EPSILON){return 0;}
 	if(isnan(x)){return x;}
 	if(isinf(x)){return (x > 0 ? 0.5 : -0.5) * ENGINEMATH_PI;}
 	if(x >  1){return  ENGINEMATH_PI * 0.5 - engineMathAtan1(1 / x);}
@@ -65,7 +65,7 @@ double engineMathAsin(double x){
 double engineMathAcos(double x){
 	if(x >  1){return 0;}
 	if(x < -1){return ENGINEMATH_PI;}
-	if(x == 0){return ENGINEMATH_PI * 0.5;}
+	if(engineMathAbs(x) < DBL_EPSILON){return ENGINEMATH_PI * 0.5;}
 	return engineMathAtan1(engineMathSqrt(1 - x * x) / x);
 }
 double engineMathAtan2(double y, double x){

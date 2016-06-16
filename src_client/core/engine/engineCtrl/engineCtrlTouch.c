@@ -26,7 +26,7 @@ static struct{
 
 // コントローラ状態メインループ計算
 void engineCtrlTouchCalc(void){
-	for(int i = 0; i < (sizeof(localGlobal.list) / sizeof(*localGlobal.list)); i++){
+	for(int i = 0; i < (int)(sizeof(localGlobal.list) / sizeof(*localGlobal.list)); i++){
 		struct engineCtrlTouchLocal *localTouch = &localGlobal.list[i];
 		struct touch *globalTouch = &global.touch[i];
 		if(globalTouch->dn.triggerActive){
@@ -69,7 +69,7 @@ void engineCtrlTouchCalc(void){
 struct engineCtrlTouch *engineCtrlTouchGet(enum engineCtrlTouchId touchId){
 	localGlobal.tempTouchId = touchId;
 	// 自分で占有済みのタッチ情報を探す
-	for(int i = 0; i < (sizeof(localGlobal.list) / sizeof(*localGlobal.list)); i++){
+	for(int i = 0; i < (int)(sizeof(localGlobal.list) / sizeof(*localGlobal.list)); i++){
 		localGlobal.tempTouch = &localGlobal.list[i];
 		if(!localGlobal.tempTouch->trigger && localGlobal.tempTouch->touchId == touchId){
 			localGlobal.tempTouch->touch.active = true;
@@ -77,7 +77,7 @@ struct engineCtrlTouch *engineCtrlTouchGet(enum engineCtrlTouchId touchId){
 		}
 	}
 	// 占有されていないタッチ情報を探す
-	for(int i = 0; i < (sizeof(localGlobal.list) / sizeof(*localGlobal.list)); i++){
+	for(int i = 0; i < (int)(sizeof(localGlobal.list) / sizeof(*localGlobal.list)); i++){
 		localGlobal.tempTouch = &localGlobal.list[i];
 		if(localGlobal.tempTouch->trigger){
 			localGlobal.tempTouch->touch.active = false;

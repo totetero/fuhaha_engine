@@ -90,7 +90,7 @@ void coreEventActivatableUpdate(struct activatable *this, bool isActive){
 
 // タッチの状態を報告する
 void gameEvenTouch(int index, int tx, int ty, bool tdn){
-	if(index >= (sizeof(global.touch) / sizeof(*global.touch))){return;}
+	if(index >= (int)(sizeof(global.touch) / sizeof(*global.touch))){return;}
 	struct touch *touch = &global.touch[index];
 	touch->window.x = tx;
 	touch->window.y = ty;

@@ -202,7 +202,7 @@ void engineMathMat4Invert(struct engineMathMatrix44 *mat){
 	double b10 = a.m21 * a.m33 - a.m23 * a.m31;
 	double b11 = a.m22 * a.m33 - a.m23 * a.m32;
 	double det = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
-	if(det == 0){return;}
+	if(engineMathAbs(det) < DBL_EPSILON){return;}
 	double idet = 1 / det;
 	mat->m00 = (a.m11 * b11 - a.m12 * b10 + a.m13 * b09) * idet;
 	mat->m01 = (a.m02 * b10 - a.m01 * b11 - a.m03 * b09) * idet;
