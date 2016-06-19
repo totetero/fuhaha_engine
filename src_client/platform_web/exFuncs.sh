@@ -5,12 +5,12 @@
 # ----------------------------------------------------------------
 
 VALUE="'_main'"
-VALUE=${VALUE}", '_gameSurfaceChanged'"
-VALUE=${VALUE}", '_gameEvenTouch'"
-VALUE=${VALUE}", '_gameEventKeyBack'"
-VALUE=${VALUE}", '_gameEventKeyArrow'"
-VALUE=${VALUE}", '_gameEventKeyZxcv'"
-VALUE=${VALUE}", '_gameEventAcceleration'"
+VALUE=${VALUE}", '_gameMainEventScreen'"
+VALUE=${VALUE}", '_gameMainEventTouch'"
+VALUE=${VALUE}", '_gameMainEventKeyBack'"
+VALUE=${VALUE}", '_gameMainEventKeyArrow'"
+VALUE=${VALUE}", '_gameMainEventKeyZxcv'"
+VALUE=${VALUE}", '_gameMainEventAcceleration'"
 VALUE=${VALUE}", '_corePluginUtilTemporaryBuffer'"
 VALUE=${VALUE}", '_gamePluginUtilUrlGet'"
 VALUE=${VALUE}", '_gamePluginDataCallbackSet'"

@@ -10,13 +10,39 @@ mergeInto(LibraryManager.library, {
 	// ゲーム初期化完了後のプラットフォーム初期化
 	webFuhahaCtrlInit: function(){
 		// ----------------------------------------------------------------
-		// タッチ入力イベント処理初期化
 
 		var ua = window.navigator.userAgent;
 		var isIos = false;
 		if(ua.indexOf('iPhone') > 0){isIos = true;}
 		if(ua.indexOf('iPad') > 0){isIos = true;}
 		if(ua.indexOf('iPod') > 0){isIos = true;}
+
+		// ----------------------------------------------------------------
+		// 画面サイズ変更処理初期化
+
+		var resizeCanvas = function(){
+			if(globalWebFuhahaSurface && globalWebFuhahaSurface.isExit){return;}
+			var w = window.innerWidth;
+			var h = window.innerHeight;
+			var pixelRatio = window.devicePixelRatio;
+			Module.setCanvasSize(w * pixelRatio, h * pixelRatio);
+			Module.canvas.width = w * pixelRatio;
+			Module.canvas.height = h * pixelRatio;
+			Module.canvas.style.width = w + "px";
+			Module.canvas.style.height = h + "px";
+			Module.canvas.style.marginLeft = (w * -0.5) + "px";
+			Module.canvas.style.marginTop = (h * -0.5) + "px";
+			ccall("gameMainEventScreen", null, [null, null, null], [w, h, pixelRatio]);
+		};
+		var resizeTimer;
+		window.addEventListener("resize", function(e){
+			clearTimeout(resizeTimer);
+			resizeTimer = setTimeout(resizeCanvas, 300);
+		});
+		resizeCanvas();
+
+		// ----------------------------------------------------------------
+		// タッチ入力イベント処理初期化
 
 		var isTouch = ('ontouchstart' in window);
 		// タッチ1状態
@@ -33,8 +59,8 @@ mergeInto(LibraryManager.library, {
 		var t2trigger = false;
 
 		function onTouch(){
-			if(t1trigger){ccall("gameEvenTouch", "null", ["null", "null", "null", "null"], [0, t1x, t1y, t1dn])};
-			if(t2trigger){ccall("gameEvenTouch", "null", ["null", "null", "null", "null"], [1, t2x, t2y, t2dn])};
+			if(t1trigger){ccall("gameMainEventTouch", "null", ["null", "null", "null", "null"], [0, t1x, t1y, t1dn])};
+			if(t2trigger){ccall("gameMainEventTouch", "null", ["null", "null", "null", "null"], [1, t2x, t2y, t2dn])};
 			t1trigger = false;
 			t2trigger = false;
 		}
@@ -170,9 +196,9 @@ mergeInto(LibraryManager.library, {
 		var kcb = false;
 		var kvb = false;
 
-		function onKeyBack(){ccall("gameEventKeyBack", "null", ["null"], [kbk]);}
-		function onKeyArrow(){ccall("gameEventKeyArrow", "null", ["null", "null", "null", "null"], [kup, kdn, krt, klt]);}
-		function onKeyZxcv(){ccall("gameEventKeyZxcv", "null", ["null", "null", "null", "null"], [kzb, kxb, kcb, kvb]);}
+		function onKeyBack(){ccall("gameMainEventKeyBack", "null", ["null"], [kbk]);}
+		function onKeyArrow(){ccall("gameMainEventKeyArrow", "null", ["null", "null", "null", "null"], [kup, kdn, krt, klt]);}
+		function onKeyZxcv(){ccall("gameMainEventKeyZxcv", "null", ["null", "null", "null", "null"], [kzb, kxb, kcb, kvb]);}
 
 		// キーを押し込む
 		document.addEventListener("keydown", function(e){
@@ -261,7 +287,7 @@ mergeInto(LibraryManager.library, {
 				var accy = e.accelerationIncludingGravity.y;
 				var accz = e.accelerationIncludingGravity.z;
 				if(isIos){accx *= -1; accy *= -1; accz *= -1;}
-				ccall("gameEventAcceleration", "null", ["null", "null", "null"], [accx, accy, accz]);
+				ccall("gameMainEventAcceleration", "null", ["null", "null", "null"], [accx, accy, accz]);
 			});
 		}
 

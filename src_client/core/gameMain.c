@@ -1,16 +1,30 @@
-#import "fuhaha-Swift.h"
 #include "library.h"
 #include "platform.h"
-#include "native.h"
+#include "engine/engineMath/engineMath.h"
+#include "engine/engineGraphic/engineGraphic.h"
 #include "game.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-// アプリ終了命令
-void platformMainSurfaceExit(void){
-	[FuhahaGLViewController platformMainSurfaceExit];
+// opengl初期化
+void gameMainSurfaceCreated(void){
+	engineGraphicGameInit();
+}
+
+// opengl描画
+void gameMainSurfaceDrawFrame(void){
+	engineGraphicSampleCode();
+}
+
+// opengl中断
+void gameMainSurfacePause(void){
+}
+
+// opengl終了
+void gameMainSurfaceDestroy(void){
+	engineGraphicGameExit();
 }
 
 // ----------------------------------------------------------------

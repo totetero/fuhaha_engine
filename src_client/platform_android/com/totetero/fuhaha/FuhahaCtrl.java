@@ -41,11 +41,11 @@ public class FuhahaCtrl implements SensorEventListener{
 
 	// JNI連携
 	static{System.loadLibrary("fuhaha_native");}
-	public static native void gameEvenTouch(int index, int tx, int ty, boolean tdn);
-	public static native void gameEventKeyBack(boolean kbk);
-	public static native void gameEventKeyArrow(boolean kup, boolean kdn, boolean krt, boolean klt);
-	public static native void gameEventKeyZxcv(boolean kzb, boolean kxb, boolean kcb, boolean kvb);
-	public static native void gameEventAcceleration(double accx, double accy, double accz);
+	public static native void gameMainEventTouch(int index, int tx, int ty, boolean tdn);
+	public static native void gameMainEventKeyBack(boolean kbk);
+	public static native void gameMainEventKeyArrow(boolean kup, boolean kdn, boolean krt, boolean klt);
+	public static native void gameMainEventKeyZxcv(boolean kzb, boolean kxb, boolean kcb, boolean kvb);
+	public static native void gameMainEventAcceleration(double accx, double accy, double accz);
 
 	// ----------------------------------------------------------------
 
@@ -127,8 +127,8 @@ public class FuhahaCtrl implements SensorEventListener{
 		}
 
 		// タッチ情報をjniに送信
-		if(isChangeTouch1){FuhahaCtrl.gameEvenTouch(0, this.t1x, this.t1y, (this.t1id >= 0));}
-		if(isChangeTouch2){FuhahaCtrl.gameEvenTouch(1, this.t2x, this.t2y, (this.t2id >= 0));}
+		if(isChangeTouch1){FuhahaCtrl.gameMainEventTouch(0, this.t1x, this.t1y, (this.t1id >= 0));}
+		if(isChangeTouch2){FuhahaCtrl.gameMainEventTouch(1, this.t2x, this.t2y, (this.t2id >= 0));}
 
 		return true;
 	}
@@ -169,9 +169,9 @@ public class FuhahaCtrl implements SensorEventListener{
 		}
 
 		if(isChangeKeyBack || isChangeKeyArrow || isChangeKeyZxcv){
-			if(isChangeKeyBack){FuhahaCtrl.gameEventKeyBack(this.kbk);}
-			if(isChangeKeyArrow){FuhahaCtrl.gameEventKeyArrow(this.kup, this.kdn, this.krt, this.klt);}
-			if(isChangeKeyZxcv){FuhahaCtrl.gameEventKeyZxcv(this.kzb, this.kxb, this.kcb, this.kvb);}
+			if(isChangeKeyBack){FuhahaCtrl.gameMainEventKeyBack(this.kbk);}
+			if(isChangeKeyArrow){FuhahaCtrl.gameMainEventKeyArrow(this.kup, this.kdn, this.krt, this.klt);}
+			if(isChangeKeyZxcv){FuhahaCtrl.gameMainEventKeyZxcv(this.kzb, this.kxb, this.kcb, this.kvb);}
 			return true;
 		}
 		return false;
@@ -186,7 +186,7 @@ public class FuhahaCtrl implements SensorEventListener{
 	public void onSensorChanged(SensorEvent event){
 		if(event.sensor.getType() == Sensor.TYPE_ACCELEROMETER){
 			// androidの軸方向を基準とする、最大値は知らん
-			FuhahaCtrl.gameEventAcceleration(event.values[0], event.values[1], event.values[2]);
+			FuhahaCtrl.gameMainEventAcceleration(event.values[0], event.values[1], event.values[2]);
 		}
 	}
 

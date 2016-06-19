@@ -26,18 +26,19 @@ class FuhahaGLViewController: GLKViewController{
 		// controller
 		self.fuhahaCtrl = FuhahaCtrl();
 
-		gameSurfaceCreated();
+		gameMainSurfaceCreated();
+		gameMainEventInit();
 	}
 
 	// 描画時
 	override func glkView(view: GLKView, drawInRect rect: CGRect){
-		gameSurfaceDrawFrame();
+		gameMainSurfaceDrawFrame();
 	}
 
 	// 画面サイズ変更時
 	override func viewDidLayoutSubviews(){
 		super.viewDidLayoutSubviews();
-		gameSurfaceChanged(Int32(self.view.frame.size.width), Int32(self.view.frame.size.height), 1.0);
+		gameMainEventScreen(Int32(self.view.frame.size.width), Int32(self.view.frame.size.height), 1.0);
 	}
 
 	// ----------------------------------------------------------------
@@ -48,7 +49,7 @@ class FuhahaGLViewController: GLKViewController{
 
 	// ライフタイムイベント アプリ閉じた
 	static internal func applicationDidEnterBackground(){
-		gameSurfacePause();
+		gameMainSurfacePause();
 	}
 
 	// ライフタイムイベント アプリ開きそう
@@ -61,7 +62,7 @@ class FuhahaGLViewController: GLKViewController{
 
 	// ライフタイムイベント フリックしてアプリを終了させた
 	static internal func applicationWillTerminate(){
-		gameSurfaceDestroy();
+		gameMainSurfaceDestroy();
 	}
 
 	// ----------------------------------------------------------------
@@ -89,7 +90,7 @@ class FuhahaGLViewController: GLKViewController{
 	// ----------------------------------------------------------------
 
 	// アプリ終了命令
-	static internal func platformSurfaceExit(){
+	static internal func platformMainSurfaceExit(){
 		exit(1);
 	}
 
@@ -98,7 +99,7 @@ class FuhahaGLViewController: GLKViewController{
 	// メモリがやばい
 	override func didReceiveMemoryWarning(){
 		super.didReceiveMemoryWarning();
-		gameSurfaceDestroy();
+		gameMainSurfaceDestroy();
 		if(self.isViewLoaded() && (self.view.window != nil)){
 			self.view = nil;
 			if(EAGLContext.currentContext() === self.context){
@@ -110,7 +111,7 @@ class FuhahaGLViewController: GLKViewController{
 
 	// 解放時
 	deinit{
-		gameSurfaceDestroy();
+		gameMainSurfaceDestroy();
 		if(EAGLContext.currentContext() === self.context){
 			EAGLContext.setCurrentContext(nil);
 		}

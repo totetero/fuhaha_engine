@@ -17,7 +17,7 @@ class FuhahaCtrl{
 	internal var t2y: Int32 = 0;
 	internal var t2trigger: Bool = false;
 	// 加速度センサー
-	internal let motionManager: CMMotionManager;
+	internal let motionManager: CMMotionManager?;
 
 	// ----------------------------------------------------------------
 
@@ -26,20 +26,22 @@ class FuhahaCtrl{
 		if(true){
 			// 加速度センサー
 			self.motionManager = CMMotionManager();
-			self.motionManager.accelerometerUpdateInterval = 0.05;
-			self.motionManager.startAccelerometerUpdatesToQueue(NSOperationQueue.currentQueue()!, withHandler: {(data: CMAccelerometerData?, error: NSError?) -> Void in
+			self.motionManager!.accelerometerUpdateInterval = 0.05;
+			self.motionManager!.startAccelerometerUpdatesToQueue(NSOperationQueue.currentQueue()!, withHandler: {(data: CMAccelerometerData?, error: NSError?) -> Void in
 				if(data == nil){return;}
 				// androidの軸方向に合わせる、最大値は知らん
-				gameEventAcceleration(-data!.acceleration.x, -data!.acceleration.y, -data!.acceleration.z);
+				gameMainEventAcceleration(-data!.acceleration.x, -data!.acceleration.y, -data!.acceleration.z);
 			});
+		}else{
+			self.motionManager = nil;
 		}
 	}
 
 	// ----------------------------------------------------------------
 
 	func onTouch(){
-		if(self.t1trigger){gameEvenTouch(0, self.t1x, self.t1y, (self.t1id >= 0))};
-		if(self.t2trigger){gameEvenTouch(1, self.t2x, self.t2y, (self.t2id >= 0))};
+		if(self.t1trigger){gameMainEventTouch(0, self.t1x, self.t1y, (self.t1id >= 0))};
+		if(self.t2trigger){gameMainEventTouch(1, self.t2x, self.t2y, (self.t2id >= 0))};
 		self.t1trigger = false;
 		self.t2trigger = false;
 	}

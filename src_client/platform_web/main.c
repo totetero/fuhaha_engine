@@ -20,7 +20,7 @@ static int init(void){
 }
 
 static void mainloop(void){	
-	gameSurfaceDrawFrame();
+	gameMainSurfaceDrawFrame();
 	glfwSwapBuffers();
 }
 
@@ -30,14 +30,15 @@ int main(void){
 		webPluginUtilInit();
 		webPluginSoundInit();
 		webPluginEnptyInit();
-		gameSurfaceCreated();
+		gameMainSurfaceCreated();
+		gameMainEventInit();
 		webFuhahaSurfaceInit();
 		webFuhahaCtrlInit();
 		emscripten_set_main_loop(mainloop, 0, 1);
 	}
 	glfwTerminate();
-	gameSurfacePause();
-	gameSurfaceDestroy();
+	gameMainSurfacePause();
+	gameMainSurfaceDestroy();
 	return 0;
 }
 

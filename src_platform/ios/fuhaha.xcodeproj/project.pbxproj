@@ -8,30 +8,31 @@
 
 /* Begin PBXBuildFile section */
 		9C5C56F01CE71FDE00757A8A /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 9C5C56EF1CE71FDE00757A8A /* assets */; };
+		9C64C6341D16C661005084C5 /* engineCtrlTouch.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C64C60F1D16C661005084C5 /* engineCtrlTouch.c */; };
+		9C64C6351D16C661005084C5 /* engineDataBase64.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C64C6121D16C661005084C5 /* engineDataBase64.c */; };
+		9C64C6361D16C661005084C5 /* engineDataJson.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C64C6131D16C661005084C5 /* engineDataJson.c */; };
+		9C64C6371D16C661005084C5 /* engineGraphicBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C64C6161D16C661005084C5 /* engineGraphicBuffer.c */; };
+		9C64C6381D16C661005084C5 /* engineGraphicEngine.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C64C6171D16C661005084C5 /* engineGraphicEngine.c */; };
+		9C64C6391D16C661005084C5 /* engineGraphicMain.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C64C6181D16C661005084C5 /* engineGraphicMain.c */; };
+		9C64C63A1D16C661005084C5 /* engineGraphicObject.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C64C6191D16C661005084C5 /* engineGraphicObject.c */; };
+		9C64C63B1D16C661005084C5 /* engineGraphicShader.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C64C61A1D16C661005084C5 /* engineGraphicShader.c */; };
+		9C64C63C1D16C661005084C5 /* engineMathFunction.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C64C61D1D16C661005084C5 /* engineMathFunction.c */; };
+		9C64C63D1D16C661005084C5 /* engineMathMatrix.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C64C61E1D16C661005084C5 /* engineMathMatrix.c */; };
+		9C64C63E1D16C661005084C5 /* engineMathRandom.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C64C61F1D16C661005084C5 /* engineMathRandom.c */; };
+		9C64C63F1D16C661005084C5 /* gameEvent.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C64C6231D16C661005084C5 /* gameEvent.c */; };
+		9C64C6401D16C661005084C5 /* gameMain.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C64C6241D16C661005084C5 /* gameMain.c */; };
+		9C64C6411D16C661005084C5 /* pluginDataCallback.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C64C6281D16C661005084C5 /* pluginDataCallback.c */; };
+		9C64C6421D16C661005084C5 /* pluginDataRequest.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C64C6291D16C661005084C5 /* pluginDataRequest.c */; };
+		9C64C6431D16C661005084C5 /* pluginEnpty.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C64C62A1D16C661005084C5 /* pluginEnpty.c */; };
+		9C64C6441D16C661005084C5 /* pluginTextureCallback.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C64C62F1D16C661005084C5 /* pluginTextureCallback.c */; };
+		9C64C6451D16C661005084C5 /* pluginUtilCallback.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C64C6311D16C661005084C5 /* pluginUtilCallback.c */; };
+		9C64C6461D16C661005084C5 /* pluginUtilTemporaryBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C64C6321D16C661005084C5 /* pluginUtilTemporaryBuffer.c */; };
+		9C64C6471D16C661005084C5 /* pluginUtilUrl.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C64C6331D16C661005084C5 /* pluginUtilUrl.c */; };
 		9C8D023D1C99CCEB00F2CFFB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C8D023C1C99CCEB00F2CFFB /* AppDelegate.swift */; };
 		9C8D023F1C99CCEB00F2CFFB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C8D023E1C99CCEB00F2CFFB /* ViewController.swift */; };
 		9C8D02421C99CCEB00F2CFFB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C8D02401C99CCEB00F2CFFB /* Main.storyboard */; };
 		9C8D02441C99CCEB00F2CFFB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C8D02431C99CCEB00F2CFFB /* Assets.xcassets */; };
 		9C8D02471C99CCEB00F2CFFB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C8D02451C99CCEB00F2CFFB /* LaunchScreen.storyboard */; };
-		9CB108461D1197E70065F8A8 /* engineCtrlTouch.c in Sources */ = {isa = PBXBuildFile; fileRef = 9CB1080F1D1197E70065F8A8 /* engineCtrlTouch.c */; };
-		9CB108471D1197E70065F8A8 /* engineDataBase64.c in Sources */ = {isa = PBXBuildFile; fileRef = 9CB108121D1197E70065F8A8 /* engineDataBase64.c */; };
-		9CB108481D1197E70065F8A8 /* engineDataJson.c in Sources */ = {isa = PBXBuildFile; fileRef = 9CB108131D1197E70065F8A8 /* engineDataJson.c */; };
-		9CB108491D1197E70065F8A8 /* engineGraphicBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 9CB108161D1197E70065F8A8 /* engineGraphicBuffer.c */; };
-		9CB1084A1D1197E70065F8A8 /* engineGraphicEngine.c in Sources */ = {isa = PBXBuildFile; fileRef = 9CB108171D1197E70065F8A8 /* engineGraphicEngine.c */; };
-		9CB1084B1D1197E70065F8A8 /* engineGraphicMain.c in Sources */ = {isa = PBXBuildFile; fileRef = 9CB108181D1197E70065F8A8 /* engineGraphicMain.c */; };
-		9CB1084C1D1197E70065F8A8 /* engineGraphicObject.c in Sources */ = {isa = PBXBuildFile; fileRef = 9CB108191D1197E70065F8A8 /* engineGraphicObject.c */; };
-		9CB1084D1D1197E70065F8A8 /* engineGraphicShader.c in Sources */ = {isa = PBXBuildFile; fileRef = 9CB1081A1D1197E70065F8A8 /* engineGraphicShader.c */; };
-		9CB1084E1D1197E70065F8A8 /* engineMathFunction.c in Sources */ = {isa = PBXBuildFile; fileRef = 9CB1081D1D1197E70065F8A8 /* engineMathFunction.c */; };
-		9CB1084F1D1197E70065F8A8 /* engineMathMatrix.c in Sources */ = {isa = PBXBuildFile; fileRef = 9CB1081E1D1197E70065F8A8 /* engineMathMatrix.c */; };
-		9CB108501D1197E70065F8A8 /* engineMathRandom.c in Sources */ = {isa = PBXBuildFile; fileRef = 9CB1081F1D1197E70065F8A8 /* engineMathRandom.c */; };
-		9CB108511D1197E70065F8A8 /* game.c in Sources */ = {isa = PBXBuildFile; fileRef = 9CB108221D1197E70065F8A8 /* game.c */; };
-		9CB108521D1197E70065F8A8 /* pluginDataCallback.c in Sources */ = {isa = PBXBuildFile; fileRef = 9CB108271D1197E70065F8A8 /* pluginDataCallback.c */; };
-		9CB108531D1197E70065F8A8 /* pluginDataRequest.c in Sources */ = {isa = PBXBuildFile; fileRef = 9CB108281D1197E70065F8A8 /* pluginDataRequest.c */; };
-		9CB108541D1197E70065F8A8 /* pluginEnpty.c in Sources */ = {isa = PBXBuildFile; fileRef = 9CB108291D1197E70065F8A8 /* pluginEnpty.c */; };
-		9CB108551D1197E70065F8A8 /* pluginTextureCallback.c in Sources */ = {isa = PBXBuildFile; fileRef = 9CB1082E1D1197E70065F8A8 /* pluginTextureCallback.c */; };
-		9CB108561D1197E70065F8A8 /* pluginUtilCallback.c in Sources */ = {isa = PBXBuildFile; fileRef = 9CB108301D1197E70065F8A8 /* pluginUtilCallback.c */; };
-		9CB108571D1197E70065F8A8 /* pluginUtilTemporaryBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 9CB108311D1197E70065F8A8 /* pluginUtilTemporaryBuffer.c */; };
-		9CB108581D1197E70065F8A8 /* pluginUtilUrl.c in Sources */ = {isa = PBXBuildFile; fileRef = 9CB108321D1197E70065F8A8 /* pluginUtilUrl.c */; };
 		9CB108591D1197E70065F8A8 /* FuhahaCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CB108351D1197E70065F8A8 /* FuhahaCtrl.swift */; };
 		9CB1085A1D1197E70065F8A8 /* FuhahaGLViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CB108361D1197E70065F8A8 /* FuhahaGLViewController.swift */; };
 		9CB1085B1D1197E70065F8A8 /* iosPluginData.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB108371D1197E70065F8A8 /* iosPluginData.m */; };
@@ -51,6 +52,39 @@
 
 /* Begin PBXFileReference section */
 		9C5C56EF1CE71FDE00757A8A /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = assets; sourceTree = "<group>"; };
+		9C64C60E1D16C661005084C5 /* engineCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = engineCtrl.h; sourceTree = "<group>"; };
+		9C64C60F1D16C661005084C5 /* engineCtrlTouch.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = engineCtrlTouch.c; sourceTree = "<group>"; };
+		9C64C6111D16C661005084C5 /* engineData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = engineData.h; sourceTree = "<group>"; };
+		9C64C6121D16C661005084C5 /* engineDataBase64.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = engineDataBase64.c; sourceTree = "<group>"; };
+		9C64C6131D16C661005084C5 /* engineDataJson.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = engineDataJson.c; sourceTree = "<group>"; };
+		9C64C6151D16C661005084C5 /* engineGraphic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = engineGraphic.h; sourceTree = "<group>"; };
+		9C64C6161D16C661005084C5 /* engineGraphicBuffer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = engineGraphicBuffer.c; sourceTree = "<group>"; };
+		9C64C6171D16C661005084C5 /* engineGraphicEngine.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = engineGraphicEngine.c; sourceTree = "<group>"; };
+		9C64C6181D16C661005084C5 /* engineGraphicMain.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = engineGraphicMain.c; sourceTree = "<group>"; };
+		9C64C6191D16C661005084C5 /* engineGraphicObject.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = engineGraphicObject.c; sourceTree = "<group>"; };
+		9C64C61A1D16C661005084C5 /* engineGraphicShader.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = engineGraphicShader.c; sourceTree = "<group>"; };
+		9C64C61C1D16C661005084C5 /* engineMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = engineMath.h; sourceTree = "<group>"; };
+		9C64C61D1D16C661005084C5 /* engineMathFunction.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = engineMathFunction.c; sourceTree = "<group>"; };
+		9C64C61E1D16C661005084C5 /* engineMathMatrix.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = engineMathMatrix.c; sourceTree = "<group>"; };
+		9C64C61F1D16C661005084C5 /* engineMathRandom.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = engineMathRandom.c; sourceTree = "<group>"; };
+		9C64C6211D16C661005084C5 /* engineUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = engineUtil.h; sourceTree = "<group>"; };
+		9C64C6221D16C661005084C5 /* game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = game.h; sourceTree = "<group>"; };
+		9C64C6231D16C661005084C5 /* gameEvent.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = gameEvent.c; sourceTree = "<group>"; };
+		9C64C6241D16C661005084C5 /* gameMain.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = gameMain.c; sourceTree = "<group>"; };
+		9C64C6251D16C661005084C5 /* library.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = library.h; sourceTree = "<group>"; };
+		9C64C6271D16C661005084C5 /* pluginData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pluginData.h; sourceTree = "<group>"; };
+		9C64C6281D16C661005084C5 /* pluginDataCallback.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pluginDataCallback.c; sourceTree = "<group>"; };
+		9C64C6291D16C661005084C5 /* pluginDataRequest.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pluginDataRequest.c; sourceTree = "<group>"; };
+		9C64C62A1D16C661005084C5 /* pluginEnpty.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pluginEnpty.c; sourceTree = "<group>"; };
+		9C64C62B1D16C661005084C5 /* pluginEnpty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pluginEnpty.h; sourceTree = "<group>"; };
+		9C64C62C1D16C661005084C5 /* pluginPreference.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pluginPreference.h; sourceTree = "<group>"; };
+		9C64C62D1D16C661005084C5 /* pluginSound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pluginSound.h; sourceTree = "<group>"; };
+		9C64C62E1D16C661005084C5 /* pluginTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pluginTexture.h; sourceTree = "<group>"; };
+		9C64C62F1D16C661005084C5 /* pluginTextureCallback.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pluginTextureCallback.c; sourceTree = "<group>"; };
+		9C64C6301D16C661005084C5 /* pluginUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pluginUtil.h; sourceTree = "<group>"; };
+		9C64C6311D16C661005084C5 /* pluginUtilCallback.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pluginUtilCallback.c; sourceTree = "<group>"; };
+		9C64C6321D16C661005084C5 /* pluginUtilTemporaryBuffer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pluginUtilTemporaryBuffer.c; sourceTree = "<group>"; };
+		9C64C6331D16C661005084C5 /* pluginUtilUrl.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pluginUtilUrl.c; sourceTree = "<group>"; };
 		9C8D02391C99CCEB00F2CFFB /* fuhaha.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = fuhaha.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C8D023C1C99CCEB00F2CFFB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9C8D023E1C99CCEB00F2CFFB /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -58,38 +92,6 @@
 		9C8D02431C99CCEB00F2CFFB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9C8D02461C99CCEB00F2CFFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9C8D02481C99CCEB00F2CFFB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		9CB1080E1D1197E70065F8A8 /* engineCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = engineCtrl.h; sourceTree = "<group>"; };
-		9CB1080F1D1197E70065F8A8 /* engineCtrlTouch.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = engineCtrlTouch.c; sourceTree = "<group>"; };
-		9CB108111D1197E70065F8A8 /* engineData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = engineData.h; sourceTree = "<group>"; };
-		9CB108121D1197E70065F8A8 /* engineDataBase64.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = engineDataBase64.c; sourceTree = "<group>"; };
-		9CB108131D1197E70065F8A8 /* engineDataJson.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = engineDataJson.c; sourceTree = "<group>"; };
-		9CB108151D1197E70065F8A8 /* engineGraphic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = engineGraphic.h; sourceTree = "<group>"; };
-		9CB108161D1197E70065F8A8 /* engineGraphicBuffer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = engineGraphicBuffer.c; sourceTree = "<group>"; };
-		9CB108171D1197E70065F8A8 /* engineGraphicEngine.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = engineGraphicEngine.c; sourceTree = "<group>"; };
-		9CB108181D1197E70065F8A8 /* engineGraphicMain.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = engineGraphicMain.c; sourceTree = "<group>"; };
-		9CB108191D1197E70065F8A8 /* engineGraphicObject.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = engineGraphicObject.c; sourceTree = "<group>"; };
-		9CB1081A1D1197E70065F8A8 /* engineGraphicShader.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = engineGraphicShader.c; sourceTree = "<group>"; };
-		9CB1081C1D1197E70065F8A8 /* engineMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = engineMath.h; sourceTree = "<group>"; };
-		9CB1081D1D1197E70065F8A8 /* engineMathFunction.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = engineMathFunction.c; sourceTree = "<group>"; };
-		9CB1081E1D1197E70065F8A8 /* engineMathMatrix.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = engineMathMatrix.c; sourceTree = "<group>"; };
-		9CB1081F1D1197E70065F8A8 /* engineMathRandom.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = engineMathRandom.c; sourceTree = "<group>"; };
-		9CB108211D1197E70065F8A8 /* engineUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = engineUtil.h; sourceTree = "<group>"; };
-		9CB108221D1197E70065F8A8 /* game.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = game.c; sourceTree = "<group>"; };
-		9CB108231D1197E70065F8A8 /* game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = game.h; sourceTree = "<group>"; };
-		9CB108241D1197E70065F8A8 /* library.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = library.h; sourceTree = "<group>"; };
-		9CB108261D1197E70065F8A8 /* pluginData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pluginData.h; sourceTree = "<group>"; };
-		9CB108271D1197E70065F8A8 /* pluginDataCallback.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pluginDataCallback.c; sourceTree = "<group>"; };
-		9CB108281D1197E70065F8A8 /* pluginDataRequest.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pluginDataRequest.c; sourceTree = "<group>"; };
-		9CB108291D1197E70065F8A8 /* pluginEnpty.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pluginEnpty.c; sourceTree = "<group>"; };
-		9CB1082A1D1197E70065F8A8 /* pluginEnpty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pluginEnpty.h; sourceTree = "<group>"; };
-		9CB1082B1D1197E70065F8A8 /* pluginPreference.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pluginPreference.h; sourceTree = "<group>"; };
-		9CB1082C1D1197E70065F8A8 /* pluginSound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pluginSound.h; sourceTree = "<group>"; };
-		9CB1082D1D1197E70065F8A8 /* pluginTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pluginTexture.h; sourceTree = "<group>"; };
-		9CB1082E1D1197E70065F8A8 /* pluginTextureCallback.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pluginTextureCallback.c; sourceTree = "<group>"; };
-		9CB1082F1D1197E70065F8A8 /* pluginUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pluginUtil.h; sourceTree = "<group>"; };
-		9CB108301D1197E70065F8A8 /* pluginUtilCallback.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pluginUtilCallback.c; sourceTree = "<group>"; };
-		9CB108311D1197E70065F8A8 /* pluginUtilTemporaryBuffer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pluginUtilTemporaryBuffer.c; sourceTree = "<group>"; };
-		9CB108321D1197E70065F8A8 /* pluginUtilUrl.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pluginUtilUrl.c; sourceTree = "<group>"; };
 		9CB108341D1197E70065F8A8 /* fuhaha-bridgingHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "fuhaha-bridgingHeader.h"; sourceTree = "<group>"; };
 		9CB108351D1197E70065F8A8 /* FuhahaCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FuhahaCtrl.swift; sourceTree = "<group>"; };
 		9CB108361D1197E70065F8A8 /* FuhahaGLViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FuhahaGLViewController.swift; sourceTree = "<group>"; };
@@ -121,10 +123,107 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9C64C60B1D16C661005084C5 /* core */ = {
+			isa = PBXGroup;
+			children = (
+				9C64C60C1D16C661005084C5 /* engine */,
+				9C64C6221D16C661005084C5 /* game.h */,
+				9C64C6231D16C661005084C5 /* gameEvent.c */,
+				9C64C6241D16C661005084C5 /* gameMain.c */,
+				9C64C6251D16C661005084C5 /* library.h */,
+				9C64C6261D16C661005084C5 /* plugin */,
+			);
+			name = core;
+			path = ../../src_client/core;
+			sourceTree = "<group>";
+		};
+		9C64C60C1D16C661005084C5 /* engine */ = {
+			isa = PBXGroup;
+			children = (
+				9C64C60D1D16C661005084C5 /* engineCtrl */,
+				9C64C6101D16C661005084C5 /* engineData */,
+				9C64C6141D16C661005084C5 /* engineGraphic */,
+				9C64C61B1D16C661005084C5 /* engineMath */,
+				9C64C6201D16C661005084C5 /* engineUtil */,
+			);
+			path = engine;
+			sourceTree = "<group>";
+		};
+		9C64C60D1D16C661005084C5 /* engineCtrl */ = {
+			isa = PBXGroup;
+			children = (
+				9C64C60E1D16C661005084C5 /* engineCtrl.h */,
+				9C64C60F1D16C661005084C5 /* engineCtrlTouch.c */,
+			);
+			path = engineCtrl;
+			sourceTree = "<group>";
+		};
+		9C64C6101D16C661005084C5 /* engineData */ = {
+			isa = PBXGroup;
+			children = (
+				9C64C6111D16C661005084C5 /* engineData.h */,
+				9C64C6121D16C661005084C5 /* engineDataBase64.c */,
+				9C64C6131D16C661005084C5 /* engineDataJson.c */,
+			);
+			path = engineData;
+			sourceTree = "<group>";
+		};
+		9C64C6141D16C661005084C5 /* engineGraphic */ = {
+			isa = PBXGroup;
+			children = (
+				9C64C6151D16C661005084C5 /* engineGraphic.h */,
+				9C64C6161D16C661005084C5 /* engineGraphicBuffer.c */,
+				9C64C6171D16C661005084C5 /* engineGraphicEngine.c */,
+				9C64C6181D16C661005084C5 /* engineGraphicMain.c */,
+				9C64C6191D16C661005084C5 /* engineGraphicObject.c */,
+				9C64C61A1D16C661005084C5 /* engineGraphicShader.c */,
+			);
+			path = engineGraphic;
+			sourceTree = "<group>";
+		};
+		9C64C61B1D16C661005084C5 /* engineMath */ = {
+			isa = PBXGroup;
+			children = (
+				9C64C61C1D16C661005084C5 /* engineMath.h */,
+				9C64C61D1D16C661005084C5 /* engineMathFunction.c */,
+				9C64C61E1D16C661005084C5 /* engineMathMatrix.c */,
+				9C64C61F1D16C661005084C5 /* engineMathRandom.c */,
+			);
+			path = engineMath;
+			sourceTree = "<group>";
+		};
+		9C64C6201D16C661005084C5 /* engineUtil */ = {
+			isa = PBXGroup;
+			children = (
+				9C64C6211D16C661005084C5 /* engineUtil.h */,
+			);
+			path = engineUtil;
+			sourceTree = "<group>";
+		};
+		9C64C6261D16C661005084C5 /* plugin */ = {
+			isa = PBXGroup;
+			children = (
+				9C64C6271D16C661005084C5 /* pluginData.h */,
+				9C64C6281D16C661005084C5 /* pluginDataCallback.c */,
+				9C64C6291D16C661005084C5 /* pluginDataRequest.c */,
+				9C64C62A1D16C661005084C5 /* pluginEnpty.c */,
+				9C64C62B1D16C661005084C5 /* pluginEnpty.h */,
+				9C64C62C1D16C661005084C5 /* pluginPreference.h */,
+				9C64C62D1D16C661005084C5 /* pluginSound.h */,
+				9C64C62E1D16C661005084C5 /* pluginTexture.h */,
+				9C64C62F1D16C661005084C5 /* pluginTextureCallback.c */,
+				9C64C6301D16C661005084C5 /* pluginUtil.h */,
+				9C64C6311D16C661005084C5 /* pluginUtilCallback.c */,
+				9C64C6321D16C661005084C5 /* pluginUtilTemporaryBuffer.c */,
+				9C64C6331D16C661005084C5 /* pluginUtilUrl.c */,
+			);
+			path = plugin;
+			sourceTree = "<group>";
+		};
 		9C8D02301C99CCEB00F2CFFB = {
 			isa = PBXGroup;
 			children = (
-				9CB1080B1D1197E70065F8A8 /* core */,
+				9C64C60B1D16C661005084C5 /* core */,
 				9CB108331D1197E70065F8A8 /* platform_ios */,
 				9C5C56EF1CE71FDE00757A8A /* assets */,
 				9C8D023B1C99CCEB00F2CFFB /* fuhaha */,
@@ -151,102 +250,6 @@
 				9C8D023E1C99CCEB00F2CFFB /* ViewController.swift */,
 			);
 			path = fuhaha;
-			sourceTree = "<group>";
-		};
-		9CB1080B1D1197E70065F8A8 /* core */ = {
-			isa = PBXGroup;
-			children = (
-				9CB1080C1D1197E70065F8A8 /* engine */,
-				9CB108221D1197E70065F8A8 /* game.c */,
-				9CB108231D1197E70065F8A8 /* game.h */,
-				9CB108241D1197E70065F8A8 /* library.h */,
-				9CB108251D1197E70065F8A8 /* plugin */,
-			);
-			name = core;
-			path = ../../src_client/core;
-			sourceTree = "<group>";
-		};
-		9CB1080C1D1197E70065F8A8 /* engine */ = {
-			isa = PBXGroup;
-			children = (
-				9CB1080D1D1197E70065F8A8 /* engineCtrl */,
-				9CB108101D1197E70065F8A8 /* engineData */,
-				9CB108141D1197E70065F8A8 /* engineGraphic */,
-				9CB1081B1D1197E70065F8A8 /* engineMath */,
-				9CB108201D1197E70065F8A8 /* engineUtil */,
-			);
-			path = engine;
-			sourceTree = "<group>";
-		};
-		9CB1080D1D1197E70065F8A8 /* engineCtrl */ = {
-			isa = PBXGroup;
-			children = (
-				9CB1080E1D1197E70065F8A8 /* engineCtrl.h */,
-				9CB1080F1D1197E70065F8A8 /* engineCtrlTouch.c */,
-			);
-			path = engineCtrl;
-			sourceTree = "<group>";
-		};
-		9CB108101D1197E70065F8A8 /* engineData */ = {
-			isa = PBXGroup;
-			children = (
-				9CB108111D1197E70065F8A8 /* engineData.h */,
-				9CB108121D1197E70065F8A8 /* engineDataBase64.c */,
-				9CB108131D1197E70065F8A8 /* engineDataJson.c */,
-			);
-			path = engineData;
-			sourceTree = "<group>";
-		};
-		9CB108141D1197E70065F8A8 /* engineGraphic */ = {
-			isa = PBXGroup;
-			children = (
-				9CB108151D1197E70065F8A8 /* engineGraphic.h */,
-				9CB108161D1197E70065F8A8 /* engineGraphicBuffer.c */,
-				9CB108171D1197E70065F8A8 /* engineGraphicEngine.c */,
-				9CB108181D1197E70065F8A8 /* engineGraphicMain.c */,
-				9CB108191D1197E70065F8A8 /* engineGraphicObject.c */,
-				9CB1081A1D1197E70065F8A8 /* engineGraphicShader.c */,
-			);
-			path = engineGraphic;
-			sourceTree = "<group>";
-		};
-		9CB1081B1D1197E70065F8A8 /* engineMath */ = {
-			isa = PBXGroup;
-			children = (
-				9CB1081C1D1197E70065F8A8 /* engineMath.h */,
-				9CB1081D1D1197E70065F8A8 /* engineMathFunction.c */,
-				9CB1081E1D1197E70065F8A8 /* engineMathMatrix.c */,
-				9CB1081F1D1197E70065F8A8 /* engineMathRandom.c */,
-			);
-			path = engineMath;
-			sourceTree = "<group>";
-		};
-		9CB108201D1197E70065F8A8 /* engineUtil */ = {
-			isa = PBXGroup;
-			children = (
-				9CB108211D1197E70065F8A8 /* engineUtil.h */,
-			);
-			path = engineUtil;
-			sourceTree = "<group>";
-		};
-		9CB108251D1197E70065F8A8 /* plugin */ = {
-			isa = PBXGroup;
-			children = (
-				9CB108261D1197E70065F8A8 /* pluginData.h */,
-				9CB108271D1197E70065F8A8 /* pluginDataCallback.c */,
-				9CB108281D1197E70065F8A8 /* pluginDataRequest.c */,
-				9CB108291D1197E70065F8A8 /* pluginEnpty.c */,
-				9CB1082A1D1197E70065F8A8 /* pluginEnpty.h */,
-				9CB1082B1D1197E70065F8A8 /* pluginPreference.h */,
-				9CB1082C1D1197E70065F8A8 /* pluginSound.h */,
-				9CB1082D1D1197E70065F8A8 /* pluginTexture.h */,
-				9CB1082E1D1197E70065F8A8 /* pluginTextureCallback.c */,
-				9CB1082F1D1197E70065F8A8 /* pluginUtil.h */,
-				9CB108301D1197E70065F8A8 /* pluginUtilCallback.c */,
-				9CB108311D1197E70065F8A8 /* pluginUtilTemporaryBuffer.c */,
-				9CB108321D1197E70065F8A8 /* pluginUtilUrl.c */,
-			);
-			path = plugin;
 			sourceTree = "<group>";
 		};
 		9CB108331D1197E70065F8A8 /* platform_ios */ = {
@@ -347,42 +350,43 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9CB108541D1197E70065F8A8 /* pluginEnpty.c in Sources */,
-				9CB108521D1197E70065F8A8 /* pluginDataCallback.c in Sources */,
-				9CB108471D1197E70065F8A8 /* engineDataBase64.c in Sources */,
-				9CB1084D1D1197E70065F8A8 /* engineGraphicShader.c in Sources */,
 				9CB108651D1197E70065F8A8 /* iosPluginUtil.m in Sources */,
-				9CB108461D1197E70065F8A8 /* engineCtrlTouch.c in Sources */,
+				9C64C6441D16C661005084C5 /* pluginTextureCallback.c in Sources */,
 				9CB108641D1197E70065F8A8 /* IosPluginTexture.swift in Sources */,
 				9CB108661D1197E70065F8A8 /* IosPluginUtil.swift in Sources */,
+				9C64C6451D16C661005084C5 /* pluginUtilCallback.c in Sources */,
+				9C64C6361D16C661005084C5 /* engineDataJson.c in Sources */,
+				9C64C6411D16C661005084C5 /* pluginDataCallback.c in Sources */,
+				9C64C6371D16C661005084C5 /* engineGraphicBuffer.c in Sources */,
 				9CB108601D1197E70065F8A8 /* IosPluginPreference.swift in Sources */,
 				9CB108591D1197E70065F8A8 /* FuhahaCtrl.swift in Sources */,
-				9CB108581D1197E70065F8A8 /* pluginUtilUrl.c in Sources */,
+				9C64C6461D16C661005084C5 /* pluginUtilTemporaryBuffer.c in Sources */,
+				9C64C63C1D16C661005084C5 /* engineMathFunction.c in Sources */,
 				9CB108671D1197E70065F8A8 /* nativeMain.m in Sources */,
+				9C64C63F1D16C661005084C5 /* gameEvent.c in Sources */,
 				9CB1085A1D1197E70065F8A8 /* FuhahaGLViewController.swift in Sources */,
+				9C64C63A1D16C661005084C5 /* engineGraphicObject.c in Sources */,
+				9C64C6471D16C661005084C5 /* pluginUtilUrl.c in Sources */,
+				9C64C6401D16C661005084C5 /* gameMain.c in Sources */,
 				9CB108621D1197E70065F8A8 /* IosPluginSound.swift in Sources */,
+				9C64C63B1D16C661005084C5 /* engineGraphicShader.c in Sources */,
 				9C8D023F1C99CCEB00F2CFFB /* ViewController.swift in Sources */,
+				9C64C6351D16C661005084C5 /* engineDataBase64.c in Sources */,
+				9C64C6381D16C661005084C5 /* engineGraphicEngine.c in Sources */,
 				9CB1085C1D1197E70065F8A8 /* IosPluginData.swift in Sources */,
-				9CB1084F1D1197E70065F8A8 /* engineMathMatrix.c in Sources */,
-				9CB108531D1197E70065F8A8 /* pluginDataRequest.c in Sources */,
-				9CB108561D1197E70065F8A8 /* pluginUtilCallback.c in Sources */,
-				9CB108481D1197E70065F8A8 /* engineDataJson.c in Sources */,
-				9CB108551D1197E70065F8A8 /* pluginTextureCallback.c in Sources */,
+				9C64C6431D16C661005084C5 /* pluginEnpty.c in Sources */,
 				9CB1085B1D1197E70065F8A8 /* iosPluginData.m in Sources */,
-				9CB108491D1197E70065F8A8 /* engineGraphicBuffer.c in Sources */,
 				9CB1085F1D1197E70065F8A8 /* iosPluginPreference.m in Sources */,
+				9C64C6421D16C661005084C5 /* pluginDataRequest.c in Sources */,
+				9C64C6341D16C661005084C5 /* engineCtrlTouch.c in Sources */,
 				9CB1085D1D1197E70065F8A8 /* iosPluginEnpty.m in Sources */,
-				9CB1084B1D1197E70065F8A8 /* engineGraphicMain.c in Sources */,
-				9CB1084C1D1197E70065F8A8 /* engineGraphicObject.c in Sources */,
 				9CB108611D1197E70065F8A8 /* iosPluginSound.m in Sources */,
 				9CB108631D1197E70065F8A8 /* iosPluginTexture.m in Sources */,
-				9CB108511D1197E70065F8A8 /* game.c in Sources */,
 				9C8D023D1C99CCEB00F2CFFB /* AppDelegate.swift in Sources */,
-				9CB1084A1D1197E70065F8A8 /* engineGraphicEngine.c in Sources */,
-				9CB108501D1197E70065F8A8 /* engineMathRandom.c in Sources */,
-				9CB108571D1197E70065F8A8 /* pluginUtilTemporaryBuffer.c in Sources */,
+				9C64C63E1D16C661005084C5 /* engineMathRandom.c in Sources */,
 				9CB1085E1D1197E70065F8A8 /* IosPluginEnpty.swift in Sources */,
-				9CB1084E1D1197E70065F8A8 /* engineMathFunction.c in Sources */,
+				9C64C63D1D16C661005084C5 /* engineMathMatrix.c in Sources */,
+				9C64C6391D16C661005084C5 /* engineGraphicMain.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

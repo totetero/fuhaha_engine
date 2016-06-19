@@ -43,59 +43,60 @@ JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaGLView_nativeOnResume(JNIE
 
 // ライフサイクル ゲーム一時停止時
 JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaGLView_nativeOnPause(JNIEnv *env, jobject obj){
-	gameSurfacePause();
+	gameMainSurfacePause();
 }
 
 // ライフサイクル ゲーム終了時
 JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaGLView_nativeOnDestroy(JNIEnv *env, jobject obj){
-	gameSurfaceDestroy();
+	gameMainSurfaceDestroy();
 }
 
 // openGL設定
 JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaGLView_nativeGlSetup(JNIEnv *env, jobject obj){
-	gameSurfaceCreated();
+	gameMainSurfaceCreated();
+	gameMainEventInit();
 }
 
 // openGL画面サイズ変更時
 JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaGLView_nativeGlResize(JNIEnv *env, jobject obj, jint width, jint height){
-	gameSurfaceChanged(width, height, 1.0);
+	gameMainEventScreen(width, height, 1.0);
 }
 
 // openGL描画
 JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaGLView_nativeGlStep(JNIEnv *env, jobject obj){
-	gameSurfaceDrawFrame();
+	gameMainSurfaceDrawFrame();
 }
 
 // ----------------------------------------------------------------
 
 // タッチの状態を報告する
-JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaCtrl_gameEvenTouch(JNIEnv *env, jobject obj, jint index, jint tx, jint ty, jboolean tdn){
-	gameEvenTouch(index, tx, ty, tdn);
+JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaCtrl_gameMainEventTouch(JNIEnv *env, jobject obj, jint index, jint tx, jint ty, jboolean tdn){
+	gameMainEventTouch(index, tx, ty, tdn);
 }
 
 // キーの押下状態変化を報告する
-JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaCtrl_gameEventKeyBack(JNIEnv *env, jobject obj, jboolean kbk){
-	gameEventKeyBack(kbk);
+JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaCtrl_gameMainEventKeyBack(JNIEnv *env, jobject obj, jboolean kbk){
+	gameMainEventKeyBack(kbk);
 }
-JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaCtrl_gameEventKeyArrow(JNIEnv *env, jobject obj, jboolean kup, jboolean kdn, jboolean krt, jboolean klt){
-	gameEventKeyArrow(kup, kdn, krt, klt);
+JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaCtrl_gameMainEventKeyArrow(JNIEnv *env, jobject obj, jboolean kup, jboolean kdn, jboolean krt, jboolean klt){
+	gameMainEventKeyArrow(kup, kdn, krt, klt);
 }
-JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaCtrl_gameEventKeyZxcv(JNIEnv *env, jobject obj, jboolean kzb, jboolean kxb, jboolean kcb, jboolean kvb){
-	gameEventKeyZxcv(kzb, kxb, kcb, kvb);
+JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaCtrl_gameMainEventKeyZxcv(JNIEnv *env, jobject obj, jboolean kzb, jboolean kxb, jboolean kcb, jboolean kvb){
+	gameMainEventKeyZxcv(kzb, kxb, kcb, kvb);
 }
 
 // 傾きの状態を報告する
-JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaCtrl_gameEventAcceleration(JNIEnv *env, jobject obj, jdouble accx, jdouble accy, jdouble accz){
-	gameEventAcceleration(accx, accy, accz);
+JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaCtrl_gameMainEventAcceleration(JNIEnv *env, jobject obj, jdouble accx, jdouble accy, jdouble accz){
+	gameMainEventAcceleration(accx, accy, accz);
 }
 
 // ----------------------------------------------------------------
 
 // アプリ終了命令
-void platformSurfaceExit(void){
+void platformMainSurfaceExit(void){
 	JNIEnv *env = getJNIEnv();
 	jclass cls = (*env)->FindClass(env, "com/totetero/fuhaha/FuhahaGLView");
-	jmethodID mid = (*env)->GetStaticMethodID(env, cls, "platformSurfaceExit", "()V");
+	jmethodID mid = (*env)->GetStaticMethodID(env, cls, "platformMainSurfaceExit", "()V");
 	(*env)->CallStaticVoidMethod(env, cls, mid);
 }
 
