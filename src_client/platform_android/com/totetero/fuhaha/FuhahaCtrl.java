@@ -34,8 +34,8 @@ public class FuhahaCtrl implements SensorEventListener{
 	private boolean kcb = false;
 	private boolean kvb = false;
 	// 加速度センサー
-	private SensorManager sensorManager;
-	private Sensor sensor;
+	private SensorManager sensorManager = null;
+	private Sensor sensor = null;
 
 	// ----------------------------------------------------------------
 
@@ -51,20 +51,26 @@ public class FuhahaCtrl implements SensorEventListener{
 
 	// コンストラクタ
 	public FuhahaCtrl(){
-		// 加速度センサー
-		this.sensorManager = (SensorManager)FuhahaGLView.activity.getSystemService(FuhahaGLView.activity.SENSOR_SERVICE);
+		if(true){
+			// 加速度センサー
+			this.sensorManager = (SensorManager)FuhahaGLView.activity.getSystemService(FuhahaGLView.activity.SENSOR_SERVICE);
+		}
 	}
 
 	public void onResume(){
-		// 加速度センサー
-		this.sensor = this.sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-		if(this.sensor != null){this.sensorManager.registerListener(this, this.sensor, SensorManager.SENSOR_DELAY_NORMAL);}
+		if(this.sensorManager != null){
+			// 加速度センサー
+			this.sensor = this.sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+			if(this.sensor != null){this.sensorManager.registerListener(this, this.sensor, SensorManager.SENSOR_DELAY_NORMAL);}
+		}
 	}
 
 	public void onPause(){
-		// 加速度センサー
-		this.sensorManager.unregisterListener(this);
-		this.sensor = null;
+		if(this.sensorManager != null){
+			// 加速度センサー
+			this.sensorManager.unregisterListener(this);
+			this.sensor = null;
+		}
 	}
 
 	// ----------------------------------------------------------------

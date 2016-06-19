@@ -254,14 +254,16 @@ mergeInto(LibraryManager.library, {
 		// ----------------------------------------------------------------
 		// 加速度イベント
 
-		window.addEventListener("devicemotion", function(e){
-			if(globalWebFuhahaSurface && globalWebFuhahaSurface.isExit){return;}
-			var accx = e.accelerationIncludingGravity.x;
-			var accy = e.accelerationIncludingGravity.y;
-			var accz = e.accelerationIncludingGravity.z;
-			if(isIos){accx *= -1; accy *= -1; accz *= -1;}
-			ccall("gameEventAcceleration", "null", ["null", "null", "null"], [accx, accy, accz]);
-		});
+		if(true){
+			window.addEventListener("devicemotion", function(e){
+				if(globalWebFuhahaSurface && globalWebFuhahaSurface.isExit){return;}
+				var accx = e.accelerationIncludingGravity.x;
+				var accy = e.accelerationIncludingGravity.y;
+				var accz = e.accelerationIncludingGravity.z;
+				if(isIos){accx *= -1; accy *= -1; accz *= -1;}
+				ccall("gameEventAcceleration", "null", ["null", "null", "null"], [accx, accy, accz]);
+			});
+		}
 
 		// ----------------------------------------------------------------
 	},
