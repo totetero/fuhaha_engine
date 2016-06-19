@@ -70,23 +70,23 @@ JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaGLView_nativeGlStep(JNIEnv
 // ----------------------------------------------------------------
 
 // タッチの状態を報告する
-JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaCtrl_gameMainEventTouch(JNIEnv *env, jobject obj, jint index, jint tx, jint ty, jboolean tdn){
+JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaEvent_gameMainEventTouch(JNIEnv *env, jobject obj, jint index, jint tx, jint ty, jboolean tdn){
 	gameMainEventTouch(index, tx, ty, tdn);
 }
 
 // キーの押下状態変化を報告する
-JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaCtrl_gameMainEventKeyBack(JNIEnv *env, jobject obj, jboolean kbk){
+JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaEvent_gameMainEventKeyBack(JNIEnv *env, jobject obj, jboolean kbk){
 	gameMainEventKeyBack(kbk);
 }
-JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaCtrl_gameMainEventKeyArrow(JNIEnv *env, jobject obj, jboolean kup, jboolean kdn, jboolean krt, jboolean klt){
+JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaEvent_gameMainEventKeyArrow(JNIEnv *env, jobject obj, jboolean kup, jboolean kdn, jboolean krt, jboolean klt){
 	gameMainEventKeyArrow(kup, kdn, krt, klt);
 }
-JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaCtrl_gameMainEventKeyZxcv(JNIEnv *env, jobject obj, jboolean kzb, jboolean kxb, jboolean kcb, jboolean kvb){
+JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaEvent_gameMainEventKeyZxcv(JNIEnv *env, jobject obj, jboolean kzb, jboolean kxb, jboolean kcb, jboolean kvb){
 	gameMainEventKeyZxcv(kzb, kxb, kcb, kvb);
 }
 
 // 傾きの状態を報告する
-JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaCtrl_gameMainEventAcceleration(JNIEnv *env, jobject obj, jdouble accx, jdouble accy, jdouble accz){
+JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaEvent_gameMainEventAcceleration(JNIEnv *env, jobject obj, jdouble accx, jdouble accy, jdouble accz){
 	gameMainEventAcceleration(accx, accy, accz);
 }
 

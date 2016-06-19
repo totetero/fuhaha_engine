@@ -13,8 +13,8 @@ import android.hardware.SensorManager;
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-// openGL描画クラス
-public class FuhahaCtrl implements SensorEventListener{
+// インターフェイスイベントクラス
+public class FuhahaEvent implements SensorEventListener{
 	// タッチ1情報
 	private int t1id = -1;
 	private int t1x = 0;
@@ -50,7 +50,7 @@ public class FuhahaCtrl implements SensorEventListener{
 	// ----------------------------------------------------------------
 
 	// コンストラクタ
-	public FuhahaCtrl(){
+	public FuhahaEvent(){
 		if(true){
 			// 加速度センサー
 			this.sensorManager = (SensorManager)FuhahaGLView.activity.getSystemService(FuhahaGLView.activity.SENSOR_SERVICE);
@@ -127,8 +127,8 @@ public class FuhahaCtrl implements SensorEventListener{
 		}
 
 		// タッチ情報をjniに送信
-		if(isChangeTouch1){FuhahaCtrl.gameMainEventTouch(0, this.t1x, this.t1y, (this.t1id >= 0));}
-		if(isChangeTouch2){FuhahaCtrl.gameMainEventTouch(1, this.t2x, this.t2y, (this.t2id >= 0));}
+		if(isChangeTouch1){FuhahaEvent.gameMainEventTouch(0, this.t1x, this.t1y, (this.t1id >= 0));}
+		if(isChangeTouch2){FuhahaEvent.gameMainEventTouch(1, this.t2x, this.t2y, (this.t2id >= 0));}
 
 		return true;
 	}
@@ -169,9 +169,9 @@ public class FuhahaCtrl implements SensorEventListener{
 		}
 
 		if(isChangeKeyBack || isChangeKeyArrow || isChangeKeyZxcv){
-			if(isChangeKeyBack){FuhahaCtrl.gameMainEventKeyBack(this.kbk);}
-			if(isChangeKeyArrow){FuhahaCtrl.gameMainEventKeyArrow(this.kup, this.kdn, this.krt, this.klt);}
-			if(isChangeKeyZxcv){FuhahaCtrl.gameMainEventKeyZxcv(this.kzb, this.kxb, this.kcb, this.kvb);}
+			if(isChangeKeyBack){FuhahaEvent.gameMainEventKeyBack(this.kbk);}
+			if(isChangeKeyArrow){FuhahaEvent.gameMainEventKeyArrow(this.kup, this.kdn, this.krt, this.klt);}
+			if(isChangeKeyZxcv){FuhahaEvent.gameMainEventKeyZxcv(this.kzb, this.kxb, this.kcb, this.kvb);}
 			return true;
 		}
 		return false;
@@ -186,7 +186,7 @@ public class FuhahaCtrl implements SensorEventListener{
 	public void onSensorChanged(SensorEvent event){
 		if(event.sensor.getType() == Sensor.TYPE_ACCELEROMETER){
 			// androidの軸方向を基準とする、最大値は知らん
-			FuhahaCtrl.gameMainEventAcceleration(event.values[0], event.values[1], event.values[2]);
+			FuhahaEvent.gameMainEventAcceleration(event.values[0], event.values[1], event.values[2]);
 		}
 	}
 

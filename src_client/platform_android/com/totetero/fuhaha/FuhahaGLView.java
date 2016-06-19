@@ -18,7 +18,7 @@ public class FuhahaGLView extends GLSurfaceView implements Renderer{
 	public static Activity activity;
 	public static FuhahaGLView surfaceView;
 
-	public FuhahaCtrl fuhahaCtrl;
+	public FuhahaEvent fuhahaEvent;
 
 	// ----------------------------------------------------------------
 
@@ -46,7 +46,7 @@ public class FuhahaGLView extends GLSurfaceView implements Renderer{
 		this.setRenderer(this);
 		
 		// controller
-		this.fuhahaCtrl = new FuhahaCtrl();
+		this.fuhahaEvent = new FuhahaEvent();
 
 		FuhahaGLView.nativeOnCreate();
 	}
@@ -54,14 +54,14 @@ public class FuhahaGLView extends GLSurfaceView implements Renderer{
 	public void onResume(){
 		FuhahaGLView.nativeOnResume();
 		AndroidPluginSound.onResume();
-		this.fuhahaCtrl.onResume();
+		this.fuhahaEvent.onResume();
 		super.onResume();
 	}
 
 	public void onPause(){
 		FuhahaGLView.nativeOnPause();
 		AndroidPluginSound.onPause();
-		this.fuhahaCtrl.onPause();
+		this.fuhahaEvent.onPause();
 		super.onPause();
 	}
 
@@ -90,12 +90,12 @@ public class FuhahaGLView extends GLSurfaceView implements Renderer{
 
 	// タッチイベント
 	public boolean onTouchEvent(MotionEvent event){
-		return this.fuhahaCtrl.onTouchEvent(event) || super.onTouchEvent(event);
+		return this.fuhahaEvent.onTouchEvent(event) || super.onTouchEvent(event);
 	}
 
 	// キーイベント
 	public boolean dispatchKeyEvent(KeyEvent event){
-		return this.fuhahaCtrl.dispatchKeyEvent(event) || super.dispatchKeyEvent(event);
+		return this.fuhahaEvent.dispatchKeyEvent(event) || super.dispatchKeyEvent(event);
 	}
 
 	// ----------------------------------------------------------------

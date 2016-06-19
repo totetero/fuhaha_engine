@@ -33,7 +33,7 @@
 		9C8D02421C99CCEB00F2CFFB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C8D02401C99CCEB00F2CFFB /* Main.storyboard */; };
 		9C8D02441C99CCEB00F2CFFB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C8D02431C99CCEB00F2CFFB /* Assets.xcassets */; };
 		9C8D02471C99CCEB00F2CFFB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C8D02451C99CCEB00F2CFFB /* LaunchScreen.storyboard */; };
-		9CB108591D1197E70065F8A8 /* FuhahaCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CB108351D1197E70065F8A8 /* FuhahaCtrl.swift */; };
+		9CB108591D1197E70065F8A8 /* FuhahaEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CB108351D1197E70065F8A8 /* FuhahaEvent.swift */; };
 		9CB1085A1D1197E70065F8A8 /* FuhahaGLViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CB108361D1197E70065F8A8 /* FuhahaGLViewController.swift */; };
 		9CB1085B1D1197E70065F8A8 /* iosPluginData.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB108371D1197E70065F8A8 /* iosPluginData.m */; };
 		9CB1085C1D1197E70065F8A8 /* IosPluginData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CB108381D1197E70065F8A8 /* IosPluginData.swift */; };
@@ -93,7 +93,7 @@
 		9C8D02461C99CCEB00F2CFFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9C8D02481C99CCEB00F2CFFB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9CB108341D1197E70065F8A8 /* fuhaha-bridgingHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "fuhaha-bridgingHeader.h"; sourceTree = "<group>"; };
-		9CB108351D1197E70065F8A8 /* FuhahaCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FuhahaCtrl.swift; sourceTree = "<group>"; };
+		9CB108351D1197E70065F8A8 /* FuhahaEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FuhahaEvent.swift; sourceTree = "<group>"; };
 		9CB108361D1197E70065F8A8 /* FuhahaGLViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FuhahaGLViewController.swift; sourceTree = "<group>"; };
 		9CB108371D1197E70065F8A8 /* iosPluginData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iosPluginData.m; sourceTree = "<group>"; };
 		9CB108381D1197E70065F8A8 /* IosPluginData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IosPluginData.swift; sourceTree = "<group>"; };
@@ -256,7 +256,7 @@
 			isa = PBXGroup;
 			children = (
 				9CB108341D1197E70065F8A8 /* fuhaha-bridgingHeader.h */,
-				9CB108351D1197E70065F8A8 /* FuhahaCtrl.swift */,
+				9CB108351D1197E70065F8A8 /* FuhahaEvent.swift */,
 				9CB108361D1197E70065F8A8 /* FuhahaGLViewController.swift */,
 				9CB108371D1197E70065F8A8 /* iosPluginData.m */,
 				9CB108381D1197E70065F8A8 /* IosPluginData.swift */,
@@ -359,7 +359,7 @@
 				9C64C6411D16C661005084C5 /* pluginDataCallback.c in Sources */,
 				9C64C6371D16C661005084C5 /* engineGraphicBuffer.c in Sources */,
 				9CB108601D1197E70065F8A8 /* IosPluginPreference.swift in Sources */,
-				9CB108591D1197E70065F8A8 /* FuhahaCtrl.swift in Sources */,
+				9CB108591D1197E70065F8A8 /* FuhahaEvent.swift in Sources */,
 				9C64C6461D16C661005084C5 /* pluginUtilTemporaryBuffer.c in Sources */,
 				9C64C63C1D16C661005084C5 /* engineMathFunction.c in Sources */,
 				9CB108671D1197E70065F8A8 /* nativeMain.m in Sources */,

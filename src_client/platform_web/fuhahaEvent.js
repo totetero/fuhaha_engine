@@ -8,7 +8,7 @@ mergeInto(LibraryManager.library, {
 	// ----------------------------------------------------------------
 
 	// ゲーム初期化完了後のプラットフォーム初期化
-	webFuhahaCtrlInit: function(){
+	webFuhahaEventInit: function(){
 		// ----------------------------------------------------------------
 
 		var ua = window.navigator.userAgent;

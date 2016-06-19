@@ -5,7 +5,7 @@ import CoreMotion
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-class FuhahaCtrl{
+class FuhahaEvent{
 	// タッチ1情報
 	internal var t1id: Int = -1;
 	internal var t1x: Int32 = 0;
