@@ -4,7 +4,7 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-#include <GLES2/gl2.h>
+#include <GL/glew.h>
 
 #include <emscripten/emscripten.h>
 #define trace(...) emscripten_log(EM_LOG_CONSOLE, __VA_ARGS__)

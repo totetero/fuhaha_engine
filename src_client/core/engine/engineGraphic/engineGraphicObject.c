@@ -1,5 +1,4 @@
 #include "../../library.h"
-#include "platform.h"
 #include "../../plugin/pluginTexture.h"
 #include "../engineMath/engineMath.h"
 #include "engineGraphic.h"

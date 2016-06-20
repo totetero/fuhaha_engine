@@ -1,5 +1,4 @@
 #include "library.h"
-#include "platform.h"
 #include "engine/engineMath/engineMath.h"
 #include "engine/engineGraphic/engineGraphic.h"
 #include "game.h"

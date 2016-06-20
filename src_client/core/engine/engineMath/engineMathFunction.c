@@ -1,5 +1,4 @@
 #include "../../library.h"
-#include "platform.h"
 #include "engineMath.h"
 #include <math.h>
 

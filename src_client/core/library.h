@@ -11,12 +11,12 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <float.h>
+#include "platform.h"
 
 // 型定義
 typedef unsigned char byte;
 
 //// ゲーム本体における共通部分インクルード順番の例
-//#include "platform.h"
 //#include "plugin/pluginUtil.h"
 //#include "plugin/pluginData.h"
 //#include "plugin/pluginTexture.h"

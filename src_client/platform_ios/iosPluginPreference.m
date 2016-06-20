@@ -1,6 +1,5 @@
 #import "fuhaha-Swift.h"
 #include "library.h"
-#include "platform.h"
 #include "native.h"
 #include "pluginUtil.h"
 #include "pluginPreference.h"

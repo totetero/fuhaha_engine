@@ -5,7 +5,6 @@
 // ----------------------------------------------------------------
 
 #include "library.h"
-#include "platform.h"
 #include "pluginUtil.h"
 #include "pluginData.h"
 #include "pluginTexture.h"
