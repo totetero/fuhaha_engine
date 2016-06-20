@@ -280,7 +280,8 @@ mergeInto(LibraryManager.library, {
 		// ----------------------------------------------------------------
 		// 加速度イベント
 
-		if(true){
+		var isAcceleration = ccall("gameMainEventIsAcceleration", "null", [], []);
+		if(isAcceleration){
 			window.addEventListener("devicemotion", function(e){
 				if(globalWebFuhahaSurface && globalWebFuhahaSurface.isExit){return;}
 				var accx = e.accelerationIncludingGravity.x;

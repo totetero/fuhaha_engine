@@ -107,6 +107,11 @@ void gameMainEventKeyZxcv(bool kzb, bool kxb, bool kcb, bool kvb){
 
 // ----------------------------------------------------------------
 
+// 傾きを使うかどうか
+bool gameMainEventIsAcceleration(void){
+	return false;
+}
+
 // 傾きの状態を報告する
 void gameMainEventAcceleration(double accx, double accy, double accz){
 	global.acc.x = accx;

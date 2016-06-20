@@ -84,6 +84,11 @@ JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaEvent_gameMainEventKeyZxcv
 	gameMainEventKeyZxcv(kzb, kxb, kcb, kvb);
 }
 
+// 傾きを使うかどうか
+JNIEXPORT jboolean JNICALL Java_com_totetero_fuhaha_FuhahaEvent_gameMainEventIsAcceleration(JNIEnv *env, jobject obj){
+	return gameMainEventIsAcceleration();
+}
+
 // 傾きの状態を報告する
 JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaEvent_gameMainEventAcceleration(JNIEnv *env, jobject obj, jdouble accx, jdouble accy, jdouble accz){
 	gameMainEventAcceleration(accx, accy, accz);

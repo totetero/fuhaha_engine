@@ -23,7 +23,7 @@ class FuhahaEvent{
 
 	// コンストラクタ
 	init(){
-		if(true){
+		if(gameMainEventIsAcceleration()){
 			// 加速度センサー
 			self.motionManager = CMMotionManager();
 			self.motionManager!.accelerometerUpdateInterval = 0.05;

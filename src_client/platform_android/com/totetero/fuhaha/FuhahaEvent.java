@@ -45,13 +45,14 @@ public class FuhahaEvent implements SensorEventListener{
 	public static native void gameMainEventKeyBack(boolean kbk);
 	public static native void gameMainEventKeyArrow(boolean kup, boolean kdn, boolean krt, boolean klt);
 	public static native void gameMainEventKeyZxcv(boolean kzb, boolean kxb, boolean kcb, boolean kvb);
+	public static native boolean gameMainEventIsAcceleration();
 	public static native void gameMainEventAcceleration(double accx, double accy, double accz);
 
 	// ----------------------------------------------------------------
 
 	// コンストラクタ
 	public FuhahaEvent(){
-		if(true){
+		if(FuhahaEvent.gameMainEventIsAcceleration()){
 			// 加速度センサー
 			this.sensorManager = (SensorManager)FuhahaGLView.activity.getSystemService(FuhahaGLView.activity.SENSOR_SERVICE);
 		}
