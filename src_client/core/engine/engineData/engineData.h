@@ -36,7 +36,8 @@ struct engineDataJsonArray{
 // ----------------------------------------------------------------
 
 // 文字列のjson解釈
-void engineDataJsonParse(struct engineDataJsonValue *this, char *json);
+void engineDataJsonParseChar(struct engineDataJsonValue *this, char *json);
+void engineDataJsonParse(struct engineDataJsonValue *this, byte *json, size_t size);
 // jsonを文字列に変換
 char *engineDataJsonStringify(struct engineDataJsonValue *this);
 
@@ -84,9 +85,10 @@ void engineDataJsonFree(struct engineDataJsonValue *this);
 // -------- base64処理
 
 // base64形式に変換 引数非破壊 返値は解放必要
-char *engineDataBase64encode(byte *data, int length);
+char *engineDataBase64encode(byte *data, size_t size);
 // base64形式から解読 引数破壊 返値は解放不要
-byte *engineDataBase64decode(char *data, int *length);
+byte *engineDataBase64decodeChar(char *data, int *length);
+byte *engineDataBase64decode(byte *data, size_t size);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

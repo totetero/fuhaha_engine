@@ -9,8 +9,8 @@ static char localGlobal_enc[0x41] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopq
 static char localGlobal_dec[0x80] = "";
 
 // base64形式に変換 引数非破壊 返値は解放必要
-char *engineDataBase64encode(byte *data, int length){
-	int rawLen = length;
+char *engineDataBase64encode(byte *data, size_t size){
+	int rawLen = (int)size;
 	int b64Len = ((rawLen + 2) / 3) * 4;
 	byte *buff = (byte*)malloc((b64Len + 1) * sizeof(byte));
 
@@ -37,7 +37,7 @@ char *engineDataBase64encode(byte *data, int length){
 }
 
 // base64形式から解読 引数破壊 返値は解放不要
-byte *engineDataBase64decode(char *data, int *length){
+byte *engineDataBase64decodeChar(char *data, int *length){
 	int b64Len = (data == NULL) ? 0 : (int)strlen(data);
 
 	int rawLen = (b64Len / 4) * 3;
@@ -48,7 +48,11 @@ byte *engineDataBase64decode(char *data, int *length){
 	// データが存在しなかった場合
 	if(rawLen <= 0){return NULL;}
 
-	byte *buff = (byte*)data;
+	return engineDataBase64decode((byte*)data, rawLen);
+}
+byte *engineDataBase64decode(byte *data, size_t size){
+	int rawLen = (int)size;
+	byte *buff = data;
 
 	// デコードテーブル作成
 	for(int i = 0; i < 0x41; i++){localGlobal_dec[localGlobal_enc[i]] = i % 0x40;}

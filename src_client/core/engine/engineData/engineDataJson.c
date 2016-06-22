@@ -6,6 +6,8 @@
 // ----------------------------------------------------------------
 
 static struct{
+	// 開始位置と終了位置
+	char *posLast;
 	// 一時バッファ
 	char *tempBuff;
 	int tempBuffIndex;
@@ -34,13 +36,16 @@ static void tempBuffPutString2(char *value){size_t n = strlen(value) + 2 + 1; te
 
 // ----------------------------------------------------------------
 
+// 終端確認
+static bool isLast(char *c){return (c >= localGlobal.posLast || *c == '\0');}
+
 // 値文字列エスケープ読み取り
 static bool parseStringEscape(char **p){
 	char *c = *p;
 
 	if(*c != '\\'){return false;}
 	c++;
-	if(*c == '\0'){return false;}
+	if(isLast(c)){return false;}
 	else if(*c == '\n'){return false;}
 	else if(*c == '\\'){tempBuffPutChar('\\'); c++;}
 	else if(*c == '\''){tempBuffPutChar('\''); c++;}
@@ -49,10 +54,10 @@ static bool parseStringEscape(char **p){
 	else if(*c == 't'){tempBuffPutChar('\t'); c++;}
 	else if(*c == 'u'){
 		// utf-16 めんどいのでいろいろ略
-		c++; if(*c == '\0' || *c == '\n' || *c == '\'' || *c == '\"'){return false;}
-		c++; if(*c == '\0' || *c == '\n' || *c == '\'' || *c == '\"'){return false;}
-		c++; if(*c == '\0' || *c == '\n' || *c == '\'' || *c == '\"'){return false;}
-		c++; if(*c == '\0' || *c == '\n' || *c == '\'' || *c == '\"'){return false;}
+		c++; if(isLast(c) || *c == '\n' || *c == '\'' || *c == '\"'){return false;}
+		c++; if(isLast(c) || *c == '\n' || *c == '\'' || *c == '\"'){return false;}
+		c++; if(isLast(c) || *c == '\n' || *c == '\'' || *c == '\"'){return false;}
+		c++; if(isLast(c) || *c == '\n' || *c == '\'' || *c == '\"'){return false;}
 	}else{return false;}
 
 	*p = c;
@@ -69,7 +74,7 @@ static bool parseString(struct engineDataJsonValue *this, char **p){
 
 	// ダブルクォーテーション内部
 	while(*c != '\"'){
-		if(*c == '\0' || *c == '\n'){
+		if(isLast(c) || *c == '\n'){
 			// クォーテーションで閉じずに文字列の終わりが来たら読み取り失敗
 			return false;
 		}else if(!parseStringEscape(&c)){
@@ -216,17 +221,17 @@ static bool parseNull(struct engineDataJsonValue *this, char **p){
 static bool skipSpace(char **c){
 	// スペースの削除
 	while(**c == ' ' || **c == '\t' || **c == '\n'){(*c)++;}
-	if(**c == '\0'){return false;}
+	if(isLast(*c)){return false;}
 	// コメントチェック
 	bool isComment1 = (*(*c + 0) == '/' && *(*c + 1) == '*');
 	bool isComment2 = (*(*c + 0) == '/' && *(*c + 1) == '/');
 	while(isComment1 || isComment2){
 		*c += 2;
-		while(isComment1 && **c != '\0' && !(*(*c - 2) ==  '*' && *(*c - 1) ==  '/')){(*c)++;}
-		while(isComment2 && **c != '\0' && !(*(*c - 2) != '\\' && *(*c - 1) == '\n')){(*c)++;}
+		while(isComment1 && !isLast(*c) && !(*(*c - 2) ==  '*' && *(*c - 1) ==  '/')){(*c)++;}
+		while(isComment2 && !isLast(*c) && !(*(*c - 2) != '\\' && *(*c - 1) == '\n')){(*c)++;}
 		// スペースの削除
 		while(**c == ' ' || **c == '\t' || **c == '\n'){(*c)++;}
-		if(**c == '\0'){return false;}
+		if(isLast(*c)){return false;}
 		// コメントチェック
 		isComment1 = (*(*c + 0) == '/' && *(*c + 1) == '*');
 		isComment2 = (*(*c + 0) == '/' && *(*c + 1) == '/');
@@ -363,8 +368,13 @@ static void jsonStringify(struct engineDataJsonValue *this, int indent){
 // ----------------------------------------------------------------
 
 // 文字列のjson解釈
-void engineDataJsonParse(struct engineDataJsonValue *this, char *json){
-	char **c = &json;
+void engineDataJsonParseChar(struct engineDataJsonValue *this, char *json){
+	engineDataJsonParse(this, (byte*)json, strlen(json));
+}
+void engineDataJsonParse(struct engineDataJsonValue *this, byte *json, size_t size){
+	char *posFirst = (char*)json;
+	localGlobal.posLast = posFirst + size;
+	char **c = &posFirst;
 	if(parseValue(this, c)){
 		if(!skipSpace(c)){
 			// 読み取り成功
