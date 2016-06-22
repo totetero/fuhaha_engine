@@ -19,7 +19,10 @@ CFLAGS += -Wfloat-equal
 CFLAGS += -Wno-missing-field-initializers
 CFLAGS += -Wno-missing-braces
 CFLAGS += -Wno-char-subscripts
+CFLAGS += -Wno-unused-variable
 CFLAGS += -Wno-unused-parameter
+CFLAGS += -Wno-unused-function
+CFLAGS += -Wno-gnu-empty-struct
 
 .PHONY : default debug release build clean
 
