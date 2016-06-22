@@ -143,7 +143,7 @@ engineGraphicObjectVBOId engineGraphicObjectVBOCreate(int size, double *vertices
 	struct engineGraphicObjectVBO *obj = (struct engineGraphicObjectVBO*)calloc(1, sizeof(struct engineGraphicObjectVBO));
 	obj->egoId = ++localGlobal.egoIdCount;
 	obj->size = size;
-	int memsize = size * sizeof(GLfloat);
+	size_t memsize = size * sizeof(GLfloat);
 	obj->vertices = (GLfloat*)malloc(memsize);
 	for(int i = 0; i < size; i++){obj->vertices[i] = (GLfloat)vertices[i];}
 	egoVBOLoad(obj);
@@ -165,7 +165,7 @@ engineGraphicObjectIBOId engineGraphicObjectIBOCreate(int size, int *indexes){
 	struct engineGraphicObjectIBO *obj = (struct engineGraphicObjectIBO*)calloc(1, sizeof(struct engineGraphicObjectIBO));
 	obj->egoId = ++localGlobal.egoIdCount;
 	obj->size = size;
-	int memsize = size * sizeof(GLushort);
+	size_t memsize = size * sizeof(GLushort);
 	obj->indexes = (GLushort*)malloc(memsize);
 	for(int i = 0; i < size; i++){obj->indexes[i] = (GLushort)indexes[i];}
 	egoIBOLoad(obj);
