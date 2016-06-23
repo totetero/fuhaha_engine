@@ -7,10 +7,10 @@
 // ----------------------------------------------------------------
 
 static struct{
-	double *buffVert;
-	double *buffClor;
-	double *buffTexc;
-	int *buffFace;
+	GLfloat *buffVert;
+	GLfloat *buffClor;
+	GLfloat *buffTexc;
+	GLushort *buffFace;
 	int buffVertIndex;
 	int buffClorIndex;
 	int buffTexcIndex;
@@ -47,67 +47,67 @@ void engineGraphicBufferEnd(engineGraphicObjectVBOId *egoIdVert, engineGraphicOb
 void engineGraphicBufferPushVert(double x, double y, double z){
 	if(localGlobal.buffVertLength < localGlobal.buffVertIndex + 3){
 		int length = localGlobal.buffVertLength + 300;
-		double *array = (double*)malloc(length * sizeof(double));
+		GLfloat *array = (GLfloat*)malloc(length * sizeof(GLfloat));
 		if(localGlobal.buffVertLength > 0){
-			memcpy(array, localGlobal.buffVert, localGlobal.buffVertLength * sizeof(double));
+			memcpy(array, localGlobal.buffVert, localGlobal.buffVertLength * sizeof(GLfloat));
 			free(localGlobal.buffVert);
 		}
 		localGlobal.buffVertLength = length;
 		localGlobal.buffVert = array;
 	}
-	*(localGlobal.buffVert + localGlobal.buffVertIndex++) = x;
-	*(localGlobal.buffVert + localGlobal.buffVertIndex++) = y;
-	*(localGlobal.buffVert + localGlobal.buffVertIndex++) = z;
+	*(localGlobal.buffVert + localGlobal.buffVertIndex++) = (GLfloat)x;
+	*(localGlobal.buffVert + localGlobal.buffVertIndex++) = (GLfloat)y;
+	*(localGlobal.buffVert + localGlobal.buffVertIndex++) = (GLfloat)z;
 }
 
 // 色彩配列に要素追加
 void engineGraphicBufferPushClor(double r, double g, double b){
 	if(localGlobal.buffClorLength < localGlobal.buffClorIndex + 3){
 		int length = localGlobal.buffClorLength + 300;
-		double *array = (double*)malloc(length * sizeof(double));
+		GLfloat *array = (GLfloat*)malloc(length * sizeof(GLfloat));
 		if(localGlobal.buffClorLength > 0){
-			memcpy(array, localGlobal.buffClor, localGlobal.buffClorLength * sizeof(double));
+			memcpy(array, localGlobal.buffClor, localGlobal.buffClorLength * sizeof(GLfloat));
 			free(localGlobal.buffClor);
 		}
 		localGlobal.buffClorLength = length;
 		localGlobal.buffClor = array;
 	}
-	*(localGlobal.buffClor + localGlobal.buffClorIndex++) = r;
-	*(localGlobal.buffClor + localGlobal.buffClorIndex++) = g;
-	*(localGlobal.buffClor + localGlobal.buffClorIndex++) = b;
+	*(localGlobal.buffClor + localGlobal.buffClorIndex++) = (GLfloat)r;
+	*(localGlobal.buffClor + localGlobal.buffClorIndex++) = (GLfloat)g;
+	*(localGlobal.buffClor + localGlobal.buffClorIndex++) = (GLfloat)b;
 }
 
 // テクスチャ座標配列に要素追加
 void engineGraphicBufferPushTexc(double u, double v){
 	if(localGlobal.buffTexcLength < localGlobal.buffTexcIndex + 2){
 		int length = localGlobal.buffTexcLength + 200;
-		double *array = (double*)malloc(length * sizeof(double));
+		GLfloat *array = (GLfloat*)malloc(length * sizeof(GLfloat));
 		if(localGlobal.buffTexcLength > 0){
-			memcpy(array, localGlobal.buffTexc, localGlobal.buffTexcLength * sizeof(double));
+			memcpy(array, localGlobal.buffTexc, localGlobal.buffTexcLength * sizeof(GLfloat));
 			free(localGlobal.buffTexc);
 		}
 		localGlobal.buffTexcLength = length;
 		localGlobal.buffTexc = array;
 	}
-	*(localGlobal.buffTexc + localGlobal.buffTexcIndex++) = u;
-	*(localGlobal.buffTexc + localGlobal.buffTexcIndex++) = v;
+	*(localGlobal.buffTexc + localGlobal.buffTexcIndex++) = (GLfloat)u;
+	*(localGlobal.buffTexc + localGlobal.buffTexcIndex++) = (GLfloat)v;
 }
 
 // 頂点番号配配列に要素追加
 void engineGraphicBufferPushFace(int index, int t0, int t1, int t2){
 	if(localGlobal.buffFaceLength < localGlobal.buffFaceIndex + 3){
 		int length = localGlobal.buffFaceLength + 150;
-		int *array = (int*)malloc(length * sizeof(int));
+		GLushort *array = (GLushort*)malloc(length * sizeof(GLushort));
 		if(localGlobal.buffFaceLength > 0){
-			memcpy(array, localGlobal.buffFace, localGlobal.buffFaceLength * sizeof(int));
+			memcpy(array, localGlobal.buffFace, localGlobal.buffFaceLength * sizeof(GLushort));
 			free(localGlobal.buffFace);
 		}
 		localGlobal.buffFaceLength = length;
 		localGlobal.buffFace = array;
 	}
-	*(localGlobal.buffFace + localGlobal.buffFaceIndex++) = index + t0;
-	*(localGlobal.buffFace + localGlobal.buffFaceIndex++) = index + t1;
-	*(localGlobal.buffFace + localGlobal.buffFaceIndex++) = index + t2;
+	*(localGlobal.buffFace + localGlobal.buffFaceIndex++) = (GLushort)(index + t0);
+	*(localGlobal.buffFace + localGlobal.buffFaceIndex++) = (GLushort)(index + t1);
+	*(localGlobal.buffFace + localGlobal.buffFaceIndex++) = (GLushort)(index + t2);
 }
 
 // ----------------------------------------------------------------

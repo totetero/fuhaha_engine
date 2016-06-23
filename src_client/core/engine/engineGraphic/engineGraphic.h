@@ -69,9 +69,9 @@ typedef int engineGraphicObjectTexId;
 // -------- 3Dオブジェクト
 
 // 3DオブジェクトVBO作成
-engineGraphicObjectVBOId engineGraphicObjectVBOCreate(int size, double *vertices);
+engineGraphicObjectVBOId engineGraphicObjectVBOCreate(int length, GLfloat *vertices);
 // 3DオブジェクトIBO作成
-engineGraphicObjectIBOId engineGraphicObjectIBOCreate(int size, int *indexes);
+engineGraphicObjectIBOId engineGraphicObjectIBOCreate(int length, GLushort *indexes);
 // 3DオブジェクトTex作成
 engineGraphicObjectTexId engineGraphicObjectTexCreate(char *src, enum engineGraphicObjectTexType type);
 
