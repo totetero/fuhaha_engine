@@ -64,7 +64,7 @@ void engineGraphicSampleCode(void){
 	engineGraphicEngineBindTexcVBO(egoIdTexc);
 	engineGraphicEngineBindFaceIBO(egoIdFace);
 	engineGraphicEngineSetMatrix(&tempMat1);
-	engineGraphicEngineSetColor(1.0, 1.0, 1.0, 1.0);
+	engineGraphicEngineSetColorRgba(1.0, 1.0, 1.0, 1.0);
 	engineGraphicEngineDrawIndex(faceIndex * 3, faceNum * 3);
 }
 

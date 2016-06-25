@@ -63,9 +63,9 @@ double engineMathFloor(double x);
 // -------- 行列演算
 
 // ベクトル行列構造体
-struct engineMathVector3{union{struct{double x, y, z;}; double v[3];};};
-struct engineMathVector4{union{struct{double x, y, z, w;}; struct{double r, g, b, a;}; double v[4];};};
-struct engineMathMatrix44{union{struct{double m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33;}; double m[16];};};
+struct engineMathVector3{union{struct{GLfloat x, y, z;}; GLfloat v[3];};};
+struct engineMathVector4{union{struct{GLfloat x, y, z, w;}; struct{GLfloat r, g, b, a;}; GLfloat v[4];};};
+struct engineMathMatrix44{union{struct{GLfloat m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33;}; GLfloat m[16];};};
 
 // 行列複製
 void engineMathMat4Copy(struct engineMathMatrix44 *dst, struct engineMathMatrix44 *src);
@@ -90,6 +90,8 @@ void engineMathMat4RotateZ(struct engineMathMatrix44 *mat, double rad);
 // 逆行列
 void engineMathMat4Invert(struct engineMathMatrix44 *mat);
 
+// ベクトル値設定
+void engineMathVec4Set(struct engineMathVector4 *vec, double x, double y, double z, double w);
 // ベクトル行列積
 void engineMathVec3MultiplyMat4(struct engineMathVector3 *dst, struct engineMathVector3 *src, struct engineMathMatrix44 *mat);
 

@@ -32,7 +32,7 @@ static struct{
 		GLboolean modeDepth;
 		enum engineGraphicObjectTexType texType;
 		GLuint texData;
-		GLfloat color[4];
+		struct engineMathVector4 color;
 		engineGraphicObjectVBOId vertVBO;
 		engineGraphicObjectVBOId clorVBO;
 		engineGraphicObjectVBOId texcVBO;
@@ -71,7 +71,7 @@ void engineGraphicEngineInit(void){
 	localGlobal.memory.modeDraw = -1;
 	localGlobal.memory.modeStencil = -1;
 	localGlobal.memory.modeDepth = GL_TRUE;
-	localGlobal.memory.color[0] = -1;
+	engineMathVec4Set(&localGlobal.memory.color, 0, 0, 0, -1);
 	engineGraphicEngineMemoryResetVBO();
 	engineGraphicEngineMemoryResetIBO();
 	engineGraphicEngineMemoryResetTex();
@@ -153,7 +153,7 @@ void engineGraphicEngineSetDrawMode(enum engineGraphicEngineModeDraw mode){
 		if(localGlobal.shader.current->attr_pos >= 0){glEnableVertexAttribArray(localGlobal.shader.current->attr_pos);}
 		if(localGlobal.shader.current->attr_col >= 0){glEnableVertexAttribArray(localGlobal.shader.current->attr_col);}
 		if(localGlobal.shader.current->attr_uvc >= 0){glEnableVertexAttribArray(localGlobal.shader.current->attr_uvc);}
-		localGlobal.memory.color[0] = -1;
+		engineMathVec4Set(&localGlobal.memory.color, 0, 0, 0, -1);
 		engineGraphicEngineMemoryResetVBO();
 	}
 
@@ -386,21 +386,19 @@ void engineGraphicEngineBindFaceIBO(engineGraphicObjectIBOId egoId){
 
 // グラフィックエンジン命令 行列の設定
 void engineGraphicEngineSetMatrix(struct engineMathMatrix44 *matrix){
-	GLfloat fmatrix[16] = {
-		(GLfloat)matrix->m00, (GLfloat)matrix->m01, (GLfloat)matrix->m02, (GLfloat)matrix->m03,
-		(GLfloat)matrix->m10, (GLfloat)matrix->m11, (GLfloat)matrix->m12, (GLfloat)matrix->m13,
-		(GLfloat)matrix->m20, (GLfloat)matrix->m21, (GLfloat)matrix->m22, (GLfloat)matrix->m23,
-		(GLfloat)matrix->m30, (GLfloat)matrix->m31, (GLfloat)matrix->m32, (GLfloat)matrix->m33,
-	};
-	glUniformMatrix4fv(localGlobal.shader.current->unif_mat, 1, GL_FALSE, fmatrix);
+	glUniformMatrix4fv(localGlobal.shader.current->unif_mat, 1, GL_FALSE, matrix->m);
 }
 
 // グラフィックエンジン命令 色の設定
-void engineGraphicEngineSetColor(double r, double g, double b, double a){
-	GLfloat fcolor[4] = {(GLfloat)r, (GLfloat)g, (GLfloat)b, (GLfloat)a};
-	if(memcmp(localGlobal.memory.color, fcolor, 4 * sizeof(GLfloat))){
-		memcpy(localGlobal.memory.color, fcolor, 4 * sizeof(GLfloat));
-		glUniform4fv(localGlobal.shader.current->unif_col, 1, fcolor);
+void engineGraphicEngineSetColorRgba(double r, double g, double b, double a){
+	struct engineMathVector4 color;
+	engineMathVec4Set(&color, r, g, b, a);
+	engineGraphicEngineSetColorVec(&color);
+}
+void engineGraphicEngineSetColorVec(struct engineMathVector4 *color){
+	if(memcmp(&localGlobal.memory.color, color, sizeof(struct engineMathVector4))){
+		memcpy(&localGlobal.memory.color, color, sizeof(struct engineMathVector4));
+		glUniform4fv(localGlobal.shader.current->unif_col, 1, color->v);
 	}
 }
 

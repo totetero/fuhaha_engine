@@ -25,21 +25,21 @@ void engineMathMat4Ortho(struct engineMathMatrix44 *mat, double left, double rig
 	double rl = 1 / (right - left);
 	double tb = 1 / (top - bottom);
 	double nf = 1 / (near - far);
-	mat->m00 = 2 * rl;
+	mat->m00 = (GLfloat)(2 * rl);
 	mat->m01 = 0;
 	mat->m02 = 0;
 	mat->m03 = 0;
 	mat->m10 = 0;
-	mat->m11 = 2 * tb;
+	mat->m11 = (GLfloat)(2 * tb);
 	mat->m12 = 0;
 	mat->m13 = 0;
 	mat->m20 = 0;
 	mat->m21 = 0;
-	mat->m22 = 2 * nf;
+	mat->m22 = (GLfloat)(2 * nf);
 	mat->m23 = 0;
-	mat->m30 = (right + left) * -rl;
-	mat->m31 = (top + bottom) * -tb;
-	mat->m32 = (far + near) * nf;
+	mat->m30 = (GLfloat)((right + left) * -rl);
+	mat->m31 = (GLfloat)((top + bottom) * -tb);
+	mat->m32 = (GLfloat)((far + near) * nf);
 	mat->m33 = 1;
 }
 
@@ -48,21 +48,21 @@ void engineMathMat4Frustum(struct engineMathMatrix44 *mat, double left, double r
 	double rl = 1 / (right - left);
 	double tb = 1 / (top - bottom);
 	double nf = 1 / (near - far);
-	mat->m00 = (near * 2) * rl;
+	mat->m00 = (GLfloat)((near * 2) * rl);
 	mat->m01 = 0;
 	mat->m02 = 0;
 	mat->m03 = 0;
 	mat->m10 = 0;
-	mat->m11 = (near * 2) * tb;
+	mat->m11 = (GLfloat)((near * 2) * tb);
 	mat->m12 = 0;
 	mat->m13 = 0;
-	mat->m20 = (right + left) * rl;
-	mat->m21 = (top + bottom) * tb;
-	mat->m22 = (far + near) * nf;
+	mat->m20 = (GLfloat)((right + left) * rl);
+	mat->m21 = (GLfloat)((top + bottom) * tb);
+	mat->m22 = (GLfloat)((far + near) * nf);
 	mat->m23 = -1;
 	mat->m30 = 0;
 	mat->m31 = 0;
-	mat->m32 = (far * near * 2) * nf;
+	mat->m32 = (GLfloat)((far * near * 2) * nf);
 	mat->m33 = 0;
 }
 
@@ -94,26 +94,26 @@ void engineMathMat4Multiply(struct engineMathMatrix44 *mat, struct engineMathMat
 
 // 平行移動
 void engineMathMat4Translate(struct engineMathMatrix44 *mat, double x, double y, double z){
-	mat->m30 += mat->m00 * x + mat->m10 * y + mat->m20 * z;
-	mat->m31 += mat->m01 * x + mat->m11 * y + mat->m21 * z;
-	mat->m32 += mat->m02 * x + mat->m12 * y + mat->m22 * z;
-	mat->m33 += mat->m03 * x + mat->m13 * y + mat->m23 * z;
+	mat->m30 += (GLfloat)(mat->m00 * x + mat->m10 * y + mat->m20 * z);
+	mat->m31 += (GLfloat)(mat->m01 * x + mat->m11 * y + mat->m21 * z);
+	mat->m32 += (GLfloat)(mat->m02 * x + mat->m12 * y + mat->m22 * z);
+	mat->m33 += (GLfloat)(mat->m03 * x + mat->m13 * y + mat->m23 * z);
 }
 
 // 拡大縮小
 void engineMathMat4Scale(struct engineMathMatrix44 *mat, double x, double y, double z){
-	mat->m00 *= x;
-	mat->m01 *= x;
-	mat->m02 *= x;
-	mat->m03 *= x;
-	mat->m10 *= y;
-	mat->m11 *= y;
-	mat->m12 *= y;
-	mat->m13 *= y;
-	mat->m20 *= z;
-	mat->m21 *= z;
-	mat->m22 *= z;
-	mat->m23 *= z;
+	mat->m00 *= (GLfloat)x;
+	mat->m01 *= (GLfloat)x;
+	mat->m02 *= (GLfloat)x;
+	mat->m03 *= (GLfloat)x;
+	mat->m10 *= (GLfloat)y;
+	mat->m11 *= (GLfloat)y;
+	mat->m12 *= (GLfloat)y;
+	mat->m13 *= (GLfloat)y;
+	mat->m20 *= (GLfloat)z;
+	mat->m21 *= (GLfloat)z;
+	mat->m22 *= (GLfloat)z;
+	mat->m23 *= (GLfloat)z;
 }
 
 // x軸回転
@@ -128,14 +128,14 @@ void engineMathMat4RotateX(struct engineMathMatrix44 *mat, double rad){
 	double m21 = mat->m21;
 	double m22 = mat->m22;
 	double m23 = mat->m23;
-	mat->m10 = m10 * c + m20 * s;
-	mat->m11 = m11 * c + m21 * s;
-	mat->m12 = m12 * c + m22 * s;
-	mat->m13 = m13 * c + m23 * s;
-	mat->m20 = m20 * c - m10 * s;
-	mat->m21 = m21 * c - m11 * s;
-	mat->m22 = m22 * c - m12 * s;
-	mat->m23 = m23 * c - m13 * s;
+	mat->m10 = (GLfloat)(m10 * c + m20 * s);
+	mat->m11 = (GLfloat)(m11 * c + m21 * s);
+	mat->m12 = (GLfloat)(m12 * c + m22 * s);
+	mat->m13 = (GLfloat)(m13 * c + m23 * s);
+	mat->m20 = (GLfloat)(m20 * c - m10 * s);
+	mat->m21 = (GLfloat)(m21 * c - m11 * s);
+	mat->m22 = (GLfloat)(m22 * c - m12 * s);
+	mat->m23 = (GLfloat)(m23 * c - m13 * s);
 }
 
 // y軸回転
@@ -150,14 +150,14 @@ void engineMathMat4RotateY(struct engineMathMatrix44 *mat, double rad){
 	double m21 = mat->m21;
 	double m22 = mat->m22;
 	double m23 = mat->m23;
-	mat->m00 = m00 * c - m20 * s;
-	mat->m01 = m01 * c - m21 * s;
-	mat->m02 = m02 * c - m22 * s;
-	mat->m03 = m03 * c - m23 * s;
-	mat->m20 = m20 * c + m00 * s;
-	mat->m21 = m21 * c + m01 * s;
-	mat->m22 = m22 * c + m02 * s;
-	mat->m23 = m23 * c + m03 * s;
+	mat->m00 = (GLfloat)(m00 * c - m20 * s);
+	mat->m01 = (GLfloat)(m01 * c - m21 * s);
+	mat->m02 = (GLfloat)(m02 * c - m22 * s);
+	mat->m03 = (GLfloat)(m03 * c - m23 * s);
+	mat->m20 = (GLfloat)(m20 * c + m00 * s);
+	mat->m21 = (GLfloat)(m21 * c + m01 * s);
+	mat->m22 = (GLfloat)(m22 * c + m02 * s);
+	mat->m23 = (GLfloat)(m23 * c + m03 * s);
 }
 
 // z軸回転
@@ -172,14 +172,14 @@ void engineMathMat4RotateZ(struct engineMathMatrix44 *mat, double rad){
 	double m11 = mat->m11;
 	double m12 = mat->m12;
 	double m13 = mat->m13;
-	mat->m00 = m00 * c + m10 * s;
-	mat->m01 = m01 * c + m11 * s;
-	mat->m02 = m02 * c + m12 * s;
-	mat->m03 = m03 * c + m13 * s;
-	mat->m10 = m10 * c - m00 * s;
-	mat->m11 = m11 * c - m01 * s;
-	mat->m12 = m12 * c - m02 * s;
-	mat->m13 = m13 * c - m03 * s;
+	mat->m00 = (GLfloat)(m00 * c + m10 * s);
+	mat->m01 = (GLfloat)(m01 * c + m11 * s);
+	mat->m02 = (GLfloat)(m02 * c + m12 * s);
+	mat->m03 = (GLfloat)(m03 * c + m13 * s);
+	mat->m10 = (GLfloat)(m10 * c - m00 * s);
+	mat->m11 = (GLfloat)(m11 * c - m01 * s);
+	mat->m12 = (GLfloat)(m12 * c - m02 * s);
+	mat->m13 = (GLfloat)(m13 * c - m03 * s);
 }
 
 // ----------------------------------------------------------------
@@ -203,27 +203,35 @@ void engineMathMat4Invert(struct engineMathMatrix44 *mat){
 	double det = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
 	if(engineMathAbs(det) < DBL_EPSILON){return;}
 	double idet = 1 / det;
-	mat->m00 = (a.m11 * b11 - a.m12 * b10 + a.m13 * b09) * idet;
-	mat->m01 = (a.m02 * b10 - a.m01 * b11 - a.m03 * b09) * idet;
-	mat->m02 = (a.m31 * b05 - a.m32 * b04 + a.m33 * b03) * idet;
-	mat->m03 = (a.m22 * b04 - a.m21 * b05 - a.m23 * b03) * idet;
-	mat->m10 = (a.m12 * b08 - a.m10 * b11 - a.m13 * b07) * idet;
-	mat->m11 = (a.m00 * b11 - a.m02 * b08 + a.m03 * b07) * idet;
-	mat->m12 = (a.m32 * b02 - a.m30 * b05 - a.m33 * b01) * idet;
-	mat->m13 = (a.m20 * b05 - a.m22 * b02 + a.m23 * b01) * idet;
-	mat->m20 = (a.m10 * b10 - a.m11 * b08 + a.m13 * b06) * idet;
-	mat->m21 = (a.m01 * b08 - a.m00 * b10 - a.m03 * b06) * idet;
-	mat->m22 = (a.m30 * b04 - a.m31 * b02 + a.m33 * b00) * idet;
-	mat->m23 = (a.m21 * b02 - a.m20 * b04 - a.m23 * b00) * idet;
-	mat->m30 = (a.m11 * b07 - a.m10 * b09 - a.m12 * b06) * idet;
-	mat->m31 = (a.m00 * b09 - a.m01 * b07 + a.m02 * b06) * idet;
-	mat->m32 = (a.m31 * b01 - a.m30 * b03 - a.m32 * b00) * idet;
-	mat->m33 = (a.m20 * b03 - a.m21 * b01 + a.m22 * b00) * idet;
+	mat->m00 = (GLfloat)((a.m11 * b11 - a.m12 * b10 + a.m13 * b09) * idet);
+	mat->m01 = (GLfloat)((a.m02 * b10 - a.m01 * b11 - a.m03 * b09) * idet);
+	mat->m02 = (GLfloat)((a.m31 * b05 - a.m32 * b04 + a.m33 * b03) * idet);
+	mat->m03 = (GLfloat)((a.m22 * b04 - a.m21 * b05 - a.m23 * b03) * idet);
+	mat->m10 = (GLfloat)((a.m12 * b08 - a.m10 * b11 - a.m13 * b07) * idet);
+	mat->m11 = (GLfloat)((a.m00 * b11 - a.m02 * b08 + a.m03 * b07) * idet);
+	mat->m12 = (GLfloat)((a.m32 * b02 - a.m30 * b05 - a.m33 * b01) * idet);
+	mat->m13 = (GLfloat)((a.m20 * b05 - a.m22 * b02 + a.m23 * b01) * idet);
+	mat->m20 = (GLfloat)((a.m10 * b10 - a.m11 * b08 + a.m13 * b06) * idet);
+	mat->m21 = (GLfloat)((a.m01 * b08 - a.m00 * b10 - a.m03 * b06) * idet);
+	mat->m22 = (GLfloat)((a.m30 * b04 - a.m31 * b02 + a.m33 * b00) * idet);
+	mat->m23 = (GLfloat)((a.m21 * b02 - a.m20 * b04 - a.m23 * b00) * idet);
+	mat->m30 = (GLfloat)((a.m11 * b07 - a.m10 * b09 - a.m12 * b06) * idet);
+	mat->m31 = (GLfloat)((a.m00 * b09 - a.m01 * b07 + a.m02 * b06) * idet);
+	mat->m32 = (GLfloat)((a.m31 * b01 - a.m30 * b03 - a.m32 * b00) * idet);
+	mat->m33 = (GLfloat)((a.m20 * b03 - a.m21 * b01 + a.m22 * b00) * idet);
 }
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
+
+// ベクトル値設定
+void engineMathVec4Set(struct engineMathVector4 *vec, double x, double y, double z, double w){
+	vec->x = (GLfloat)x;
+	vec->y = (GLfloat)y;
+	vec->z = (GLfloat)z;
+	vec->w = (GLfloat)w;
+}
 
 // ベクトル行列積
 void engineMathVec3MultiplyMat4(struct engineMathVector3 *dst, struct engineMathVector3 *src, struct engineMathMatrix44 *mat){

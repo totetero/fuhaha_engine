@@ -152,7 +152,8 @@ void engineGraphicEngineBindFaceIBO(engineGraphicObjectIBOId egoId);
 // グラフィックエンジン命令 行列の設定
 void engineGraphicEngineSetMatrix(struct engineMathMatrix44 *matrix);
 // グラフィックエンジン命令 色の設定
-void engineGraphicEngineSetColor(double r, double g, double b, double a);
+void engineGraphicEngineSetColorRgba(double r, double g, double b, double a);
+void engineGraphicEngineSetColorVec(struct engineMathVector4 *color);
 
 // グラフィックエンジン命令 頂点インデックスを元に描画
 void engineGraphicEngineDrawIndex(int offset, int count);
