@@ -4,17 +4,6 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-// 3Dエンジン初期化処理
-void engineGraphicGameInit(void);
-// 3Dエンジン終了処理
-void engineGraphicGameExit(void);
-// 3Dエンジン例文
-void engineGraphicSampleCode(void);
-
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
-
 // テクスチャタイプ列挙型
 enum engineGraphicObjectTexType{
 	ENGINEGRAPHICOBJECTTEXTYPE_LINEAR,
@@ -62,6 +51,17 @@ enum engineGraphicEngineModeStencil{
 typedef int engineGraphicObjectVBOId;
 typedef int engineGraphicObjectIBOId;
 typedef int engineGraphicObjectTexId;
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+
+// 3Dエンジン初期化処理
+void engineGraphicGameInit(void);
+// 3Dエンジン終了処理
+void engineGraphicGameExit(void);
+// 3Dエンジン例文
+void engineGraphicSampleCode(void);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
