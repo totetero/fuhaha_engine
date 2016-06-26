@@ -12,6 +12,7 @@
 //double engineMathAcos(double x){return acos(x);}
 //double engineMathAsin(double x){return asin(x);}
 //double engineMathAtan2(double y, double x){return atan2(y, x);}
+double engineMathPow(double x, double y){return pow(x, y);}
 double engineMathAbs(double x){return fabs(x);}
 double engineMathCeil(double x){return ceil(x);}
 double engineMathRound(double x){return round(x);}

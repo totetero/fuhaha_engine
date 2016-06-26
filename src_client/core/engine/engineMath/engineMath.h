@@ -52,6 +52,7 @@ double engineMathSin(double x);
 double engineMathAcos(double x);
 double engineMathAsin(double x);
 double engineMathAtan2(double y, double x);
+double engineMathPow(double x, double y);
 double engineMathAbs(double x);
 double engineMathCeil(double x);
 double engineMathRound(double x);

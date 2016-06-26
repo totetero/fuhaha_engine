@@ -26,6 +26,7 @@ typedef unsigned char byte;
 //#include "engine/engineMath/engineMath.h"
 //#include "engine/engineUtil/engineUtil.h"
 //#include "engine/engineData/engineData.h"
+//#include "engine/engineCtrl/engineCtrl.h"
 //#include "engine/engineGraphic/engineGraphic.h"
 //#include "game.h"
 
