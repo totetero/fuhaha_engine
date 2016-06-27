@@ -28,6 +28,7 @@ class IosPluginTexture: NSObject{
 			dispatch_async(dispatch_get_main_queue(), {
 				var glId: GLuint = 0;
 				glGenTextures(GLsizei(1), &glId);
+				corePluginTextureIsBind(glId);
 				glBindTexture(GLenum(GL_TEXTURE_2D), glId);
 				glTexImage2D(GLenum(GL_TEXTURE_2D), GLint(0), GL_RGBA, GLsizei(width), GLsizei(height), 0, GLenum(GL_RGBA), GLenum(GL_UNSIGNED_BYTE), buff);
 				buff.dealloc(buffSize);

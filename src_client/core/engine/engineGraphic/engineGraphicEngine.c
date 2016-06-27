@@ -1,4 +1,5 @@
 #include "../../library.h"
+#include "../../plugin/pluginTexture.h"
 #include "../engineMath/engineMath.h"
 #include "engineGraphic.h"
 
@@ -31,7 +32,6 @@ static struct{
 		enum engineGraphicEngineModeStencil modeStencil;
 		GLboolean modeDepth;
 		enum engineGraphicObjectTexType texType;
-		GLuint texData;
 		struct engineMathVector4 color;
 		engineGraphicObjectVBOId vertVBO;
 		engineGraphicObjectVBOId clorVBO;
@@ -126,7 +126,6 @@ void engineGraphicEngineMemoryResetIBO(void){
 // 重複動作阻止のためのTex状態記録をリセット
 void engineGraphicEngineMemoryResetTex(void){
 	localGlobal.memory.texType = -1;
-	localGlobal.memory.texData = ~0;
 }
 
 // ----------------------------------------------------------------
@@ -314,9 +313,10 @@ void engineGraphicEngineBindTexture(engineGraphicObjectTexId egoId){
 	GLuint glId;
 	enum engineGraphicObjectTexType type;
 	if(!engineGraphicObjectTexGetGLId(egoId, &glId, &type)){return;}
-	if(localGlobal.memory.texType == type && localGlobal.memory.texData == glId){return;}
+	bool isBind = corePluginTextureIsBind(glId);
+	if(localGlobal.memory.texType == type && isBind){return;}
 
-	if(localGlobal.memory.texData != glId){glBindTexture(GL_TEXTURE_2D, glId);}
+	if(!isBind){glBindTexture(GL_TEXTURE_2D, glId);}
 
 	switch(type){
 		case ENGINEGRAPHICOBJECTTEXTYPE_LINEAR:
@@ -336,7 +336,6 @@ void engineGraphicEngineBindTexture(engineGraphicObjectTexId egoId){
 	}
 
 	localGlobal.memory.texType = type;
-	localGlobal.memory.texData = glId;
 }
 
 // グラフィックエンジン命令 VBO登録 頂点座標

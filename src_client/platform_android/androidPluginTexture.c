@@ -6,6 +6,11 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
+// テクスチャバインド状態の記録と重複確認
+JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginTexture_corePluginTextureIsBind(JNIEnv *env, jobject obj, jint glId){
+	return corePluginTextureIsBind(glId);
+}
+
 // テクスチャのコールバック
 JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginTexture_gamePluginTextureCallback(JNIEnv *env, jobject obj, jint callbackId, jint glId, jint texw, jint texh, jint imgw, jint imgh){
 	gamePluginTextureCallbackCall(callbackId, glId, texw, texh, imgw, imgh);

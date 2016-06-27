@@ -48,6 +48,7 @@
 		9CB108651D1197E70065F8A8 /* iosPluginUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB108411D1197E70065F8A8 /* iosPluginUtil.m */; };
 		9CB108661D1197E70065F8A8 /* IosPluginUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CB108421D1197E70065F8A8 /* IosPluginUtil.swift */; };
 		9CB108671D1197E70065F8A8 /* nativeMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB108441D1197E70065F8A8 /* nativeMain.m */; };
+		9CCF76FF1D20AAA80005BF84 /* pluginTextureMemory.c in Sources */ = {isa = PBXBuildFile; fileRef = 9CCF76FE1D20AAA80005BF84 /* pluginTextureMemory.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -110,6 +111,7 @@
 		9CB108431D1197E70065F8A8 /* native.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = native.h; sourceTree = "<group>"; };
 		9CB108441D1197E70065F8A8 /* nativeMain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = nativeMain.m; sourceTree = "<group>"; };
 		9CB108451D1197E70065F8A8 /* platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = platform.h; sourceTree = "<group>"; };
+		9CCF76FE1D20AAA80005BF84 /* pluginTextureMemory.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pluginTextureMemory.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -212,6 +214,7 @@
 				9C64C62D1D16C661005084C5 /* pluginSound.h */,
 				9C64C62E1D16C661005084C5 /* pluginTexture.h */,
 				9C64C62F1D16C661005084C5 /* pluginTextureCallback.c */,
+				9CCF76FE1D20AAA80005BF84 /* pluginTextureMemory.c */,
 				9C64C6301D16C661005084C5 /* pluginUtil.h */,
 				9C64C6311D16C661005084C5 /* pluginUtilCallback.c */,
 				9C64C6321D16C661005084C5 /* pluginUtilTemporaryBuffer.c */,
@@ -361,6 +364,7 @@
 				9CB108601D1197E70065F8A8 /* IosPluginPreference.swift in Sources */,
 				9CB108591D1197E70065F8A8 /* FuhahaEvent.swift in Sources */,
 				9C64C6461D16C661005084C5 /* pluginUtilTemporaryBuffer.c in Sources */,
+				9CCF76FF1D20AAA80005BF84 /* pluginTextureMemory.c in Sources */,
 				9C64C63C1D16C661005084C5 /* engineMathFunction.c in Sources */,
 				9CB108671D1197E70065F8A8 /* nativeMain.m in Sources */,
 				9C64C63F1D16C661005084C5 /* gameEvent.c in Sources */,

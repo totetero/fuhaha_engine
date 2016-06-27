@@ -421,6 +421,7 @@ void engineGraphicObjectReload(void){
 	// 読み込み中に使うデフォルトテクスチャ作成
 	byte data[4] = {0xff, 0xff, 0xff, 0xff};
 	glGenTextures(1, &localGlobal.defaultTexture.glId);
+	corePluginTextureIsBind(localGlobal.defaultTexture.glId);
 	glBindTexture(GL_TEXTURE_2D, localGlobal.defaultTexture.glId);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 	glGenerateMipmap(GL_TEXTURE_2D);
