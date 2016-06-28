@@ -54,6 +54,7 @@ void engineCtrlTouchCalc(void){
 			// 離した直後
 			globalTouch->dn.triggerInactive = false;
 			localTouch->touch.dn = false;
+			localTouch->trigger = false;
 		}
 
 		if(localTouch->free){
