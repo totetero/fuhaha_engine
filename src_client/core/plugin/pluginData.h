@@ -20,7 +20,7 @@ pluginDataRequestId corePluginDataRequestHttp(char *url, char *request);
 // ローカルデータリクエスト
 pluginDataRequestId corePluginDataRequestLocal(char *src);
 
-// リクエスト応答 応答バッファは要開放
+// リクエスト応答
 bool corePluginDataRequestResponse(pluginDataRequestId reqId, void **buff, size_t *size);
 
 // リクエスト開放
