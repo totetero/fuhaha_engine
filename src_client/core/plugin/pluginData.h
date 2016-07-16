@@ -4,9 +4,6 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-// リクエスト識別子
-typedef int pluginDataRequestId;
-
 // コールバック識別子
 typedef int pluginDataCallbackId;
 
@@ -14,19 +11,6 @@ typedef int pluginDataCallbackId;
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // -------- ゲーム側で実装 主にゲーム側から呼び出す
-
-// HTTP通信リクエスト
-pluginDataRequestId corePluginDataRequestHttp(char *url, char *request);
-// ローカルデータリクエスト
-pluginDataRequestId corePluginDataRequestLocal(char *src);
-
-// リクエスト応答
-bool corePluginDataRequestResponse(pluginDataRequestId reqId, void **buff, size_t *size);
-
-// リクエスト開放
-void corePluginDataRequestFree(pluginDataRequestId reqId);
-// 全リクエスト開放
-void corePluginDataRequestFreeAll(void);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

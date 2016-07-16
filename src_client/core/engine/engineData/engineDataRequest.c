@@ -1,5 +1,6 @@
-#include "../library.h"
-#include "pluginData.h"
+#include "../../library.h"
+#include "plugin/pluginData.h"
+#include "engineData.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -8,16 +9,16 @@
 static struct{
 	// リクエストリスト
 	int reqIdCount;
-	struct pluginDataRequestUnit{
-		struct pluginDataRequestUnit *next;
-		pluginDataRequestId reqId;
+	struct engineDataRequestUnit{
+		struct engineDataRequestUnit *next;
+		engineDataRequestId reqId;
 		void *buff;
 		size_t size;
 		// ロード状態
-		enum pluginDataRequestUnitStatus{
-			PLUGINDATAREQUESTUNITSTATUS_LOADING,
-			PLUGINDATAREQUESTUNITSTATUS_LOADED,
-			PLUGINDATAREQUESTUNITSTATUS_CANCEL,
+		enum engineDataRequestUnitStatus{
+			ENGINEDATAREQUESTUNITSTATUS_LOADING,
+			ENGINEDATAREQUESTUNITSTATUS_LOADED,
+			ENGINEDATAREQUESTUNITSTATUS_CANCEL,
 		} status;
 	} *reqList;
 } localGlobal = {0};
@@ -25,13 +26,13 @@ static struct{
 // ----------------------------------------------------------------
 
 // リクエストデータ作成
-static struct pluginDataRequestUnit *reqDataCreate(void){
-	struct pluginDataRequestUnit *this = (struct pluginDataRequestUnit*)calloc(1, sizeof(struct pluginDataRequestUnit));
+static struct engineDataRequestUnit *reqDataCreate(void){
+	struct engineDataRequestUnit *this = (struct engineDataRequestUnit*)calloc(1, sizeof(struct engineDataRequestUnit));
 	// リストにデータ追加
 	if(localGlobal.reqList == NULL){
 		localGlobal.reqList = this;
 	}else{
-		struct pluginDataRequestUnit *temp = localGlobal.reqList;
+		struct engineDataRequestUnit *temp = localGlobal.reqList;
 		while(temp->next != NULL){temp = temp->next;}
 		temp->next = this;
 	}
@@ -39,19 +40,19 @@ static struct pluginDataRequestUnit *reqDataCreate(void){
 	this->reqId = ++localGlobal.reqIdCount;
 	this->buff = NULL;
 	this->size = 0;
-	this->status = PLUGINDATAREQUESTUNITSTATUS_LOADING;
+	this->status = ENGINEDATAREQUESTUNITSTATUS_LOADING;
 	return this;
 }
 
 // リクエストデータ解放
-static void reqDataFree(struct pluginDataRequestUnit *this){
-	if(this->status == PLUGINDATAREQUESTUNITSTATUS_LOADED){
+static void reqDataFree(struct engineDataRequestUnit *this){
+	if(this->status == ENGINEDATAREQUESTUNITSTATUS_LOADED){
 		// 解放
 		if(this->buff != NULL){free(this->buff);}
 		free(this);
 	}else{
 		// ロードが完了していないのでコールバックで破棄
-		this->status = PLUGINDATAREQUESTUNITSTATUS_CANCEL;
+		this->status = ENGINEDATAREQUESTUNITSTATUS_CANCEL;
 	}
 }
 
@@ -59,14 +60,14 @@ static void reqDataFree(struct pluginDataRequestUnit *this){
 
 // ロード完了時コールバック
 static void callback(void *param, void *buff, size_t size){
-	struct pluginDataRequestUnit *this = (struct pluginDataRequestUnit*)param;
+	struct engineDataRequestUnit *this = (struct engineDataRequestUnit*)param;
 
-	if(this->status == PLUGINDATAREQUESTUNITSTATUS_LOADING){
+	if(this->status == ENGINEDATAREQUESTUNITSTATUS_LOADING){
 		// ロード完了
 		this->buff = buff;
 		this->size = size;
-		this->status = PLUGINDATAREQUESTUNITSTATUS_LOADED;
-	}else if(this->status == PLUGINDATAREQUESTUNITSTATUS_CANCEL){
+		this->status = ENGINEDATAREQUESTUNITSTATUS_LOADED;
+	}else if(this->status == ENGINEDATAREQUESTUNITSTATUS_CANCEL){
 		// ロード中止
 		if(this != NULL){free(this);}
 		if(buff != NULL){free(buff);}
@@ -78,15 +79,15 @@ static void callback(void *param, void *buff, size_t size){
 // ----------------------------------------------------------------
 
 // 通信リクエスト
-pluginDataRequestId corePluginDataRequestHttp(char *url, char *request){
-	struct pluginDataRequestUnit *this = reqDataCreate();
+engineDataRequestId engineDataRequestHttp(char *url, char *request){
+	struct engineDataRequestUnit *this = reqDataCreate();
 	platformPluginDataHttp(this, url, request, callback);
 	return this->reqId;
 }
 
 // ローカルファイルリクエスト
-pluginDataRequestId corePluginDataRequestLocal(char *src){
-	struct pluginDataRequestUnit *this = reqDataCreate();
+engineDataRequestId engineDataRequestLocal(char *src){
+	struct engineDataRequestUnit *this = reqDataCreate();
 	platformPluginDataLocal(this, src, callback);
 	return this->reqId;
 }
@@ -94,11 +95,11 @@ pluginDataRequestId corePluginDataRequestLocal(char *src){
 // ----------------------------------------------------------------
 
 // リクエスト応答
-bool corePluginDataRequestResponse(pluginDataRequestId reqId, void **buff, size_t *size){
-	struct pluginDataRequestUnit *temp = localGlobal.reqList;
+bool engineDataRequestResponse(engineDataRequestId reqId, void **buff, size_t *size){
+	struct engineDataRequestUnit *temp = localGlobal.reqList;
 	while(temp != NULL){
 		if(temp->reqId == reqId){
-			if(temp->status == PLUGINDATAREQUESTUNITSTATUS_LOADED){
+			if(temp->status == ENGINEDATAREQUESTUNITSTATUS_LOADED){
 				// データが存在した場合
 				if(buff != NULL){*buff = temp->buff;}
 				if(size != NULL){*size = temp->size;}
@@ -117,12 +118,12 @@ bool corePluginDataRequestResponse(pluginDataRequestId reqId, void **buff, size_
 // ----------------------------------------------------------------
 
 // リクエスト解放
-void corePluginDataRequestFree(pluginDataRequestId reqId){
-	struct pluginDataRequestUnit *prev = NULL;
-	struct pluginDataRequestUnit *temp = localGlobal.reqList;
+void engineDataRequestFree(engineDataRequestId reqId){
+	struct engineDataRequestUnit *prev = NULL;
+	struct engineDataRequestUnit *temp = localGlobal.reqList;
 	while(temp != NULL){
 		if(temp->reqId == reqId){
-			struct pluginDataRequestUnit *dispose = temp;
+			struct engineDataRequestUnit *dispose = temp;
 			// 次のを装填
 			if(prev == NULL){localGlobal.reqList = temp->next;}
 			else{prev->next = temp->next;}
@@ -137,10 +138,10 @@ void corePluginDataRequestFree(pluginDataRequestId reqId){
 }
 
 // 全リクエスト解放
-void corePluginDataRequestFreeAll(void){
-	struct pluginDataRequestUnit *temp = localGlobal.reqList;
+void engineDataRequestFreeAll(void){
+	struct engineDataRequestUnit *temp = localGlobal.reqList;
 	while(temp != NULL){
-		struct pluginDataRequestUnit *dispose = temp;
+		struct engineDataRequestUnit *dispose = temp;
 		temp = temp->next;
 		// 解放
 		reqDataFree(dispose);
