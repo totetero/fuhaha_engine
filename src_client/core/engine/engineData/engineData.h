@@ -84,9 +84,9 @@ void engineDataJsonFree(struct engineDataJsonValue *this);
 // ----------------------------------------------------------------
 // -------- base64処理
 
-// base64形式に変換 引数非破壊 返値は解放必要
+// base64形式に変換 返値文字列は揮発性バッファで解放禁止
 char *engineDataBase64encode(byte *data, size_t size);
-// base64形式から解読 引数破壊 返値は解放不要
+// base64形式から解読 返値データは揮発性バッファで解放禁止
 byte *engineDataBase64decodeChar(char *data, int *length);
 byte *engineDataBase64decode(byte *data, size_t size);
 

@@ -8,11 +8,12 @@
 static char localGlobal_enc[0x41] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 static char localGlobal_dec[0x80] = "";
 
-// base64形式に変換 引数非破壊 返値は解放必要
+// base64形式に変換 返値文字列は揮発性バッファで解放禁止
 char *engineDataBase64encode(byte *data, size_t size){
 	int rawLen = (int)size;
 	int b64Len = ((rawLen + 2) / 3) * 4;
-	byte *buff = (byte*)malloc((b64Len + 1) * sizeof(byte));
+	size_t buffSize = (b64Len + 1) * sizeof(byte);
+	byte *buff = (byte*)corePluginUtilTemporaryBuffer(buffSize);
 
 	// base64エンコード
 	int x = 0;
@@ -36,7 +37,7 @@ char *engineDataBase64encode(byte *data, size_t size){
 	return (char*)buff;
 }
 
-// base64形式から解読 引数破壊 返値は解放不要
+// base64形式から解読 返値データは揮発性バッファで解放禁止
 byte *engineDataBase64decodeChar(char *data, int *length){
 	int b64Len = (data == NULL) ? 0 : (int)strlen(data);
 
@@ -52,7 +53,8 @@ byte *engineDataBase64decodeChar(char *data, int *length){
 }
 byte *engineDataBase64decode(byte *data, size_t size){
 	int rawLen = (int)size;
-	byte *buff = data;
+	size_t buffSize = (rawLen + 1) * sizeof(byte);
+	byte *buff = (byte*)corePluginUtilTemporaryBuffer(buffSize);
 
 	// デコードテーブル作成
 	for(int i = 0; i < 0x41; i++){localGlobal_dec[localGlobal_enc[i]] = i % 0x40;}
@@ -65,6 +67,7 @@ byte *engineDataBase64decode(byte *data, size_t size){
 			case 2: buff[i] = localGlobal_dec[data[j + 2]] << 6 | localGlobal_dec[data[j + 3]]; j += 4; break;
 		}
 	}
+	buff[rawLen] = '\0';
 
 	return buff;
 }
