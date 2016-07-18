@@ -1,5 +1,6 @@
 #include "../../library.h"
-#include "plugin/pluginData.h"
+#include "../../plugin/pluginData.h"
+#include "../engineUtil/engineUtil.h"
 #include "engineData.h"
 
 // ----------------------------------------------------------------
@@ -27,7 +28,7 @@ static struct{
 
 // リクエストデータ作成
 static struct engineDataRequestUnit *reqDataCreate(void){
-	struct engineDataRequestUnit *this = (struct engineDataRequestUnit*)calloc(1, sizeof(struct engineDataRequestUnit));
+	struct engineDataRequestUnit *this = (struct engineDataRequestUnit*)engineUtilMemoryCalloc(1, sizeof(struct engineDataRequestUnit));
 	// リストにデータ追加
 	if(localGlobal.reqList == NULL){
 		localGlobal.reqList = this;
@@ -48,8 +49,8 @@ static struct engineDataRequestUnit *reqDataCreate(void){
 static void reqDataFree(struct engineDataRequestUnit *this){
 	if(this->status == ENGINEDATAREQUESTUNITSTATUS_LOADED){
 		// 解放
-		if(this->buff != NULL){free(this->buff);}
-		free(this);
+		if(this->buff != NULL){engineUtilMemoryFree(this->buff);}
+		engineUtilMemoryFree(this);
 	}else{
 		// ロードが完了していないのでコールバックで破棄
 		this->status = ENGINEDATAREQUESTUNITSTATUS_CANCEL;
@@ -69,8 +70,8 @@ static void callback(void *param, void *buff, size_t size){
 		this->status = ENGINEDATAREQUESTUNITSTATUS_LOADED;
 	}else if(this->status == ENGINEDATAREQUESTUNITSTATUS_CANCEL){
 		// ロード中止
-		if(this != NULL){free(this);}
-		if(buff != NULL){free(buff);}
+		if(this != NULL){engineUtilMemoryFree(this);}
+		if(buff != NULL){engineUtilMemoryFree(buff);}
 	}
 }
 

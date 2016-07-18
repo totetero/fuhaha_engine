@@ -1,6 +1,7 @@
 #include "../../library.h"
 #include "../../plugin/pluginTexture.h"
 #include "../engineMath/engineMath.h"
+#include "../engineUtil/engineUtil.h"
 #include "engineGraphic.h"
 
 // ----------------------------------------------------------------
@@ -66,15 +67,15 @@ static struct{
 // 3DオブジェクトVBO解放
 static void egoVBOFree(struct engineGraphicObjectVBO *this){
 	glDeleteBuffers(1, &this->glId);
-	free(this->vertices);
-	free(this);
+	engineUtilMemoryFree(this->vertices);
+	engineUtilMemoryFree(this);
 }
 
 // 3DオブジェクトIBO解放
 static void egoIBOFree(struct engineGraphicObjectIBO *this){
 	glDeleteBuffers(1, &this->glId);
-	free(this->indexes);
-	free(this);
+	engineUtilMemoryFree(this->indexes);
+	engineUtilMemoryFree(this);
 }
 
 // テクスチャ情報解放
@@ -82,8 +83,8 @@ static void texDataFree(struct engineGraphicObjectTexData *this){
 	if(this->status == ENGINEGRAPHICOBJECTTEXDATASTATUS_LOADED){
 		// 解放
 		if(this->glId != localGlobal.defaultTexture.glId){glDeleteTextures(1, &this->glId);}
-		free(this->src);
-		free(this);
+		engineUtilMemoryFree(this->src);
+		engineUtilMemoryFree(this);
 	}else{
 		// ロードが完了していないのでコールバックで破棄
 		this->status = ENGINEGRAPHICOBJECTTEXDATASTATUS_CANCEL;
@@ -92,7 +93,7 @@ static void texDataFree(struct engineGraphicObjectTexData *this){
 
 // 3DオブジェクトTex解放
 static void egoTexFree(struct engineGraphicObjectTex *this){
-	free(this);
+	engineUtilMemoryFree(this);
 }
 
 // ----------------------------------------------------------------
@@ -140,11 +141,11 @@ static void texDataLoad(struct engineGraphicObjectTexData *this){
 // 3DオブジェクトVBO作成
 engineGraphicObjectVBOId engineGraphicObjectVBOCreate(int length, GLfloat *vertices){
 	// データ作成
-	struct engineGraphicObjectVBO *obj = (struct engineGraphicObjectVBO*)calloc(1, sizeof(struct engineGraphicObjectVBO));
+	struct engineGraphicObjectVBO *obj = (struct engineGraphicObjectVBO*)engineUtilMemoryCalloc(1, sizeof(struct engineGraphicObjectVBO));
 	obj->egoId = ++localGlobal.egoIdCount;
 	obj->length = length;
 	size_t size = length * sizeof(GLfloat);
-	obj->vertices = (GLfloat*)malloc(size);
+	obj->vertices = (GLfloat*)engineUtilMemoryMalloc(size);
 	memcpy(obj->vertices, vertices, size);
 	//for(int i = 0; i < length; i++){obj->vertices[i] = (GLfloat)vertices[i];}
 	egoVBOLoad(obj);
@@ -163,11 +164,11 @@ engineGraphicObjectVBOId engineGraphicObjectVBOCreate(int length, GLfloat *verti
 // 3DオブジェクトIBO作成
 engineGraphicObjectIBOId engineGraphicObjectIBOCreate(int length, GLushort *indexes){
 	// データ作成
-	struct engineGraphicObjectIBO *obj = (struct engineGraphicObjectIBO*)calloc(1, sizeof(struct engineGraphicObjectIBO));
+	struct engineGraphicObjectIBO *obj = (struct engineGraphicObjectIBO*)engineUtilMemoryCalloc(1, sizeof(struct engineGraphicObjectIBO));
 	obj->egoId = ++localGlobal.egoIdCount;
 	obj->length = length;
 	size_t size = length * sizeof(GLushort);
-	obj->indexes = (GLushort*)malloc(size);
+	obj->indexes = (GLushort*)engineUtilMemoryMalloc(size);
 	memcpy(obj->indexes, indexes, size);
 	//for(int i = 0; i < length; i++){obj->indexes[i] = (GLushort)indexes[i];}
 	egoIBOLoad(obj);
@@ -192,9 +193,9 @@ static struct engineGraphicObjectTexData *texDataCreate(char *src){
 		temp = temp->next;
 	}
 	// 重複がなければ新規作成
-	struct engineGraphicObjectTexData *obj = (struct engineGraphicObjectTexData*)calloc(1, sizeof(struct engineGraphicObjectTexData));
+	struct engineGraphicObjectTexData *obj = (struct engineGraphicObjectTexData*)engineUtilMemoryCalloc(1, sizeof(struct engineGraphicObjectTexData));
 	size_t size = ((int)strlen(src) + 1) * sizeof(char);
-	obj->src = (char*)malloc(size);
+	obj->src = (char*)engineUtilMemoryMalloc(size);
 	memcpy(obj->src, src, size);
 	texDataLoad(obj);
 	// リスト登録
@@ -212,7 +213,7 @@ static struct engineGraphicObjectTexData *texDataCreate(char *src){
 // 3DオブジェクトTex作成
 engineGraphicObjectTexId engineGraphicObjectTexCreate(char *src, enum engineGraphicObjectTexType type){
 	// データ作成
-	struct engineGraphicObjectTex *obj = (struct engineGraphicObjectTex*)calloc(1, sizeof(struct engineGraphicObjectTex));
+	struct engineGraphicObjectTex *obj = (struct engineGraphicObjectTex*)engineUtilMemoryCalloc(1, sizeof(struct engineGraphicObjectTex));
 	obj->egoId = ++localGlobal.egoIdCount;
 	obj->data = texDataCreate(src);
 	obj->type = type;

@@ -1,5 +1,6 @@
 #include "../library.h"
 #include "pluginUtil.h"
+#include "../engine/engineUtil/engineUtil.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -33,7 +34,7 @@ pluginUtilCallbackId corePluginUtilCallbackSet(void *param, void *callback){
 		localGlobal.pool = new->next;
 	}else{
 		// 要素を新しく作成
-		new = (struct pluginUtilCallbackUnit*)calloc(1, sizeof(struct pluginUtilCallbackUnit));
+		new = (struct pluginUtilCallbackUnit*)engineUtilMemoryCalloc(1, sizeof(struct pluginUtilCallbackUnit));
 	}
 
 	// 要素の設定
@@ -91,8 +92,8 @@ void *corePluginUtilCallbackGet(pluginUtilCallbackId callbackId, void **param){
 //		struct pluginUtilCallbackUnit *dispose = tempList;
 //		tempList = tempList->next;
 //		// 要素の除去
-//		free(dispose->param);
-//		free(dispose);
+//		engineUtilMemoryFree(dispose->param);
+//		engineUtilMemoryFree(dispose);
 //	}
 //	localGlobal.list = NULL;
 //
@@ -101,7 +102,7 @@ void *corePluginUtilCallbackGet(pluginUtilCallbackId callbackId, void **param){
 //		struct pluginUtilCallbackUnit *dispose = tempPool;
 //		tempPool = tempPool->next;
 //		// 要素の除去
-//		free(dispose);
+//		engineUtilMemoryFree(dispose);
 //	}
 //	localGlobal.pool = NULL;
 //}
