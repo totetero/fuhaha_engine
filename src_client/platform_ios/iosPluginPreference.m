@@ -15,7 +15,7 @@ char *platformPluginPreferenceGet(char *key){
 
 	char *value = (char*)[nsstr2 UTF8String];
 	if(value == NULL){return NULL;}
-	char *buff = (char*)corePluginUtilTemporaryBuffer(strlen(value) + 1);
+	char *buff = (char*)corePluginUtilMemoryTemporary(strlen(value) + 1);
 	strcpy(buff, value);
 
 	return buff;

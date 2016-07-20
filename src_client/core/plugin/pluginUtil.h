@@ -13,7 +13,7 @@ typedef int pluginUtilCallbackId;
 // -------- ゲーム側で実装 主にゲーム側から呼び出す
 
 // 揮発性一時バッファ 返値領域は解放禁止
-void *corePluginUtilTemporaryBuffer(size_t size);
+void *corePluginUtilMemoryTemporary(size_t size);
 
 // ----------------------------------------------------------------
 

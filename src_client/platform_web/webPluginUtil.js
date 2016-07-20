@@ -30,7 +30,7 @@ mergeInto(LibraryManager.library, {
 	// プラットフォーム名取得 返値文字列は揮発性バッファで解放禁止
 	platformPluginUtilPlatformGet: function(){
 		var value = "web";
-		var buff = ccall("corePluginUtilTemporaryBuffer", null, [null], [value.length + 1]);
+		var buff = ccall("corePluginUtilMemoryTemporary", null, [null], [value.length + 1]);
 		Module.writeStringToMemory(value, buff);
 		return buff;
 	},
@@ -44,7 +44,7 @@ mergeInto(LibraryManager.library, {
 			value = (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
 			localStorage.setItem(key, value);
 		}
-		var buff = ccall("corePluginUtilTemporaryBuffer", null, [null], [value.length + 1]);
+		var buff = ccall("corePluginUtilMemoryTemporary", null, [null], [value.length + 1]);
 		Module.writeStringToMemory(value, buff);
 		return buff;
 	},

@@ -14,7 +14,7 @@ char *engineDataBase64encode(byte *data, size_t size){
 	int rawLen = (int)size;
 	int b64Len = ((rawLen + 2) / 3) * 4;
 	size_t buffSize = (b64Len + 1) * sizeof(byte);
-	byte *buff = (byte*)corePluginUtilTemporaryBuffer(buffSize);
+	byte *buff = (byte*)corePluginUtilMemoryTemporary(buffSize);
 
 	// base64エンコード
 	int x = 0;
@@ -55,7 +55,7 @@ byte *engineDataBase64decodeChar(char *data, int *length){
 byte *engineDataBase64decode(byte *data, size_t size){
 	int rawLen = (int)size;
 	size_t buffSize = (rawLen + 1) * sizeof(byte);
-	byte *buff = (byte*)corePluginUtilTemporaryBuffer(buffSize);
+	byte *buff = (byte*)corePluginUtilMemoryTemporary(buffSize);
 
 	// デコードテーブル作成
 	for(int i = 0; i < 0x41; i++){localGlobal_dec[localGlobal_enc[i]] = i % 0x40;}

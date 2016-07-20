@@ -17,7 +17,7 @@ JNIEXPORT jstring JNICALL Java_com_totetero_fuhaha_AndroidPluginUtil_gamePluginU
 // プラットフォーム名取得 返値文字列は揮発性バッファで解放禁止
 char *platformPluginUtilPlatformGet(void){
 	char *value = "and";
-	char *buff = (char*)corePluginUtilTemporaryBuffer(strlen(value) + 1);
+	char *buff = (char*)corePluginUtilMemoryTemporary(strlen(value) + 1);
 	strcpy(buff, value);
 	return buff;
 }
@@ -31,7 +31,7 @@ char *platformPluginUtilUidGet(void){
 	char* value = (char*)((*env)->GetStringUTFChars(env, str, NULL));
 	if(value == NULL){return NULL;}
 
-	char *buff = (char*)corePluginUtilTemporaryBuffer(strlen(value) + 1);
+	char *buff = (char*)corePluginUtilMemoryTemporary(strlen(value) + 1);
 	strcpy(buff, value);
 	return buff;
 }

@@ -11,7 +11,7 @@ mergeInto(LibraryManager.library, {
 	platformPluginPreferenceGet: function(key){
 		var str = localStorage.getItem(Pointer_stringify(key));
 		if(str == null){return null;}
-		var buff = ccall("corePluginUtilTemporaryBuffer", null, [null], [str.length + 1]);
+		var buff = ccall("corePluginUtilMemoryTemporary", null, [null], [str.length + 1]);
 		Module.writeStringToMemory(str, buff);
 		return buff;
 	},

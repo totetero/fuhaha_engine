@@ -11,7 +11,7 @@
 // プラットフォーム名取得 返値文字列は揮発性バッファで解放禁止
 char *platformPluginUtilPlatformGet(void){
 	NSString *value = @"ios";
-	char *buff = (char*)corePluginUtilTemporaryBuffer([value length] + 1);
+	char *buff = (char*)corePluginUtilMemoryTemporary([value length] + 1);
 	strcpy(buff, (char*)[value UTF8String]);
 	return buff;
 }
@@ -19,7 +19,7 @@ char *platformPluginUtilPlatformGet(void){
 // ユーザーID取得 返値文字列は揮発性バッファで解放禁止
 char *platformPluginUtilUidGet(void){
 	NSString *value = [IosPluginUtil platformPluginUtilUidGet];
-	char *buff = (char*)corePluginUtilTemporaryBuffer([value length] + 1);
+	char *buff = (char*)corePluginUtilMemoryTemporary([value length] + 1);
 	strcpy(buff, (char*)[value UTF8String]);
 	return buff;
 }
