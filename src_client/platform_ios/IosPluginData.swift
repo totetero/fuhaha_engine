@@ -30,8 +30,9 @@ class IosPluginData: NSObject{
 			var size: Int = 0;
 			var buff: UnsafeMutablePointer<CChar> = nil;
 			if(resData != nil){
+				let info = UnsafeMutablePointer<Int8>(("pluginData" as NSString).UTF8String);
 				size = resData!.length;
-				buff = UnsafeMutablePointer<CChar>.alloc(size)
+				buff = UnsafeMutablePointer<CChar>(gamePluginUtilMemoryMalloc(info, size)); // バッファの解放はゲーム側で行う
 				resData!.getBytes(buff, length: size);
 			}
 			dispatch_async(dispatch_get_main_queue(), {
@@ -55,8 +56,9 @@ class IosPluginData: NSObject{
 			var size: Int = 0;
 			var buff: UnsafeMutablePointer<CChar> = nil;
 			if(resData != nil){
+				let info = UnsafeMutablePointer<Int8>(("pluginData" as NSString).UTF8String);
 				size = resData!.length;
-				buff = UnsafeMutablePointer<CChar>.alloc(size)
+				buff = UnsafeMutablePointer<CChar>(gamePluginUtilMemoryMalloc(info, size)); // バッファの解放はゲーム側で行う
 				resData!.getBytes(buff, length: size);
 			}
 			dispatch_async(dispatch_get_main_queue(), {

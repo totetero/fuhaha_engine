@@ -27,6 +27,11 @@ void *corePluginUtilCallbackGet(pluginUtilCallbackId callbackId, void **param);
 // ----------------------------------------------------------------
 // -------- ゲーム側で実装 主にプラットフォーム側から呼び出す
 
+// 領域確保mallocラッパ
+void *gamePluginUtilMemoryMalloc(char *info, size_t size);
+// 領域確保callocラッパ
+void *gamePluginUtilMemoryCalloc(char *info, size_t n, size_t size);
+
 // url取得 返値文字列は揮発性バッファで解放禁止
 char *gamePluginUtilUrlGet(void);
 

@@ -29,3 +29,17 @@ void *corePluginUtilMemoryTemporary(size_t size){
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
+// 領域確保mallocラッパ
+void *gamePluginUtilMemoryMalloc(char *info, size_t size){
+	return engineUtilMemoryInfoMalloc(info, size);
+}
+
+// 領域確保callocラッパ
+void *gamePluginUtilMemoryCalloc(char *info, size_t n, size_t size){
+	return engineUtilMemoryInfoCalloc(info, n, size);
+}
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+

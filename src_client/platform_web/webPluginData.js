@@ -25,14 +25,14 @@ mergeInto(LibraryManager.library, {
 					var byteArray = new Uint8Array(xhr.response);
 					size = byteArray.byteLength;
 					if(size > 0){
-						buff = Module._malloc(size);
+						buff = ccall("gamePluginUtilMemoryMalloc", null, ["string", null], ["pluginData", size]); // バッファの解放はゲーム側で行う
 						Module.writeArrayToMemory(byteArray, buff);
 					}
 				}else{
 					//// 通信失敗
 					//var message = "failed";
 					//size = message.length + 1;
-					//buff = Module._malloc(size);
+					//buff = ccall("gamePluginUtilMemoryMalloc", null, ["string", null], ["pluginData", size]); // バッファの解放はゲーム側で行う
 					//Module.writeStringToMemory(message, buff);
 				}
 				Module.nativePluginUtilLoadingDecrement();
@@ -61,14 +61,14 @@ mergeInto(LibraryManager.library, {
 					var byteArray = new Uint8Array(xhr.response);
 					size = byteArray.byteLength;
 					if(size > 0){
-						buff = Module._malloc(size);
+						buff = ccall("gamePluginUtilMemoryMalloc", null, ["string", null], ["pluginData", size]); // バッファの解放はゲーム側で行う
 						Module.writeArrayToMemory(byteArray, buff);
 					}
 				}else{
 					//// 通信失敗
 					//var message = "failed";
 					//size = message.length + 1;
-					//buff = Module._malloc(size);
+					//buff = ccall("gamePluginUtilMemoryMalloc", null, ["string", null], ["pluginData", size]); // バッファの解放はゲーム側で行う
 					//Module.writeStringToMemory(message, buff);
 				}
 				Module.nativePluginUtilLoadingDecrement();
