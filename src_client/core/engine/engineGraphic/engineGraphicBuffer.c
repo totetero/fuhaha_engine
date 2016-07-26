@@ -7,7 +7,8 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-static struct{(permanent) 
+static struct{
+	GLfloat *buffVert;
 	GLfloat *buffClor;
 	GLfloat *buffTexc;
 	GLushort *buffFace;
