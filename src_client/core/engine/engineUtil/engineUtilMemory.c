@@ -91,9 +91,23 @@ void engineUtilMemoryFreeImplement(char *info, void *ptr){
 static int datList_sort(const void *a, const void *b){
 	struct engineUtilMemoryUnit *dat1 = *(struct engineUtilMemoryUnit**)a;
 	struct engineUtilMemoryUnit *dat2 = *(struct engineUtilMemoryUnit**)b;
-	double val1 = (dat1 != NULL) ? dat1->count : 0;
-	double val2 = (dat2 != NULL) ? dat2->count : 0;
-	return (val1 - val2);
+
+	char *info1 = (dat1 != NULL) ? dat1->info : "";
+	char *info2 = (dat2 != NULL) ? dat2->info : "";
+	int infoDiff = strcmp(info1, info2);
+	if(infoDiff != 0){return infoDiff;}
+
+	double size1 = (dat1 != NULL) ? dat1->size : 0;
+	double size2 = (dat2 != NULL) ? dat2->size : 0;
+	int sizeDiff = size1 - size2;
+	if(sizeDiff != 0){return sizeDiff;}
+
+	double count1 = (dat1 != NULL) ? dat1->count : 0;
+	double count2 = (dat2 != NULL) ? dat2->count : 0;
+	int countDiff = count1 - count2;
+	if(countDiff != 0){return countDiff;}
+
+	return 0;
 }
 
 // 独自に確保したメモリ領域の確認
@@ -115,7 +129,7 @@ void engineUtilMemoryTraceImplement(){
 	for(int i = 0; i < localGlobal.datLength; i++){
 		struct engineUtilMemoryUnit *temp = localGlobal.datList[i];
 		if(temp == NULL || temp->ptr == NULL){continue;}
-		trace("mem %d %d %s\n", temp->count++, temp->size, temp->info);
+		trace("mem %2d %8d %s\n", temp->count++, temp->size, temp->info);
 	}
 
 	trace("---------------- ----------------\n");
