@@ -11,7 +11,7 @@
 void* engineUtilMemoryMallocImplement(char *info, size_t size);
 void* engineUtilMemoryCallocImplement(char *info, size_t n, size_t size);
 void engineUtilMemoryFreeImplement(char *info, void *ptr);
-void engineUtilMemoryTraceImplement();
+void engineUtilMemoryTraceImplement(char *info);
 #define ENGINEUTILMEMORY_STRINGIFY(n) #n
 #define ENGINEUTILMEMORY_TOSTRING(n) ENGINEUTILMEMORY_STRINGIFY(n) 
 #define ENGINEUTILMEMORY_LINEINFO __FILE__ ":" ENGINEUTILMEMORY_TOSTRING(__LINE__)
@@ -21,7 +21,7 @@ void engineUtilMemoryTraceImplement();
 #define engineUtilMemoryInfoMalloc(info, size) engineUtilMemoryMallocImplement(info, size)
 #define engineUtilMemoryInfoCalloc(info, n, size) engineUtilMemoryCallocImplement(info, n, size)
 #define engineUtilMemoryInfoFree(info, ptr) engineUtilMemoryFreeImplement(info, ptr)
-#define engineUtilMemoryTrace() engineUtilMemoryTraceImplement()
+#define engineUtilMemoryTrace(info) engineUtilMemoryTraceImplement(info)
 #else
 #define engineUtilMemoryMalloc(size) malloc(size)
 #define engineUtilMemoryCalloc(n, size) calloc(n, size)
@@ -29,7 +29,7 @@ void engineUtilMemoryTraceImplement();
 #define engineUtilMemoryInfoMalloc(info, size) malloc(size)
 #define engineUtilMemoryInfoCalloc(info, n, size) calloc(n, size)
 #define engineUtilMemoryInfoFree(info, ptr) free(ptr)
-#define engineUtilMemoryTrace()
+#define engineUtilMemoryTrace(info)
 #endif
 
 // ----------------------------------------------------------------

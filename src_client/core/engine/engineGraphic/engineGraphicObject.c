@@ -279,6 +279,8 @@ bool engineGraphicObjectTexGetGLId(engineGraphicObjectTexId egoId, GLuint *glId,
 
 // 3DオブジェクトVBO除去
 void engineGraphicObjectVBODispose(engineGraphicObjectVBOId egoId){
+	if(egoId == 0){return;}
+	int freeCount = 0;
 	struct engineGraphicObjectVBO *prev = NULL;
 	struct engineGraphicObjectVBO *temp = localGlobal.egoVBOList;
 	while(temp != NULL){
@@ -290,15 +292,20 @@ void engineGraphicObjectVBODispose(engineGraphicObjectVBOId egoId){
 			else{prev->next = temp;}
 			// 要素の除去
 			egoVBOFree(dispose);
+			freeCount++;
 		}else{
 			prev = temp;
 			temp = temp->next;
 		}
 	}
+	if(freeCount < 1){trace("vbo free error -- no such pointer");}
+	if(freeCount > 1){trace("vbo free error -- too meny pointer");}
 }
 
 // 3DオブジェクトIBO除去
 void engineGraphicObjectIBODispose(engineGraphicObjectIBOId egoId){
+	if(egoId == 0){return;}
+	int freeCount = 0;
 	struct engineGraphicObjectIBO *prev = NULL;
 	struct engineGraphicObjectIBO *temp = localGlobal.egoIBOList;
 	while(temp != NULL){
@@ -310,11 +317,14 @@ void engineGraphicObjectIBODispose(engineGraphicObjectIBOId egoId){
 			else{prev->next = temp;}
 			// 要素の除去
 			egoIBOFree(dispose);
+			freeCount++;
 		}else{
 			prev = temp;
 			temp = temp->next;
 		}
 	}
+	if(freeCount < 1){trace("ibo free error -- no such pointer");}
+	if(freeCount > 1){trace("ibo free error -- too meny pointer");}
 }
 
 // テクスチャ情報除去
@@ -345,6 +355,8 @@ static void texDataDispose(struct engineGraphicObjectTexData *this){
 
 // 3DオブジェクトTex除去
 void engineGraphicObjectTexDispose(engineGraphicObjectTexId egoId){
+	if(egoId == 0){return;}
+	int freeCount = 0;
 	struct engineGraphicObjectTex *prev = NULL;
 	struct engineGraphicObjectTex *temp = localGlobal.egoTexList;
 	while(temp != NULL){
@@ -357,11 +369,14 @@ void engineGraphicObjectTexDispose(engineGraphicObjectTexId egoId){
 			// 要素の除去
 			texDataDispose(dispose->data);
 			egoTexFree(dispose);
+			freeCount++;
 		}else{
 			prev = temp;
 			temp = temp->next;
 		}
 	}
+	if(freeCount < 1){trace("tex free error -- no such pointer");}
+	if(freeCount > 1){trace("tex free error -- too meny pointer");}
 }
 
 // 全3Dオブジェクト除去

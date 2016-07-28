@@ -11,6 +11,7 @@ static struct{
 		size_t size;
 		char info[128];
 		int count;
+		bool isPermanent;
 	} **datList;
 	int datLength;
 	size_t debugSize;
@@ -57,6 +58,8 @@ static void* addDatList(char *info, void *ptr, size_t size){
 	strncpy(unit->info, info, sizeof(unit->info) - 1);
 	unit->info[sizeof(unit->info) - 1] = '\0';
 	unit->count = 0;
+	char *key = "(permanent)";
+	unit->isPermanent = (strncmp(info, key, strlen(key)) == 0);
 	return ptr;
 }
 
@@ -74,6 +77,7 @@ void* engineUtilMemoryCallocImplement(char *info, size_t n, size_t size){
 
 // 独自freeの実装
 void engineUtilMemoryFreeImplement(char *info, void *ptr){
+	if(ptr == NULL){return;}
 	int freeCount = 0;
 	for(int i = 0; i < localGlobal.datLength; i++){
 		struct engineUtilMemoryUnit *temp = localGlobal.datList[i];
@@ -92,6 +96,16 @@ static int datList_sort(const void *a, const void *b){
 	struct engineUtilMemoryUnit *dat1 = *(struct engineUtilMemoryUnit**)a;
 	struct engineUtilMemoryUnit *dat2 = *(struct engineUtilMemoryUnit**)b;
 
+	bool isPermanent1 = (dat1 != NULL) ? dat1->isPermanent : false;
+	bool isPermanent2 = (dat2 != NULL) ? dat2->isPermanent : false;
+	if(isPermanent1 && !isPermanent2){return -1;}
+	if(!isPermanent1 && isPermanent2){return  1;}
+
+	double count1 = (dat1 != NULL) ? dat1->count : 0;
+	double count2 = (dat2 != NULL) ? dat2->count : 0;
+	int countDiff = count1 - count2;
+	if(countDiff != 0){return countDiff;}
+
 	char *info1 = (dat1 != NULL) ? dat1->info : "";
 	char *info2 = (dat2 != NULL) ? dat2->info : "";
 	int infoDiff = strcmp(info1, info2);
@@ -102,28 +116,28 @@ static int datList_sort(const void *a, const void *b){
 	int sizeDiff = size1 - size2;
 	if(sizeDiff != 0){return sizeDiff;}
 
-	double count1 = (dat1 != NULL) ? dat1->count : 0;
-	double count2 = (dat2 != NULL) ? dat2->count : 0;
-	int countDiff = count1 - count2;
-	if(countDiff != 0){return countDiff;}
-
 	return 0;
 }
 
 // 独自に確保したメモリ領域の確認
-void engineUtilMemoryTraceImplement(){
+void engineUtilMemoryTraceImplement(char *info){
 	// メモリサイズ計算
-	size_t releaseSize = 0;
+	size_t memorySize = 0;
+	size_t permanentSize = 0;
 	for(int i = 0; i < localGlobal.datLength; i++){
 		struct engineUtilMemoryUnit *temp = localGlobal.datList[i];
 		if(temp == NULL || temp->ptr == NULL){continue;}
-		releaseSize += temp->size;
+		if(temp->isPermanent){permanentSize += temp->size;}
+		if(!temp->isPermanent){memorySize += temp->size;}
 	}
 	char dstr[32];
-	char rstr[32];
+	char mstr[32];
+	char pstr[32];
 	snprintf(dstr, sizeof(dstr), "%d.%dkB", localGlobal.debugSize / 1000, localGlobal.debugSize % 1000);
-	snprintf(rstr, sizeof(rstr), "%d.%dkB", releaseSize / 1000, releaseSize % 1000);
-	trace("mem trace %s (+%s) ----------------\n", rstr, dstr);
+	snprintf(mstr, sizeof(mstr), "%d.%dkB", memorySize / 1000, memorySize % 1000);
+	snprintf(pstr, sizeof(pstr), "%d.%dkB", permanentSize / 1000, permanentSize % 1000);
+	trace("---------------- %s ----------------\n", info);
+	trace("mem trace %s %s (+%s) ----------------\n", mstr, pstr, dstr);
 
 	qsort((void*)localGlobal.datList, localGlobal.datLength, sizeof(struct engineUtilMemoryUnit**), datList_sort);
 	for(int i = 0; i < localGlobal.datLength; i++){
