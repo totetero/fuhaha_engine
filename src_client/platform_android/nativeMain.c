@@ -84,6 +84,11 @@ JNIEXPORT void JNICALL Java_com_totetero_fuhaha_FuhahaEvent_gameMainEventKeyZxcv
 	gameMainEventKeyZxcv(kzb, kxb, kcb, kvb);
 }
 
+// 戻るボタンの制御を行うか
+JNIEXPORT jboolean JNICALL Java_com_totetero_fuhaha_FuhahaEvent_gameMainEventKeyIsBack(JNIEnv *env, jobject obj){
+	return gameMainEventKeyIsBack();
+}
+
 // 傾きを使うかどうか
 JNIEXPORT jboolean JNICALL Java_com_totetero_fuhaha_FuhahaEvent_gameMainEventIsAcceleration(JNIEnv *env, jobject obj){
 	return gameMainEventIsAcceleration();

@@ -100,6 +100,8 @@ void gameMainEventTouch(int index, int tx, int ty, bool tdn);
 void gameMainEventKeyBack(bool kbk);
 void gameMainEventKeyArrow(bool kup, bool kdn, bool krt, bool klt);
 void gameMainEventKeyZxcv(bool kzb, bool kxb, bool kcb, bool kvb);
+// 戻るボタンの制御を行うか
+bool gameMainEventKeyIsBack(void);
 // 傾きを使うかどうか
 bool gameMainEventIsAcceleration(void);
 // 傾きの状態を報告する

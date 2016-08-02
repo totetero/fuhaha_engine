@@ -244,38 +244,41 @@ mergeInto(LibraryManager.library, {
 			e.stopPropagation();
 		});
 
-		// 監視ハッシュタグ作成
-		var isHashInit = false;
-		var firstHash = window.parent.location.hash;
-		var secondHash = "#h1";
-		var thirdHash = "#h2";
-		while(firstHash == secondHash || secondHash == thirdHash || thirdHash == firstHash){
-			secondHash = "#h" + Math.floor(Math.random() * 100 + 1);
-			thirdHash = "#h" + Math.floor(Math.random() * 100 + 1);
-		}
-		// 戻るためのハッシュタグ監視
-		(function hashObservation(){
-			if(!(globalWebFuhahaSurface && globalWebFuhahaSurface.isExit)){
-				var currHash = window.parent.location.hash;
-				if(currHash == thirdHash){
-				}else if(currHash == secondHash){
-					window.parent.location.hash = thirdHash;
-					if(isHashInit){
-						// 戻るコマンド
-						kbk = true; onKeyBack();
-						kbk = false; onKeyBack();
-					}else{
-						isHashInit = true;
-					}
-				}else{
-					window.parent.location.hash = secondHash;
-				}
-				setTimeout(hashObservation, 100);
-			}else{
-				// 終了状態処理 とりあえず一つ戻っておく
-				window.parent.history.back();
+		var isBack = ccall("gameMainEventKeyIsBack", "null", [], []);
+		if(isBack){
+			// 監視ハッシュタグ作成
+			var isHashInit = false;
+			var firstHash = window.parent.location.hash;
+			var secondHash = "#h1";
+			var thirdHash = "#h2";
+			while(firstHash == secondHash || secondHash == thirdHash || thirdHash == firstHash){
+				secondHash = "#h" + Math.floor(Math.random() * 100 + 1);
+				thirdHash = "#h" + Math.floor(Math.random() * 100 + 1);
 			}
-		})();
+			// 戻るためのハッシュタグ監視
+			(function hashObservation(){
+				if(!(globalWebFuhahaSurface && globalWebFuhahaSurface.isExit)){
+					var currHash = window.parent.location.hash;
+					if(currHash == thirdHash){
+					}else if(currHash == secondHash){
+						window.parent.location.hash = thirdHash;
+						if(isHashInit){
+							// 戻るコマンド
+							kbk = true; onKeyBack();
+							kbk = false; onKeyBack();
+						}else{
+							isHashInit = true;
+						}
+					}else{
+						window.parent.location.hash = secondHash;
+					}
+					setTimeout(hashObservation, 100);
+				}else{
+					// 終了状態処理 とりあえず一つ戻っておく
+					window.parent.history.back();
+				}
+			})();
+		}
 
 		// ----------------------------------------------------------------
 		// 加速度イベント

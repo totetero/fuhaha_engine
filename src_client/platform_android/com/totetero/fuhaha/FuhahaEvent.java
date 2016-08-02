@@ -45,6 +45,7 @@ public class FuhahaEvent implements SensorEventListener{
 	public static native void gameMainEventKeyBack(boolean kbk);
 	public static native void gameMainEventKeyArrow(boolean kup, boolean kdn, boolean krt, boolean klt);
 	public static native void gameMainEventKeyZxcv(boolean kzb, boolean kxb, boolean kcb, boolean kvb);
+	public static native boolean gameMainEventKeyIsBack();
 	public static native boolean gameMainEventIsAcceleration();
 	public static native void gameMainEventAcceleration(double accx, double accy, double accz);
 
@@ -168,6 +169,9 @@ public class FuhahaEvent implements SensorEventListener{
 				default: break;
 			}
 		}
+
+		// 戻るボタンの制御を行うか
+		if(isChangeKeyBack && !FuhahaEvent.gameMainEventKeyIsBack()){isChangeKeyBack = false;}
 
 		if(isChangeKeyBack || isChangeKeyArrow || isChangeKeyZxcv){
 			if(isChangeKeyBack){FuhahaEvent.gameMainEventKeyBack(this.kbk);}

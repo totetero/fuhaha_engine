@@ -105,6 +105,11 @@ void gameMainEventKeyZxcv(bool kzb, bool kxb, bool kcb, bool kvb){
 	coreMainEventActivatableUpdate(&global.key.vb, kvb);
 }
 
+// 戻るボタンの制御を行うか
+bool gameMainEventKeyIsBack(void){
+	return true;
+}
+
 // ----------------------------------------------------------------
 
 // 傾きを使うかどうか
