@@ -330,7 +330,7 @@ static void jsonStringify(struct engineDataJsonValue *this, int indent){
 				if(indent >= 0){for(int i = 0; i < indent + 1; i++){tempBuffPutChar('\t');}}
 				struct engineDataJsonArray *tempObj = this->jArray;
 				while(tempObj != NULL){
-					tempBuffPutString1(tempObj->key);
+					tempBuffPutString2(tempObj->key);
 					tempBuffPutChar(':');
 					if(indent >= 0){tempBuffPutChar(' ');}
 					jsonStringify(&tempObj->value, indent + (indent < 0 ? 0 : 1));
