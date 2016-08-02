@@ -318,11 +318,11 @@ static bool parseValue(struct engineDataJsonValue *this, char **c){
 static void jsonStringify(struct engineDataJsonValue *this, int indent){
 	if(this == NULL){return;}
 	switch(this->type){
+		case ENGINEDATAJSONTYPE_NULL: tempBuffPutString1("null"); break;
 		case ENGINEDATAJSONTYPE_INT: tempBuffPutInt(this->jInt); break;
 		case ENGINEDATAJSONTYPE_FLOAT: tempBuffPutFloat(this->jFloat); break;
 		case ENGINEDATAJSONTYPE_BOOL: tempBuffPutString1(this->jBool ? "true" : "false"); break;
 		case ENGINEDATAJSONTYPE_STRING: tempBuffPutString2(this->jString); break;
-		case ENGINEDATAJSONTYPE_NULL: tempBuffPutString1("null"); break;
 		case ENGINEDATAJSONTYPE_OBJECT:
 			tempBuffPutChar('{');
 			if(this->jArray != NULL){
@@ -435,7 +435,7 @@ void engineDataJsonSetBool(struct engineDataJsonValue *this, bool value){
 void engineDataJsonSetString(struct engineDataJsonValue *this, char *value){
 	int length = (int)strlen(value);
 	char *buff = (char*)engineUtilMemoryInfoMalloc("engineDataJson string", (length + 1) * sizeof(char));
-	strcpy(buff, this->jString);
+	strcpy(buff, value);
 	this->type = ENGINEDATAJSONTYPE_STRING;
 	this->jString = buff;
 }
