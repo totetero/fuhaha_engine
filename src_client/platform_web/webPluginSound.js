@@ -27,6 +27,7 @@ mergeInto(LibraryManager.library, {
 
 			globalWebPluginSound.bgmList = {};
 			globalWebPluginSound.seList = {};
+			globalWebPluginSound.bgmZeroId = 0;
 			globalWebPluginSound.bgmCurrentId = 0;
 			globalWebPluginSound.bgmToneDown = 1.0;
 
@@ -165,7 +166,9 @@ mergeInto(LibraryManager.library, {
 	// BGM再生
 	platformPluginSoundBgmPlay: function(bgmId){
 		if(globalWebPluginSound.soundContext == null){return;}
-		globalWebPluginSound.bgmPlay(bgmId);
+		globalWebPluginSound.bgmZeroId = bgmId;
+		var oldVolume = globalWebPluginSound.bgmVolumeGain.gain.value;
+		if(oldVolume > 0){globalWebPluginSound.bgmPlay(bgmId);}
 	},
 
 	// BGMトーンダウン
@@ -177,6 +180,12 @@ mergeInto(LibraryManager.library, {
 	// BGM設定音量
 	platformPluginSoundBgmVolume: function(volume){
 		if(globalWebPluginSound.soundContext == null){return;}
+
+		// 音量をゼロにした瞬間とゼロから戻した瞬間
+		var oldVolume = globalWebPluginSound.bgmVolumeGain.gain.value;
+		if(oldVolume > 0 && volume <= 0){globalWebPluginSound.bgmPlay(0);}
+		if(oldVolume <= 0 && volume > 0){globalWebPluginSound.bgmPlay(globalWebPluginSound.bgmZeroId);}
+
 		globalWebPluginSound.bgmVolumeGain.gain.value = volume;
 	},
 

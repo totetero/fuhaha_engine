@@ -9,6 +9,7 @@ import AVFoundation
 class IosPluginSound: NSObject{
 	private static var bgmList: Dictionary<UInt32, IosPluginSound.FuhahaBgmItem> = Dictionary<UInt32, IosPluginSound.FuhahaBgmItem>();
 	private static var seList: Dictionary<UInt32, IosPluginSound.FuhahaSeItem> = Dictionary<UInt32, IosPluginSound.FuhahaSeItem>();
+	private static var bgmZeroId: UInt32 = 0;
 	private static var bgmCurrentId: UInt32 = 0;
 	private static var seAudioPlayer: Array<AVAudioPlayer> = Array<AVAudioPlayer>();
 	private static var bgmToneDown: Float = 1.0;
@@ -28,6 +29,13 @@ class IosPluginSound: NSObject{
 
 	// BGM再生
 	static internal func platformPluginSoundBgmPlay(bgmId: UInt32){
+		IosPluginSound.bgmZeroId = bgmId;
+		let oldVolume = IosPluginSound.bgmVolume;
+		if(oldVolume > 0){IosPluginSound.bgmPlay(bgmId);}
+	}
+
+	// BGM再生
+	static internal func bgmPlay(bgmId: UInt32){
 		IosPluginSound.bgmToneDown = 1.0;
 
 		// 同じBGMを再生中なら何もしない
@@ -47,6 +55,11 @@ class IosPluginSound: NSObject{
 
 	// BGM設定音量
 	static internal func platformPluginSoundBgmVolume(volume: Double){
+		// 音量をゼロにした瞬間とゼロから戻した瞬間
+		let oldVolume = IosPluginSound.bgmVolume;
+		if(oldVolume > 0 && volume <= 0){IosPluginSound.bgmPlay(0);}
+		if(oldVolume <= 0 && volume > 0){IosPluginSound.bgmPlay(IosPluginSound.bgmZeroId);}
+
 		IosPluginSound.bgmVolume = Float(volume);
 	}
 

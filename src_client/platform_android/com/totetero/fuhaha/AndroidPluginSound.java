@@ -17,6 +17,7 @@ import java.util.Map.Entry;
 public class AndroidPluginSound{
 	private static HashMap<Integer, FuhahaBgmItem> bgmList = new HashMap<Integer, FuhahaBgmItem>();
 	private static HashMap<Integer, FuhahaSeItem> seList = new HashMap<Integer, FuhahaSeItem>();
+	private static int bgmZeroId = 0;
 	private static int bgmCurrentId = 0;
 	private static SoundPool seSoundPool = null;
 	private static float bgmToneDown = 1.0f;
@@ -62,6 +63,13 @@ public class AndroidPluginSound{
 
 	// BGM再生
 	public static void platformPluginSoundBgmPlay(int bgmId){
+		AndroidPluginSound.bgmZeroId = bgmId;
+		float oldVolume = AndroidPluginSound.bgmVolume;
+		if(oldVolume > 0){AndroidPluginSound.bgmPlay(bgmId);}
+	}
+
+	// BGM再生
+	private static void bgmPlay(int bgmId){
 		AndroidPluginSound.bgmToneDown = 1.0f;
 
 		// 同じBGMを再生中なら何もしない
@@ -81,6 +89,11 @@ public class AndroidPluginSound{
 
 	// BGM設定音量
 	public static void platformPluginSoundBgmVolume(double volume){
+		// 音量をゼロにした瞬間とゼロから戻した瞬間
+		float oldVolume = AndroidPluginSound.bgmVolume;
+		if(oldVolume > 0 && volume <= 0){AndroidPluginSound.bgmPlay(0);}
+		if(oldVolume <= 0 && volume > 0){AndroidPluginSound.bgmPlay(AndroidPluginSound.bgmZeroId);}
+
 		AndroidPluginSound.bgmVolume = (float)volume;
 	}
 
