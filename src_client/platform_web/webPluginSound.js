@@ -91,6 +91,7 @@ mergeInto(LibraryManager.library, {
 					// 再生関数
 					playing: function(){
 						var isActive = (globalWebPluginSound.bgmCurrentId == this.bgmId);
+						isActive = isActive && !(globalWebFuhahaSurface && globalWebFuhahaSurface.isExit);
 						if(isActive || this.countPrev > 0){
 							if(!this.isPlaying && this.buffer != null){
 								// BGM作成と再生
