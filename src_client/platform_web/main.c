@@ -3,10 +3,10 @@
 #include <emscripten/emscripten.h>
 #include "game.h"
 
+void webFuhahaSurfaceInit(void);
 void webPluginUtilInit(void);
 void webPluginSoundInit(void);
 void webPluginEnptyInit(void);
-void webFuhahaSurfaceInit(void);
 void webFuhahaEventInit(void);
 
 // ----------------------------------------------------------------
@@ -27,12 +27,12 @@ static void mainloop(void){
 // main関数 処理はここから始まる
 int main(void){
 	if(init() == 0){
+		webFuhahaSurfaceInit();
 		webPluginUtilInit();
 		webPluginSoundInit();
 		webPluginEnptyInit();
 		gameMainSurfaceCreated();
 		gameMainEventInit();
-		webFuhahaSurfaceInit();
 		webFuhahaEventInit();
 		emscripten_set_main_loop(mainloop, 0, 1);
 	}

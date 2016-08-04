@@ -7,7 +7,7 @@
 mergeInto(LibraryManager.library, {
 	// ----------------------------------------------------------------
 
-	// ゲーム初期化完了後のプラットフォーム初期化
+	// ゲーム初期化開始時のプラットフォーム初期化
 	webFuhahaSurfaceInit: function(){
 		this.globalWebFuhahaSurface = {};
 		globalWebFuhahaSurface.isExit = false;

@@ -90,8 +90,7 @@ mergeInto(LibraryManager.library, {
 					callback: function(self){if(self.playing()){setTimeout(self.callback, 100, self);}},
 					// 再生関数
 					playing: function(){
-						var isActive = (globalWebPluginSound.bgmCurrentId == this.bgmId);
-						isActive = isActive && !(globalWebFuhahaSurface && globalWebFuhahaSurface.isExit);
+						var isActive = (globalWebPluginSound.bgmCurrentId == this.bgmId && !globalWebFuhahaSurface.isExit);
 						if(isActive || this.countPrev > 0){
 							if(!this.isPlaying && this.buffer != null){
 								// BGM作成と再生
