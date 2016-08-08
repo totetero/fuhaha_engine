@@ -96,9 +96,10 @@ void engineGraphicEngineExit(void){
 
 // グラフィックエンジン命令 描画のクリア
 void engineGraphicEngineClearAll(void){
-	glDepthMask(localGlobal.memory.modeDepth = GL_TRUE);
+	if(!localGlobal.memory.modeDepth){glDepthMask(GL_TRUE);}
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	engineGraphicEngineSetStencilMode(ENGINEGRAPHICENGINEMODESTENCIL_NONE);
+	if(!localGlobal.memory.modeDepth){glDepthMask(localGlobal.memory.modeDepth);}
 }
 
 // グラフィックエンジン命令 深度バッファのクリア
