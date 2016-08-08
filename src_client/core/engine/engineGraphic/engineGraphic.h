@@ -75,6 +75,9 @@ engineGraphicObjectIBOId engineGraphicObjectIBOCreate(int length, GLushort *inde
 // 3DオブジェクトTex作成
 engineGraphicObjectTexId engineGraphicObjectTexCreate(char *src, enum engineGraphicObjectTexType type);
 
+// 3DオブジェクトTex読み込み完了確認
+bool engineGraphicObjectTexIsComplete(engineGraphicObjectTexId egoId);
+
 // VBOID取得
 bool engineGraphicObjectVBOGetGLId(engineGraphicObjectVBOId egoId, GLuint *glId);
 // IBOID取得

@@ -138,6 +138,21 @@ static void texDataLoad(struct engineGraphicObjectTexData *this){
 
 // ----------------------------------------------------------------
 
+// 3DオブジェクトTex読み込み完了確認
+bool engineGraphicObjectTexIsComplete(engineGraphicObjectTexId egoId){
+	struct engineGraphicObjectTex *temp = localGlobal.egoTexList;
+	while(temp != NULL){
+		if(temp->egoId == egoId){
+			if(temp->data == NULL){return false;}
+			return (temp->data->status == ENGINEGRAPHICOBJECTTEXDATASTATUS_LOADED);
+		}
+		temp = temp->next;
+	}
+	return false;
+}
+
+// ----------------------------------------------------------------
+
 // 3DオブジェクトVBO作成
 engineGraphicObjectVBOId engineGraphicObjectVBOCreate(int length, GLfloat *vertices){
 	// データ作成
