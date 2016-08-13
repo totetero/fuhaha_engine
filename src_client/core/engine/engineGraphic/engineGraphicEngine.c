@@ -20,7 +20,6 @@ struct engineGraphicEngineShader{
 static struct{
 	// グラフィックエンジンシェーダー
 	struct{
-		struct engineGraphicEngineShader *current;
 		struct engineGraphicEngineShader reserve1;
 		struct engineGraphicEngineShader reserve2;
 		struct engineGraphicEngineShader reserve3;
@@ -28,6 +27,7 @@ static struct{
 	} shader;
 	// 重複動作阻止のための状態記録
 	struct{
+		struct engineGraphicEngineShader *shader;
 		enum engineGraphicEngineModeDraw modeDraw;
 		enum engineGraphicEngineModeStencil modeStencil;
 		GLboolean modeDepth;
@@ -68,6 +68,7 @@ void engineGraphicEngineInit(void){
 	engineGraphicEngineShaderCreate(&localGlobal.shader.reserve3, externGlobal_vsh3_src, externGlobal_fsh3_src);
 	engineGraphicEngineShaderCreate(&localGlobal.shader.reserve4, externGlobal_vsh4_src, externGlobal_fsh4_src);
 
+	localGlobal.memory.shader = NULL;
 	localGlobal.memory.modeDraw = -1;
 	localGlobal.memory.modeStencil = -1;
 	localGlobal.memory.modeDepth = GL_TRUE;
@@ -137,22 +138,22 @@ void engineGraphicEngineSetDrawMode(enum engineGraphicEngineModeDraw mode){
 	localGlobal.memory.modeDraw = mode;
 
 	// シェーダー差し替え
-	struct engineGraphicEngineShader *oldShader = localGlobal.shader.current;
+	struct engineGraphicEngineShader *oldShader = localGlobal.memory.shader;
 	switch(mode){
-		case ENGINEGRAPHICENGINEMODEDRAW_NORMAL:    localGlobal.shader.current = &localGlobal.shader.reserve1; break;
-		case ENGINEGRAPHICENGINEMODEDRAW_2D:        localGlobal.shader.current = &localGlobal.shader.reserve2; break;
-		case ENGINEGRAPHICENGINEMODEDRAW_ALPHA_ADD: localGlobal.shader.current = &localGlobal.shader.reserve2; break;
-		case ENGINEGRAPHICENGINEMODEDRAW_HKNW:      localGlobal.shader.current = &localGlobal.shader.reserve3; break;
-		case ENGINEGRAPHICENGINEMODEDRAW_SPHERE:    localGlobal.shader.current = &localGlobal.shader.reserve4; break;
+		case ENGINEGRAPHICENGINEMODEDRAW_NORMAL:    localGlobal.memory.shader = &localGlobal.shader.reserve1; break;
+		case ENGINEGRAPHICENGINEMODEDRAW_2D:        localGlobal.memory.shader = &localGlobal.shader.reserve2; break;
+		case ENGINEGRAPHICENGINEMODEDRAW_ALPHA_ADD: localGlobal.memory.shader = &localGlobal.shader.reserve2; break;
+		case ENGINEGRAPHICENGINEMODEDRAW_HKNW:      localGlobal.memory.shader = &localGlobal.shader.reserve3; break;
+		case ENGINEGRAPHICENGINEMODEDRAW_SPHERE:    localGlobal.memory.shader = &localGlobal.shader.reserve4; break;
 	}
-	if(localGlobal.shader.current != oldShader){
+	if(localGlobal.memory.shader != oldShader){
 		if(oldShader != NULL && oldShader->attr_pos >= 0){glDisableVertexAttribArray(oldShader->attr_pos);}
 		if(oldShader != NULL && oldShader->attr_col >= 0){glDisableVertexAttribArray(oldShader->attr_col);}
 		if(oldShader != NULL && oldShader->attr_uvc >= 0){glDisableVertexAttribArray(oldShader->attr_uvc);}
-		glUseProgram(localGlobal.shader.current->program);
-		if(localGlobal.shader.current->attr_pos >= 0){glEnableVertexAttribArray(localGlobal.shader.current->attr_pos);}
-		if(localGlobal.shader.current->attr_col >= 0){glEnableVertexAttribArray(localGlobal.shader.current->attr_col);}
-		if(localGlobal.shader.current->attr_uvc >= 0){glEnableVertexAttribArray(localGlobal.shader.current->attr_uvc);}
+		glUseProgram(localGlobal.memory.shader->program);
+		if(localGlobal.memory.shader->attr_pos >= 0){glEnableVertexAttribArray(localGlobal.memory.shader->attr_pos);}
+		if(localGlobal.memory.shader->attr_col >= 0){glEnableVertexAttribArray(localGlobal.memory.shader->attr_col);}
+		if(localGlobal.memory.shader->attr_uvc >= 0){glEnableVertexAttribArray(localGlobal.memory.shader->attr_uvc);}
 		engineMathVec4Set(&localGlobal.memory.color, 0, 0, 0, -1);
 		engineGraphicEngineMemoryResetVBO();
 	}
@@ -347,7 +348,7 @@ void engineGraphicEngineBindVertVBO(engineGraphicObjectVBOId egoId){
 	GLuint glId;
 	if(!engineGraphicObjectVBOGetGLId(egoId, &glId)){return;}
 	glBindBuffer(GL_ARRAY_BUFFER, glId);
-	glVertexAttribPointer(localGlobal.shader.current->attr_pos, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(localGlobal.memory.shader->attr_pos, 3, GL_FLOAT, GL_FALSE, 0, 0);
 }
 
 // グラフィックエンジン命令 VBO登録 カラーrgb
@@ -358,7 +359,7 @@ void engineGraphicEngineBindClorVBO(engineGraphicObjectVBOId egoId){
 	GLuint glId;
 	if(!engineGraphicObjectVBOGetGLId(egoId, &glId)){return;}
 	glBindBuffer(GL_ARRAY_BUFFER, glId);
-	glVertexAttribPointer(localGlobal.shader.current->attr_col, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(localGlobal.memory.shader->attr_col, 3, GL_FLOAT, GL_FALSE, 0, 0);
 }
 
 // グラフィックエンジン命令 VBO登録 テクスチャ座標
@@ -369,7 +370,7 @@ void engineGraphicEngineBindTexcVBO(engineGraphicObjectVBOId egoId){
 	GLuint glId;
 	if(!engineGraphicObjectVBOGetGLId(egoId, &glId)){return;}
 	glBindBuffer(GL_ARRAY_BUFFER, glId);
-	glVertexAttribPointer(localGlobal.shader.current->attr_uvc, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(localGlobal.memory.shader->attr_uvc, 2, GL_FLOAT, GL_FALSE, 0, 0);
 }
 
 // グラフィックエンジン命令 IBO登録 頂点インデックス
@@ -386,7 +387,7 @@ void engineGraphicEngineBindFaceIBO(engineGraphicObjectIBOId egoId){
 
 // グラフィックエンジン命令 行列の設定
 void engineGraphicEngineSetMatrix(struct engineMathMatrix44 *matrix){
-	glUniformMatrix4fv(localGlobal.shader.current->unif_mat, 1, GL_FALSE, matrix->m);
+	glUniformMatrix4fv(localGlobal.memory.shader->unif_mat, 1, GL_FALSE, matrix->m);
 }
 
 // グラフィックエンジン命令 色の設定
@@ -398,7 +399,7 @@ void engineGraphicEngineSetColorRgba(double r, double g, double b, double a){
 void engineGraphicEngineSetColorVec(struct engineMathVector4 *color){
 	if(memcmp(&localGlobal.memory.color, color, sizeof(struct engineMathVector4))){
 		memcpy(&localGlobal.memory.color, color, sizeof(struct engineMathVector4));
-		glUniform4fv(localGlobal.shader.current->unif_col, 1, color->v);
+		glUniform4fv(localGlobal.memory.shader->unif_col, 1, color->v);
 	}
 }
 
