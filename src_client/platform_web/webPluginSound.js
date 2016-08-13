@@ -160,6 +160,7 @@ mergeInto(LibraryManager.library, {
 	platformPluginSoundBgmLoad: function(bgmId, src){
 		if(globalWebPluginSound.soundContext == null){return;}
 		if(bgmId <= 0){return;}
+		if(globalWebPluginSound.bgmList[bgmId] != null){return;}
 		globalWebPluginSound.soundLoaderBgm(Pointer_stringify(src), bgmId);
 	},
 
@@ -195,6 +196,7 @@ mergeInto(LibraryManager.library, {
 	platformPluginSoundSeLoad: function(seId, src){
 		if(globalWebPluginSound.soundContext == null){return;}
 		if(seId <= 0){return;}
+		if(globalWebPluginSound.seList[seId] != null){return;}
 		globalWebPluginSound.soundLoaderSe(Pointer_stringify(src), seId);
 	},
 

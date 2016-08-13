@@ -18,6 +18,7 @@ public class AndroidPluginSound{
 	private static HashMap<Integer, FuhahaBgmItem> bgmList = new HashMap<Integer, FuhahaBgmItem>();
 	private static HashMap<Integer, FuhahaSeItem> seList = new HashMap<Integer, FuhahaSeItem>();
 	private static int bgmZeroId = 0;
+	private static int bgmPauseId = 0;
 	private static int bgmCurrentId = 0;
 	private static SoundPool seSoundPool = null;
 	private static float bgmToneDown = 1.0f;
@@ -30,7 +31,7 @@ public class AndroidPluginSound{
 	// 開始時
 	public static void onResume(){
 		// BGM再開
-		AndroidPluginSound.platformPluginSoundBgmPlay(AndroidPluginSound.bgmCurrentId);
+		AndroidPluginSound.platformPluginSoundBgmPlay(AndroidPluginSound.bgmPauseId);
 		// SE読込
 		if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP){
 			AndroidPluginSound.seSoundPool = new SoundPool(3, AudioManager.STREAM_MUSIC, 0);
@@ -44,6 +45,7 @@ public class AndroidPluginSound{
 	// 停止時
 	public static void onPause(){
 		// BGM停止
+		AndroidPluginSound.bgmPauseId = AndroidPluginSound.bgmCurrentId;
 		AndroidPluginSound.bgmCurrentId = 0;
 		// SE解放
 		for(Entry<Integer, FuhahaSeItem> entry : AndroidPluginSound.seList.entrySet()){entry.getValue().unload();}
@@ -57,6 +59,7 @@ public class AndroidPluginSound{
 	// BGM読込
 	public static void platformPluginSoundBgmLoad(int bgmId, String src){
 		if(bgmId <= 0){return;}
+		if(AndroidPluginSound.bgmList.get(bgmId) != null){return;}
 		AndroidPluginSound.FuhahaBgmItem playData = new AndroidPluginSound.FuhahaBgmItem(src, bgmId);
 		AndroidPluginSound.bgmList.put(bgmId, playData);
 	}
@@ -177,6 +180,7 @@ public class AndroidPluginSound{
 	// SE読込
 	public static void platformPluginSoundSeLoad(int seId, String src){
 		if(seId <= 0){return;}
+		if(AndroidPluginSound.seList.get(seId) != null){return;}
 		AndroidPluginSound.FuhahaSeItem playData = new AndroidPluginSound.FuhahaSeItem(src);
 		AndroidPluginSound.seList.put(seId, playData);
 		playData.load();

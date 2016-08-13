@@ -24,6 +24,7 @@ class IosPluginSound: NSObject{
 	// BGM読込
 	static internal func platformPluginSoundBgmLoad(bgmId: UInt32, src: String){
 		if(bgmId <= 0){return;}
+		if(IosPluginSound.bgmList[bgmId] != nil){return;}
 		IosPluginSound.bgmList[bgmId] = IosPluginSound.FuhahaBgmItem(src: src, bgmId: bgmId);
 	}
 
@@ -141,6 +142,7 @@ class IosPluginSound: NSObject{
 	// SE読込
 	static internal func platformPluginSoundSeLoad(seId: UInt32, src: String){
 		if(seId <= 0){return;}
+		if(IosPluginSound.seList[seId] != nil){return;}
 		IosPluginSound.seList[seId] = IosPluginSound.FuhahaSeItem(src: src);
 	}
 
