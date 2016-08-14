@@ -133,9 +133,9 @@ void engineUtilMemoryTraceImplement(char *info){
 	char dstr[32];
 	char mstr[32];
 	char pstr[32];
-	snprintf(dstr, sizeof(dstr), "%d.%dkB", localGlobal.debugSize / 1000, localGlobal.debugSize % 1000);
-	snprintf(mstr, sizeof(mstr), "%d.%dkB", memorySize / 1000, memorySize % 1000);
-	snprintf(pstr, sizeof(pstr), "%d.%dkB", permanentSize / 1000, permanentSize % 1000);
+	snprintf(dstr, sizeof(dstr), "%zu.%zukB", localGlobal.debugSize / 1000, localGlobal.debugSize % 1000);
+	snprintf(mstr, sizeof(mstr), "%zu.%zukB", memorySize / 1000, memorySize % 1000);
+	snprintf(pstr, sizeof(pstr), "%zu.%zukB", permanentSize / 1000, permanentSize % 1000);
 	trace("---------------- %s ----------------\n", info);
 	trace("mem trace %s %s (+%s) ----------------\n", mstr, pstr, dstr);
 
@@ -143,7 +143,7 @@ void engineUtilMemoryTraceImplement(char *info){
 	for(int i = 0; i < localGlobal.datLength; i++){
 		struct engineUtilMemoryUnit *temp = localGlobal.datList[i];
 		if(temp == NULL || temp->ptr == NULL){continue;}
-		trace("mem %2d %8d %s\n", temp->count++, temp->size, temp->info);
+		trace("mem %2d %8zu %s\n", temp->count++, temp->size, temp->info);
 	}
 
 	trace("---------------- ----------------\n");
