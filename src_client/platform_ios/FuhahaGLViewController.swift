@@ -17,6 +17,7 @@ class FuhahaGLViewController: GLKViewController{
 
 		// openGL
 		self.context = EAGLContext(API: .OpenGLES2);
+		self.preferredFramesPerSecond = 60;
 		let view: GLKView = self.view as! GLKView;
 		view.context = self.context!;
 		view.drawableDepthFormat = .Format24;
