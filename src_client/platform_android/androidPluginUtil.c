@@ -29,10 +29,9 @@ char *platformPluginUtilUidGet(void){
 	jmethodID mid = (*env)->GetStaticMethodID(env, cls, "platformPluginUtilUidGet", "()Ljava/lang/String;");
 	jstring str = (*env)->CallStaticObjectMethod(env, cls, mid);
 	char* value = (char*)((*env)->GetStringUTFChars(env, str, NULL));
-	if(value == NULL){return NULL;}
-
 	char *buff = (char*)corePluginUtilMemoryTemporary(strlen(value) + 1);
 	strcpy(buff, value);
+	(*env)->ReleaseStringUTFChars(env, str, value);
 	return buff;
 }
 
