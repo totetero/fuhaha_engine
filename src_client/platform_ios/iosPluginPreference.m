@@ -12,9 +12,9 @@
 char *platformPluginPreferenceGet(char *key){
 	NSString *nsstr1 = [NSString stringWithCString: key encoding: NSUTF8StringEncoding];
 	NSString *nsstr2 = [IosPluginPreference platformPluginPreferenceGet: nsstr1];
+	if(nsstr2 == NULL){return NULL;}
 
 	char *value = (char*)[nsstr2 UTF8String];
-	if(value == NULL){return NULL;}
 	char *buff = (char*)corePluginUtilMemoryTemporary(strlen(value) + 1);
 	strcpy(buff, value);
 

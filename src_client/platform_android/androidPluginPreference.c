@@ -14,9 +14,9 @@ char *platformPluginPreferenceGet(char *key){
 	jmethodID mid = (*env)->GetStaticMethodID(env, cls, "platformPluginPreferenceGet", "(Ljava/lang/String;)Ljava/lang/String;");
 	jstring str1 = (*env)->NewStringUTF(env, key);
 	jstring str2 = (*env)->CallStaticObjectMethod(env, cls, mid, str1);
+	if(str2 == NULL){return NULL;}
 
 	char *value = (char*)((*env)->GetStringUTFChars(env, str2, NULL));
-	if(value == NULL){return NULL;}
 	char *buff = (char*)corePluginUtilMemoryTemporary(strlen(value) + 1);
 	strcpy(buff, value);
 	(*env)->ReleaseStringUTFChars(env, str2, value);
