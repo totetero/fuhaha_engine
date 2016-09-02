@@ -68,6 +68,7 @@ static struct{
 static void egoVBOFree(struct engineGraphicObjectVBO *this){
 	glDeleteBuffers(1, &this->glId);
 	engineUtilMemoryInfoFree("engineGraphicObject vbo2", this->vertices);
+	this->vertices = NULL;
 	engineUtilMemoryInfoFree("engineGraphicObject vbo1", this);
 }
 
@@ -75,6 +76,7 @@ static void egoVBOFree(struct engineGraphicObjectVBO *this){
 static void egoIBOFree(struct engineGraphicObjectIBO *this){
 	glDeleteBuffers(1, &this->glId);
 	engineUtilMemoryInfoFree("engineGraphicObject ibo2", this->indexes);
+	this->indexes = NULL;
 	engineUtilMemoryInfoFree("engineGraphicObject ibo1", this);
 }
 
@@ -84,6 +86,7 @@ static void texDataFree(struct engineGraphicObjectTexData *this){
 		// 解放
 		if(this->glId != localGlobal.defaultTexture.glId){glDeleteTextures(1, &this->glId);}
 		engineUtilMemoryInfoFree("engineGraphicObject tex3", this->src);
+		this->src = NULL;
 		engineUtilMemoryInfoFree("engineGraphicObject tex2", this);
 	}else{
 		// ロードが完了していないのでコールバックで破棄

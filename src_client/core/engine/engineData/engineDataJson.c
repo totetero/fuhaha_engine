@@ -619,6 +619,7 @@ void engineDataJsonFree(struct engineDataJsonValue *this){
 	switch(this->type){
 		case ENGINEDATAJSONTYPE_STRING:
 			engineUtilMemoryInfoFree("engineDataJson string", this->jString);
+			this->jString = NULL;
 			break;
 		case ENGINEDATAJSONTYPE_OBJECT:
 		case ENGINEDATAJSONTYPE_ARRAY:

@@ -155,6 +155,10 @@ void engineGraphicBufferClean(void){
 	engineUtilMemoryInfoFree("(permanent) engineGraphicBuffer clor", localGlobal.buffClor);
 	engineUtilMemoryInfoFree("(permanent) engineGraphicBuffer texc", localGlobal.buffTexc);
 	engineUtilMemoryInfoFree("(permanent) engineGraphicBuffer face", localGlobal.buffFace);
+	localGlobal.buffVert = NULL;
+	localGlobal.buffClor = NULL;
+	localGlobal.buffTexc = NULL;
+	localGlobal.buffFace = NULL;
 	localGlobal.buffVertLength = 0;
 	localGlobal.buffClorLength = 0;
 	localGlobal.buffTexcLength = 0;

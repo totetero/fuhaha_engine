@@ -93,6 +93,7 @@ void *corePluginUtilCallbackGet(pluginUtilCallbackId callbackId, void **param){
 //		tempList = tempList->next;
 //		// 要素の除去
 //		engineUtilMemoryInfoFree("(permanent) pluginUtilCallback param", dispose->param);
+//		dispose->param = NULL;
 //		engineUtilMemoryInfoFree("(permanent) pluginUtilCallback", dispose);
 //	}
 //	localGlobal.list = NULL;

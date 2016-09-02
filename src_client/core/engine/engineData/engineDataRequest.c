@@ -49,7 +49,7 @@ static struct engineDataRequestUnit *reqDataCreate(void){
 static void reqDataFree(struct engineDataRequestUnit *this){
 	if(this->status == ENGINEDATAREQUESTUNITSTATUS_LOADED){
 		// 解放
-		if(this->buff != NULL){engineUtilMemoryInfoFree("engineDataRequest buff", this->buff);}
+		if(this->buff != NULL){engineUtilMemoryInfoFree("engineDataRequest buff", this->buff); this->buff = NULL;}
 		engineUtilMemoryInfoFree("engineDataRequest body", this);
 	}else{
 		// ロードが完了していないのでコールバックで破棄
