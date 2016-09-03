@@ -6,6 +6,9 @@ VERSIONNAME=0.0.1
 
 # --------------------------------
 
+# make id設定
+sed -i '' -e 's/IDENTIFIER = .*/IDENTIFIER = '${IDENTIFIER}'/g' Makefile
+
 # android id設定
 sed -i '' -e 's/project.ext.fuhahaApplicationId = ".*"/project.ext.fuhahaApplicationId = "'${IDENTIFIER}'"/g' src_platform/android/build.gradle
 
