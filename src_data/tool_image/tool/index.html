@@ -1,0 +1,24 @@
+<!DOCTYPE html><html><head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head><body>
+	<table><tr><td valign="top">
+		<div>画像確認ツール</div>
+		<div><select id="domSelectDst"><option>none</option></select></div>
+		<div><select id="domSelectScale">
+			<option value="2.00">200%</option>
+			<option value="1.00" selected="true">100%</option>
+			<option value="0.50">50%</option>
+			<option value="0.25">25%</option>
+		</select></div>
+		<div><input id="domToggleBack" type="checkbox">画像境界確認<br></div>
+		<div><input type="button" id ="domButtonSaveHeader" value="情報保存"></div>
+		<div><input type="button" id ="domButtonSaveImage" value="画像保存"></div>
+	</td><td>
+		<div id="domCanvas"></div>
+	</td></tr></table>
+	<script type="text/javascript" src="/tool_image/data_system.js"></script>
+	<script type="text/javascript" src="/tool_image/main.js"></script>
+</body><html>
