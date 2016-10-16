@@ -189,6 +189,11 @@
 		data += "#define TEXSIZ_" + util.target.tag + "_H " + h + "\n";
 		data += "#define TEXSIZ_" + util.target.tag + "_WH " + w + ", " + h + "\n";
 		for(var i = 0; i < util.target.imgs.length; i++){
+			// 同じタグ名を既に使っていたらスキップ
+			var isSkip = false;
+			for(var j = 0; j < i; j++){if(util.target.imgs[i]["tag"] == util.target.imgs[j]["tag"]){isSkip = true;}}
+			if(isSkip){continue;}
+
 			var tag = util.target.tag + "_" + util.target.imgs[i]["tag"];
 			var prefixId = util.target.imgs[i]["prefixId"];
 			var prefix = util.target.prefixes[prefixId];
