@@ -1,6 +1,8 @@
 #include "library.h"
 #include "engine/engineMath/engineMath.h"
+#include "engine/engineCtrl/engineCtrl.h"
 #include "engine/engineGraphic/engineGraphic.h"
+#include "engine/engineCartridge/engineCartridge.h"
 #include "game.h"
 
 // ----------------------------------------------------------------
@@ -10,19 +12,28 @@
 // opengl初期化
 void gameMainSurfaceCreated(void){
 	engineGraphicGameInit();
+	engineCartridgePageManagerInit();
 }
 
 // opengl描画
 void gameMainSurfaceDrawFrame(void){
-	engineGraphicSampleCode();
+	// 計算
+	engineCtrlTouchCalc();
+	engineCartridgePageManagerCalc();
+	// 描画
+	engineGraphicEngineClearAll();
+	engineCartridgePageManagerDraw();
+	engineGraphicEngineFlush();
 }
 
 // opengl中断
 void gameMainSurfacePause(void){
+	engineCartridgePageManagerPause();
 }
 
 // opengl終了
 void gameMainSurfaceDestroy(void){
+	engineCartridgePageManagerDispose();
 	engineGraphicGameExit();
 }
 

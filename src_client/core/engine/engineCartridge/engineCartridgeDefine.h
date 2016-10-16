@@ -1,23 +1,15 @@
-#include "../../library.h"
-#include "../engineMath/engineMath.h"
-#include "engineGraphic.h"
+#pragma once
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-// 3Dエンジン初期化処理
-void engineGraphicGameInit(void){
-	engineGraphicEngineInit();
-	engineGraphicObjectReload();
-}
+// 各ページカートリッジ装填のコンストラクタ
+void pageTest1PushPage();
+void pageTest2PushPage();
 
-// 3Dエンジン終了処理
-void engineGraphicGameExit(void){
-	engineGraphicBufferClean();
-	engineGraphicObjectDispose();
-	engineGraphicEngineExit();
-}
+// 最初のページカートリッジ装填
+#define ENGINECARTRIDGEPAGE_FIRST pageTest1PushPage
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

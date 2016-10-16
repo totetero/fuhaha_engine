@@ -17,6 +17,7 @@
 typedef unsigned char byte;
 
 //// ゲーム本体における共通部分インクルード順番の例
+//#include "texpos.h"
 //#include "plugin/pluginUtil.h"
 //#include "plugin/pluginData.h"
 //#include "plugin/pluginTexture.h"
@@ -28,6 +29,8 @@ typedef unsigned char byte;
 //#include "engine/engineData/engineData.h"
 //#include "engine/engineCtrl/engineCtrl.h"
 //#include "engine/engineGraphic/engineGraphic.h"
+//#include "engine/engineCartridge/engineCartridge.h"
+//#include "engine/engineParts/engineParts.h"
 //#include "game.h"
 
 // ----------------------------------------------------------------
