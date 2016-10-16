@@ -64,37 +64,58 @@
 
 		// json書式確認
 		var checkType = function(type, obj){return (Object.prototype.toString.call(obj).slice(8, -1) === type);};
-		var setError = function(err){console.error(err);};
+		
 		var validate = function(json){
-			if(!checkType("Array", json)){setError("validateError json"); return false;}
-			for(var i = 0; i < json.length; i++){
-				// 書式確認
-				if(!checkType("Object", json[i])){setError("validateError json[" + i + "]"); return false;}
-				if(!checkType("String", json[i]["dst"])){setError("validateError json[" + i + "]['dst']"); return false;}
-				if(!checkType("String", json[i]["tag"])){setError("validateError json[" + i + "]['tag']"); return false;}
-				if(!checkType("Object", json[i]["prefixes"])){setError("validateError json[" + i + "]['prefixes']"); return false;}
-				for(var j in json[i]["prefixes"]){if(!checkType("String", json[i]["prefixes"][j])){setError("validateError json[" + i + "]['prefixes']['" + j + "']"); return false;}}
-				// 同一タグが既に存在するか確認
-				var isDuplicate = false;
-				for(var j = 0; j < i; j++){if(json[i]["tag"] == json[j]["tag"]){isDuplicate = true; break;}}
-				if(isDuplicate){continue;}
-				// 書式確認
-				if(!checkType("Number", json[i]["width"])){setError("validateError json[" + i + "]['width']"); return false;}
-				if(!checkType("Number", json[i]["height"])){setError("validateError json[" + i + "]['height']"); return false;}
-				if(!checkType("Array", json[i]["imgs"])){setError("validateError json[" + i + "]['imgs']"); return false;}
-				for(var j = 0; j < json[i]["imgs"].length; j++){
-					if(!checkType("Object", json[i]["imgs"][j])){setError("validateError json[" + i + "]['imgs'][" + j + "]"); return false;}
-					if(!checkType("String", json[i]["imgs"][j]["tag"])){setError("validateError json[" + i + "]['imgs'][" + j + "]['tag']"); return false;}
-					if(!checkType("Number", json[i]["imgs"][j]["x"])){setError("validateError json[" + i + "]['imgs'][" + j + "]['x']"); return false;}
-					if(!checkType("Number", json[i]["imgs"][j]["y"])){setError("validateError json[" + i + "]['imgs'][" + j + "]['y']"); return false;}
-					if(json[i]["imgs"][j]["w"] != null && !checkType("Number", json[i]["imgs"][j]["w"])){setError("validateError json[" + i + "]['imgs'][" + j + "]['w']"); return false;}
-					if(json[i]["imgs"][j]["h"] != null && !checkType("Number", json[i]["imgs"][j]["h"])){setError("validateError json[" + i + "]['imgs'][" + j + "]['h']"); return false;}
-					if(json[i]["imgs"][j]["isTurn"] != null && !checkType("Boolean", json[i]["imgs"][j]["isTurn"])){setError("validateError json[" + i + "]['imgs'][" + j + "]['isTurn']"); return false;}
-					if(!checkType("String", json[i]["imgs"][j]["prefixId"])){setError("validateError json[" + i + "]['imgs'][" + j + "]['prefixId']"); return false;}
-					if(!checkType("String", json[i]["imgs"][j]["src"])){setError("validateError json[" + i + "]['imgs'][" + j + "]['src']"); return false;}
+			var countJson = 0;
+			var isErrorJson = false;
+			if(!checkType("Array", json)){setError("validateError json"); isErrorJson = true;}
+			else{
+				for(var i = 0; i < json.length; i++){
+					// データの書式確認
+					var isErrorData = false;
+					var setErrorData = function(err){console.error(err); isErrorData = true;};
+					if(!checkType("Object", json[i])){setErrorData("validateError json[" + i + "]");}
+					else{
+						var isDuplicate = false;
+						if(!checkType("String", json[i]["dst"])){setErrorData("validateError json[" + i + "]['dst']");}
+						if(!checkType("String", json[i]["tag"])){setErrorData("validateError json[" + i + "]['tag']");}
+						else{for(var j = 0; j < i; j++){if(json[i]["tag"] == json[j]["tag"]){isDuplicate = true; break;}}} // 同一タグが既に存在するか確認
+						if(!checkType("Object", json[i]["prefixes"])){setErrorData("validateError json[" + i + "]['prefixes']");}
+						else{for(var j in json[i]["prefixes"]){if(!checkType("String", json[i]["prefixes"][j])){setErrorData("validateError json[" + i + "]['prefixes']['" + j + "']");}}}
+						if(!isDuplicate){
+							// 同一タグが存在しなければ書式確認を続ける
+							if(!checkType("Number", json[i]["width"])){setErrorData("validateError json[" + i + "]['width']");}
+							if(!checkType("Number", json[i]["height"])){setErrorData("validateError json[" + i + "]['height']");}
+							if(!checkType("Array", json[i]["imgs"])){setErrorData("validateError json[" + i + "]['imgs']");}
+							else{
+								for(var j = 0; j < json[i]["imgs"].length; j++){
+									if(!checkType("Object", json[i]["imgs"][j])){setErrorData("validateError json[" + i + "]['imgs'][" + j + "]");}
+									if(!checkType("String", json[i]["imgs"][j]["tag"])){setErrorData("validateError json[" + i + "]['imgs'][" + j + "]['tag']");}
+									if(!checkType("Number", json[i]["imgs"][j]["x"])){setErrorData("validateError json[" + i + "]['imgs'][" + j + "]['x']");}
+									if(!checkType("Number", json[i]["imgs"][j]["y"])){setErrorData("validateError json[" + i + "]['imgs'][" + j + "]['y']");}
+									if(json[i]["imgs"][j]["w"] != null && !checkType("Number", json[i]["imgs"][j]["w"])){setErrorData("validateError json[" + i + "]['imgs'][" + j + "]['w']");}
+									if(json[i]["imgs"][j]["h"] != null && !checkType("Number", json[i]["imgs"][j]["h"])){setErrorData("validateError json[" + i + "]['imgs'][" + j + "]['h']");}
+									if(json[i]["imgs"][j]["isTurn"] != null && !checkType("Boolean", json[i]["imgs"][j]["isTurn"])){setErrorData("validateError json[" + i + "]['imgs'][" + j + "]['isTurn']");}
+									if(!checkType("String", json[i]["imgs"][j]["prefixId"])){setErrorData("validateError json[" + i + "]['imgs'][" + j + "]['prefixId']");}
+									if(!checkType("String", json[i]["imgs"][j]["src"])){setErrorData("validateError json[" + i + "]['imgs'][" + j + "]['src']");}
+								}
+							}
+						}
+					}
+					
+					if(!isErrorData){
+						// 正しいデータ
+						json[i]["isExist"] = true;
+						countJson++;
+					}else{
+						// エラーデータ
+						json[i]["isExist"] = false;
+						isErrorJson = true;
+					}
 				}
 			}
-			return true;
+			//return !isErrorJson; // エラーデータを一つも許さない場合
+			return (countJson > 0); // 一つ以上の正しいデータがあれば良い場合
 		};
 
 		// json設定
@@ -105,7 +126,7 @@
 
 			// セレクトボックス作成
 			var selects = "";
-			for(var i = 0; i < json.length; i++){selects += "<option>" + json[i]["dst"] + "</option>"}
+			for(var i = 0; i < json.length; i++){if(json[i]["isExist"]){selects += "<option>" + json[i]["dst"] + "</option>";}}
 			document.getElementById("domSelectDst").innerHTML = selects;
 		};
 
@@ -116,13 +137,14 @@
 
 	// 計算処理
 	var calc = function(){
-		if(util.target == null || util.target.dst != selectedDst){
-			// DOM確認
-			var domSelectDst = document.getElementById("domSelectDst");
-			var selectedDst = domSelectDst.options[domSelectDst.selectedIndex].innerHTML;
+		// DOM確認
+		var domSelectDst = document.getElementById("domSelectDst");
+		var selectedDst = domSelectDst.options[domSelectDst.selectedIndex].innerHTML;
 
+		if(util.target == null || util.target.dst != selectedDst){
 			for(var i = 0; i < loader.json.length; i++){
 				if(loader.json[i]["dst"] != selectedDst){continue;}
+				if(!loader.json[i]["isExist"]){break;}
 				// データコピー
 				util.target = {};
 				util.target.dst = loader.json[i]["dst"];
