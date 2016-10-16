@@ -48,11 +48,18 @@
 		// 読み込まれていない画像の読み込み
 		loader.loadImage = function(json){
 			for(var i = 0; i < json.length; i++){
-				if(json[i].imgs == null){continue;}
-				for(var j = 0; j < json[i]["imgs"].length; j++){
-					var prefixId = json[i]["imgs"][j]["prefixId"];
+				var imgs = json[i]["imgs"];
+				if(imgs == null){
+					for(var j = 0; j < i; j++){
+						if(json[i]["tag"] != json[j]["tag"]){continue;}
+						imgs = json[j]["imgs"];
+					}
+				}
+				if(imgs == null){continue;}
+				for(var j = 0; j < imgs.length; j++){
+					var prefixId = imgs[j]["prefixId"];
 					var prefix = json[i]["prefixes"][prefixId];
-					var src = prefix + json[i]["imgs"][j]["src"];
+					var src = prefix + imgs[j]["src"];
 					if(loader.imgs[src] != null){continue;}
 					var img = new Image();
 					img.onload = function(){util.update = true;};
