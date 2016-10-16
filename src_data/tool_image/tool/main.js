@@ -87,7 +87,9 @@
 					if(!checkType("String", json[i]["imgs"][j]["tag"])){setError("validateError json[" + i + "]['imgs'][" + j + "]['tag']"); return false;}
 					if(!checkType("Number", json[i]["imgs"][j]["x"])){setError("validateError json[" + i + "]['imgs'][" + j + "]['x']"); return false;}
 					if(!checkType("Number", json[i]["imgs"][j]["y"])){setError("validateError json[" + i + "]['imgs'][" + j + "]['y']"); return false;}
-					if(!checkType("Boolean", json[i]["imgs"][j]["isTurn"])){setError("validateError json[" + i + "]['imgs'][" + j + "]['isTurn']"); return false;}
+					if(json[i]["imgs"][j]["w"] != null && !checkType("Number", json[i]["imgs"][j]["w"])){setError("validateError json[" + i + "]['imgs'][" + j + "]['w']"); return false;}
+					if(json[i]["imgs"][j]["h"] != null && !checkType("Number", json[i]["imgs"][j]["h"])){setError("validateError json[" + i + "]['imgs'][" + j + "]['h']"); return false;}
+					if(json[i]["imgs"][j]["isTurn"] != null && !checkType("Boolean", json[i]["imgs"][j]["isTurn"])){setError("validateError json[" + i + "]['imgs'][" + j + "]['isTurn']"); return false;}
 					if(!checkType("String", json[i]["imgs"][j]["prefixId"])){setError("validateError json[" + i + "]['imgs'][" + j + "]['prefixId']"); return false;}
 					if(!checkType("String", json[i]["imgs"][j]["src"])){setError("validateError json[" + i + "]['imgs'][" + j + "]['src']"); return false;}
 				}
@@ -163,8 +165,8 @@
 			var img = loader.imgs[src];
 			var x = util.target.imgs[i]["x"];
 			var y = util.target.imgs[i]["y"];
-			var w = img.width;
-			var h = img.height;
+			var w = util.target.imgs[i]["w"] || img.width; 
+			var h = util.target.imgs[i]["h"] || img.height;
 			data += "#define TEXPOS_" + tag + "_X " + x + "\n";
 			data += "#define TEXPOS_" + tag + "_Y " + y + "\n";
 			data += "#define TEXPOS_" + tag + "_W " + w + "\n";
@@ -239,12 +241,14 @@
 			var isTurn = util.target.imgs[i]["isTurn"];
 			var x = util.target.imgs[i]["x"] + (isTurn ? img.height : 0);
 			var y = util.target.imgs[i]["y"];
+			var w = util.target.imgs[i]["w"] || img.width; 
+			var h = util.target.imgs[i]["h"] || img.height;
 			var r = (isTurn ? 90 : 0);
 			util.context.save();
 			util.context.translate(x, y);
 			util.context.rotate(r / 180 * Math.PI);
-			if(isBack){util.context.fillStyle = "black"; util.context.fillRect(0, 0, img.width, img.height);}
-			util.context.drawImage(img, 0, 0);
+			if(isBack){util.context.fillStyle = "black"; util.context.fillRect(0, 0, w, h);}
+			util.context.drawImage(img, 0, 0, w, h);
 			util.context.restore();
 		}
 	};
