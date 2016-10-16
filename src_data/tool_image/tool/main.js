@@ -53,6 +53,7 @@
 					for(var j = 0; j < i; j++){
 						if(json[i]["tag"] != json[j]["tag"]){continue;}
 						imgs = json[j]["imgs"];
+						break;
 					}
 				}
 				if(imgs == null){continue;}
@@ -167,6 +168,7 @@
 						util.target.width = loader.json[j]["width"];
 						util.target.height = loader.json[j]["height"];
 						util.target.imgs = loader.json[j]["imgs"];
+						break;
 					}
 				}
 				// オブジェクトのディープコピー
