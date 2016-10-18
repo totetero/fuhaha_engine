@@ -18,9 +18,9 @@ copy:
 
 # --------------------------------
 
-web: web-node
+web: copy web-debug web-node
 
-web-node: copy web-debug
+web-node:
 	node src_server/node/main.js
 
 web-debug:
