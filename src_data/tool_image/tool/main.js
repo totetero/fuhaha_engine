@@ -50,6 +50,7 @@
 			for(var i = 0; i < json.length; i++){
 				var imgs = json[i]["imgs"];
 				if(imgs == null){
+					// データが存在しない場合、同一グローバルタグのデータを探し出す
 					for(var j = 0; j < i; j++){
 						if(json[i]["tag"] != json[j]["tag"]){continue;}
 						imgs = json[j]["imgs"];
@@ -87,11 +88,11 @@
 						var isDuplicate = false;
 						if(!checkType("String", json[i]["dst"])){setErrorData("validateError json[" + i + "]['dst']");}
 						if(!checkType("String", json[i]["tag"])){setErrorData("validateError json[" + i + "]['tag']");}
-						else{for(var j = 0; j < i; j++){if(json[i]["tag"] == json[j]["tag"]){isDuplicate = true; break;}}} // 同一タグが既に存在するか確認
+						else{for(var j = 0; j < i; j++){if(json[i]["tag"] == json[j]["tag"]){isDuplicate = true; break;}}} // 同一グローバルタグが既に存在するか確認
 						if(!checkType("Object", json[i]["prefixes"])){setErrorData("validateError json[" + i + "]['prefixes']");}
 						else{for(var j in json[i]["prefixes"]){if(!checkType("String", json[i]["prefixes"][j])){setErrorData("validateError json[" + i + "]['prefixes']['" + j + "']");}}}
 						if(!isDuplicate){
-							// 同一タグが存在しなければ書式確認を続ける
+							// 同一グローバルタグが存在しなければ書式確認を続ける
 							if(!checkType("Number", json[i]["width"])){setErrorData("validateError json[" + i + "]['width']");}
 							if(!checkType("Number", json[i]["height"])){setErrorData("validateError json[" + i + "]['height']");}
 							if(!checkType("Array", json[i]["imgs"])){setErrorData("validateError json[" + i + "]['imgs']");}
@@ -138,6 +139,54 @@
 			document.getElementById("domSelectDst").innerHTML = selects;
 		};
 
+		loader.saveHeader = function(callback){
+			// 情報作成
+			var data = "// image data\n";
+			var w = util.target.width;
+			var h = util.target.height;
+			data += "#define TEXSIZ_" + util.target.tag + "_W " + w + "\n";
+			data += "#define TEXSIZ_" + util.target.tag + "_H " + h + "\n";
+			data += "#define TEXSIZ_" + util.target.tag + "_WH " + w + ", " + h + "\n";
+			for(var i = 0; i < util.target.imgs.length; i++){
+				// 同じローカルタグ名を既に使っていたらスキップ
+				var isSkip = false;
+				for(var j = 0; j < i; j++){if(util.target.imgs[i]["tag"] == util.target.imgs[j]["tag"]){isSkip = true;}}
+				if(isSkip){continue;}
+   
+				var tag = util.target.tag + "_" + util.target.imgs[i]["tag"];
+				var prefixId = util.target.imgs[i]["prefixId"];
+				var prefix = util.target.prefixes[prefixId];
+				var src = prefix + util.target.imgs[i]["src"];
+				var img = loader.imgs[src];
+				var x = util.target.imgs[i]["x"];
+				var y = util.target.imgs[i]["y"];
+				var w = util.target.imgs[i]["w"] || img.width; 
+				var h = util.target.imgs[i]["h"] || img.height;
+				data += "#define TEXPOS_" + tag + "_X " + x + "\n";
+				data += "#define TEXPOS_" + tag + "_Y " + y + "\n";
+				data += "#define TEXPOS_" + tag + "_W " + w + "\n";
+				data += "#define TEXPOS_" + tag + "_H " + h + "\n";
+				data += "#define TEXPOS_" + tag + "_XYWH " + x + ", " + y + ", " + w + ", " + h + "\n";
+			}
+			// 情報送信
+			loader.send("/tool_image/save_text", {
+				"path": util.target.tag + ".h",
+				"data": data
+			}, function(json){
+				callback();
+			});
+		};
+
+		loader.saveImage = function(callback){
+			// 画像送信
+			loader.send("/tool_image/save_image", {
+				"path": util.target.dst,
+				"data": util.canvas.toDataURL()
+			}, function(json){
+				callback();
+			});
+		};
+
 		return loader;
 	})();
 
@@ -159,15 +208,19 @@
 				util.target.tag = loader.json[i]["tag"];
 				util.target.prefixes = loader.json[i]["prefixes"];
 				if(loader.json[i]["imgs"] != null){
+					// データのコピーを続ける
 					util.target.width = loader.json[i]["width"];
 					util.target.height = loader.json[i]["height"];
 					util.target.imgs = loader.json[i]["imgs"];
+					util.target.isDuplicate = false;
 				}else{
+					// データが存在しない場合、同一グローバルタグのデータを探し出す
 					for(var j = 0; j < i; j++){
 						if(loader.json[i]["tag"] != loader.json[j]["tag"]){continue;}
 						util.target.width = loader.json[j]["width"];
 						util.target.height = loader.json[j]["height"];
 						util.target.imgs = loader.json[j]["imgs"];
+						util.target.isDuplicate = true;
 						break;
 					}
 				}
@@ -181,52 +234,55 @@
 
 	// 情報保存ボタン押下時
 	document.getElementById("domButtonSaveHeader").addEventListener("click", function(){
-		// 情報作成
-		var data = "// image data\n";
-		var w = util.target.width;
-		var h = util.target.height;
-		data += "#define TEXSIZ_" + util.target.tag + "_W " + w + "\n";
-		data += "#define TEXSIZ_" + util.target.tag + "_H " + h + "\n";
-		data += "#define TEXSIZ_" + util.target.tag + "_WH " + w + ", " + h + "\n";
-		for(var i = 0; i < util.target.imgs.length; i++){
-			// 同じタグ名を既に使っていたらスキップ
-			var isSkip = false;
-			for(var j = 0; j < i; j++){if(util.target.imgs[i]["tag"] == util.target.imgs[j]["tag"]){isSkip = true;}}
-			if(isSkip){continue;}
-
-			var tag = util.target.tag + "_" + util.target.imgs[i]["tag"];
-			var prefixId = util.target.imgs[i]["prefixId"];
-			var prefix = util.target.prefixes[prefixId];
-			var src = prefix + util.target.imgs[i]["src"];
-			var img = loader.imgs[src];
-			var x = util.target.imgs[i]["x"];
-			var y = util.target.imgs[i]["y"];
-			var w = util.target.imgs[i]["w"] || img.width; 
-			var h = util.target.imgs[i]["h"] || img.height;
-			data += "#define TEXPOS_" + tag + "_X " + x + "\n";
-			data += "#define TEXPOS_" + tag + "_Y " + y + "\n";
-			data += "#define TEXPOS_" + tag + "_W " + w + "\n";
-			data += "#define TEXPOS_" + tag + "_H " + h + "\n";
-			data += "#define TEXPOS_" + tag + "_XYWH " + x + ", " + y + ", " + w + ", " + h + "\n";
-		}
-		// 情報送信
-		loader.send("/tool_image/save_text", {
-			"path": util.target.tag + ".h",
-			"data": data
-		}, function(json){
-			console.log("callback success");
-		});
+		loader.saveHeader(function(){console.log("callback success");});
 	});
 
 	// 画像保存ボタン押下時
 	document.getElementById("domButtonSaveImage").addEventListener("click", function(){
-		// 画像送信
-		loader.send("/tool_image/save_image", {
-			"path": util.target.dst,
-			"data": util.canvas.toDataURL()
-		}, function(json){
-			console.log("callback success");
-		});
+		loader.saveImage(function(){console.log("callback success");});
+	});
+
+	// 全保存ボタン押下時
+	document.getElementById("domButtonSaveAll").addEventListener("click", function(){
+		var domSelectDst = document.getElementById("domSelectDst");
+		// 保存開始関数
+		var saveStart = function(index){
+			domSelectDst.selectedIndex = index;
+			util.update = true;
+			calc();
+			draw();
+			if(util.target.isDuplicate){
+				loader.saveImage(function(){saveEnd();});
+			}else{
+				loader.saveHeader(function(){loader.saveImage(function(){saveEnd();});});
+			}
+		};
+		// 保存完了関数
+		var saveEnd = function(){
+			var nextIndex = domSelectDst.selectedIndex + 1;
+			if(nextIndex < domSelectDst.options.length){
+				domSelectDst.selectedIndex = nextIndex;
+				saveStart(nextIndex);
+			}else{
+				// 全保存完了
+				document.getElementById("domSelectDst").disabled = false;
+				document.getElementById("domSelectScale").disabled = false;
+				document.getElementById("domToggleBack").disabled = false;
+				document.getElementById("domToggleBack").checked = false;
+				document.getElementById("domButtonSaveHeader").disabled = false;
+				document.getElementById("domButtonSaveImage").disabled = false;
+				document.getElementById("domButtonSaveAll").disabled = false;
+			}
+		};
+		// 全保存開始
+		document.getElementById("domSelectDst").disabled = true;
+		document.getElementById("domSelectScale").disabled = true;
+		document.getElementById("domToggleBack").disabled = true;
+		document.getElementById("domToggleBack").checked = false;
+		document.getElementById("domButtonSaveHeader").disabled = true;
+		document.getElementById("domButtonSaveImage").disabled = true;
+		document.getElementById("domButtonSaveAll").disabled = true;
+		saveStart(0);
 	});
 
 	// DOM切り替え時処理
