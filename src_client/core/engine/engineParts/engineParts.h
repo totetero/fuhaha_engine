@@ -72,6 +72,41 @@ void enginePartsButtonBoxDraw(struct enginePartsButtonBox *this, struct engineMa
 void enginePartsButtonBoxDispose(struct enginePartsButtonBox *this);
 
 // ----------------------------------------------------------------
+
+// ピッカーボタン構造体
+struct enginePartsButtonPicker{
+	struct enginePartsButton super;
+	struct engineGraphicTrans trans;
+	struct engineGraphicImageRect imgRectNormal;
+	struct engineGraphicImageRect imgRectSelect;
+	struct engineGraphicImageRect imgRectActibve;
+	struct engineGraphicImageRect imgRectInactive;
+	struct engineGraphicImageFrame imgFrameNormal;
+	struct engineGraphicImageFrame imgFrameSelect;
+	struct engineGraphicImageFrame imgFrameActibve;
+	struct engineGraphicImageFrame imgFrameInactive;
+	struct engineGraphicImageText imgText[8];
+	int picked;
+	bool select;
+};
+
+// ピッカーボタン構造体 初期化
+void enginePartsButtonPickerInit(struct enginePartsButtonPicker *this, int picked);
+// ピッカーボタン構造体 静的位置設定
+void enginePartsButtonPickerSetPosition(struct enginePartsButtonPicker *this, double x, double y, double w);
+// ピッカーボタン構造体 計算
+void enginePartsButtonPickerCalc(struct enginePartsButtonPicker *this);
+// ピッカーボタン構造体 タッチ情報を使い回す計算
+void enginePartsButtonPickerSubCalc(struct enginePartsButtonPicker *this, struct engineCtrlTouch *t, bool clickable);
+// 配列にピッカーボタンの描画情報を追加
+void enginePartsButtonPickerCreateArray(struct enginePartsButtonPicker *this, char **textList, int textListLength);
+
+// ピッカーボタン構造体 描画
+void enginePartsButtonPickerDraw(struct enginePartsButtonPicker *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color);
+// ピッカーボタン構造体 破棄
+void enginePartsButtonPickerDispose(struct enginePartsButtonPicker *this);
+
+// ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 

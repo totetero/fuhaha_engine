@@ -27,6 +27,7 @@ struct pageCartridgeTest2{
 	struct engineGraphicImageText imgTextTest;
 	struct engineGraphicImageNumber imgNumberTest;
 	struct enginePartsButtonBox btnBoxTest;
+	struct enginePartsButtonPicker btnPickerTest;
 
 	int bufferStatus;
 	int bufferScreen;
@@ -49,6 +50,7 @@ static void init(struct pageCartridgeTest2 *this){
 	engineGraphicImageTextInit(&this->imgTextTest);
 	engineGraphicImageNumberInit(&this->imgNumberTest);
 	enginePartsButtonBoxInit(&this->btnBoxTest);
+	enginePartsButtonPickerInit(&this->btnPickerTest, 0);
 
 	// 画像読み込み
 	this->stat->egoIdTexSystem = engineGraphicObjectTexCreate("img/system.png", ENGINEGRAPHICOBJECTTEXTYPE_LINEAR);
@@ -124,6 +126,7 @@ static void calc(struct pageCartridgeTest2 *this){
 
 	// タッチ処理
 	enginePartsButtonBoxCalc(&this->btnBoxTest);
+	enginePartsButtonPickerCalc(&this->btnPickerTest);
 	calcTouch(this);
 
 	// ボタン処理
@@ -154,12 +157,15 @@ static void createBuffer(struct pageCartridgeTest2 *this){
 		double wh = 80;
 		double wx = ww * -0.5;
 		double wy = wh * -0.5;
+		char *textList[] = {"あいう", "エオカ", "abc"};
 		engineGraphicImageRectCreateArray(&this->imgRectTest, TEXSIZ_SYSTEM_WH, 0, 0, 320, 180, TEXPOS_SYSTEM_FONTABCD_XYWH);
 		engineGraphicImageFrameCreateArray(&this->imgFrameTest, wx, wy, ww, wh);
 		engineGraphicImageTextCreateArray(&this->imgTextTest, wx + ww * 0.5, wy + wh * 0.5 - 10, "ボックス\nみょん");
 		engineGraphicImageNumberCreateArray(&this->imgNumberTest, wx + ww * 0.5, wy + wh * 0.5 + 20, 100);
 		enginePartsButtonBoxCreateArray(&this->btnBoxTest, "ポップアップ");
 		enginePartsButtonBoxSetPosition(&this->btnBoxTest, (global.screen.w - 120) * 0.5, global.screen.h - 40, 120, 30);
+		enginePartsButtonPickerCreateArray(&this->btnPickerTest, textList, 3);
+		enginePartsButtonPickerSetPosition(&this->btnPickerTest, 10, 10, 100);
 		// トランス設定
 		engineGraphicTransSetTranslate(&this->transBox, global.screen.w * 0.5, 80, 0);
 		engineGraphicTransSetColorRgba(&this->imgTextTest.trans, 0.0, 0.0, 0.0, 1.0);
@@ -172,6 +178,7 @@ static void createBuffer(struct pageCartridgeTest2 *this){
 		engineGraphicTransManagerPushProperty(&this->transManager, &this->imgTextTest.trans, &this->transBox, 0);
 		engineGraphicTransManagerPushProperty(&this->transManager, &this->imgNumberTest.trans, &this->transBox, 0);
 		engineGraphicTransManagerPushProperty(&this->transManager, &this->btnBoxTest.trans, &this->transRoot, 0);
+		engineGraphicTransManagerPushProperty(&this->transManager, &this->btnPickerTest.trans, &this->transRoot, 0);
 
 		// バッファ作成完了
 		engineGraphicBufferEnd(&this->egoIdVert, NULL, &this->egoIdTexc, &this->egoIdFace);
