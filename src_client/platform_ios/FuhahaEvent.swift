@@ -27,11 +27,11 @@ class FuhahaEvent{
 			// 加速度センサー
 			self.motionManager = CMMotionManager();
 			self.motionManager!.accelerometerUpdateInterval = 0.05;
-			self.motionManager!.startAccelerometerUpdates(to: OperationQueue.current!, withHandler: {(data: CMAccelerometerData?, error: NSError?) -> Void in
+			self.motionManager!.startAccelerometerUpdates(to: OperationQueue.current!, withHandler: {(data: CMAccelerometerData?, error: Error?) -> Void in
 				if(data == nil){return;}
 				// androidの軸方向に合わせる、最大値は知らん
 				gameMainEventAcceleration(-data!.acceleration.x, -data!.acceleration.y, -data!.acceleration.z);
-			} as! CMAccelerometerHandler);
+			});
 		}else{
 			self.motionManager = nil;
 		}
