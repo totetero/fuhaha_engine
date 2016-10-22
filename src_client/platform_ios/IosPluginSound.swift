@@ -7,36 +7,36 @@ import AVFoundation
 
 // プラグインクラス
 class IosPluginSound: NSObject{
-	private static var bgmList: Dictionary<UInt32, IosPluginSound.FuhahaBgmItem> = Dictionary<UInt32, IosPluginSound.FuhahaBgmItem>();
-	private static var seList: Dictionary<UInt32, IosPluginSound.FuhahaSeItem> = Dictionary<UInt32, IosPluginSound.FuhahaSeItem>();
-	private static var bgmZeroId: UInt32 = 0;
-	private static var bgmCurrentId: UInt32 = 0;
-	private static var seAudioPlayer: Array<AVAudioPlayer> = Array<AVAudioPlayer>();
-	private static var bgmToneDown: Float = 1.0;
-	private static var bgmVolume: Float = 1.0;
-	private static var seVolume: Float = 1.0;
-	private static let soundSuffix: String = ".m4a";
+	fileprivate static var bgmList: Dictionary<UInt32, IosPluginSound.FuhahaBgmItem> = Dictionary<UInt32, IosPluginSound.FuhahaBgmItem>();
+	fileprivate static var seList: Dictionary<UInt32, IosPluginSound.FuhahaSeItem> = Dictionary<UInt32, IosPluginSound.FuhahaSeItem>();
+	fileprivate static var bgmZeroId: UInt32 = 0;
+	fileprivate static var bgmCurrentId: UInt32 = 0;
+	fileprivate static var seAudioPlayer: Array<AVAudioPlayer> = Array<AVAudioPlayer>();
+	fileprivate static var bgmToneDown: Float = 1.0;
+	fileprivate static var bgmVolume: Float = 1.0;
+	fileprivate static var seVolume: Float = 1.0;
+	fileprivate static let soundSuffix: String = ".m4a";
 
 	// ----------------------------------------------------------------
 	// ----------------------------------------------------------------
 	// ----------------------------------------------------------------
 
 	// BGM読込
-	static internal func platformPluginSoundBgmLoad(bgmId: UInt32, src: String){
+	static internal func platformPluginSoundBgmLoad(_ bgmId: UInt32, src: String){
 		if(bgmId <= 0){return;}
 		if(IosPluginSound.bgmList[bgmId] != nil){return;}
 		IosPluginSound.bgmList[bgmId] = IosPluginSound.FuhahaBgmItem(src: src, bgmId: bgmId);
 	}
 
 	// BGM再生
-	static internal func platformPluginSoundBgmPlay(bgmId: UInt32){
+	static internal func platformPluginSoundBgmPlay(_ bgmId: UInt32){
 		IosPluginSound.bgmZeroId = bgmId;
 		let oldVolume = IosPluginSound.bgmVolume;
 		if(oldVolume > 0){IosPluginSound.bgmPlay(bgmId);}
 	}
 
 	// BGM再生
-	static internal func bgmPlay(bgmId: UInt32){
+	static internal func bgmPlay(_ bgmId: UInt32){
 		IosPluginSound.bgmToneDown = 1.0;
 
 		// 同じBGMを再生中なら何もしない
@@ -50,12 +50,12 @@ class IosPluginSound: NSObject{
 	}
 
 	// BGMトーンダウン
-	static internal func platformPluginSoundBgmToneDown(volume: Double){
+	static internal func platformPluginSoundBgmToneDown(_ volume: Double){
 		IosPluginSound.bgmToneDown = Float(volume);
 	}
 
 	// BGM設定音量
-	static internal func platformPluginSoundBgmVolume(volume: Double){
+	static internal func platformPluginSoundBgmVolume(_ volume: Double){
 		// 音量をゼロにした瞬間とゼロから戻した瞬間
 		let oldVolume = IosPluginSound.bgmVolume;
 		if(oldVolume > 0 && volume <= 0){IosPluginSound.bgmPlay(0);}
@@ -66,19 +66,19 @@ class IosPluginSound: NSObject{
 
 	// BGM情報クラス
 	class FuhahaBgmItem: NSObject, AVAudioPlayerDelegate{
-		private let bgmId: UInt32;
-		private let src: NSURL;
+		fileprivate let bgmId: UInt32;
+		fileprivate let src: URL;
 
-		private let countMax: Int = 30;
-		private var countPrev: Int = 0;
-		private var isPlaying: Bool = false;
-		private var audioPlayer: AVAudioPlayer? = nil;
-		private var settingVolume: Float = 0.0;
+		fileprivate let countMax: Int = 30;
+		fileprivate var countPrev: Int = 0;
+		fileprivate var isPlaying: Bool = false;
+		fileprivate var audioPlayer: AVAudioPlayer? = nil;
+		fileprivate var settingVolume: Float = 0.0;
 
 		// コンストラクタ
 		init(src: String, bgmId: UInt32){
 			self.bgmId = bgmId;
-			self.src = NSBundle.mainBundle().URLForResource(src, withExtension: IosPluginSound.soundSuffix, subdirectory: "assets")!;
+			self.src = Bundle.main.url(forResource: src, withExtension: IosPluginSound.soundSuffix, subdirectory: "assets")!;
 		}
 
 		// 再生開始
@@ -87,20 +87,20 @@ class IosPluginSound: NSObject{
 		}
 
 		// タイマーコールバック
-		func playTimer(timer: NSTimer?){
+		func playTimer(_ timer: Timer?){
 			if(self.playing()){
-				NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: #selector(self.playTimer(_:)), userInfo: nil, repeats: false);
+				Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(self.playTimer(_:)), userInfo: nil, repeats: false);
 			}
 		}
 
 		// 再生関数
-		private func playing() -> Bool{
+		fileprivate func playing() -> Bool{
 			let isActive: Bool = (IosPluginSound.bgmCurrentId == self.bgmId);
 			if(isActive || self.countPrev > 0){
 				if(!self.isPlaying){
 					// BGM作成と再生
 					do{
-						let audioPlayer: AVAudioPlayer = try AVAudioPlayer(contentsOfURL: self.src);
+						let audioPlayer: AVAudioPlayer = try AVAudioPlayer(contentsOf: self.src);
 						audioPlayer.volume = 0.0;
 						audioPlayer.delegate = self;
 						audioPlayer.numberOfLoops = -1;
@@ -140,35 +140,35 @@ class IosPluginSound: NSObject{
 	// ----------------------------------------------------------------
 
 	// SE読込
-	static internal func platformPluginSoundSeLoad(seId: UInt32, src: String){
+	static internal func platformPluginSoundSeLoad(_ seId: UInt32, src: String){
 		if(seId <= 0){return;}
 		if(IosPluginSound.seList[seId] != nil){return;}
 		IosPluginSound.seList[seId] = IosPluginSound.FuhahaSeItem(src: src);
 	}
 
 	// SE再生
-	static internal func platformPluginSoundSePlay(seId: UInt32){
+	static internal func platformPluginSoundSePlay(_ seId: UInt32){
 		IosPluginSound.seList[seId]?.play();
 	}
 
 	// SE設定音量
-	static internal func platformPluginSoundSeVolume(volume: Double){
+	static internal func platformPluginSoundSeVolume(_ volume: Double){
 		IosPluginSound.seVolume = Float(volume);
 	}
 
 	// SE情報クラス
 	class FuhahaSeItem: NSObject, AVAudioPlayerDelegate{
-		private let src: NSURL;
+		fileprivate let src: URL;
 
 		// コンストラクタ
 		init(src: String){
-			self.src = NSBundle.mainBundle().URLForResource(src, withExtension: IosPluginSound.soundSuffix, subdirectory: "assets")!;
+			self.src = Bundle.main.url(forResource: src, withExtension: IosPluginSound.soundSuffix, subdirectory: "assets")!;
 		}
 
 		// 再生開始
 		func play(){
 			do{
-				let audioPlayer: AVAudioPlayer = try AVAudioPlayer(contentsOfURL: self.src);
+				let audioPlayer: AVAudioPlayer = try AVAudioPlayer(contentsOf: self.src);
 				IosPluginSound.seAudioPlayer.append(audioPlayer);
 				audioPlayer.volume = IosPluginSound.seVolume;
 				audioPlayer.delegate = self;
@@ -179,9 +179,9 @@ class IosPluginSound: NSObject{
 		}
 
 		// 再生完了
-		func audioPlayerDidFinishPlaying(player: AVAudioPlayer, successfully flag: Bool){
-			let index: Int? = IosPluginSound.seAudioPlayer.indexOf(player);
-			if(index != nil){IosPluginSound.seAudioPlayer.removeAtIndex(index!);}
+		func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool){
+			let index: Int? = IosPluginSound.seAudioPlayer.index(of: player);
+			if(index != nil){IosPluginSound.seAudioPlayer.remove(at: index!);}
 		}
 	}
 

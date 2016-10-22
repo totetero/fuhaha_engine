@@ -16,13 +16,13 @@ class FuhahaGLViewController: GLKViewController{
 		super.viewDidLoad();
 
 		// openGL
-		self.context = EAGLContext(API: .OpenGLES2);
+		self.context = EAGLContext(api: .openGLES2);
 		self.preferredFramesPerSecond = 60;
 		let view: GLKView = self.view as! GLKView;
 		view.context = self.context!;
-		view.drawableDepthFormat = .Format24;
-		view.drawableStencilFormat = .Format8;
-		EAGLContext.setCurrentContext(self.context);
+		view.drawableDepthFormat = .format24;
+		view.drawableStencilFormat = .format8;
+		EAGLContext.setCurrent(self.context);
 
 		// controller
 		self.fuhahaEvent = FuhahaEvent();
@@ -32,7 +32,7 @@ class FuhahaGLViewController: GLKViewController{
 	}
 
 	// 描画時
-	override func glkView(view: GLKView, drawInRect rect: CGRect){
+	override func glkView(_ view: GLKView, drawIn rect: CGRect){
 		gameMainSurfaceDrawFrame();
 	}
 
@@ -69,22 +69,22 @@ class FuhahaGLViewController: GLKViewController{
 	// ----------------------------------------------------------------
 
 	// タッチ開始
-	override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?){
+	override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?){
 		self.fuhahaEvent!.touchesBegan(self.view, touches: touches, withEvent: event);
 	}
 
 	// タッチ移動
-	override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?){
+	override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?){
 		self.fuhahaEvent!.touchesMoved(self.view, touches: touches, withEvent: event);
 	}
 
 	// タッチ完了
-	override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?){
+	override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?){
 		self.fuhahaEvent!.touchesEnded(self.view, touches: touches, withEvent: event);
 	}
 
 	// タッチ中止
-	override func touchesCancelled(touches: Set<UITouch>!, withEvent event: UIEvent?){
+	override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?){
 		self.fuhahaEvent!.touchesCancelled(self.view, touches: touches, withEvent: event);
 	}
 
@@ -101,10 +101,10 @@ class FuhahaGLViewController: GLKViewController{
 	override func didReceiveMemoryWarning(){
 		super.didReceiveMemoryWarning();
 		gameMainSurfaceDestroy();
-		if(self.isViewLoaded() && (self.view.window != nil)){
+		if(self.isViewLoaded && (self.view.window != nil)){
 			self.view = nil;
-			if(EAGLContext.currentContext() === self.context){
-				EAGLContext.setCurrentContext(nil);
+			if(EAGLContext.current() === self.context){
+				EAGLContext.setCurrent(nil);
 			}
 			self.context = nil;
 		}
@@ -113,8 +113,8 @@ class FuhahaGLViewController: GLKViewController{
 	// 解放時
 	deinit{
 		gameMainSurfaceDestroy();
-		if(EAGLContext.currentContext() === self.context){
-			EAGLContext.setCurrentContext(nil);
+		if(EAGLContext.current() === self.context){
+			EAGLContext.setCurrent(nil);
 		}
 	}
 

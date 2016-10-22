@@ -27,11 +27,11 @@ class FuhahaEvent{
 			// 加速度センサー
 			self.motionManager = CMMotionManager();
 			self.motionManager!.accelerometerUpdateInterval = 0.05;
-			self.motionManager!.startAccelerometerUpdatesToQueue(NSOperationQueue.currentQueue()!, withHandler: {(data: CMAccelerometerData?, error: NSError?) -> Void in
+			self.motionManager!.startAccelerometerUpdates(to: OperationQueue.current!, withHandler: {(data: CMAccelerometerData?, error: NSError?) -> Void in
 				if(data == nil){return;}
 				// androidの軸方向に合わせる、最大値は知らん
 				gameMainEventAcceleration(-data!.acceleration.x, -data!.acceleration.y, -data!.acceleration.z);
-			});
+			} as! CMAccelerometerHandler);
 		}else{
 			self.motionManager = nil;
 		}
@@ -47,10 +47,10 @@ class FuhahaEvent{
 	}
 
 	// タッチ開始
-	func touchesBegan(view: UIView, touches: Set<UITouch>, withEvent event: UIEvent?){
+	func touchesBegan(_ view: UIView, touches: Set<UITouch>, withEvent event: UIEvent?){
 		for touch: UITouch in touches{
 			let tid: Int = touch.hash;
-			let point: CGPoint = touch.locationInView(view);
+			let point: CGPoint = touch.location(in: view);
 			if(self.t1id < 0){
 				self.t1x = Int32(point.x);
 				self.t1y = Int32(point.y);
@@ -67,10 +67,10 @@ class FuhahaEvent{
 	}
 
 	// タッチ移動
-	func touchesMoved(view: UIView, touches: Set<UITouch>, withEvent event: UIEvent?){
+	func touchesMoved(_ view: UIView, touches: Set<UITouch>, withEvent event: UIEvent?){
 		for touch: UITouch in touches{
 			let tid: Int = touch.hash;
-			let point: CGPoint = touch.locationInView(view);
+			let point: CGPoint = touch.location(in: view);
 			if(self.t1id == tid){
 				self.t1x = Int32(point.x);
 				self.t1y = Int32(point.y);
@@ -85,10 +85,10 @@ class FuhahaEvent{
 	}
 
 	// タッチ完了
-	func touchesEnded(view: UIView, touches: Set<UITouch>, withEvent event: UIEvent?){
+	func touchesEnded(_ view: UIView, touches: Set<UITouch>, withEvent event: UIEvent?){
 		for touch: UITouch in touches{
 			let tid: Int = touch.hash;
-			let point: CGPoint = touch.locationInView(view);
+			let point: CGPoint = touch.location(in: view);
 			if(self.t1id == tid){
 				self.t1x = Int32(point.x);
 				self.t1y = Int32(point.y);
@@ -105,10 +105,10 @@ class FuhahaEvent{
 	}
 
 	// タッチ中止
-	func touchesCancelled(view: UIView, touches: Set<UITouch>!, withEvent event: UIEvent?){
+	func touchesCancelled(_ view: UIView, touches: Set<UITouch>!, withEvent event: UIEvent?){
 		for touch: UITouch in touches{
 			let tid: Int = touch.hash;
-			let point: CGPoint = touch.locationInView(view);
+			let point: CGPoint = touch.location(in: view);
 			if(self.t1id == tid){
 				self.t1x = Int32(point.x);
 				self.t1y = Int32(point.y);

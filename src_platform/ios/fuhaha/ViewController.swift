@@ -5,7 +5,7 @@ import UIKit
 // ----------------------------------------------------------------
 
 class ViewController: UIViewController{
-	private var glViewController : FuhahaGLViewController = FuhahaGLViewController();
+	fileprivate var glViewController : FuhahaGLViewController = FuhahaGLViewController();
 
 	override func viewDidLoad(){
 		super.viewDidLoad();

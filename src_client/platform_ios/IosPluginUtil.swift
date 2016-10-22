@@ -6,19 +6,19 @@ import Foundation
 
 // プラグインクラス
 class IosPluginUtil: NSObject{
-	private static let semaphore: dispatch_semaphore_t = dispatch_semaphore_create(1);
-	private static var counter: Int = 0;
+	fileprivate static let semaphore: DispatchSemaphore = DispatchSemaphore(value: 1);
+	fileprivate static var counter: Int = 0;
 
 	// ----------------------------------------------------------------
 
 	// ユーザーID取得
 	static internal func platformPluginUtilUidGet() -> NSString{
-		let userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults();
+		let userDefaults: UserDefaults = UserDefaults.standard;
 		let key: String = "fuhaha_user_id";
-		var value: String! = userDefaults.objectForKey(key) as! String!;
+		var value: String! = userDefaults.object(forKey: key) as! String!;
 		if(value == nil){
-			value = NSUUID().UUIDString;
-			userDefaults.setObject(value, forKey: key);
+			value = UUID().uuidString;
+			userDefaults.set(value, forKey: key);
 			userDefaults.synchronize();
 		}
 		return (value as NSString);
@@ -28,24 +28,24 @@ class IosPluginUtil: NSObject{
 
 	// 読み込み中確認
 	static internal func platformPluginUtilIsLoading() -> Bool{
-		dispatch_semaphore_wait(IosPluginUtil.semaphore, DISPATCH_TIME_FOREVER);
+		IosPluginUtil.semaphore.wait();
 		let isLoading: Bool = (IosPluginUtil.counter > 0);
-		dispatch_semaphore_signal(IosPluginUtil.semaphore);
+		IosPluginUtil.semaphore.signal();
 		return isLoading;
 	}
 
 	// 読み込み中カウンタ加算
 	static internal func nativePluginUtilLoadingIncrement(){
-		dispatch_semaphore_wait(IosPluginUtil.semaphore, DISPATCH_TIME_FOREVER);
+		IosPluginUtil.semaphore.wait();
 		IosPluginUtil.counter += 1;
-		dispatch_semaphore_signal(IosPluginUtil.semaphore);
+		IosPluginUtil.semaphore.signal();
 	}
 
 	// 読み込み中カウンタ減算
 	static internal func nativePluginUtilLoadingDecrement(){
-		dispatch_semaphore_wait(IosPluginUtil.semaphore, DISPATCH_TIME_FOREVER);
+		IosPluginUtil.semaphore.wait();
 		IosPluginUtil.counter -= 1;
-		dispatch_semaphore_signal(IosPluginUtil.semaphore);
+		IosPluginUtil.semaphore.signal();
 	}
 
 	// ----------------------------------------------------------------
