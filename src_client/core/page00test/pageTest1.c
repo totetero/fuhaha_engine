@@ -1,8 +1,8 @@
 #include "../library.h"
-#include "engine/engineMath/engineMath.h"
-#include "engine/engineUtil/engineUtil.h"
-#include "engine/engineGraphic/engineGraphic.h"
-#include "engine/engineCartridge/engineCartridge.h"
+#include "../engine/engineMath/engineMath.h"
+#include "../engine/engineUtil/engineUtil.h"
+#include "../engine/engineGraphic/engineGraphic.h"
+#include "../engine/engineCartridge/engineCartridge.h"
 #include "../game.h"
 
 // ----------------------------------------------------------------
