@@ -11,7 +11,7 @@ class IosPluginPreference: NSObject{
 	// 設定読み込み
 	static internal func platformPluginPreferenceGet(_ key: String) -> NSString?{
 		let userDefaults = UserDefaults.standard;
-		return userDefaults.object(forKey: key) as! String? as NSString?;
+		return userDefaults.object(forKey: key) as! NSString?;
 	}
 
 	// 設定書き込み
