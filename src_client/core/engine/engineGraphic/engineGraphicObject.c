@@ -240,6 +240,7 @@ static struct engineGraphicObjectTexData *texDataCreate(struct engineGraphicObje
 	}
 	// 重複がなければ新規作成
 	struct engineGraphicObjectTexData *obj = (struct engineGraphicObjectTexData*)engineUtilMemoryInfoCalloc("engineGraphicObject tex2", 1, sizeof(struct engineGraphicObjectTexData));
+	obj->arg.type = arg->type;
 	if(arg->type == ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEXTURELOCAL){
 		size_t length = ((int)strlen(arg->pluginTextureLocal.src) + 1) * sizeof(char);
 		obj->arg.pluginTextureLocal.src = (char*)engineUtilMemoryInfoMalloc("engineGraphicObject tex3", length);
