@@ -17,7 +17,7 @@ public class AndroidPluginTexture{
 	// JNI連携
 	static{System.loadLibrary("fuhaha_native");}
 	public static native void corePluginTextureIsBind(int glId);
-	public static native void gamePluginTextureCallback(int callbackId, int glId, int texw, int texh, int imgw, int imgh);
+	public static native void gamePluginTextureCallback(int callbackId, int glId, int w, int h);
 
 	// ----------------------------------------------------------------
 
@@ -48,16 +48,14 @@ public class AndroidPluginTexture{
 		public CallbackBitmap setBitmap(Bitmap bmp){this.bmp = bmp; return this;}
 		public void run(){
 			int glId = 0;
-			int texw = 0;
-			int texh = 0;
-			int imgw = 0;
-			int imgh = 0;
+			int width = 0;
+			int height = 0;
 			if(this.bmp != null){
 				int[] glIds = new int[1];
 				GLES20.glGenTextures(1, glIds, 0);
 				glId = glIds[0];
-				texw = imgw = this.bmp.getWidth();
-				texh = imgh = this.bmp.getHeight();
+				width = this.bmp.getWidth();
+				height = this.bmp.getHeight();
 
 				AndroidPluginTexture.corePluginTextureIsBind(glId);
 				GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, glId);
@@ -77,7 +75,7 @@ public class AndroidPluginTexture{
 				}})).start();
 			}
 			AndroidPluginUtil.nativePluginUtilLoadingDecrement();
-			AndroidPluginTexture.gamePluginTextureCallback(this.callbackId, glId, texw, texh, imgw, imgh);
+			AndroidPluginTexture.gamePluginTextureCallback(this.callbackId, glId, width, height);
 		}
 	}
 

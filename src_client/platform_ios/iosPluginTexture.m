@@ -9,7 +9,7 @@
 // ----------------------------------------------------------------
 
 // ローカルデータ読み込み
-void platformPluginTextureLocal(void *param, char *src, void(*callback)(void *param, int glId, int texw, int texh, int imgw, int imgh)){
+void platformPluginTextureLocal(void *param, char *src, void(*callback)(void *param, int glId, int w, int h)){
 	pluginTextureCallbackId callbackId = gamePluginTextureCallbackSet(param, callback);
 	NSString *nsstr1 = [NSString stringWithCString: src encoding: NSUTF8StringEncoding];
 	[IosPluginTexture platformPluginTextureLocal: callbackId src: nsstr1];

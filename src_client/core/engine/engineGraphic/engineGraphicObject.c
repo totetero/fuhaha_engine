@@ -119,7 +119,7 @@ static void egoTexFree(struct engineGraphicObjectTexCage *this){
 // ----------------------------------------------------------------
 
 // ロード完了時コールバック
-static void texDataLocalCallback(void *param, int glId, int texw, int texh, int imgw, int imgh){
+static void texDataLocalCallback(void *param, int glId, int w, int h){
 	struct engineGraphicObjectTexData *this = (struct engineGraphicObjectTexData*)param;
 	enum engineGraphicObjectTexDataStatus beforeStatus = this->status;
 	this->glId = glId;

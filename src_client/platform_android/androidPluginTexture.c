@@ -12,8 +12,8 @@ JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginTexture_corePluginT
 }
 
 // テクスチャのコールバック
-JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginTexture_gamePluginTextureCallback(JNIEnv *env, jobject obj, jint callbackId, jint glId, jint texw, jint texh, jint imgw, jint imgh){
-	gamePluginTextureCallbackCall(callbackId, glId, texw, texh, imgw, imgh);
+JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginTexture_gamePluginTextureCallback(JNIEnv *env, jobject obj, jint callbackId, jint glId, jint w, jint h){
+	gamePluginTextureCallbackCall(callbackId, glId, w, h);
 }
 
 // ----------------------------------------------------------------
@@ -21,7 +21,7 @@ JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginTexture_gamePluginT
 // ----------------------------------------------------------------
 
 // ローカルデータ読み込み
-void platformPluginTextureLocal(void *param, char *src, void(*callback)(void *param, int glId, int texw, int texh, int imgw, int imgh)){
+void platformPluginTextureLocal(void *param, char *src, void(*callback)(void *param, int glId, int w, int h)){
 	JNIEnv *env = getJNIEnv();
 	jclass cls = (*env)->FindClass(env, "com/totetero/fuhaha/AndroidPluginTexture");
 	jmethodID mid = (*env)->GetStaticMethodID(env, cls, "platformPluginTextureLocal", "(ILjava/lang/String;)V");
