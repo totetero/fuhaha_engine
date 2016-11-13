@@ -56,25 +56,31 @@ pluginUtilCallbackId corePluginUtilCallbackSet(void *param, void *callback){
 }
 
 // コールバック関数の取得と解放 ひな形
-void *corePluginUtilCallbackGet(pluginUtilCallbackId callbackId, void **param){
+void *corePluginUtilCallbackGet(pluginUtilCallbackId callbackId, void **param, bool isFree){
 	struct pluginUtilCallbackUnit *prev = NULL;
 	struct pluginUtilCallbackUnit *temp = localGlobal.list;
 	while(temp != NULL){
-		if(temp->callbackId == callbackId){
-			// リストから要素を外す
-			struct pluginUtilCallbackUnit *use = temp;
-			temp = temp->next;
-			if(prev == NULL){localGlobal.list = temp;}
-			else{prev->next = temp;}
+		if(temp->callbackId == callbackId){			
 			// コールバック取得
-			void *callback = use->callback;
-			if(param != NULL){*param = use->param;}
-			// 解放の代わりに要素のプール
-			use->callbackId = 0;
-			use->param = NULL;
-			use->callback = NULL;
-			use->next = localGlobal.pool;
-			localGlobal.pool = use;
+			void *callback = temp->callback;
+			if(param != NULL){*param = temp->param;}
+
+			if(isFree){
+				// リストから要素を外す
+				struct pluginUtilCallbackUnit *dispose = temp;
+				temp = temp->next;
+				if(prev == NULL){localGlobal.list = temp;}
+				else{prev->next = temp;}
+				// 解放の代わりに要素のプール
+				dispose->callbackId = 0;
+				dispose->param = NULL;
+				dispose->callback = NULL;
+				dispose->next = localGlobal.pool;
+				localGlobal.pool = dispose;
+			}else{
+				prev = temp;
+				temp = temp->next;
+			}
 
 			return callback;
 		}else{

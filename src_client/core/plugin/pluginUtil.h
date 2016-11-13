@@ -20,7 +20,7 @@ void *corePluginUtilMemoryTemporary(size_t size);
 // コールバック関数の登録 ひな形
 pluginUtilCallbackId corePluginUtilCallbackSet(void *param, void *callback);
 // コールバック関数の取得と解放 ひな形
-void *corePluginUtilCallbackGet(pluginUtilCallbackId callbackId, void **param);
+void *corePluginUtilCallbackGet(pluginUtilCallbackId callbackId, void **param, bool isFree);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
