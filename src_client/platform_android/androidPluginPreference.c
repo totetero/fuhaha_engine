@@ -16,10 +16,10 @@ char *platformPluginPreferenceGet(char *key){
 	jstring str2 = (*env)->CallStaticObjectMethod(env, cls, mid, str1);
 	if(str2 == NULL){return NULL;}
 
-	char *value = (char*)((*env)->GetStringUTFChars(env, str2, NULL));
+	char *value = (char*)((*env)->GetStringCritical(env, str2, NULL));
 	char *buff = (char*)corePluginUtilMemoryTemporary(strlen(value) + 1);
 	strcpy(buff, value);
-	(*env)->ReleaseStringUTFChars(env, str2, value);
+	(*env)->ReleaseStringCritical(env, str2, value);
 
 	return buff;
 }

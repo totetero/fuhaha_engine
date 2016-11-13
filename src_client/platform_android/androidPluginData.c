@@ -11,21 +11,21 @@
 JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginData_gamePluginDataCallbackBinary(JNIEnv *env, jobject obj, jint callbackId, jbyteArray buff0){
 	if(buff0 == NULL){gamePluginDataCallbackCall(callbackId, NULL, 0); return;}
 	jsize size = (*env)->GetArrayLength(env, buff0);
-	jbyte *buff1 = (*env)->GetByteArrayElements(env, buff0, NULL);
 	void *buff2 = gamePluginUtilMemoryMalloc("pluginData", size); // バッファの解放はゲーム側で行う
+	jbyte *buff1 = (*env)->GetPrimitiveArrayCritical(env, buff0, NULL);
 	memcpy(buff2, buff1, size);
-	(*env)->ReleaseByteArrayElements(env, buff0, buff1, 0);
+	(*env)->ReleasePrimitiveArrayCritical(env, buff0, buff1, 0);
 	gamePluginDataCallbackCall(callbackId, buff2, size);
 }
 
 // 文字列のコールバック
 JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginData_gamePluginDataCallbackString(JNIEnv *env, jobject obj, jint callbackId, jstring buff0){
 	if(buff0 == NULL){gamePluginDataCallbackCall(callbackId, NULL, 0); return;}
-	jbyte *buff1 = (*env)->GetStringUTFChars(env, buff0, NULL);
+	jbyte *buff1 = (*env)->GetStringCritical(env, buff0, NULL);
 	size_t size = strlen(buff1) + 1;
 	char *buff2 = (char*)gamePluginUtilMemoryMalloc("pluginData", size); // バッファの解放はゲーム側で行う
 	strcpy(buff2, buff1);
-	(*env)->ReleaseStringUTFChars(env, buff0, buff1);
+	(*env)->ReleaseStringCritical(env, buff0, buff1);
 	gamePluginDataCallbackCall(callbackId, buff2, size);
 }
 
