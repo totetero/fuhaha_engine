@@ -47,6 +47,11 @@ public class FuhahaActivity extends Activity{
 	public boolean dispatchKeyEvent(KeyEvent event){
 		return this.glView.dispatchKeyEvent(event) || super.dispatchKeyEvent(event);
 	}
+
+	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults){
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+		this.glView.onRequestPermissionsResult(requestCode, permissions, grantResults);
+	}
 }
 
 // ----------------------------------------------------------------

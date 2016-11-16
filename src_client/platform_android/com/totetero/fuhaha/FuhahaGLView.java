@@ -100,6 +100,12 @@ public class FuhahaGLView extends GLSurfaceView implements Renderer{
 
 	// ----------------------------------------------------------------
 
+	// パーミッションリクエストの応答を受け取る
+	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults){
+	}
+
+	// ----------------------------------------------------------------
+
 	// アプリ終了命令
 	public static void platformMainSurfaceExit(){
 		FuhahaGLView.activity.finish();
