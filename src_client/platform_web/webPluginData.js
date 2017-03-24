@@ -10,7 +10,7 @@ mergeInto(LibraryManager.library, {
 	// HTTP通信 コールバックバッファは要解放
 	platformPluginDataHttp: function(param, url, request, callback){
 		Module.nativePluginUtilLoadingIncrement();
-		var callbackId = ccall("gamePluginDataCallbackSet", null, [null, null], [param, callback]);
+		var callbackId = ccall("gamePluginDataHttpCallbackSet", null, [null, null], [param, callback]);
 		var xhr = new XMLHttpRequest();
 		xhr.open("POST", "../" + Pointer_stringify(url), true);
 		//xhr.open("POST", Pointer_stringify(ccall("gamePluginUtilUrlGet")) + "/" + Pointer_stringify(url), true);
@@ -36,7 +36,7 @@ mergeInto(LibraryManager.library, {
 					//Module.writeStringToMemory(message, buff);
 				}
 				Module.nativePluginUtilLoadingDecrement();
-				ccall("gamePluginDataCallbackCall", null, [null, null, null], [callbackId, buff, size]);
+				ccall("gamePluginDataHttpCallbackCall", null, [null, null, null], [callbackId, buff, size]);
 			}
 		};
 		xhr.send(Pointer_stringify(request));
@@ -47,7 +47,7 @@ mergeInto(LibraryManager.library, {
 	// ローカルデータ読み込み コールバックバッファは要解放
 	platformPluginDataLocal: function(param, src, callback){
 		Module.nativePluginUtilLoadingIncrement();
-		var callbackId = ccall("gamePluginDataCallbackSet", null, [null, null], [param, callback]);
+		var callbackId = ccall("gamePluginDataLocalCallbackSet", null, [null, null], [param, callback]);
 		var xhr = new XMLHttpRequest();
 		xhr.open("GET", Pointer_stringify(src), true);
 		xhr.setRequestHeader("Content-Type", "application/octet-stream");
@@ -72,7 +72,7 @@ mergeInto(LibraryManager.library, {
 					//Module.writeStringToMemory(message, buff);
 				}
 				Module.nativePluginUtilLoadingDecrement();
-				ccall("gamePluginDataCallbackCall", null, [null, null, null], [callbackId, buff, size]);
+				ccall("gamePluginDataLocalCallbackCall", null, [null, null, null], [callbackId, buff, size]);
 			}
 		};
 		xhr.send();

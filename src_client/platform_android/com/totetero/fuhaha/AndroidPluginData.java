@@ -18,14 +18,16 @@ public class AndroidPluginData{
 
 	// JNI連携
 	static{System.loadLibrary("fuhaha_native");}
-	public static native void gamePluginDataCallbackBinary(int callbackId, byte[] buff);
-	public static native void gamePluginDataCallbackString(int callbackId, String buff);
+	public static native void gamePluginDataHttpCallbackBinary(int callbackId, byte[] buff);
+	public static native void gamePluginDataHttpCallbackString(int callbackId, String buff);
+	public static native void gamePluginDataLocalCallbackBinary(int callbackId, byte[] buff);
+	public static native void gamePluginDataLocalCallbackString(int callbackId, String buff);
 
 	// ----------------------------------------------------------------
 
 	// HTTP通信
 	public static void platformPluginDataHttp(int callbackId, final String url, final String request){
-		final Callback callback = new Callback(callbackId);
+		final Callback callback = new CallbackHttp(callbackId);
 		new Thread(new Runnable(){public void run(){
 			byte[] buff = null;
 			HttpURLConnection connect = null;
@@ -58,7 +60,7 @@ public class AndroidPluginData{
 
 	// ローカルデータ読み込み
 	public static void platformPluginDataLocal(int callbackId, final String src){
-		final Callback callback = new Callback(callbackId);
+		final Callback callback = new CallbackLocal(callbackId);
 		new Thread(new Runnable(){public void run(){
 			byte[] buff = null;
 			try{
@@ -76,10 +78,10 @@ public class AndroidPluginData{
 	// ----------------------------------------------------------------
 
 	// メインスレッドでコールバック呼び出しクラス
-	private static class Callback implements Runnable{
-		private int callbackId;
-		private byte[] binBuff = null;
-		private String strBuff = null;
+	private static abstract class Callback implements Runnable{
+		protected int callbackId;
+		protected byte[] binBuff = null;
+		protected String strBuff = null;
 		public Callback(int callbackId){
 			AndroidPluginUtil.nativePluginUtilLoadingIncrement();
 			this.callbackId = callbackId;
@@ -89,9 +91,20 @@ public class AndroidPluginData{
 		public void run(){
 			//if(this.binBuff == null && this.strBuff == null){this.strBuff = "failed";}
 			AndroidPluginUtil.nativePluginUtilLoadingDecrement();
-			if(this.binBuff == null && this.strBuff != null){AndroidPluginData.gamePluginDataCallbackString(this.callbackId, this.strBuff);}
-			else{AndroidPluginData.gamePluginDataCallbackBinary(this.callbackId, this.binBuff);}
+			if(this.binBuff == null && this.strBuff != null){this.callbackString();}else{this.callbackBinary();}
 		}
+		protected abstract void callbackBinary();
+		protected abstract void callbackString();
+	}
+	private static class CallbackHttp extends Callback{
+		public CallbackHttp(int callbackId){super(callbackId);}
+		protected void callbackBinary(){AndroidPluginData.gamePluginDataHttpCallbackBinary(this.callbackId, this.binBuff);}
+		protected void callbackString(){AndroidPluginData.gamePluginDataHttpCallbackString(this.callbackId, this.strBuff);}
+	}
+	private static class CallbackLocal extends Callback{
+		public CallbackLocal(int callbackId){super(callbackId);}
+		protected void callbackBinary(){AndroidPluginData.gamePluginDataLocalCallbackBinary(this.callbackId, this.binBuff);}
+		protected void callbackString(){AndroidPluginData.gamePluginDataLocalCallbackString(this.callbackId, this.strBuff);}
 	}
 
 	// ----------------------------------------------------------------

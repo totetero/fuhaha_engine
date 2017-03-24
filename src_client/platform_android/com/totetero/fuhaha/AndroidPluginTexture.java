@@ -17,7 +17,7 @@ public class AndroidPluginTexture{
 	// JNI連携
 	static{System.loadLibrary("fuhaha_native");}
 	public static native void corePluginTextureIsBind(int glId);
-	public static native void gamePluginTextureCallback(int callbackId, int glId, int w, int h);
+	public static native void gamePluginTextureLocalCallback(int callbackId, int glId, int w, int h);
 
 	// ----------------------------------------------------------------
 
@@ -75,7 +75,7 @@ public class AndroidPluginTexture{
 				}})).start();
 			}
 			AndroidPluginUtil.nativePluginUtilLoadingDecrement();
-			AndroidPluginTexture.gamePluginTextureCallback(this.callbackId, glId, width, height);
+			AndroidPluginTexture.gamePluginTextureLocalCallback(this.callbackId, glId, width, height);
 		}
 	}
 

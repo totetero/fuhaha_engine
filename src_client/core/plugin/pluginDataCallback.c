@@ -7,12 +7,28 @@
 // ----------------------------------------------------------------
 
 // コールバック関数の登録
-pluginDataCallbackId gamePluginDataCallbackSet(void *param, void(*callback)(void *param, void *buff, size_t size)){
-	return (pluginDataCallbackId)corePluginUtilCallbackSet(param, (void*)callback);
+pluginDataHttpCallbackId gamePluginDataHttpCallbackSet(void *param, void(*callback)(void *param, PLUGINDATA_HTTP_CALLBACKPARAMS)){
+	return (pluginDataHttpCallbackId)corePluginUtilCallbackSet(param, (void*)callback);
+}
+
+// コールバック関数の登録
+pluginDataLocalCallbackId gamePluginDataLocalCallbackSet(void *param, void(*callback)(void *param, PLUGINDATA_LOCAL_CALLBACKPARAMS)){
+	return (pluginDataLocalCallbackId)corePluginUtilCallbackSet(param, (void*)callback);
+}
+
+// ----------------------------------------------------------------
+
+// コールバック関数の実行と解放
+bool gamePluginDataHttpCallbackCall(pluginDataHttpCallbackId callbackId, PLUGINDATA_HTTP_CALLBACKPARAMS){
+	void *param;
+	void *callback = corePluginUtilCallbackGet(callbackId, &param, true);
+	if(callback == NULL){return false;}
+	((void(*)(void*, void*, size_t))callback)(param, buff, size);
+	return true;
 }
 
 // コールバック関数の実行と解放
-bool gamePluginDataCallbackCall(pluginDataCallbackId callbackId, void *buff, size_t size){
+bool gamePluginDataLocalCallbackCall(pluginDataLocalCallbackId callbackId, PLUGINDATA_LOCAL_CALLBACKPARAMS){
 	void *param;
 	void *callback = corePluginUtilCallbackGet(callbackId, &param, true);
 	if(callback == NULL){return false;}

@@ -32,7 +32,7 @@ class IosPluginTexture: NSObject{
 				glTexImage2D(GLenum(GL_TEXTURE_2D), GLint(0), GL_RGBA, GLsizei(width), GLsizei(height), 0, GLenum(GL_RGBA), GLenum(GL_UNSIGNED_BYTE), buff);
 				glGenerateMipmap(GLenum(GL_TEXTURE_2D));
 				IosPluginUtil.nativePluginUtilLoadingDecrement();
-				gamePluginTextureCallbackCall(callbackId, Int32(glId), Int32(width), Int32(height));
+				gamePluginTextureLocalCallbackCall(callbackId, Int32(glId), Int32(width), Int32(height));
 			});
 		});
 	}
