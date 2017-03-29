@@ -31,7 +31,7 @@ struct pageCartridgeTest1{
 // 初期化
 static void init(struct pageCartridgeTest1 *this){
 	// 画像読み込み
-	this->egoIdTexTest = engineGraphicObjectTexCreate("test.png", ENGINEGRAPHICOBJECTTEXTYPE_LINEAR);
+	this->egoIdTexTest = engineGraphicObjectTexCreateLocal("test.png", ENGINEGRAPHICOBJECTTEXTYPE_LINEAR);
 
 	this->step = 0;
 }

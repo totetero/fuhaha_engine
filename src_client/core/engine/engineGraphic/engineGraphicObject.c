@@ -41,10 +41,12 @@ struct engineGraphicObjectTexCage{
 struct engineGraphicObjectTexArg{
 	enum engineGraphicObjectTexArgType{
 		ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEXTURELOCAL,
+		ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEXTUREFONT,
 		ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEST,
 	} type;
 	union{
 		struct{char *src;} pluginTextureLocal;
+		struct{int fontSetId; char *letterList; int letterLenght;} pluginTextureFont;
 		struct{} pluginTest;
 	};
 };
@@ -53,7 +55,11 @@ struct engineGraphicObjectTexArg{
 struct engineGraphicObjectTexData{
 	struct engineGraphicObjectTexData *next;
 	struct engineGraphicObjectTexArg arg;
-	GLuint glId;
+	union{
+		struct{GLuint glId; int w; int h;} pluginTextureLocal;
+		struct{GLuint glId; int w; int h; struct pluginTextureFontCode *codeList;} pluginTextureFont;
+		struct{} pluginTest;
+	};
 	enum engineGraphicObjectTexDataStatus{
 		ENGINEGRAPHICOBJECTTEXDATASTATUS_LOADING,
 		ENGINEGRAPHICOBJECTTEXDATASTATUS_LOADED,
@@ -65,6 +71,8 @@ static struct{
 	// デフォルトテクスチャ
 	struct{
 		GLuint glId;
+		int w;
+		int h;
 	} defaultTexture;
 	// 3Dオブジェクトリスト
 	int egoIdCount;
@@ -97,9 +105,22 @@ static void texDataFree(struct engineGraphicObjectTexData *this){
 	if(this->arg.type == ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEXTURELOCAL){
 		if(this->status == ENGINEGRAPHICOBJECTTEXDATASTATUS_LOADED){
 			// 解放
-			if(this->glId != localGlobal.defaultTexture.glId){glDeleteTextures(1, &this->glId);}
+			if(this->pluginTextureLocal.glId != localGlobal.defaultTexture.glId){glDeleteTextures(1, &this->pluginTextureLocal.glId);}
 			engineUtilMemoryInfoFree("engineGraphicObject tex3", this->arg.pluginTextureLocal.src);
 			this->arg.pluginTextureLocal.src = NULL;
+			engineUtilMemoryInfoFree("engineGraphicObject tex2", this);
+		}else{
+			// ロードが完了していないのでコールバックで破棄
+			this->status = ENGINEGRAPHICOBJECTTEXDATASTATUS_CANCEL;
+		}
+	}else if(this->arg.type == ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEXTUREFONT){
+		if(this->status == ENGINEGRAPHICOBJECTTEXDATASTATUS_LOADED){
+			// 解放
+			if(this->pluginTextureFont.glId != localGlobal.defaultTexture.glId){glDeleteTextures(1, &this->pluginTextureFont.glId);}
+			engineUtilMemoryInfoFree("pluginTextureFontCodeList", this->pluginTextureFont.codeList);
+			engineUtilMemoryInfoFree("engineGraphicObject tex3", this->arg.pluginTextureFont.letterList);
+			this->pluginTextureFont.codeList = NULL;
+			this->arg.pluginTextureFont.letterList = NULL;
 			engineUtilMemoryInfoFree("engineGraphicObject tex2", this);
 		}else{
 			// ロードが完了していないのでコールバックで破棄
@@ -122,11 +143,33 @@ static void egoTexFree(struct engineGraphicObjectTexCage *this){
 static void texDataLocalCallback(void *param, int glId, int w, int h){
 	struct engineGraphicObjectTexData *this = (struct engineGraphicObjectTexData*)param;
 	enum engineGraphicObjectTexDataStatus beforeStatus = this->status;
-	this->glId = glId;
 	this->status = ENGINEGRAPHICOBJECTTEXDATASTATUS_LOADED;
+	if(beforeStatus == ENGINEGRAPHICOBJECTTEXDATASTATUS_LOADING){
+		// ロード完了
+		this->pluginTextureLocal.glId = glId;
+		this->pluginTextureLocal.w = w;
+		this->pluginTextureLocal.h = h;
+	}else if(beforeStatus == ENGINEGRAPHICOBJECTTEXDATASTATUS_CANCEL){
+		// ロード中止
+		texDataFree(this);
+	}
+}
 
-	// ロード中止時の解放処理
-	if(beforeStatus == ENGINEGRAPHICOBJECTTEXDATASTATUS_CANCEL){texDataFree(this);}
+// ロード完了時コールバック
+static void texDataFontCallback(void *param, int glId, int w, int h, struct pluginTextureFontCode *codeList){
+	struct engineGraphicObjectTexData *this = (struct engineGraphicObjectTexData*)param;
+	enum engineGraphicObjectTexDataStatus beforeStatus = this->status;
+	this->status = ENGINEGRAPHICOBJECTTEXDATASTATUS_LOADED;
+	if(beforeStatus == ENGINEGRAPHICOBJECTTEXDATASTATUS_LOADING){
+		// ロード完了
+		this->pluginTextureFont.glId = glId;
+		this->pluginTextureFont.w = w;
+		this->pluginTextureFont.h = h;
+		this->pluginTextureFont.codeList = codeList;
+	}else if(beforeStatus == ENGINEGRAPHICOBJECTTEXDATASTATUS_CANCEL){
+		// ロード中止
+		texDataFree(this);
+	}
 }
 
 // ----------------------------------------------------------------
@@ -151,13 +194,21 @@ static void egoIBOLoad(struct engineGraphicObjectIBOCage *this){
 static void texDataLoad(struct engineGraphicObjectTexData *this){
 	if(this->arg.type == ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEXTURELOCAL){
 		// 読み込み中のデフォルトテクスチャ設定
-		this->glId = localGlobal.defaultTexture.glId;
+		this->pluginTextureLocal.glId = localGlobal.defaultTexture.glId;
+		this->pluginTextureLocal.w = localGlobal.defaultTexture.w;
+		this->pluginTextureLocal.h = localGlobal.defaultTexture.h;
 		// テクスチャロード
 		this->status = ENGINEGRAPHICOBJECTTEXDATASTATUS_LOADING;
 		platformPluginTextureLocal(this, this->arg.pluginTextureLocal.src, texDataLocalCallback);
+	}else if(this->arg.type == ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEXTUREFONT){
+		// 読み込み中のデフォルトテクスチャ設定
+		this->pluginTextureFont.glId = localGlobal.defaultTexture.glId;
+		this->pluginTextureFont.w = localGlobal.defaultTexture.w;
+		this->pluginTextureFont.h = localGlobal.defaultTexture.h;
+		// テクスチャロード
+		this->status = ENGINEGRAPHICOBJECTTEXDATASTATUS_LOADING;
+		platformPluginTextureFont(this, this->arg.pluginTextureFont.fontSetId, this->arg.pluginTextureFont.letterList, this->arg.pluginTextureFont.letterLenght, texDataFontCallback);
 	}else if(this->arg.type == ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEST){
-		// デフォルトテクスチャ設定
-		this->glId = localGlobal.defaultTexture.glId;
 	}
 }
 
@@ -232,6 +283,12 @@ static struct engineGraphicObjectTexData *texDataCreate(struct engineGraphicObje
 		if(arg->type == temp->arg.type){
 			if(arg->type == ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEXTURELOCAL){
 				if(strcmp(temp->arg.pluginTextureLocal.src, arg->pluginTextureLocal.src) == 0){return temp;}
+			}else if(arg->type == ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEXTUREFONT){
+				bool isSame = false;
+				if(!isSame && temp->arg.pluginTextureFont.fontSetId == arg->pluginTextureFont.fontSetId){isSame = true;}
+				if(!isSame && strcmp(temp->arg.pluginTextureFont.letterList, arg->pluginTextureFont.letterList) == 0){isSame = true;}
+				if(!isSame && temp->arg.pluginTextureFont.letterLenght == arg->pluginTextureFont.letterLenght){isSame = true;}
+				if(isSame){return temp;}
 			}else if(arg->type == ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEST){
 				return temp;
 			}
@@ -245,6 +302,12 @@ static struct engineGraphicObjectTexData *texDataCreate(struct engineGraphicObje
 		size_t length = ((int)strlen(arg->pluginTextureLocal.src) + 1) * sizeof(char);
 		obj->arg.pluginTextureLocal.src = (char*)engineUtilMemoryInfoMalloc("engineGraphicObject tex3", length);
 		memcpy(obj->arg.pluginTextureLocal.src, arg->pluginTextureLocal.src, length);
+	}else if(arg->type == ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEXTUREFONT){
+		size_t length = ((int)strlen(arg->pluginTextureFont.letterList) + 1) * sizeof(char);
+		obj->arg.pluginTextureFont.letterList = (char*)engineUtilMemoryInfoMalloc("engineGraphicObject tex3", length);
+		memcpy(obj->arg.pluginTextureFont.letterList, arg->pluginTextureFont.letterList, length);
+		obj->arg.pluginTextureFont.fontSetId = arg->pluginTextureFont.fontSetId;
+		obj->arg.pluginTextureFont.letterLenght = arg->pluginTextureFont.letterLenght;
 	}else if(arg->type == ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEST){
 	}
 	texDataLoad(obj);
@@ -280,10 +343,20 @@ static engineGraphicObjectTexId texCageCreate(struct engineGraphicObjectTexArg *
 }
 
 // 3DオブジェクトTex作成
-engineGraphicObjectTexId engineGraphicObjectTexCreate(char *src, enum engineGraphicObjectTexType type){
+engineGraphicObjectTexId engineGraphicObjectTexCreateLocal(char *src, enum engineGraphicObjectTexType type){
 	struct engineGraphicObjectTexArg arg;
 	arg.type = ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEXTURELOCAL;
 	arg.pluginTextureLocal.src = src;
+	return texCageCreate(&arg, type);
+}
+
+// 3DオブジェクトTex作成
+engineGraphicObjectTexId engineGraphicObjectTexCreateFont(int fontSetId, char *letterList, int letterLenght, enum engineGraphicObjectTexType type){
+	struct engineGraphicObjectTexArg arg;
+	arg.type = ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEXTUREFONT;
+	arg.pluginTextureFont.fontSetId = fontSetId;
+	arg.pluginTextureFont.letterList = letterList;
+	arg.pluginTextureFont.letterLenght = letterLenght;
 	return texCageCreate(&arg, type);
 }
 
@@ -324,7 +397,9 @@ bool engineGraphicObjectTexGetGLId(engineGraphicObjectTexId egoId, GLuint *glId,
 	while(temp != NULL){
 		if(temp->egoId == egoId){
 			if(temp->data == NULL){return false;}
-			if(glId != NULL){*glId = temp->data->glId;}
+			if(glId != NULL && temp->data->arg.type == ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEXTURELOCAL){*glId = temp->data->pluginTextureLocal.glId;}
+			if(glId != NULL && temp->data->arg.type == ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEXTUREFONT){*glId = temp->data->pluginTextureFont.glId;}
+			if(glId != NULL && temp->data->arg.type == ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEST){*glId = localGlobal.defaultTexture.glId;}
 			if(type != NULL){*type = temp->type;}
 			return true;
 		}
@@ -494,10 +569,12 @@ void engineGraphicObjectReload(void){
 
 	// 読み込み中に使うデフォルトテクスチャ作成
 	byte data[4] = {0xff, 0xff, 0xff, 0xff};
+	localGlobal.defaultTexture.w = 1;
+	localGlobal.defaultTexture.h = 1;
 	glGenTextures(1, &localGlobal.defaultTexture.glId);
 	corePluginTextureIsBind(localGlobal.defaultTexture.glId);
 	glBindTexture(GL_TEXTURE_2D, localGlobal.defaultTexture.glId);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, localGlobal.defaultTexture.w, localGlobal.defaultTexture.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 	glGenerateMipmap(GL_TEXTURE_2D);
 }
 

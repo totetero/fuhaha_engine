@@ -11,6 +11,11 @@ pluginTextureLocalCallbackId gamePluginTextureLocalCallbackSet(void *param, void
 	return (pluginTextureLocalCallbackId)corePluginUtilCallbackSet(param, (void*)callback);
 }
 
+// コールバック関数の登録
+pluginTextureFontCallbackId gamePluginTextureFontCallbackSet(void *param, void(*callback)(void *param, PLUGINTEXTURE_FONT_CALLBACKPARAMS)){
+	return (pluginTextureFontCallbackId)corePluginUtilCallbackSet(param, (void*)callback);
+}
+
 // ----------------------------------------------------------------
 
 // コールバック関数の実行と解放
@@ -19,6 +24,15 @@ bool gamePluginTextureLocalCallbackCall(pluginTextureLocalCallbackId callbackId,
 	void *callback = corePluginUtilCallbackGet(callbackId, &param, true);
 	if(callback == NULL){return false;}
 	((void(*)(void*, int, int, int))callback)(param, glId, w, h);
+	return true;
+}
+
+// コールバック関数の実行と解放
+bool gamePluginTextureFontCallbackCall(pluginTextureFontCallbackId callbackId, PLUGINTEXTURE_FONT_CALLBACKPARAMS){
+	void *param;
+	void *callback = corePluginUtilCallbackGet(callbackId, &param, true);
+	if(callback == NULL){return false;}
+	((void(*)(void*, int, int, int, struct pluginTextureFontCode*))callback)(param, glId, w, h, codeList);
 	return true;
 }
 

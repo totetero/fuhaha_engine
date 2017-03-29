@@ -5,6 +5,7 @@
 
 void webFuhahaSurfaceInit(void);
 void webPluginUtilInit(void);
+void webPluginTextureInit(void);
 void webPluginSoundInit(void);
 void webPluginEnptyInit(void);
 void webFuhahaEventInit(void);
@@ -16,7 +17,7 @@ void webFuhahaEventInit(void);
 static int init(void){
 	if(glfwInit() != GL_TRUE){return -1;}
 	if(glfwOpenWindow(320, 480, 5, 6, 5, 0, 16, 1, GLFW_WINDOW) != GL_TRUE){return -1;}
-    return 0;
+	return 0;
 }
 
 static void mainloop(void){	
@@ -29,6 +30,7 @@ int main(void){
 	if(init() == 0){
 		webFuhahaSurfaceInit();
 		webPluginUtilInit();
+		webPluginTextureInit();
 		webPluginSoundInit();
 		webPluginEnptyInit();
 		gameMainSurfaceCreated();

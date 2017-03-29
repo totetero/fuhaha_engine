@@ -62,16 +62,15 @@ static void reqDataFree(struct engineDataRequestUnit *this){
 // ロード完了時コールバック
 static void callback(void *param, void *buff, size_t size){
 	struct engineDataRequestUnit *this = (struct engineDataRequestUnit*)param;
-
-	if(this->status == ENGINEDATAREQUESTUNITSTATUS_LOADING){
+	enum engineDataRequestUnitStatus beforeStatus = this->status;
+	this->status = ENGINEDATAREQUESTUNITSTATUS_LOADED;
+	if(beforeStatus == ENGINEDATAREQUESTUNITSTATUS_LOADING){
 		// ロード完了
 		this->buff = buff;
 		this->size = size;
-		this->status = ENGINEDATAREQUESTUNITSTATUS_LOADED;
-	}else if(this->status == ENGINEDATAREQUESTUNITSTATUS_CANCEL){
+	}else if(beforeStatus == ENGINEDATAREQUESTUNITSTATUS_CANCEL){
 		// ロード中止
-		if(this != NULL){engineUtilMemoryInfoFree("engineDataRequest body", this);}
-		if(buff != NULL){engineUtilMemoryInfoFree("engineDataRequest buff", buff);}
+		reqDataFree(this);
 	}
 }
 

@@ -71,7 +71,8 @@ engineGraphicObjectVBOId engineGraphicObjectVBOCreate(int length, GLfloat *verti
 // 3DオブジェクトIBO作成
 engineGraphicObjectIBOId engineGraphicObjectIBOCreate(int length, GLushort *indexes);
 // 3DオブジェクトTex作成
-engineGraphicObjectTexId engineGraphicObjectTexCreate(char *src, enum engineGraphicObjectTexType type);
+engineGraphicObjectTexId engineGraphicObjectTexCreateLocal(char *src, enum engineGraphicObjectTexType type);
+engineGraphicObjectTexId engineGraphicObjectTexCreateFont(int fontSetId, char *letterList, int letterLenght, enum engineGraphicObjectTexType type);
 
 // 3DオブジェクトTex読み込み完了確認
 bool engineGraphicObjectTexIsComplete(engineGraphicObjectTexId egoId);

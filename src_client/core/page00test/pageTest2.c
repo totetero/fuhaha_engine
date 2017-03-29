@@ -53,7 +53,7 @@ static void init(struct pageCartridgeTest2 *this){
 	enginePartsButtonPickerInit(&this->btnPickerTest, 0);
 
 	// 画像読み込み
-	this->stat->egoIdTexSystem = engineGraphicObjectTexCreate("img/system.png", ENGINEGRAPHICOBJECTTEXTYPE_LINEAR);
+	this->stat->egoIdTexSystem = engineGraphicObjectTexCreateLocal("img/system.png", ENGINEGRAPHICOBJECTTEXTYPE_LINEAR);
 
 	this->step = 0;
 }
