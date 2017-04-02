@@ -45,17 +45,19 @@ bool gamePluginTextureFontCallbackCall(pluginTextureFontCallbackId callbackId, P
 // フォントテクスチャ用文字リスト作成
 struct pluginTextureFontCode *gamePluginTextureFontCodeListCreate(int letterLength);
 void gamePluginTextureFontCodeListSet(struct pluginTextureFontCode *codeList, int index, int code, int x, int y, int w, int h);
+void gamePluginTextureFontCodeListDispose(struct pluginTextureFontCode *codeList);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // -------- プラットフォーム側で実装 主にゲーム側から呼び出す
 
-// ローカルデータ読み込み
+// ローカルデータ読み込み glIdの解放はゲーム側で管理する
 void platformPluginTextureLocal(void *param, char *src, void(*callback)(void *param, PLUGINTEXTURE_LOCAL_CALLBACKPARAMS));
 
-// フォントテクスチャ作成 コールバックバッファは要解放
+// フォントテクスチャ作成 glIdとコールバックバッファの解放はプラットフォーム側で管理する
 void platformPluginTextureFont(void *param, int fontSetId, char *letterList, int letterLenght, void(*callback)(void *param, PLUGINTEXTURE_FONT_CALLBACKPARAMS));
+void platformPluginTextureFontDispose(int glId, struct pluginTextureFontCode *codeList);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

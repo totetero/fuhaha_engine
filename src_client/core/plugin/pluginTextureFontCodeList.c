@@ -21,6 +21,11 @@ void gamePluginTextureFontCodeListSet(struct pluginTextureFontCode *codeList, in
 	codeList[index].h = h;
 }
 
+// フォントテクスチャ用文字リスト破棄
+void gamePluginTextureFontCodeListDispose(struct pluginTextureFontCode *codeList){
+	engineUtilMemoryInfoFree("pluginTextureFontCodeList", codeList);
+}
+
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

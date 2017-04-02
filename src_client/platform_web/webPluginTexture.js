@@ -148,6 +148,17 @@ mergeInto(LibraryManager.library, {
 		}
 	},
 
+	// フォントテクスチャ破棄
+	platformPluginTextureFont: function(glId, codeList){
+		// テクスチャ除去
+		var texture = GL.textures[glId];
+		GLctx.deleteTexture(texture);
+		texture.name = 0;
+		GL.textures[glId] = null;
+		// ネイティブデータ破棄
+		ccall("gamePluginTextureFontCodeListDispose", null, [null], [codeList]);
+	}
+
 	// ----------------------------------------------------------------
 });
 

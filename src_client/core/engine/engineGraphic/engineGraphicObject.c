@@ -116,8 +116,7 @@ static void texDataFree(struct engineGraphicObjectTexData *this){
 	}else if(this->arg.type == ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEXTUREFONT){
 		if(this->status == ENGINEGRAPHICOBJECTTEXDATASTATUS_LOADED){
 			// 解放
-			if(this->pluginTextureFont.glId != localGlobal.defaultTexture.glId){glDeleteTextures(1, &this->pluginTextureFont.glId);}
-			engineUtilMemoryInfoFree("pluginTextureFontCodeList", this->pluginTextureFont.codeList);
+			platformPluginTextureFontDispose(this->pluginTextureFont.glId, this->pluginTextureFont.codeList);
 			engineUtilMemoryInfoFree("engineGraphicObject tex3", this->arg.pluginTextureFont.letterList);
 			this->pluginTextureFont.codeList = NULL;
 			this->arg.pluginTextureFont.letterList = NULL;

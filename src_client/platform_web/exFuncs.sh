@@ -27,6 +27,7 @@ VALUE=${VALUE}", '_gamePluginTextureFontCallbackSet'"
 VALUE=${VALUE}", '_gamePluginTextureFontCallbackCall'"
 VALUE=${VALUE}", '_gamePluginTextureFontCodeListCreate'"
 VALUE=${VALUE}", '_gamePluginTextureFontCodeListSet'"
+VALUE=${VALUE}", '_gamePluginTextureFontCodeListDispose'"
 VALUE=${VALUE}", '_corePluginTextureIsBind'"
 echo "["${VALUE}"]"
 
