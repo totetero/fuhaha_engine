@@ -19,7 +19,7 @@ typedef int pluginTextureFontCallbackId;
 
 // コールバック引数
 #define PLUGINTEXTURE_LOCAL_CALLBACKPARAMS int glId, int w, int h
-#define PLUGINTEXTURE_FONT_CALLBACKPARAMS int glId, int w, int h, struct pluginTextureFontCode *codeList
+#define PLUGINTEXTURE_FONT_CALLBACKPARAMS int glId, int w, int h, int codeListIndex
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -28,6 +28,9 @@ typedef int pluginTextureFontCallbackId;
 
 // テクスチャバインド状態の記録と重複確認
 bool corePluginTextureIsBind(GLuint glId);
+
+// フォントテクスチャ用文字リスト取得
+struct pluginTextureFontCode *corePluginTextureFontCodeListGet(int codeListIndex);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -43,9 +46,9 @@ bool gamePluginTextureLocalCallbackCall(pluginTextureLocalCallbackId callbackId,
 bool gamePluginTextureFontCallbackCall(pluginTextureFontCallbackId callbackId, PLUGINTEXTURE_FONT_CALLBACKPARAMS);
 
 // フォントテクスチャ用文字リスト作成
-struct pluginTextureFontCode *gamePluginTextureFontCodeListCreate(int letterLength);
-void gamePluginTextureFontCodeListSet(struct pluginTextureFontCode *codeList, int index, int code, int x, int y, int w, int h);
-void gamePluginTextureFontCodeListDispose(struct pluginTextureFontCode *codeList);
+int gamePluginTextureFontCodeListCreate(int letterLength);
+void gamePluginTextureFontCodeListSet(int codeListIndex, int index, int code, int x, int y, int w, int h);
+void gamePluginTextureFontCodeListDispose(int codeListIndex);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -57,7 +60,7 @@ void platformPluginTextureLocal(void *param, char *src, void(*callback)(void *pa
 
 // フォントテクスチャ作成 glIdとコールバックバッファの解放はプラットフォーム側で管理する
 void platformPluginTextureFont(void *param, int fontSetId, char *letterList, int letterLenght, void(*callback)(void *param, PLUGINTEXTURE_FONT_CALLBACKPARAMS));
-void platformPluginTextureFontDispose(int glId, struct pluginTextureFontCode *codeList);
+void platformPluginTextureFontDispose(int codeListIndex);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

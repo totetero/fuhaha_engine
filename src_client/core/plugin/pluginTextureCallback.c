@@ -32,7 +32,7 @@ bool gamePluginTextureFontCallbackCall(pluginTextureFontCallbackId callbackId, P
 	void *param;
 	void *callback = corePluginUtilCallbackGet(callbackId, &param, true);
 	if(callback == NULL){return false;}
-	((void(*)(void*, int, int, int, struct pluginTextureFontCode*))callback)(param, glId, w, h, codeList);
+	((void(*)(void*, int, int, int, int))callback)(param, glId, w, h, codeListIndex);
 	return true;
 }
 

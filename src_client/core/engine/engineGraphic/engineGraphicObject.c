@@ -57,7 +57,7 @@ struct engineGraphicObjectTexData{
 	struct engineGraphicObjectTexArg arg;
 	union{
 		struct{GLuint glId; int w; int h;} pluginTextureLocal;
-		struct{GLuint glId; int w; int h; struct pluginTextureFontCode *codeList;} pluginTextureFont;
+		struct{GLuint glId; int w; int h; int codeListIndex;} pluginTextureFont;
 		struct{} pluginTest;
 	};
 	enum engineGraphicObjectTexDataStatus{
@@ -116,9 +116,8 @@ static void texDataFree(struct engineGraphicObjectTexData *this){
 	}else if(this->arg.type == ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEXTUREFONT){
 		if(this->status == ENGINEGRAPHICOBJECTTEXDATASTATUS_LOADED){
 			// 解放
-			platformPluginTextureFontDispose(this->pluginTextureFont.glId, this->pluginTextureFont.codeList);
+			platformPluginTextureFontDispose(this->pluginTextureFont.codeListIndex);
 			engineUtilMemoryInfoFree("engineGraphicObject tex3", this->arg.pluginTextureFont.letterList);
-			this->pluginTextureFont.codeList = NULL;
 			this->arg.pluginTextureFont.letterList = NULL;
 			engineUtilMemoryInfoFree("engineGraphicObject tex2", this);
 		}else{
@@ -155,7 +154,7 @@ static void texDataLocalCallback(void *param, int glId, int w, int h){
 }
 
 // ロード完了時コールバック
-static void texDataFontCallback(void *param, int glId, int w, int h, struct pluginTextureFontCode *codeList){
+static void texDataFontCallback(void *param, int glId, int w, int h, int codeListIndex){
 	struct engineGraphicObjectTexData *this = (struct engineGraphicObjectTexData*)param;
 	enum engineGraphicObjectTexDataStatus beforeStatus = this->status;
 	this->status = ENGINEGRAPHICOBJECTTEXDATASTATUS_LOADED;
@@ -164,7 +163,7 @@ static void texDataFontCallback(void *param, int glId, int w, int h, struct plug
 		this->pluginTextureFont.glId = glId;
 		this->pluginTextureFont.w = w;
 		this->pluginTextureFont.h = h;
-		this->pluginTextureFont.codeList = codeList;
+		this->pluginTextureFont.codeListIndex = codeListIndex;
 	}else if(beforeStatus == ENGINEGRAPHICOBJECTTEXDATASTATUS_CANCEL){
 		// ロード中止
 		texDataFree(this);

@@ -7,23 +7,66 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
+static struct{
+	struct pluginTextureFontCodeListCage{
+		struct pluginTextureFontCode *codeList;
+	} *list;
+	int length;
+} localGlobal = {0};
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+
+// フォントテクスチャ用文字リスト取得
+struct pluginTextureFontCode *corePluginTextureFontCodeListGet(int codeListIndex){
+	if(codeListIndex < 0){return NULL;}
+	if(codeListIndex >= localGlobal.length){return NULL;}
+	return localGlobal.list[codeListIndex].codeList;
+}
+
+// ----------------------------------------------------------------
+
 // フォントテクスチャ用文字リスト作成
-struct pluginTextureFontCode *gamePluginTextureFontCodeListCreate(int letterLength){
-	return (struct pluginTextureFontCode*)engineUtilMemoryInfoCalloc("pluginTextureFontCodeList", letterLength, sizeof(struct pluginTextureFontCode));
+int gamePluginTextureFontCodeListCreate(int letterLength){
+	int codeListIndex = -1;
+	// 領域リストに空きがないか確認する
+	for(int i = 0; i < localGlobal.length; i++){if(localGlobal.list[i].codeList == NULL){codeListIndex =  i;}}
+	if(codeListIndex < 0){
+		// 空きがなければ領域リストを拡張する
+		codeListIndex = localGlobal.length;
+		int length = localGlobal.length + 10;
+		struct pluginTextureFontCodeListCage *list = (struct pluginTextureFontCodeListCage*)engineUtilMemoryInfoCalloc("(permanent) pluginTextureFontCodeListCage", length, sizeof(struct pluginTextureFontCodeListCage));
+		if(localGlobal.length > 0){
+			memcpy(list, localGlobal.list, localGlobal.length * sizeof(struct pluginTextureFontCodeListCage));
+			engineUtilMemoryInfoFree("(permanent) pluginTextureFontCodeListCage", localGlobal.list);
+		}
+		localGlobal.length = length;
+		localGlobal.list = list;
+	}
+	// 文字リスト作成
+	localGlobal.list[codeListIndex].codeList = (struct pluginTextureFontCode*)engineUtilMemoryInfoCalloc("pluginTextureFontCodeList", letterLength, sizeof(struct pluginTextureFontCode));
+	return codeListIndex;
 }
 
 // フォントテクスチャ用文字リストの要素設定
-void gamePluginTextureFontCodeListSet(struct pluginTextureFontCode *codeList, int index, int code, int x, int y, int w, int h){
-	codeList[index].code = code;
-	codeList[index].x = x;
-	codeList[index].y = y;
-	codeList[index].w = w;
-	codeList[index].h = h;
+void gamePluginTextureFontCodeListSet(int codeListIndex, int index, int code, int x, int y, int w, int h){
+	struct pluginTextureFontCode *codeList = corePluginTextureFontCodeListGet(codeListIndex);
+	if(codeList == NULL){return;}
+	struct pluginTextureFontCode *data = &codeList[index];
+	data->code = code;
+	data->x = x;
+	data->y = y;
+	data->w = w;
+	data->h = h;
 }
 
 // フォントテクスチャ用文字リスト破棄
-void gamePluginTextureFontCodeListDispose(struct pluginTextureFontCode *codeList){
+void gamePluginTextureFontCodeListDispose(int codeListIndex){
+	struct pluginTextureFontCode *codeList = corePluginTextureFontCodeListGet(codeListIndex);
+	if(codeList == NULL){return;}
 	engineUtilMemoryInfoFree("pluginTextureFontCodeList", codeList);
+	localGlobal.list[codeListIndex].codeList = NULL;
 }
 
 // ----------------------------------------------------------------

@@ -22,10 +22,14 @@ mergeInto(LibraryManager.library, {
 			var fontSize = globalWebPluginTexture.getFontSize(fontSetId);
 			return "bolder " + fontSize + "px sans-serif";
 		};
+
 		// フォント文字列作成
 		globalWebPluginTexture.getFontSize = function(fontSetId){
 			return 32;
 		};
+
+		// 作成したフォントリスト
+		globalWebPluginTexture.fontList = {};
 	},
 
 	// ----------------------------------------------------------------
@@ -135,13 +139,15 @@ mergeInto(LibraryManager.library, {
 			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, canvas);
 			gl.generateMipmap(gl.TEXTURE_2D);
 			// ネイティブデータ作成
-			var codeList = ccall("gamePluginTextureFontCodeListCreate", null, [null], [letterLenght]);
+			var codeListIndex = ccall("gamePluginTextureFontCodeListCreate", null, [null], [letterLenght]);
+			globalWebPluginTexture.fontList[codeListIndex] = {};
+			globalWebPluginTexture.fontList[codeListIndex].glId = glId;
 			for(var i = 0; i < letterLenght; i++){
 				var objLetter = objLetterList[i];
-				ccall("gamePluginTextureFontCodeListSet", null, [null, null, null, null, null, null, null], [codeList, i, objLetter.code, objLetter.x, objLetter.y, objLetter.w, objLetter.h]);
+				ccall("gamePluginTextureFontCodeListSet", null, [null, null, null, null, null, null, null], [codeListIndex, i, objLetter.code, objLetter.x, objLetter.y, objLetter.w, objLetter.h]);
 			}
 			Module.nativePluginUtilLoadingDecrement();
-			ccall("gamePluginTextureFontCallbackCall", null, [null, null, null, null, null], [callbackId, glId, canvas.width, canvas.Height, codeList]);
+			ccall("gamePluginTextureFontCallbackCall", null, [null, null, null, null, null], [callbackId, glId, canvas.width, canvas.Height, codeListIndex]);
 		}else{
 			// 必要領域が大きすぎる
 			// TODO
@@ -149,14 +155,17 @@ mergeInto(LibraryManager.library, {
 	},
 
 	// フォントテクスチャ破棄
-	platformPluginTextureFontDispose: function(glId, codeList){
+	platformPluginTextureFontDispose: function(codeListIndex){
+		if(globalWebPluginTexture.fontList[codeListIndex] == undefined){return;}
+		var glId = globalWebPluginTexture.fontList[codeListIndex].glId;
+		delete globalWebPluginTexture.fontList[codeListIndex];
 		// テクスチャ除去
 		var texture = GL.textures[glId];
 		GLctx.deleteTexture(texture);
 		texture.name = 0;
 		GL.textures[glId] = null;
 		// ネイティブデータ破棄
-		ccall("gamePluginTextureFontCodeListDispose", null, [null], [codeList]);
+		ccall("gamePluginTextureFontCodeListDispose", null, [null], [codeListIndex]);
 	}
 
 	// ----------------------------------------------------------------
