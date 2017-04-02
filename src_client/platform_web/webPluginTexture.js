@@ -149,7 +149,7 @@ mergeInto(LibraryManager.library, {
 	},
 
 	// フォントテクスチャ破棄
-	platformPluginTextureFont: function(glId, codeList){
+	platformPluginTextureFontDispose: function(glId, codeList){
 		// テクスチャ除去
 		var texture = GL.textures[glId];
 		GLctx.deleteTexture(texture);
