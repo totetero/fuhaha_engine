@@ -75,6 +75,14 @@ void* engineUtilMemoryCallocImplement(char *info, size_t n, size_t size){
 	return addDatList(info, calloc(n, size), n * size);
 }
 
+// 独自strdupの実装
+char* engineUtilMemoryStrdupImplement(char *info, char *src){
+	size_t length = (strlen(src) + 1) * sizeof(char);
+	char *dst = (char*)engineUtilMemoryMallocImplement(info, length);
+	strcpy(dst, src);
+	return dst;
+}
+
 // 独自freeの実装
 void engineUtilMemoryFreeImplement(char *info, void *ptr){
 	if(ptr == NULL){return;}

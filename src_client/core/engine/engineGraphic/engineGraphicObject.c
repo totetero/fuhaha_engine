@@ -298,14 +298,10 @@ static struct engineGraphicObjectTexData *texDataCreate(struct engineGraphicObje
 	struct engineGraphicObjectTexData *obj = (struct engineGraphicObjectTexData*)engineUtilMemoryInfoCalloc("engineGraphicObject tex2", 1, sizeof(struct engineGraphicObjectTexData));
 	obj->arg.type = arg->type;
 	if(arg->type == ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEXTURELOCAL){
-		size_t length = ((int)strlen(arg->pluginTextureLocal.src) + 1) * sizeof(char);
-		obj->arg.pluginTextureLocal.src = (char*)engineUtilMemoryInfoMalloc("engineGraphicObject tex3", length);
-		memcpy(obj->arg.pluginTextureLocal.src, arg->pluginTextureLocal.src, length);
+		obj->arg.pluginTextureLocal.src = engineUtilMemoryInfoStrdup("engineGraphicObject tex3", arg->pluginTextureLocal.src);
 	}else if(arg->type == ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEXTUREFONT){
-		size_t length = ((int)strlen(arg->pluginTextureFont.letterList) + 1) * sizeof(char);
-		obj->arg.pluginTextureFont.letterList = (char*)engineUtilMemoryInfoMalloc("engineGraphicObject tex3", length);
-		memcpy(obj->arg.pluginTextureFont.letterList, arg->pluginTextureFont.letterList, length);
 		obj->arg.pluginTextureFont.fontSetId = arg->pluginTextureFont.fontSetId;
+		obj->arg.pluginTextureFont.letterList = engineUtilMemoryInfoStrdup("engineGraphicObject tex3", arg->pluginTextureFont.letterList);
 		obj->arg.pluginTextureFont.letterLenght = arg->pluginTextureFont.letterLenght;
 	}else if(arg->type == ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEST){
 	}
