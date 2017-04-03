@@ -18,10 +18,10 @@ public class AndroidPluginData{
 
 	// JNI連携
 	static{System.loadLibrary("fuhaha_native");}
-	public static native void gamePluginDataHttpCallbackBinary(int callbackId, byte[] buff);
-	public static native void gamePluginDataHttpCallbackString(int callbackId, String buff);
-	public static native void gamePluginDataLocalCallbackBinary(int callbackId, byte[] buff);
-	public static native void gamePluginDataLocalCallbackString(int callbackId, String buff);
+	public static native void gamePluginDataHttpCallbackCallBinary(int callbackId, byte[] buff);
+	public static native void gamePluginDataHttpCallbackCallString(int callbackId, String buff);
+	public static native void gamePluginDataLocalCallbackCallBinary(int callbackId, byte[] buff);
+	public static native void gamePluginDataLocalCallbackCallString(int callbackId, String buff);
 
 	// ----------------------------------------------------------------
 
@@ -98,13 +98,13 @@ public class AndroidPluginData{
 	}
 	private static class CallbackHttp extends Callback{
 		public CallbackHttp(int callbackId){super(callbackId);}
-		protected void callbackBinary(){AndroidPluginData.gamePluginDataHttpCallbackBinary(this.callbackId, this.binBuff);}
-		protected void callbackString(){AndroidPluginData.gamePluginDataHttpCallbackString(this.callbackId, this.strBuff);}
+		protected void callbackBinary(){AndroidPluginData.gamePluginDataHttpCallbackCallBinary(this.callbackId, this.binBuff);}
+		protected void callbackString(){AndroidPluginData.gamePluginDataHttpCallbackCallString(this.callbackId, this.strBuff);}
 	}
 	private static class CallbackLocal extends Callback{
 		public CallbackLocal(int callbackId){super(callbackId);}
-		protected void callbackBinary(){AndroidPluginData.gamePluginDataLocalCallbackBinary(this.callbackId, this.binBuff);}
-		protected void callbackString(){AndroidPluginData.gamePluginDataLocalCallbackString(this.callbackId, this.strBuff);}
+		protected void callbackBinary(){AndroidPluginData.gamePluginDataLocalCallbackCallBinary(this.callbackId, this.binBuff);}
+		protected void callbackString(){AndroidPluginData.gamePluginDataLocalCallbackCallString(this.callbackId, this.strBuff);}
 	}
 
 	// ----------------------------------------------------------------

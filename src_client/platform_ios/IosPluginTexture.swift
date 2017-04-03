@@ -38,6 +38,16 @@ class IosPluginTexture: NSObject{
 	}
 
 	// ----------------------------------------------------------------
+
+	// フォントテクスチャ作成
+	static internal func platformPluginTextureFont(_ callbackId: Int32, fontSetId: Int32, letterList: String, letterLenght: Int32){
+	}
+
+	// フォントテクスチャ破棄
+	static internal func platformPluginTextureFontDispose(_ codeListIndex: Int32){
+	}
+
+	// ----------------------------------------------------------------
 }
 
 // ----------------------------------------------------------------

@@ -16,8 +16,12 @@ public class AndroidPluginTexture{
 
 	// JNI連携
 	static{System.loadLibrary("fuhaha_native");}
-	public static native void corePluginTextureIsBind(int glId);
-	public static native void gamePluginTextureLocalCallback(int callbackId, int glId, int w, int h);
+	public static native boolean corePluginTextureIsBind(int glId);
+	public static native void gamePluginTextureLocalCallbackCall(int callbackId, int glId, int w, int h);
+	public static native void gamePluginTextureFontCallbackCall(int callbackId, int glId, int w, int h, int codeListIndex);
+	public static native int gamePluginTextureFontCodeListCreate(int letterLength);
+	public static native void gamePluginTextureFontCodeListSet(int codeListIndex, int index, int code, int x, int y, int w, int h);
+	public static native void gamePluginTextureFontCodeListDispose(int codeListIndex);
 
 	// ----------------------------------------------------------------
 
@@ -34,8 +38,6 @@ public class AndroidPluginTexture{
 			FuhahaGLView.surfaceView.queueEvent(callback.setBitmap(bmp));
 		}}).start();
 	}
-
-	// ----------------------------------------------------------------
 
 	// メインスレッドでビットマップテクスチャ作成クラス
 	private static class CallbackBitmap implements Runnable{
@@ -75,8 +77,18 @@ public class AndroidPluginTexture{
 				}})).start();
 			}
 			AndroidPluginUtil.nativePluginUtilLoadingDecrement();
-			AndroidPluginTexture.gamePluginTextureLocalCallback(this.callbackId, glId, width, height);
+			AndroidPluginTexture.gamePluginTextureLocalCallbackCall(this.callbackId, glId, width, height);
 		}
+	}
+
+	// ----------------------------------------------------------------
+
+	// フォントテクスチャ作成
+	public static void platformPluginTextureFont(int callbackId, int fontSetId, String letterList, int letterLenght){
+	}
+
+	// フォントテクスチャ破棄
+	public static void platformPluginTextureFontDispose(int codeListIndex){
 	}
 
 	// ----------------------------------------------------------------

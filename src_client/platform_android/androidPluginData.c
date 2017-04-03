@@ -29,17 +29,17 @@ void callbackCallString(JNIEnv *env, jobject obj, jint callbackId, jstring buff0
 	callbackCall(callbackId, buff2, size);
 }
 
-JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginData_gamePluginDataHttpCallbackBinary(JNIEnv *env, jobject obj, jint callbackId, jbyteArray buff0){callbackCallBinary(env, obj, callbackId, buff0, gamePluginDataHttpCallbackCall);}
-JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginData_gamePluginDataHttpCallbackString(JNIEnv *env, jobject obj, jint callbackId, jbyteArray buff0){callbackCallBinary(env, obj, callbackId, buff0, gamePluginDataHttpCallbackCall);}
-JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginData_gamePluginDataLocalCallbackBinary(JNIEnv *env, jobject obj, jint callbackId, jbyteArray buff0){callbackCallBinary(env, obj, callbackId, buff0, gamePluginDataLocalCallbackCall);}
-JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginData_gamePluginDataLocalCallbackString(JNIEnv *env, jobject obj, jint callbackId, jbyteArray buff0){callbackCallBinary(env, obj, callbackId, buff0, gamePluginDataLocalCallbackCall);}
+JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginData_gamePluginDataHttpCallbackCallBinary(JNIEnv *env, jobject obj, jint callbackId, jbyteArray buff0){callbackCallBinary(env, obj, callbackId, buff0, gamePluginDataHttpCallbackCall);}
+JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginData_gamePluginDataHttpCallbackCallString(JNIEnv *env, jobject obj, jint callbackId, jbyteArray buff0){callbackCallBinary(env, obj, callbackId, buff0, gamePluginDataHttpCallbackCall);}
+JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginData_gamePluginDataLocalCallbackCallBinary(JNIEnv *env, jobject obj, jint callbackId, jbyteArray buff0){callbackCallBinary(env, obj, callbackId, buff0, gamePluginDataLocalCallbackCall);}
+JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginData_gamePluginDataLocalCallbackCallString(JNIEnv *env, jobject obj, jint callbackId, jbyteArray buff0){callbackCallBinary(env, obj, callbackId, buff0, gamePluginDataLocalCallbackCall);}
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
 // HTTP通信 コールバックバッファは要解放
-void platformPluginDataHttp(void *param, char *url, char *request, void(*callback)(void *param, void *buff, size_t size)){
+void platformPluginDataHttp(void *param, char *url, char *request, void(*callback)(void *param, PLUGINDATA_HTTP_CALLBACKPARAMS)){
 	JNIEnv *env = getJNIEnv();
 	jclass cls = (*env)->FindClass(env, "com/totetero/fuhaha/AndroidPluginData");
 	jmethodID mid = (*env)->GetStaticMethodID(env, cls, "platformPluginDataHttp", "(ILjava/lang/String;Ljava/lang/String;)V");
@@ -51,7 +51,7 @@ void platformPluginDataHttp(void *param, char *url, char *request, void(*callbac
 // ----------------------------------------------------------------
 
 // ローカルデータ読み込み コールバックバッファは要解放
-void platformPluginDataLocal(void *param, char *src, void(*callback)(void *param, void *buff, size_t size)){
+void platformPluginDataLocal(void *param, char *src, void(*callback)(void *param, PLUGINDATA_LOCAL_CALLBACKPARAMS)){
 	JNIEnv *env = getJNIEnv();
 	jclass cls = (*env)->FindClass(env, "com/totetero/fuhaha/AndroidPluginData");
 	jmethodID mid = (*env)->GetStaticMethodID(env, cls, "platformPluginDataLocal", "(ILjava/lang/String;)V");
