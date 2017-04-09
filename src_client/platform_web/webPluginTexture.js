@@ -11,6 +11,20 @@ mergeInto(LibraryManager.library, {
 	webPluginTextureInit: function(){
 		this.globalWebPluginTexture = {};
 
+		// テクスチャ作成
+		globalWebPluginTexture.createTexture = function(image){
+			var gl = Module.ctx;
+			var texture = GLctx.createTexture();
+			var glId = GL.getNewId(GL.textures);
+			texture.name = glId;
+			GL.textures[glId] = texture;
+			ccall("corePluginTextureIsBind", null, [null], [glId]);
+			gl.bindTexture(gl.TEXTURE_2D, GL.textures[glId]);
+			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+			gl.generateMipmap(gl.TEXTURE_2D);
+			return glId;
+		}
+
 		// 文字サイズ計測キャンバス作成
 		globalWebPluginTexture.measureCanvas = document.createElement("canvas");
 		globalWebPluginTexture.measureCanvas.width = 10;
@@ -38,17 +52,9 @@ mergeInto(LibraryManager.library, {
 	platformPluginTextureLocal: function(param, src, callback){
 		Module.nativePluginUtilLoadingIncrement();
 		var callbackId = ccall("gamePluginTextureLocalCallbackSet", null, [null, null], [param, callback]);
-		var gl = Module.ctx;
 		var image = new Image();
 		image.onload = function(){
-			var texture = GLctx.createTexture();
-			var glId = GL.getNewId(GL.textures);
-			texture.name = glId;
-			GL.textures[glId] = texture;
-			ccall("corePluginTextureIsBind", null, [null], [glId]);
-			gl.bindTexture(gl.TEXTURE_2D, GL.textures[glId]);
-			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-			gl.generateMipmap(gl.TEXTURE_2D);
+			var glId = globalWebPluginTexture.createTexture(image);
 			Module.nativePluginUtilLoadingDecrement();
 			ccall("gamePluginTextureLocalCallbackCall", null, [null, null, null, null], [callbackId, glId, image.width, image.height]);
 		};
@@ -61,7 +67,11 @@ mergeInto(LibraryManager.library, {
 	platformPluginTextureFont: function(param, fontSetId, letterList, letterLenght, callback){
 		Module.nativePluginUtilLoadingIncrement();
 		var callbackId = ccall("gamePluginTextureFontCallbackSet", null, [null, null], [param, callback]);
-		var gl = Module.ctx;
+
+		// フォント準備
+		globalWebPluginTexture.measureContext.font = globalWebPluginTexture.getFontSet(fontSetId);
+
+		// 文字サイズの計測
 		var strLetterList = Pointer_stringify(letterList);
 		var objLetterList = {};
 		var margin = 2;
@@ -71,8 +81,6 @@ mergeInto(LibraryManager.library, {
 		var maxHeight = margin;
 		var limitWidth = (1 << 10);
 		var limitHeight = (1 << 10);
-		// 文字サイズの計測
-		globalWebPluginTexture.measureContext.font = globalWebPluginTexture.getFontSet(fontSetId);
 		for(var i = 0; i < letterLenght; i++){
 			var objLetter = objLetterList[i] = {};
 			objLetter.code = strLetterList.charCodeAt(i);
@@ -94,6 +102,7 @@ mergeInto(LibraryManager.library, {
 		}
 		if(maxWidth < lineWidth){maxWidth = lineWidth;}
 		maxHeight += lineHeight;
+
 		if(maxWidth <= limitWidth && maxHeight <= limitHeight){
 			// 2の累乗にする
 			for(var i = 0; i < 12; i++){var size = (1 << i); if(maxWidth <= size){maxWidth = size; break;}}
@@ -129,23 +138,23 @@ mergeInto(LibraryManager.library, {
 				objLetter.y = maxHeight;
 				context.fillText(strLetterList[i], objLetter.x, objLetter.y + objLetter.h * 0.5);
 			}
+
 			// テクスチャ作成
-			var texture = GLctx.createTexture();
-			var glId = GL.getNewId(GL.textures);
-			texture.name = glId;
-			GL.textures[glId] = texture;
-			ccall("corePluginTextureIsBind", null, [null], [glId]);
-			gl.bindTexture(gl.TEXTURE_2D, GL.textures[glId]);
-			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, canvas);
-			gl.generateMipmap(gl.TEXTURE_2D);
+			var glId = globalWebPluginTexture.createTexture(canvas);
+
 			// ネイティブデータ作成
 			var codeListIndex = ccall("gamePluginTextureFontCodeListCreate", null, [null], [letterLenght]);
-			globalWebPluginTexture.fontList[codeListIndex] = {};
-			globalWebPluginTexture.fontList[codeListIndex].glId = glId;
 			for(var i = 0; i < letterLenght; i++){
 				var objLetter = objLetterList[i];
 				ccall("gamePluginTextureFontCodeListSet", null, [null, null, null, null, null, null, null], [codeListIndex, i, objLetter.code, objLetter.x, objLetter.y, objLetter.w, objLetter.h]);
 			}
+
+			// フォントデータ保持
+			var fontData = {};
+			fontData.glId = glId;
+			globalWebPluginTexture.fontList[codeListIndex] = fontData;
+
+			// コールバック
 			Module.nativePluginUtilLoadingDecrement();
 			ccall("gamePluginTextureFontCallbackCall", null, [null, null, null, null, null], [callbackId, glId, canvas.width, canvas.Height, codeListIndex]);
 		}else{
@@ -156,8 +165,9 @@ mergeInto(LibraryManager.library, {
 
 	// フォントテクスチャ破棄
 	platformPluginTextureFontDispose: function(codeListIndex){
-		if(globalWebPluginTexture.fontList[codeListIndex] == undefined){return;}
-		var glId = globalWebPluginTexture.fontList[codeListIndex].glId;
+		var fontData = globalWebPluginTexture.fontList[codeListIndex];
+		if(fontData == undefined){return;}
+		var glId = fontData.glId;
 		delete globalWebPluginTexture.fontList[codeListIndex];
 		// テクスチャ除去
 		var texture = GL.textures[glId];

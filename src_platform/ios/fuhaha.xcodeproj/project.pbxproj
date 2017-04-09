@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		9C31DADA1D7749B400472C89 /* splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C31DAD91D7749B400472C89 /* splash.png */; };
+		9C3AD9BA1E99D5800029B1EB /* pluginTextureFontCodeList.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C3AD9B91E99D5800029B1EB /* pluginTextureFontCodeList.c */; };
 		9C5C56F01CE71FDE00757A8A /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 9C5C56EF1CE71FDE00757A8A /* assets */; };
 		9C8D023D1C99CCEB00F2CFFB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C8D023C1C99CCEB00F2CFFB /* AppDelegate.swift */; };
 		9C8D023F1C99CCEB00F2CFFB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C8D023E1C99CCEB00F2CFFB /* ViewController.swift */; };
@@ -70,6 +71,7 @@
 
 /* Begin PBXFileReference section */
 		9C31DAD91D7749B400472C89 /* splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = splash.png; sourceTree = "<group>"; };
+		9C3AD9B91E99D5800029B1EB /* pluginTextureFontCodeList.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pluginTextureFontCodeList.c; sourceTree = "<group>"; };
 		9C5C56EF1CE71FDE00757A8A /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = assets; sourceTree = "<group>"; };
 		9C8D02391C99CCEB00F2CFFB /* fuhaha.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = fuhaha.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C8D023C1C99CCEB00F2CFFB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -331,6 +333,7 @@
 				9CA876111DBB85C000D64CB1 /* pluginSound.h */,
 				9CA876121DBB85C000D64CB1 /* pluginTexture.h */,
 				9CA876131DBB85C000D64CB1 /* pluginTextureCallback.c */,
+				9C3AD9B91E99D5800029B1EB /* pluginTextureFontCodeList.c */,
 				9CA876141DBB85C000D64CB1 /* pluginTextureMemory.c */,
 				9CA876151DBB85C000D64CB1 /* pluginUtil.h */,
 				9CA876161DBB85C000D64CB1 /* pluginUtilCallback.c */,
@@ -491,6 +494,7 @@
 				9CA8764B1DBB85C000D64CB1 /* pluginDataCallback.c in Sources */,
 				9CA876311DBB85C000D64CB1 /* engineDataJson.c in Sources */,
 				9CA8763C1DBB85C000D64CB1 /* engineGraphicTrans.c in Sources */,
+				9C3AD9BA1E99D5800029B1EB /* pluginTextureFontCodeList.c in Sources */,
 				9CA876501DBB85C000D64CB1 /* pluginUtilMemory.c in Sources */,
 				9CA8762D1DBB85C000D64CB1 /* engineCartridgePage.c in Sources */,
 				9CA876361DBB85C000D64CB1 /* engineGraphicImageNumber.c in Sources */,
