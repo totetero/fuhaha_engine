@@ -12,13 +12,13 @@ JNIEXPORT jboolean JNICALL Java_com_totetero_fuhaha_AndroidPluginTexture_corePlu
 }
 
 // ローカルテクスチャのコールバック
-JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginTexture_gamePluginTextureLocalCallbackCall(JNIEnv *env, jobject obj, jint callbackId, jint glId, jint w, jint h){
-	gamePluginTextureLocalCallbackCall(callbackId, glId, w, h);
+JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginTexture_gamePluginTextureLocalCallbackCall(JNIEnv *env, jobject obj, jint callbackId, jint glId, jint imgw, jint imgh){
+	gamePluginTextureLocalCallbackCall(callbackId, glId, imgw, imgh);
 }
 
 // フォントテクスチャのコールバック
-JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginTexture_gamePluginTextureFontCallbackCall(JNIEnv *env, jobject obj, jint callbackId, jint glId, jint w, jint h, jint codeListIndex){
-	gamePluginTextureFontCallbackCall(callbackId, glId, w, h, codeListIndex);
+JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginTexture_gamePluginTextureFontCallbackCall(JNIEnv *env, jobject obj, jint callbackId, jint codeListIndex){
+	gamePluginTextureFontCallbackCall(callbackId, codeListIndex);
 }
 
 // フォントテクスチャ用文字リスト作成
@@ -27,8 +27,8 @@ JNIEXPORT jint JNICALL Java_com_totetero_fuhaha_AndroidPluginTexture_gamePluginT
 }
 
 // フォントテクスチャ用文字リストの要素設定
-JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginTexture_gamePluginTextureFontCodeListSet(JNIEnv *env, jobject obj, jint codeListIndex, jint index, jint code, jint x, jint y, jint w, jint h){
-	gamePluginTextureFontCodeListSet(codeListIndex, index, code, x, y, w, h);
+JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginTexture_gamePluginTextureFontCodeListSet(JNIEnv *env, jobject obj, jint codeListIndex, jint index, jint fontSetId, jint code, jint glId, jint imgw, jint imgh, jint x, jint y, jint w, jint h){
+	gamePluginTextureFontCodeListSet(codeListIndex, index, fontSetId, code, glId, imgw, imgh, x, y, w, h);
 }
 
 // フォントテクスチャ用文字リスト破棄

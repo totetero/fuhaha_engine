@@ -82,7 +82,7 @@ mergeInto(LibraryManager.library, {
 		var limitWidth = (1 << 10);
 		var limitHeight = (1 << 10);
 		for(var i = 0; i < letterLenght; i++){
-			var objLetter = objLetterList[i] = {};
+			var objLetter = objLetterList[i] = {code: -1, x: 0, y: 0, w: 0, h: 0};
 			objLetter.code = strLetterList.charCodeAt(i);
 			objLetter.w = globalWebPluginTexture.measureContext.measureText(strLetterList[i]).width;
 			objLetter.h = globalWebPluginTexture.getFontSize(fontSetId);
@@ -146,7 +146,7 @@ mergeInto(LibraryManager.library, {
 			var codeListIndex = ccall("gamePluginTextureFontCodeListCreate", null, [null], [letterLenght]);
 			for(var i = 0; i < letterLenght; i++){
 				var objLetter = objLetterList[i];
-				ccall("gamePluginTextureFontCodeListSet", null, [null, null, null, null, null, null, null], [codeListIndex, i, objLetter.code, objLetter.x, objLetter.y, objLetter.w, objLetter.h]);
+				ccall("gamePluginTextureFontCodeListSet", null, [null, null, null, null, null, null, null, null, null, null, null], [codeListIndex, i, fontSetId, objLetter.code, glId, canvas.width, canvas.Height, objLetter.x, objLetter.y, objLetter.w, objLetter.h]);
 			}
 
 			// フォントデータ保持
@@ -156,7 +156,7 @@ mergeInto(LibraryManager.library, {
 
 			// コールバック
 			Module.nativePluginUtilLoadingDecrement();
-			ccall("gamePluginTextureFontCallbackCall", null, [null, null, null, null, null], [callbackId, glId, canvas.width, canvas.Height, codeListIndex]);
+			ccall("gamePluginTextureFontCallbackCall", null, [null, null], [callbackId, codeListIndex]);
 		}else{
 			// 必要領域が大きすぎる
 			// TODO

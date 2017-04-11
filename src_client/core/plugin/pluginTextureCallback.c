@@ -23,7 +23,7 @@ bool gamePluginTextureLocalCallbackCall(pluginTextureLocalCallbackId callbackId,
 	void *param;
 	void *callback = corePluginUtilCallbackGet(callbackId, &param, true);
 	if(callback == NULL){return false;}
-	((void(*)(void*, int, int, int))callback)(param, glId, w, h);
+	((void(*)(void*, int, int, int))callback)(param, glId, imgw, imgh);
 	return true;
 }
 
@@ -32,7 +32,7 @@ bool gamePluginTextureFontCallbackCall(pluginTextureFontCallbackId callbackId, P
 	void *param;
 	void *callback = corePluginUtilCallbackGet(callbackId, &param, true);
 	if(callback == NULL){return false;}
-	((void(*)(void*, int, int, int, int))callback)(param, glId, w, h, codeListIndex);
+	((void(*)(void*, int))callback)(param, codeListIndex);
 	return true;
 }
 

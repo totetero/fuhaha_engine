@@ -6,7 +6,11 @@
 
 // 文字テクスチャ情報
 struct pluginTextureFontCode{
+	int fontSetId;
 	int code;
+	int glId;
+	int imgw;
+	int imgh;
 	int x;
 	int y;
 	int w;
@@ -18,8 +22,8 @@ typedef int pluginTextureLocalCallbackId;
 typedef int pluginTextureFontCallbackId;
 
 // コールバック引数
-#define PLUGINTEXTURE_LOCAL_CALLBACKPARAMS int glId, int w, int h
-#define PLUGINTEXTURE_FONT_CALLBACKPARAMS int glId, int w, int h, int codeListIndex
+#define PLUGINTEXTURE_LOCAL_CALLBACKPARAMS int glId, int imgw, int imgh
+#define PLUGINTEXTURE_FONT_CALLBACKPARAMS int codeListIndex
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -47,7 +51,7 @@ bool gamePluginTextureFontCallbackCall(pluginTextureFontCallbackId callbackId, P
 
 // フォントテクスチャ用文字リスト作成
 int gamePluginTextureFontCodeListCreate(int letterLength);
-void gamePluginTextureFontCodeListSet(int codeListIndex, int index, int code, int x, int y, int w, int h);
+void gamePluginTextureFontCodeListSet(int codeListIndex, int index, int fontSetId, int code, int glId, int imgw, int imgh, int x, int y, int w, int h);
 void gamePluginTextureFontCodeListDispose(int codeListIndex);
 
 // ----------------------------------------------------------------

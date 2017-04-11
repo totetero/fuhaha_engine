@@ -27,9 +27,9 @@ public class AndroidPluginTexture{
 	static{System.loadLibrary("fuhaha_native");}
 	public static native boolean corePluginTextureIsBind(int glId);
 	public static native void gamePluginTextureLocalCallbackCall(int callbackId, int glId, int w, int h);
-	public static native void gamePluginTextureFontCallbackCall(int callbackId, int glId, int w, int h, int codeListIndex);
+	public static native void gamePluginTextureFontCallbackCall(int callbackId, int codeListIndex);
 	public static native int gamePluginTextureFontCodeListCreate(int letterLength);
-	public static native void gamePluginTextureFontCodeListSet(int codeListIndex, int index, int code, int x, int y, int w, int h);
+	public static native void gamePluginTextureFontCodeListSet(int codeListIndex, int index, int fontSetId, int code, int glId, int imgw, int imgh, int x, int y, int w, int h);
 	public static native void gamePluginTextureFontCodeListDispose(int codeListIndex);
 
 	// ----------------------------------------------------------------
@@ -192,7 +192,7 @@ public class AndroidPluginTexture{
 			int codeListIndex = AndroidPluginTexture.gamePluginTextureFontCodeListCreate(letterLenght);
 			for(int i = 0; i < letterLenght; i++){
 				AndroidPluginTexture.ObjLetter objLetter = objLetterList[i];
-				AndroidPluginTexture.gamePluginTextureFontCodeListSet(codeListIndex, i, objLetter.code, (int)objLetter.x, (int)objLetter.y, (int)objLetter.w, (int)objLetter.h);
+				AndroidPluginTexture.gamePluginTextureFontCodeListSet(codeListIndex, i, fontSetId, objLetter.code, glId, width, height, (int)objLetter.x, (int)objLetter.y, (int)objLetter.w, (int)objLetter.h);
 			}
 
 			// フォントデータ保持
@@ -202,7 +202,7 @@ public class AndroidPluginTexture{
 
 			// コールバック
 			AndroidPluginUtil.nativePluginUtilLoadingDecrement();
-			AndroidPluginTexture.gamePluginTextureFontCallbackCall(callbackId, glId, width, height, codeListIndex);
+			AndroidPluginTexture.gamePluginTextureFontCallbackCall(callbackId, codeListIndex);
 		}else{
 			// 必要領域が大きすぎる
 			// TODO
