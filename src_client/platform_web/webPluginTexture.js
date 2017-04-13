@@ -64,16 +64,18 @@ mergeInto(LibraryManager.library, {
 	// ----------------------------------------------------------------
 
 	// フォントテクスチャ作成
-	platformPluginTextureFont: function(param, fontSetId, letterList, letterLenght, callback){
+	platformPluginTextureFont: function(param, fontSetId, letterList, callback){
 		Module.nativePluginUtilLoadingIncrement();
 		var callbackId = ccall("gamePluginTextureFontCallbackSet", null, [null, null], [param, callback]);
 
 		// フォント準備
 		globalWebPluginTexture.measureContext.font = globalWebPluginTexture.getFontSet(fontSetId);
 
-		// 文字サイズの計測
 		var strLetterList = Pointer_stringify(letterList);
 		var objLetterList = {};
+		var letterLength = strLetterList.length;
+
+		// 文字サイズの計測
 		var margin = 2;
 		var lineWidth = margin;
 		var lineHeight = margin;
@@ -81,7 +83,7 @@ mergeInto(LibraryManager.library, {
 		var maxHeight = margin;
 		var limitWidth = (1 << 10);
 		var limitHeight = (1 << 10);
-		for(var i = 0; i < letterLenght; i++){
+		for(var i = 0; i < letterLength; i++){
 			var objLetter = objLetterList[i] = {code: -1, x: 0, y: 0, w: 0, h: 0};
 			objLetter.code = strLetterList.charCodeAt(i);
 			objLetter.w = globalWebPluginTexture.measureContext.measureText(strLetterList[i]).width;
@@ -119,7 +121,7 @@ mergeInto(LibraryManager.library, {
 			lineHeight = margin;
 			maxHeight = margin;
 			// 文字キャンバス描画
-			for(var i = 0; i < letterLenght; i++){
+			for(var i = 0; i < letterLength; i++){
 				var objLetter = objLetterList[i];
 				var marginTexw = objLetter.w + margin;
 				var marginTexh = objLetter.h + margin;
@@ -143,8 +145,8 @@ mergeInto(LibraryManager.library, {
 			var glId = globalWebPluginTexture.createTexture(canvas);
 
 			// ネイティブデータ作成
-			var codeListIndex = ccall("gamePluginTextureFontCodeListCreate", null, [null], [letterLenght]);
-			for(var i = 0; i < letterLenght; i++){
+			var codeListIndex = ccall("gamePluginTextureFontCodeListCreate", null, [null], [letterLength]);
+			for(var i = 0; i < letterLength; i++){
 				var objLetter = objLetterList[i];
 				ccall("gamePluginTextureFontCodeListSet", null, [null, null, null, null, null, null, null, null, null, null, null], [codeListIndex, i, fontSetId, objLetter.code, glId, canvas.width, canvas.Height, objLetter.x, objLetter.y, objLetter.w, objLetter.h]);
 			}
@@ -156,7 +158,7 @@ mergeInto(LibraryManager.library, {
 
 			// コールバック
 			Module.nativePluginUtilLoadingDecrement();
-			ccall("gamePluginTextureFontCallbackCall", null, [null, null], [callbackId, codeListIndex]);
+			ccall("gamePluginTextureFontCallbackCall", null, [null, null, null], [callbackId, codeListIndex, letterLength]);
 		}else{
 			// 必要領域が大きすぎる
 			// TODO

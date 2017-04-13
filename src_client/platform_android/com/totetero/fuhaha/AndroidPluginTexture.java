@@ -27,8 +27,8 @@ public class AndroidPluginTexture{
 	static{System.loadLibrary("fuhaha_native");}
 	public static native boolean corePluginTextureIsBind(int glId);
 	public static native void gamePluginTextureLocalCallbackCall(int callbackId, int glId, int w, int h);
-	public static native void gamePluginTextureFontCallbackCall(int callbackId, int codeListIndex);
-	public static native int gamePluginTextureFontCodeListCreate(int letterLength);
+	public static native void gamePluginTextureFontCallbackCall(int callbackId, int codeListIndex, int codeListLength);
+	public static native int gamePluginTextureFontCodeListCreate(int codeListLength);
 	public static native void gamePluginTextureFontCodeListSet(int codeListIndex, int index, int fontSetId, int code, int glId, int imgw, int imgh, int x, int y, int w, int h);
 	public static native void gamePluginTextureFontCodeListDispose(int codeListIndex);
 
@@ -109,7 +109,7 @@ public class AndroidPluginTexture{
 	}
 
 	// フォントテクスチャ作成
-	public static void platformPluginTextureFont(int callbackId, int fontSetId, String letterList, int letterLenght){
+	public static void platformPluginTextureFont(int callbackId, int fontSetId, String letterList){
 		AndroidPluginUtil.nativePluginUtilLoadingIncrement();
 
 		// フォント準備
@@ -119,9 +119,11 @@ public class AndroidPluginTexture{
 		paint.setColor(Color.WHITE);
 		Paint.FontMetrics fontMetrics = paint.getFontMetrics();
 
-		// 文字サイズの計測
+		int letterLength = letterList.length();
 		String[] strLetterList = letterList.split("(?<=.)");
-		AndroidPluginTexture.ObjLetter[] objLetterList = new AndroidPluginTexture.ObjLetter[letterLenght];
+		AndroidPluginTexture.ObjLetter[] objLetterList = new AndroidPluginTexture.ObjLetter[letterLength];
+
+		// 文字サイズの計測
 		float margin = 2;
 		float lineWidth = margin;
 		float lineHeight = margin;
@@ -129,7 +131,7 @@ public class AndroidPluginTexture{
 		float maxHeight = margin;
 		int limitWidth = (1 << 10);
 		int limitHeight = (1 << 10);
-		for(int i = 0; i < letterLenght; i++){
+		for(int i = 0; i < letterLength; i++){
 			AndroidPluginTexture.ObjLetter objLetter = objLetterList[i] = new AndroidPluginTexture.ObjLetter();
 			objLetter.code = Character.codePointAt(strLetterList[i], 0);
 			objLetter.w = paint.measureText(strLetterList[i]);
@@ -162,7 +164,7 @@ public class AndroidPluginTexture{
 			lineHeight = margin;
 			maxHeight = margin;
 			// 文字キャンバス描画
-			for(int i = 0; i < letterLenght; i++){
+			for(int i = 0; i < letterLength; i++){
 				AndroidPluginTexture.ObjLetter objLetter = objLetterList[i];
 				float marginTexw = objLetter.w + margin;
 				float marginTexh = objLetter.h + margin;
@@ -189,8 +191,8 @@ public class AndroidPluginTexture{
 			bitmap.recycle();
 
 			// ネイティブデータ作成
-			int codeListIndex = AndroidPluginTexture.gamePluginTextureFontCodeListCreate(letterLenght);
-			for(int i = 0; i < letterLenght; i++){
+			int codeListIndex = AndroidPluginTexture.gamePluginTextureFontCodeListCreate(letterLength);
+			for(int i = 0; i < letterLength; i++){
 				AndroidPluginTexture.ObjLetter objLetter = objLetterList[i];
 				AndroidPluginTexture.gamePluginTextureFontCodeListSet(codeListIndex, i, fontSetId, objLetter.code, glId, width, height, (int)objLetter.x, (int)objLetter.y, (int)objLetter.w, (int)objLetter.h);
 			}
@@ -202,7 +204,7 @@ public class AndroidPluginTexture{
 
 			// コールバック
 			AndroidPluginUtil.nativePluginUtilLoadingDecrement();
-			AndroidPluginTexture.gamePluginTextureFontCallbackCall(callbackId, codeListIndex);
+			AndroidPluginTexture.gamePluginTextureFontCallbackCall(callbackId, codeListIndex, letterLength);
 		}else{
 			// 必要領域が大きすぎる
 			// TODO

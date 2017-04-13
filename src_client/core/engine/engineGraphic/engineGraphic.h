@@ -72,7 +72,7 @@ engineGraphicObjectVBOId engineGraphicObjectVBOCreate(int length, GLfloat *verti
 engineGraphicObjectIBOId engineGraphicObjectIBOCreate(int length, GLushort *indexes);
 // 3DオブジェクトTex作成
 engineGraphicObjectTexId engineGraphicObjectTexCreateLocal(char *src, enum engineGraphicObjectTexType type);
-engineGraphicObjectTexId engineGraphicObjectTexCreateFont(int fontSetId, char *letterList, int letterLenght, enum engineGraphicObjectTexType type);
+engineGraphicObjectTexId engineGraphicObjectTexCreateFont(int fontSetId, char *letterList, enum engineGraphicObjectTexType type);
 
 // 3DオブジェクトTex読み込み完了確認
 bool engineGraphicObjectTexIsComplete(engineGraphicObjectTexId egoId);
@@ -83,6 +83,7 @@ bool engineGraphicObjectVBOGetGLId(engineGraphicObjectVBOId egoId, GLuint *glId)
 bool engineGraphicObjectIBOGetGLId(engineGraphicObjectIBOId egoId, GLuint *glId);
 // テクスチャID取得
 bool engineGraphicObjectTexGetGLId(engineGraphicObjectTexId egoId, GLuint *glId, enum engineGraphicObjectTexType *type);
+bool engineGraphicObjectTexGetCodeList(engineGraphicObjectTexId egoId, int *codeListIndex, int *codeListLength, enum engineGraphicObjectTexType *type);
 
 // 3DオブジェクトVBO除去
 void engineGraphicObjectVBODispose(engineGraphicObjectVBOId egoId);

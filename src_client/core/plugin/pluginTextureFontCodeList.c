@@ -28,7 +28,7 @@ struct pluginTextureFontCode *corePluginTextureFontCodeListGet(int codeListIndex
 // ----------------------------------------------------------------
 
 // フォントテクスチャ用文字リスト作成
-int gamePluginTextureFontCodeListCreate(int letterLength){
+int gamePluginTextureFontCodeListCreate(int codeListLength){
 	int codeListIndex = -1;
 	// 領域リストに空きがないか確認する
 	for(int i = 0; i < localGlobal.length; i++){if(localGlobal.list[i].codeList == NULL){codeListIndex =  i;}}
@@ -45,7 +45,7 @@ int gamePluginTextureFontCodeListCreate(int letterLength){
 		localGlobal.list = list;
 	}
 	// 文字リスト作成
-	localGlobal.list[codeListIndex].codeList = (struct pluginTextureFontCode*)engineUtilMemoryInfoCalloc("pluginTextureFontCodeList", letterLength, sizeof(struct pluginTextureFontCode));
+	localGlobal.list[codeListIndex].codeList = (struct pluginTextureFontCode*)engineUtilMemoryInfoCalloc("pluginTextureFontCodeList", codeListLength, sizeof(struct pluginTextureFontCode));
 	return codeListIndex;
 }
 

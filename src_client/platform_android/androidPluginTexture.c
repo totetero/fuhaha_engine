@@ -17,13 +17,13 @@ JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginTexture_gamePluginT
 }
 
 // フォントテクスチャのコールバック
-JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginTexture_gamePluginTextureFontCallbackCall(JNIEnv *env, jobject obj, jint callbackId, jint codeListIndex){
-	gamePluginTextureFontCallbackCall(callbackId, codeListIndex);
+JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginTexture_gamePluginTextureFontCallbackCall(JNIEnv *env, jobject obj, jint callbackId, jint codeListIndex, jint codeListLength){
+	gamePluginTextureFontCallbackCall(callbackId, codeListIndex, codeListLength);
 }
 
 // フォントテクスチャ用文字リスト作成
-JNIEXPORT jint JNICALL Java_com_totetero_fuhaha_AndroidPluginTexture_gamePluginTextureFontCodeListCreate(JNIEnv *env, jobject obj, jint letterLength){
-	return gamePluginTextureFontCodeListCreate(letterLength);
+JNIEXPORT jint JNICALL Java_com_totetero_fuhaha_AndroidPluginTexture_gamePluginTextureFontCodeListCreate(JNIEnv *env, jobject obj, jint codeListLength){
+	return gamePluginTextureFontCodeListCreate(codeListLength);
 }
 
 // フォントテクスチャ用文字リストの要素設定
@@ -50,12 +50,12 @@ void platformPluginTextureLocal(void *param, char *src, void(*callback)(void *pa
 }
 
 // フォントテクスチャ作成 glIdとコールバックバッファの解放はプラットフォーム側で管理する
-void platformPluginTextureFont(void *param, int fontSetId, char *letterList, int letterLenght, void(*callback)(void *param, PLUGINTEXTURE_FONT_CALLBACKPARAMS)){
+void platformPluginTextureFont(void *param, int fontSetId, char *letterList, void(*callback)(void *param, PLUGINTEXTURE_FONT_CALLBACKPARAMS)){
 	JNIEnv *env = getJNIEnv();
 	jclass cls = (*env)->FindClass(env, "com/totetero/fuhaha/AndroidPluginTexture");
 	jmethodID mid = (*env)->GetStaticMethodID(env, cls, "platformPluginTextureFont", "(IILjava/lang/String;I)V");
 	jstring str = (*env)->NewStringUTF(env, letterList);
-	(*env)->CallStaticVoidMethod(env, cls, mid, gamePluginTextureFontCallbackSet(param, callback), fontSetId, str, letterLenght);
+	(*env)->CallStaticVoidMethod(env, cls, mid, gamePluginTextureFontCallbackSet(param, callback), fontSetId, str);
 }
 
 // フォントテクスチャ破棄

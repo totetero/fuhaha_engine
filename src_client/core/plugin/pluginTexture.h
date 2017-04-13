@@ -23,7 +23,7 @@ typedef int pluginTextureFontCallbackId;
 
 // コールバック引数
 #define PLUGINTEXTURE_LOCAL_CALLBACKPARAMS int glId, int imgw, int imgh
-#define PLUGINTEXTURE_FONT_CALLBACKPARAMS int codeListIndex
+#define PLUGINTEXTURE_FONT_CALLBACKPARAMS int codeListIndex, int codeListLength
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -50,7 +50,7 @@ bool gamePluginTextureLocalCallbackCall(pluginTextureLocalCallbackId callbackId,
 bool gamePluginTextureFontCallbackCall(pluginTextureFontCallbackId callbackId, PLUGINTEXTURE_FONT_CALLBACKPARAMS);
 
 // フォントテクスチャ用文字リスト作成
-int gamePluginTextureFontCodeListCreate(int letterLength);
+int gamePluginTextureFontCodeListCreate(int codeListLength);
 void gamePluginTextureFontCodeListSet(int codeListIndex, int index, int fontSetId, int code, int glId, int imgw, int imgh, int x, int y, int w, int h);
 void gamePluginTextureFontCodeListDispose(int codeListIndex);
 
@@ -63,7 +63,7 @@ void gamePluginTextureFontCodeListDispose(int codeListIndex);
 void platformPluginTextureLocal(void *param, char *src, void(*callback)(void *param, PLUGINTEXTURE_LOCAL_CALLBACKPARAMS));
 
 // フォントテクスチャ作成 glIdとコールバックバッファの解放はプラットフォーム側で管理する
-void platformPluginTextureFont(void *param, int fontSetId, char *letterList, int letterLenght, void(*callback)(void *param, PLUGINTEXTURE_FONT_CALLBACKPARAMS));
+void platformPluginTextureFont(void *param, int fontSetId, char *letterList, void(*callback)(void *param, PLUGINTEXTURE_FONT_CALLBACKPARAMS));
 void platformPluginTextureFontDispose(int codeListIndex);
 
 // ----------------------------------------------------------------

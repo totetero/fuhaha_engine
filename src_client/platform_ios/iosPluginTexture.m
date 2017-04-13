@@ -16,10 +16,10 @@ void platformPluginTextureLocal(void *param, char *src, void(*callback)(void *pa
 }
 
 // フォントテクスチャ作成 glIdとコールバックバッファの解放はプラットフォーム側で管理する
-void platformPluginTextureFont(void *param, int fontSetId, char *letterList, int letterLenght, void(*callback)(void *param, PLUGINTEXTURE_FONT_CALLBACKPARAMS)){
+void platformPluginTextureFont(void *param, int fontSetId, char *letterList, void(*callback)(void *param, PLUGINTEXTURE_FONT_CALLBACKPARAMS)){
 	pluginTextureFontCallbackId callbackId = gamePluginTextureFontCallbackSet(param, callback);
 	NSString *nsstr1 = [NSString stringWithCString: letterList encoding: NSUTF8StringEncoding];
-	[IosPluginTexture platformPluginTextureFont: callbackId fontSetId: fontSetId letterList: nsstr1 letterLenght: letterLenght];
+	[IosPluginTexture platformPluginTextureFont: callbackId fontSetId: fontSetId letterList: nsstr1];
 }
 
 // フォントテクスチャ破棄

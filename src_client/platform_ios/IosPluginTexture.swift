@@ -72,15 +72,17 @@ class IosPluginTexture: NSObject{
 	}
 
 	// フォントテクスチャ作成
-	static internal func platformPluginTextureFont(_ callbackId: Int32, fontSetId: Int32, letterList: String, letterLenght: Int32){
+	static internal func platformPluginTextureFont(_ callbackId: Int32, fontSetId: Int32, letterList: String){
 		IosPluginUtil.nativePluginUtilLoadingIncrement();
 
 		// フォント準備
 		let font: UIFont = IosPluginTexture.getFontSet(fontSetId);
 
-		// 文字サイズの計測
+		let letterLength: Int32 = Int32(letterList.characters.count);
 		let strLetterList: [String] = letterList.characters.map{(c: Character) -> String in return String(c);}
-		var objLetterList: [IosPluginTexture.ObjLetter?] = Array<IosPluginTexture.ObjLetter?>(repeating: nil, count: Int(letterLenght));
+		var objLetterList: [IosPluginTexture.ObjLetter?] = Array<IosPluginTexture.ObjLetter?>(repeating: nil, count: Int(letterLength));
+
+		// 文字サイズの計測
 		let margin: Float = 2;
 		var lineWidth: Float = margin;
 		var lineHeight: Float = margin;
@@ -88,7 +90,7 @@ class IosPluginTexture: NSObject{
 		var maxHeight: Float = margin;
 		let limitWidth: Int = (1 << 10);
 		let limitHeight: Int = (1 << 10);
-		for i: Int in (0 ..< Int(letterLenght)){
+		for i: Int in (0 ..< Int(letterLength)){
 			objLetterList[i] = IosPluginTexture.ObjLetter();
 			let objLetter: IosPluginTexture.ObjLetter = objLetterList[i]!;
 			let size: CGSize = strLetterList[i].size(attributes: [NSFontAttributeName : font]);
@@ -123,7 +125,7 @@ class IosPluginTexture: NSObject{
 			lineHeight = margin;
 			maxHeight = margin;
 			// 文字キャンバス描画
-			for i: Int in (0 ..< Int(letterLenght)){
+			for i: Int in (0 ..< Int(letterLength)){
 				let objLetter: IosPluginTexture.ObjLetter = objLetterList[i]!;
 				let marginTexw: Float = objLetter.w + margin;
 				let marginTexh: Float = objLetter.h + margin;
@@ -154,8 +156,8 @@ class IosPluginTexture: NSObject{
 				let glId: GLuint = IosPluginTexture.createTextureGlId(buff, width, height);
 
 				// ネイティブデータ作成
-				let codeListIndex: Int32 = gamePluginTextureFontCodeListCreate(letterLenght);
-				for i: Int in (0 ..< Int(letterLenght)){
+				let codeListIndex: Int32 = gamePluginTextureFontCodeListCreate(letterLength);
+				for i: Int in (0 ..< Int(letterLength)){
 					let objLetter: IosPluginTexture.ObjLetter = objLetterList[i]!;
 					gamePluginTextureFontCodeListSet(codeListIndex, Int32(i), fontSetId, objLetter.code, Int32(glId), Int32(width), Int32(height), Int32(objLetter.x), Int32(objLetter.y), Int32(objLetter.w), Int32(objLetter.h));
 				}
@@ -167,7 +169,7 @@ class IosPluginTexture: NSObject{
 
 				// コールバック
 				IosPluginUtil.nativePluginUtilLoadingDecrement();
-				gamePluginTextureFontCallbackCall(callbackId, codeListIndex);
+				gamePluginTextureFontCallbackCall(callbackId, codeListIndex, letterLength);
 			});
 		}else{
 			// 必要領域が大きすぎる

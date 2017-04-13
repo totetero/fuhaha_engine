@@ -46,7 +46,7 @@ struct engineGraphicObjectTexArg{
 	} type;
 	union{
 		struct{char *src;} pluginTextureLocal;
-		struct{int fontSetId; char *letterList; int letterLenght;} pluginTextureFont;
+		struct{int fontSetId; char *letterList;} pluginTextureFont;
 		struct{} pluginTest;
 	};
 };
@@ -57,7 +57,7 @@ struct engineGraphicObjectTexData{
 	struct engineGraphicObjectTexArg arg;
 	union{
 		struct{GLuint glId; int imgw; int imgh;} pluginTextureLocal;
-		struct{int codeListIndex;} pluginTextureFont;
+		struct{int codeListIndex; int codeListLength;} pluginTextureFont;
 		struct{} pluginTest;
 	};
 	enum engineGraphicObjectTexDataStatus{
@@ -161,6 +161,7 @@ static void texDataFontCallback(void *param, PLUGINTEXTURE_FONT_CALLBACKPARAMS){
 	if(beforeStatus == ENGINEGRAPHICOBJECTTEXDATASTATUS_LOADING){
 		// ロード完了
 		this->pluginTextureFont.codeListIndex = codeListIndex;
+		this->pluginTextureFont.codeListLength = codeListLength;
 	}else if(beforeStatus == ENGINEGRAPHICOBJECTTEXDATASTATUS_CANCEL){
 		// ロード中止
 		texDataFree(this);
@@ -198,7 +199,7 @@ static void texDataLoad(struct engineGraphicObjectTexData *this){
 	}else if(this->arg.type == ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEXTUREFONT){
 		// テクスチャロード
 		this->status = ENGINEGRAPHICOBJECTTEXDATASTATUS_LOADING;
-		platformPluginTextureFont(this, this->arg.pluginTextureFont.fontSetId, this->arg.pluginTextureFont.letterList, this->arg.pluginTextureFont.letterLenght, texDataFontCallback);
+		platformPluginTextureFont(this, this->arg.pluginTextureFont.fontSetId, this->arg.pluginTextureFont.letterList, texDataFontCallback);
 	}else if(this->arg.type == ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEST){
 	}
 }
@@ -278,7 +279,6 @@ static struct engineGraphicObjectTexData *texDataCreate(struct engineGraphicObje
 				bool isSame = false;
 				if(!isSame && temp->arg.pluginTextureFont.fontSetId == arg->pluginTextureFont.fontSetId){isSame = true;}
 				if(!isSame && strcmp(temp->arg.pluginTextureFont.letterList, arg->pluginTextureFont.letterList) == 0){isSame = true;}
-				if(!isSame && temp->arg.pluginTextureFont.letterLenght == arg->pluginTextureFont.letterLenght){isSame = true;}
 				if(isSame){return temp;}
 			}else if(arg->type == ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEST){
 				return temp;
@@ -294,7 +294,6 @@ static struct engineGraphicObjectTexData *texDataCreate(struct engineGraphicObje
 	}else if(arg->type == ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEXTUREFONT){
 		obj->arg.pluginTextureFont.fontSetId = arg->pluginTextureFont.fontSetId;
 		obj->arg.pluginTextureFont.letterList = engineUtilMemoryInfoStrdup("engineGraphicObject tex3", arg->pluginTextureFont.letterList);
-		obj->arg.pluginTextureFont.letterLenght = arg->pluginTextureFont.letterLenght;
 	}else if(arg->type == ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEST){
 	}
 	texDataLoad(obj);
@@ -338,12 +337,11 @@ engineGraphicObjectTexId engineGraphicObjectTexCreateLocal(char *src, enum engin
 }
 
 // 3DオブジェクトTex作成
-engineGraphicObjectTexId engineGraphicObjectTexCreateFont(int fontSetId, char *letterList, int letterLenght, enum engineGraphicObjectTexType type){
+engineGraphicObjectTexId engineGraphicObjectTexCreateFont(int fontSetId, char *letterList, enum engineGraphicObjectTexType type){
 	struct engineGraphicObjectTexArg arg;
 	arg.type = ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEXTUREFONT;
 	arg.pluginTextureFont.fontSetId = fontSetId;
 	arg.pluginTextureFont.letterList = letterList;
-	arg.pluginTextureFont.letterLenght = letterLenght;
 	return texCageCreate(&arg, type);
 }
 
@@ -389,6 +387,27 @@ bool engineGraphicObjectTexGetGLId(engineGraphicObjectTexId egoId, GLuint *glId,
 			if(glId != NULL && temp->data->arg.type == ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEST){*glId = localGlobal.defaultTexture.glId;}
 			if(type != NULL){*type = temp->type;}
 			return true;
+		}
+		temp = temp->next;
+	}
+	return false;
+}
+
+// テクスチャID取得
+bool engineGraphicObjectTexGetCodeList(engineGraphicObjectTexId egoId, int *codeListIndex, int *codeListLength, enum engineGraphicObjectTexType *type){
+	if(codeListIndex == NULL && codeListLength == NULL && type == NULL){return false;}
+	struct engineGraphicObjectTexCage *temp = localGlobal.egoTexList;
+	while(temp != NULL){
+		if(temp->egoId == egoId){
+			if(temp->data == NULL){return false;}
+			if(temp->data->arg.type == ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEXTUREFONT){
+				if(codeListIndex != NULL){*codeListIndex = temp->data->pluginTextureFont.codeListIndex;}
+				if(codeListLength != NULL){*codeListLength = temp->data->pluginTextureFont.codeListLength;}
+				if(type != NULL){*type = temp->type;}
+				return true;
+			}else{
+				return false;
+			}
 		}
 		temp = temp->next;
 	}
