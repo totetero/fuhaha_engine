@@ -83,11 +83,11 @@ class IosPluginTexture: NSObject{
 		var objLetterList: [IosPluginTexture.ObjLetter?] = Array<IosPluginTexture.ObjLetter?>(repeating: nil, count: Int(letterLength));
 
 		// 文字サイズの計測
-		let margin: Float = 2;
-		var lineWidth: Float = margin;
-		var lineHeight: Float = margin;
-		var maxWidth: Float = margin;
-		var maxHeight: Float = margin;
+		let margin: Double = 2;
+		var lineWidth: Double = margin;
+		var lineHeight: Double = margin;
+		var maxWidth: Double = margin;
+		var maxHeight: Double = margin;
 		let limitWidth: Int = (1 << 10);
 		let limitHeight: Int = (1 << 10);
 		for i: Int in (0 ..< Int(letterLength)){
@@ -95,11 +95,11 @@ class IosPluginTexture: NSObject{
 			let objLetter: IosPluginTexture.ObjLetter = objLetterList[i]!;
 			let size: CGSize = strLetterList[i].size(attributes: [NSFontAttributeName : font]);
 			objLetter.code = Int32(strLetterList[i].unicodeScalars.first!.value);
-			objLetter.w = Float(size.width);
-			objLetter.h = Float(size.height);
-			let marginTexw: Float = objLetter.w + margin;
-			let marginTexh: Float = objLetter.h + margin;
-			if(lineWidth + marginTexw <= Float(limitWidth)){
+			objLetter.w = Double(size.width);
+			objLetter.h = Double(size.height);
+			let marginTexw: Double = objLetter.w + margin;
+			let marginTexh: Double = objLetter.h + margin;
+			if(lineWidth + marginTexw <= Double(limitWidth)){
 				// 行に続ける
 				lineWidth += marginTexw;
 				if(lineHeight < marginTexh){lineHeight = marginTexh;}
@@ -114,10 +114,10 @@ class IosPluginTexture: NSObject{
 		if(maxWidth < lineWidth){maxWidth = lineWidth;}
 		maxHeight += lineHeight;
 
-		if(maxWidth <= Float(limitWidth) && maxHeight <= Float(limitHeight)){
+		if(maxWidth <= Double(limitWidth) && maxHeight <= Double(limitHeight)){
 			// 2の累乗にする
-			for i: Int in (0..<12){let size: Int = (1 << i); if(maxWidth <= Float(size)){maxWidth = Float(size); break;}}
-			for i: Int in (0..<12){let size: Int = (1 << i); if(maxHeight <= Float(size)){maxHeight = Float(size); break;}}
+			for i: Int in (0..<12){let size: Int = (1 << i); if(maxWidth <= Double(size)){maxWidth = Double(size); break;}}
+			for i: Int in (0..<12){let size: Int = (1 << i); if(maxHeight <= Double(size)){maxHeight = Double(size); break;}}
 			// 文字キャンバス作成
 			UIGraphicsBeginImageContext(CGSize(width: Int(maxWidth), height: Int(maxHeight)));
 			let attrs: [String: NSObject] = [NSFontAttributeName: font, NSForegroundColorAttributeName: UIColor.white, NSParagraphStyleAttributeName: NSMutableParagraphStyle()];
@@ -127,9 +127,9 @@ class IosPluginTexture: NSObject{
 			// 文字キャンバス描画
 			for i: Int in (0 ..< Int(letterLength)){
 				let objLetter: IosPluginTexture.ObjLetter = objLetterList[i]!;
-				let marginTexw: Float = objLetter.w + margin;
-				let marginTexh: Float = objLetter.h + margin;
-				if(lineWidth + marginTexw <= Float(limitWidth)){
+				let marginTexw: Double = objLetter.w + margin;
+				let marginTexh: Double = objLetter.h + margin;
+				if(lineWidth + marginTexw <= Double(limitWidth)){
 					// 行に続ける
 					lineWidth += marginTexw;
 					if(lineHeight < marginTexh){lineHeight = marginTexh;}
@@ -159,7 +159,7 @@ class IosPluginTexture: NSObject{
 				let codeListIndex: Int32 = gamePluginTextureFontCodeListCreate(letterLength);
 				for i: Int in (0 ..< Int(letterLength)){
 					let objLetter: IosPluginTexture.ObjLetter = objLetterList[i]!;
-					gamePluginTextureFontCodeListSet(codeListIndex, Int32(i), fontSetId, objLetter.code, Int32(glId), Int32(width), Int32(height), Int32(objLetter.x), Int32(objLetter.y), Int32(objLetter.w), Int32(objLetter.h));
+					gamePluginTextureFontCodeListSet(codeListIndex, Int32(i), fontSetId, objLetter.code, Int32(glId), Int32(width), Int32(height), objLetter.x, objLetter.y, objLetter.w, objLetter.h);
 				}
 
 				// フォントデータ保持
@@ -192,10 +192,10 @@ class IosPluginTexture: NSObject{
 	// 文字データ
 	class ObjLetter: NSObject{
 		var code: Int32 = -1;
-		var x: Float = 0;
-		var y: Float = 0;
-		var w: Float = 0;
-		var h: Float = 0;
+		var x: Double = 0;
+		var y: Double = 0;
+		var w: Double = 0;
+		var h: Double = 0;
 	}
 
 	// 保持フォントデータ

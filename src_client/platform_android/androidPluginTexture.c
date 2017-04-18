@@ -27,7 +27,7 @@ JNIEXPORT jint JNICALL Java_com_totetero_fuhaha_AndroidPluginTexture_gamePluginT
 }
 
 // フォントテクスチャ用文字リストの要素設定
-JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginTexture_gamePluginTextureFontCodeListSet(JNIEnv *env, jobject obj, jint codeListIndex, jint index, jint fontSetId, jint code, jint glId, jint imgw, jint imgh, jint x, jint y, jint w, jint h){
+JNIEXPORT void JNICALL Java_com_totetero_fuhaha_AndroidPluginTexture_gamePluginTextureFontCodeListSet(JNIEnv *env, jobject obj, jint codeListIndex, jint index, jint fontSetId, jint code, jint glId, jint imgw, jint imgh, jdouble x, jdouble y, jdouble w, jdouble h){
 	gamePluginTextureFontCodeListSet(codeListIndex, index, fontSetId, code, glId, imgw, imgh, x, y, w, h);
 }
 

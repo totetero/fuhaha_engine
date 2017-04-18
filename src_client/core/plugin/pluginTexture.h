@@ -11,10 +11,10 @@ struct pluginTextureFontCode{
 	int glId;
 	int imgw;
 	int imgh;
-	int x;
-	int y;
-	int w;
-	int h;
+	double x;
+	double y;
+	double w;
+	double h;
 };
 
 // コールバック識別子
@@ -51,7 +51,7 @@ bool gamePluginTextureFontCallbackCall(pluginTextureFontCallbackId callbackId, P
 
 // フォントテクスチャ用文字リスト作成
 int gamePluginTextureFontCodeListCreate(int codeListLength);
-void gamePluginTextureFontCodeListSet(int codeListIndex, int index, int fontSetId, int code, int glId, int imgw, int imgh, int x, int y, int w, int h);
+void gamePluginTextureFontCodeListSet(int codeListIndex, int index, int fontSetId, int code, int glId, int imgw, int imgh, double x, double y, double w, double h);
 void gamePluginTextureFontCodeListDispose(int codeListIndex);
 
 // ----------------------------------------------------------------
