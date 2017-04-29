@@ -391,6 +391,8 @@ struct engineGraphicFont{
 		int codeListIndex;
 		int codeListLength;
 		enum engineGraphicObjectTexType type;
+		double textWidth;
+		double textHeight;
 	} fontInfo;
 	struct{
 		double x;

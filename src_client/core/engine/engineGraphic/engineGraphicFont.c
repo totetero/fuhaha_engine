@@ -149,6 +149,7 @@ static void createBuffer(struct engineGraphicFont *this){
 
 	// 文字位置計算1
 	double rowWidth = 0;
+	double rowWidthMax = 0;
 	int rowIndexPrev = 0;
 	int rowIndexCurr = 0;
 	int colIndex = 0;
@@ -169,6 +170,7 @@ static void createBuffer(struct engineGraphicFont *this){
 			double nextHeight = (colIndex + 1 + 1) * this->dynamicInfo.size;
 			if(this->dynamicInfo.h > 0 && nextHeight > this->dynamicInfo.h){break;}
 			// 次の行へ進む
+			if(rowWidthMax < rowWidth){rowWidthMax = rowWidth;}
 			rowWidth = 0;
 			rowIndexPrev = rowIndexCurr;
 			rowIndexCurr = 0;
@@ -183,10 +185,13 @@ static void createBuffer(struct engineGraphicFont *this){
 			rowIndexCurr++;
 		}
 	}
+	if(rowWidthMax < rowWidth){rowWidthMax = rowWidth;}
+	int colNum = colIndex + 1;
+	double colHeight = colNum * this->dynamicInfo.size;
+	this->fontInfo.textWidth = rowWidthMax;
+	this->fontInfo.textHeight = colHeight;
 
 	// 文字位置計算2
-	int colNum = colIndex + 1;
-	double colWidth = colNum * this->dynamicInfo.size;
 	for(int i = 0; i < colNum; i++){
 		rowWidth = 0;
 		if(this->dynamicInfo.xalign <= 0){
@@ -205,7 +210,7 @@ static void createBuffer(struct engineGraphicFont *this){
 			double row = rowPosition;
 			double col = i * this->dynamicInfo.size + (this->dynamicInfo.size - codeData->layout.h) * 0.5;
 			codeData->layout.x = row + this->dynamicInfo.x + (this->dynamicInfo.w - rowWidth) * ((this->dynamicInfo.xalign > 0) ? 0.0 : (this->dynamicInfo.xalign == 0) ? 0.5 : 1.0);
-			codeData->layout.y = col + this->dynamicInfo.y + (this->dynamicInfo.h - colWidth) * ((this->dynamicInfo.yalign > 0) ? 0.0 : (this->dynamicInfo.yalign == 0) ? 0.5 : 1.0);
+			codeData->layout.y = col + this->dynamicInfo.y + (this->dynamicInfo.h - colHeight) * ((this->dynamicInfo.yalign > 0) ? 0.0 : (this->dynamicInfo.yalign == 0) ? 0.5 : 1.0);
 			rowPosition += codeData->layout.w;
 		}
 	}
