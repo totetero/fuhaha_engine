@@ -15,6 +15,7 @@
 		9C8D02421C99CCEB00F2CFFB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C8D02401C99CCEB00F2CFFB /* Main.storyboard */; };
 		9C8D02441C99CCEB00F2CFFB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C8D02431C99CCEB00F2CFFB /* Assets.xcassets */; };
 		9C8D02471C99CCEB00F2CFFB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C8D02451C99CCEB00F2CFFB /* LaunchScreen.storyboard */; };
+		9C9ED0B11EB49768008E589C /* engineGraphicFont.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C9ED0B01EB49768008E589C /* engineGraphicFont.c */; };
 		9CA8762D1DBB85C000D64CB1 /* engineCartridgePage.c in Sources */ = {isa = PBXBuildFile; fileRef = 9CA875DD1DBB85C000D64CB1 /* engineCartridgePage.c */; };
 		9CA8762E1DBB85C000D64CB1 /* engineCartridgePopup.c in Sources */ = {isa = PBXBuildFile; fileRef = 9CA875DE1DBB85C000D64CB1 /* engineCartridgePopup.c */; };
 		9CA8762F1DBB85C000D64CB1 /* engineCtrlTouch.c in Sources */ = {isa = PBXBuildFile; fileRef = 9CA875E11DBB85C000D64CB1 /* engineCtrlTouch.c */; };
@@ -80,6 +81,7 @@
 		9C8D02431C99CCEB00F2CFFB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9C8D02461C99CCEB00F2CFFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9C8D02481C99CCEB00F2CFFB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9C9ED0B01EB49768008E589C /* engineGraphicFont.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = engineGraphicFont.c; sourceTree = "<group>"; };
 		9CA875DB1DBB85C000D64CB1 /* engineCartridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = engineCartridge.h; sourceTree = "<group>"; };
 		9CA875DC1DBB85C000D64CB1 /* engineCartridgeDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = engineCartridgeDefine.h; sourceTree = "<group>"; };
 		9CA875DD1DBB85C000D64CB1 /* engineCartridgePage.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = engineCartridgePage.c; sourceTree = "<group>"; };
@@ -266,6 +268,7 @@
 				9CA875E81DBB85C000D64CB1 /* engineGraphic.h */,
 				9CA875E91DBB85C000D64CB1 /* engineGraphicBuffer.c */,
 				9CA875EA1DBB85C000D64CB1 /* engineGraphicEngine.c */,
+				9C9ED0B01EB49768008E589C /* engineGraphicFont.c */,
 				9CA875EB1DBB85C000D64CB1 /* engineGraphicImageFrame.c */,
 				9CA875EC1DBB85C000D64CB1 /* engineGraphicImageNumber.c */,
 				9CA875ED1DBB85C000D64CB1 /* engineGraphicImageRect.c */,
@@ -459,6 +462,7 @@
 				9CA876301DBB85C000D64CB1 /* engineDataBase64.c in Sources */,
 				9CA876401DBB85C000D64CB1 /* engineMathRandom.c in Sources */,
 				9CA8764A1DBB85C000D64CB1 /* popupTest2Sample.c in Sources */,
+				9C9ED0B11EB49768008E589C /* engineGraphicFont.c in Sources */,
 				9CA876351DBB85C000D64CB1 /* engineGraphicImageFrame.c in Sources */,
 				9CA8764F1DBB85C000D64CB1 /* pluginUtilCallback.c in Sources */,
 				9CA876391DBB85C000D64CB1 /* engineGraphicMain.c in Sources */,
