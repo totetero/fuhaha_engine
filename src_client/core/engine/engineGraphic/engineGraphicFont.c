@@ -165,8 +165,11 @@ static void createBuffer(struct engineGraphicFont *this){
 		}
 
 		if(isReturn){
+			int colNumNext = colIndex + 1 + 1;
+			// 行数の限界を超えていたら位置計算処理を打ち切る
+			if(this->dynamicInfo.lineNum > 0 && colNumNext > this->dynamicInfo.lineNum){break;}
 			// 縦幅の限界を超えていたら位置計算処理を打ち切る
-			double nextHeight = (colIndex + 1 + 1) * this->dynamicInfo.size;
+			double nextHeight = colNumNext * this->dynamicInfo.size;
 			if(this->dynamicInfo.h > 0 && nextHeight > this->dynamicInfo.h){break;}
 			// 次の行へ進む
 			if(rowWidthMax < rowWidth){rowWidthMax = rowWidth;}
@@ -274,6 +277,7 @@ void engineGraphicFontDraw(struct engineGraphicFont *this, struct engineMathMatr
 		}
 		engineGraphicEngineBindTextureGlId(codeList[i].glId, this->fontInfo.type);
 		engineGraphicEngineDrawIndex((this->faceIndex + (index++) * 2) * 3, 3 * 2);
+		if(index >= this->dynamicInfo.wordNum){break;}
 	}
 }
 
