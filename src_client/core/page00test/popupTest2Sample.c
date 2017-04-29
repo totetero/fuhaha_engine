@@ -25,6 +25,7 @@ struct popupCartridgeTest2Sample{
 	struct engineGraphicImageRect imgBack;
 	struct engineGraphicImageFrame imgFrame;
 	struct engineGraphicImageText imgTextTitle;
+	struct engineGraphicFont fontTest;
 	struct enginePartsButtonBox btnBoxOk;
 	struct enginePartsButtonBox btnBoxClose;
 	struct enginePartsButton btnOuter;
@@ -49,6 +50,7 @@ static void init(struct popupCartridgeTest2Sample *this){
 	engineGraphicImageRectInit(&this->imgBack);
 	engineGraphicImageFrameInit(&this->imgFrame);
 	engineGraphicImageTextInit(&this->imgTextTitle);
+	engineGraphicFontInit(&this->fontTest);
 	enginePartsButtonBoxInit(&this->btnBoxOk);
 	enginePartsButtonBoxInit(&this->btnBoxClose);
 	enginePartsButtonInit(&this->btnOuter);
@@ -123,6 +125,7 @@ static void createBuffer(struct popupCartridgeTest2Sample *this){
 		engineGraphicImageRectCreateArrayWhite(&this->imgBack, 0, 0, global.screen.w, global.screen.h);
 		engineGraphicImageFrameCreateArray(&this->imgFrame, wx, wy, ww, wh);
 		engineGraphicImageTextCreateArray(&this->imgTextTitle, wx + ww * 0.5, wy + 10 + 15 * 0.5, "タイトル");
+		engineGraphicFontSet(&this->fontTest, 1, "あい");
 		enginePartsButtonBoxCreateArray(&this->btnBoxOk, "ボタン1");
 		enginePartsButtonBoxCreateArray(&this->btnBoxClose, "ボタン2");
 		enginePartsButtonBoxSetPosition(&this->btnBoxOk, wx + ww * 0.5 - 60 - 5, wy + wh - 40, 60, 30);
@@ -132,6 +135,7 @@ static void createBuffer(struct popupCartridgeTest2Sample *this){
 		engineGraphicTransSetTranslate(&this->transWindow, global.screen.w * 0.5, global.screen.h * 0.5, 0);
 		engineGraphicTransSetColorRgba(&this->imgBack.trans, 0.0, 0.0, 0.0, 1.0);
 		engineGraphicTransSetColorRgba(&this->imgTextTitle.trans, 0.0, 0.0, 0.0, 1.0);
+		engineGraphicTransSetColorRgba(&this->fontTest.trans, 1.0, 1.0, 1.0, 1.0);
 		// トランスマネージャー登録
 		engineGraphicTransManagerPush(&this->transManager, &this->transRoot);
 		engineGraphicTransManagerPushProperty(&this->transManager, &this->transBack, &this->transRoot, 0);
@@ -139,6 +143,7 @@ static void createBuffer(struct popupCartridgeTest2Sample *this){
 		engineGraphicTransManagerPushProperty(&this->transManager, &this->imgBack.trans, &this->transBack, 0);
 		engineGraphicTransManagerPushProperty(&this->transManager, &this->imgFrame.trans, &this->transWindow, 1);
 		engineGraphicTransManagerPushProperty(&this->transManager, &this->imgTextTitle.trans, &this->transWindow, 2);
+		engineGraphicTransManagerPushProperty(&this->transManager, &this->fontTest.trans, &this->transWindow, 2);
 		engineGraphicTransManagerPushProperty(&this->transManager, &this->btnBoxOk.trans, &this->transWindow, 2);
 		engineGraphicTransManagerPushProperty(&this->transManager, &this->btnBoxClose.trans, &this->transWindow, 2);
 

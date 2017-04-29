@@ -143,6 +143,7 @@ void engineGraphicEngineIgnoreDepthMode(bool isIgnore);
 
 // グラフィックエンジン命令 テクスチャを指定
 void engineGraphicEngineBindTexture(engineGraphicObjectTexId egoId);
+void engineGraphicEngineBindTextureGlId(GLuint glId, enum engineGraphicObjectTexType type);
 // グラフィックエンジン命令 VBO登録 頂点座標
 void engineGraphicEngineBindVertVBO(engineGraphicObjectVBOId egoId);
 // グラフィックエンジン命令 VBO登録 カラーrgb
@@ -372,6 +373,47 @@ void engineGraphicImageNumberCreateArray(struct engineGraphicImageNumber *this, 
 void engineGraphicImageNumberDraw(struct engineGraphicImageNumber *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color);
 // 数値列描画構造体 破棄
 void engineGraphicImageNumberDispose(struct engineGraphicImageNumber *this);
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+
+// ネイティブ文字列描画構造体
+struct engineGraphicFont{
+	struct engineGraphicTrans trans;
+	int faceIndex;
+	int faceNum;
+	engineGraphicObjectVBOId egoIdVert;
+	engineGraphicObjectVBOId egoIdTexc;
+	engineGraphicObjectIBOId egoIdFace;
+	struct{
+		engineGraphicObjectTexId egoIdTexFont;
+		int codeListIndex;
+		int codeListLength;
+		enum engineGraphicObjectTexType type;
+	} fontInfo;
+	struct{
+		double x;
+		double y;
+		double w;
+		double h;
+		double size;
+		int lineNum;
+		int wordNum;
+		int xalign;
+		int yalign;
+		bool shouldCreateBuffer;
+	} dynamicInfo;
+};
+
+// ネイティブ文字列描画構造体 初期化
+void engineGraphicFontInit(struct engineGraphicFont *this);
+// ネイティブ文字列描画構造体 文字列設定
+void engineGraphicFontSet(struct engineGraphicFont *this, int fontSetId, char *text);
+// ネイティブ文字列描画構造体 描画
+void engineGraphicFontDraw(struct engineGraphicFont *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color);
+// ネイティブ文字列描画構造体 破棄
+void engineGraphicFontDispose(struct engineGraphicFont *this);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

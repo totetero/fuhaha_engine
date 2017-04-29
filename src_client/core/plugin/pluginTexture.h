@@ -15,6 +15,8 @@ struct pluginTextureFontCode{
 	double y;
 	double w;
 	double h;
+	struct{bool isTag; bool isReturn; uint32_t color;} tag;
+	struct{int rowIndex; int colIndex; double x; double y; double w; double h;} layout;
 };
 
 // コールバック識別子

@@ -197,6 +197,9 @@ static void texDataLoad(struct engineGraphicObjectTexData *this){
 		this->status = ENGINEGRAPHICOBJECTTEXDATASTATUS_LOADING;
 		platformPluginTextureLocal(this, this->arg.pluginTextureLocal.src, texDataLocalCallback);
 	}else if(this->arg.type == ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEXTUREFONT){
+		// フォント未ロード値設定
+		this->pluginTextureFont.codeListIndex = -1;
+		this->pluginTextureFont.codeListLength = 0;
 		// テクスチャロード
 		this->status = ENGINEGRAPHICOBJECTTEXDATASTATUS_LOADING;
 		platformPluginTextureFont(this, this->arg.pluginTextureFont.fontSetId, this->arg.pluginTextureFont.letterList, texDataFontCallback);

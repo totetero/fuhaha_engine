@@ -315,6 +315,11 @@ void engineGraphicEngineBindTexture(engineGraphicObjectTexId egoId){
 	GLuint glId;
 	enum engineGraphicObjectTexType type;
 	if(!engineGraphicObjectTexGetGLId(egoId, &glId, &type)){return;}
+	engineGraphicEngineBindTextureGlId(glId, type);
+}
+
+// グラフィックエンジン命令 テクスチャを指定
+void engineGraphicEngineBindTextureGlId(GLuint glId, enum engineGraphicObjectTexType type){
 	bool isBind = corePluginTextureIsBind(glId);
 	if(localGlobal.memory.texType == type && isBind){return;}
 
