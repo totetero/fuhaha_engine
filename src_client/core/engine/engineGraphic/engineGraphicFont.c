@@ -150,19 +150,18 @@ static void createBuffer(struct engineGraphicFont *this){
 	// 文字位置計算1
 	double rowWidth = 0;
 	double rowWidthMax = 0;
-	int rowIndexPrev = 0;
-	int rowIndexCurr = 0;
+	int rowIndex = 0;
 	int colIndex = 0;
 	for(int i = 0; i < this->fontInfo.codeListLength; i++){
 		struct pluginTextureFontCode *codeData = &codeList[i];
 		bool isReturn = codeData->tag.isReturn;
 
-		// 文字はみ出しによる改行の確認
-		double nextWidth = rowWidth + codeData->layout.w;
-		if(!isReturn && rowIndexCurr > 0 && (this->dynamicInfo.w > 0 && nextWidth > this->dynamicInfo.w)){
-			// TODO 禁則文字が現れたら改行を打ち消す
-			//if(rowIndexPrev > 1 && (codeData->code == CODE_JP_COMMA || codeData->code == CODE_JP_PERIOD)){}
-			isReturn = true;
+		if(!isReturn && rowIndex > 0){
+			// 文字はみ出しによる改行確認 禁則文字が先頭に来そうな時は改行しない
+			double nextWidth = rowWidth + codeData->layout.w;
+			bool isOver = (this->dynamicInfo.w > 0 && nextWidth > this->dynamicInfo.w);
+			bool isProhibition = (codeData->code == CODE_JP_COMMA || codeData->code == CODE_JP_PERIOD);
+			if(isOver && !isProhibition){isReturn = true;}
 		}
 
 		if(isReturn){
@@ -172,17 +171,16 @@ static void createBuffer(struct engineGraphicFont *this){
 			// 次の行へ進む
 			if(rowWidthMax < rowWidth){rowWidthMax = rowWidth;}
 			rowWidth = 0;
-			rowIndexPrev = rowIndexCurr;
-			rowIndexCurr = 0;
+			rowIndex = 0;
 			colIndex++;
 		}
 
 		if(!codeData->tag.isTag){
 			// 文字位置設定
-			codeData->layout.rowIndex = rowIndexCurr;
+			codeData->layout.rowIndex = rowIndex;
 			codeData->layout.colIndex = colIndex;
 			rowWidth += codeData->layout.w;
-			rowIndexCurr++;
+			rowIndex++;
 		}
 	}
 	if(rowWidthMax < rowWidth){rowWidthMax = rowWidth;}
