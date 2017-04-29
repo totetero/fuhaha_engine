@@ -53,7 +53,7 @@ void platformPluginTextureLocal(void *param, char *src, void(*callback)(void *pa
 void platformPluginTextureFont(void *param, int fontSetId, char *letterList, void(*callback)(void *param, PLUGINTEXTURE_FONT_CALLBACKPARAMS)){
 	JNIEnv *env = getJNIEnv();
 	jclass cls = (*env)->FindClass(env, "com/totetero/fuhaha/AndroidPluginTexture");
-	jmethodID mid = (*env)->GetStaticMethodID(env, cls, "platformPluginTextureFont", "(IILjava/lang/String;I)V");
+	jmethodID mid = (*env)->GetStaticMethodID(env, cls, "platformPluginTextureFont", "(IILjava/lang/String;)V");
 	jstring str = (*env)->NewStringUTF(env, letterList);
 	(*env)->CallStaticVoidMethod(env, cls, mid, gamePluginTextureFontCallbackSet(param, callback), fontSetId, str);
 }
