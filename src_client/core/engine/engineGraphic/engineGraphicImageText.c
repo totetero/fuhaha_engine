@@ -58,24 +58,24 @@ static unsigned int getUtf8Code(unsigned char *word){
 }
 
 // 行数の計算
-static int getRowNum(char *text){
-	int rownum = 1;
-	while(*text){
-		if(*text == '\n'){rownum++;}
-		text++;
-	}
-	return rownum;
-}
-
-// 行に含まれる文字数の計算
 static int getColNum(char *text){
-	int colnum = 0;
-	while(*text && *text != '\n'){
-		unsigned int code = getUtf8Code((unsigned char *)text);
-		if(0x1f <= code && code !=0x7f){colnum++;}
+	int colnum = 1;
+	while(*text){
+		if(*text == '\n'){colnum++;}
 		text++;
 	}
 	return colnum;
+}
+
+// 行に含まれる文字数の計算
+static int getRowNum(char *text){
+	int rownum = 0;
+	while(*text && *text != '\n'){
+		unsigned int code = getUtf8Code((unsigned char *)text);
+		if(0x1f <= code && code !=0x7f){rownum++;}
+		text++;
+	}
+	return rownum;
 }
 
 // 配列に文字列(utf8)の描画情報を追加
@@ -85,15 +85,15 @@ void engineGraphicImageTextCreateArray(struct engineGraphicImageText *this, doub
 	int vertIndex = engineGraphicBufferVretIndexGet();
 	int faceIndex = engineGraphicBufferFaceIndexGet();
 	int tetraNum = 0;
-	int row = 0;
 	int col = 0;
-	int rowmax = getRowNum(text);
+	int row = 0;
 	int colmax = getColNum(text);
+	int rowmax = getRowNum(text);
 	while(*text){
 		if(*text == '\n'){
-			row++;
-			col = 0;
-			colmax = getColNum(text + 1);
+			col++;
+			row = 0;
+			rowmax = getRowNum(text + 1);
 		}else{
 			unsigned int code = getUtf8Code((unsigned char *)text);
 			if(0x1f <= code && code !=0x7f){
@@ -120,14 +120,14 @@ void engineGraphicImageTextCreateArray(struct engineGraphicImageText *this, doub
 				}
 				double w1 = tw * this->createArrayInfo.scale;
 				double h1 = th * this->createArrayInfo.scale;
-				double x1 = x + (col - colmax * ((this->createArrayInfo.xalign > 0) ? 0.0 : (this->createArrayInfo.xalign == 0) ? 0.5 : 1.0)) * w1;
-				double y1 = y + (row - rowmax * ((this->createArrayInfo.yalign > 0) ? 0.0 : (this->createArrayInfo.yalign == 0) ? 0.5 : 1.0)) * h1;
+				double x1 = x + (row - rowmax * ((this->createArrayInfo.xalign > 0) ? 0.0 : (this->createArrayInfo.xalign == 0) ? 0.5 : 1.0)) * w1;
+				double y1 = y + (col - colmax * ((this->createArrayInfo.yalign > 0) ? 0.0 : (this->createArrayInfo.yalign == 0) ? 0.5 : 1.0)) * h1;
 				int u1 = tu + tw * (code % 16);
 				int v1 = tv + th * engineMathFloor(code / 16);
 				engineGraphicBufferPushTetraVert(x1, y1, w1, h1);
 				engineGraphicBufferPushTetraTexc(this->createArrayInfo.imgw, this->createArrayInfo.imgh, u1, v1, tw, th);
 				tetraNum++;
-				col++;
+				row++;
 			}
 		}
 		text++;
