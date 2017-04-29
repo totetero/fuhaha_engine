@@ -148,7 +148,7 @@ mergeInto(LibraryManager.library, {
 			var codeListIndex = ccall("gamePluginTextureFontCodeListCreate", null, [null], [letterLength]);
 			for(var i = 0; i < letterLength; i++){
 				var objLetter = objLetterList[i];
-				ccall("gamePluginTextureFontCodeListSet", null, [null, null, null, null, null, null, null, null, null, null, null], [codeListIndex, i, fontSetId, objLetter.code, glId, canvas.width, canvas.Height, objLetter.x, objLetter.y, objLetter.w, objLetter.h]);
+				ccall("gamePluginTextureFontCodeListSet", null, [null, null, null, null, null, null, null, null, null, null, null], [codeListIndex, i, fontSetId, objLetter.code, glId, canvas.width, canvas.height, objLetter.x, objLetter.y, objLetter.w, objLetter.h]);
 			}
 
 			// フォントデータ保持
