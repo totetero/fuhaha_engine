@@ -1,6 +1,5 @@
 #include "library.h"
 #include "plugin/pluginData.h"
-#include "engine/engineMath/engineMath.h"
 #include "engine/engineGraphic/engineGraphic.h"
 #include "game.h"
 

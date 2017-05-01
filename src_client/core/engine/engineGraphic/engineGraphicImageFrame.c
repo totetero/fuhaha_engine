@@ -1,5 +1,5 @@
 #include "../../library.h"
-#include "../../texpos.h"
+#include "../../define/texpos.h"
 #include "../engineMath/engineMath.h"
 #include "../engineUtil/engineUtil.h"
 #include "engineGraphic.h"

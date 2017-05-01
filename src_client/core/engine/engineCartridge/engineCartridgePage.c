@@ -1,6 +1,5 @@
 #include "../../library.h"
 #include "../../plugin/pluginUtil.h"
-#include "../engineMath/engineMath.h"
 #include "../engineGraphic/engineGraphic.h"
 #include "engineCartridge.h"
 #include "engineCartridgeDefine.h"
