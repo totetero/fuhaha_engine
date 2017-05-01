@@ -277,7 +277,7 @@ void engineGraphicFontDraw(struct engineGraphicFont *this, struct engineMathMatr
 		}
 		engineGraphicEngineBindTextureGlId(codeList[i].glId, this->fontInfo.type);
 		engineGraphicEngineDrawIndex((this->faceIndex + (index++) * 2) * 3, 3 * 2);
-		if(index >= this->dynamicInfo.wordNum){break;}
+		if(this->dynamicInfo.wordNum > 0 && index >= this->dynamicInfo.wordNum){break;}
 	}
 }
 
