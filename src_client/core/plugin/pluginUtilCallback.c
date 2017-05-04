@@ -60,7 +60,7 @@ void *corePluginUtilCallbackGet(pluginUtilCallbackId callbackId, void **param, b
 	struct pluginUtilCallbackUnit *prev = NULL;
 	struct pluginUtilCallbackUnit *temp = localGlobal.list;
 	while(temp != NULL){
-		if(temp->callbackId == callbackId){			
+		if(temp->callbackId == callbackId){
 			// コールバック取得
 			void *callback = temp->callback;
 			if(param != NULL){*param = temp->param;}
