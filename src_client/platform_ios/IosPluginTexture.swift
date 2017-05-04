@@ -159,7 +159,7 @@ class IosPluginTexture: NSObject{
 				let codeListIndex: Int32 = gamePluginTextureFontCodeListCreate(letterLength);
 				for i: Int in (0 ..< Int(letterLength)){
 					let objLetter: IosPluginTexture.ObjLetter = objLetterList[i]!;
-					gamePluginTextureFontCodeListSet(codeListIndex, Int32(i), fontSetId, objLetter.code, Int32(glId), Int32(width), Int32(height), objLetter.x, objLetter.y, objLetter.w, objLetter.h);
+					gamePluginTextureFontCodeListSet(codeListIndex, Int32(i), pluginTextureFontSetId(UInt32(fontSetId)), objLetter.code, Int32(glId), Int32(width), Int32(height), objLetter.x, objLetter.y, objLetter.w, objLetter.h);
 				}
 
 				// フォントデータ保持

@@ -72,7 +72,7 @@ engineGraphicObjectVBOId engineGraphicObjectVBOCreate(int length, GLfloat *verti
 engineGraphicObjectIBOId engineGraphicObjectIBOCreate(int length, GLushort *indexes);
 // 3DオブジェクトTex作成
 engineGraphicObjectTexId engineGraphicObjectTexCreateLocal(char *src, enum engineGraphicObjectTexType type);
-engineGraphicObjectTexId engineGraphicObjectTexCreateFont(int fontSetId, char *letterList, enum engineGraphicObjectTexType type);
+engineGraphicObjectTexId engineGraphicObjectTexCreateFont(enum pluginTextureFontSetId fontSetId, char *letterList, enum engineGraphicObjectTexType type);
 
 // 3DオブジェクトTex読み込み完了確認
 bool engineGraphicObjectTexIsComplete(engineGraphicObjectTexId egoId);
@@ -411,7 +411,7 @@ struct engineGraphicFont{
 // ネイティブ文字列描画構造体 初期化
 void engineGraphicFontInit(struct engineGraphicFont *this);
 // ネイティブ文字列描画構造体 文字列設定
-void engineGraphicFontSet(struct engineGraphicFont *this, int fontSetId, char *text);
+void engineGraphicFontSet(struct engineGraphicFont *this, enum pluginTextureFontSetId fontSetId, char *text);
 // ネイティブ文字列描画構造体 描画
 void engineGraphicFontDraw(struct engineGraphicFont *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color);
 // ネイティブ文字列描画構造体 破棄

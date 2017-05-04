@@ -45,7 +45,7 @@ struct engineGraphicObjectTexArg{
 	} type;
 	union{
 		struct{char *src;} pluginTextureLocal;
-		struct{int fontSetId; char *letterList;} pluginTextureFont;
+		struct{enum pluginTextureFontSetId fontSetId; char *letterList;} pluginTextureFont;
 		struct{} pluginTest;
 	};
 };
@@ -339,7 +339,7 @@ engineGraphicObjectTexId engineGraphicObjectTexCreateLocal(char *src, enum engin
 }
 
 // 3DオブジェクトTex作成
-engineGraphicObjectTexId engineGraphicObjectTexCreateFont(int fontSetId, char *letterList, enum engineGraphicObjectTexType type){
+engineGraphicObjectTexId engineGraphicObjectTexCreateFont(enum pluginTextureFontSetId fontSetId, char *letterList, enum engineGraphicObjectTexType type){
 	struct engineGraphicObjectTexArg arg;
 	arg.type = ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEXTUREFONT;
 	arg.pluginTextureFont.fontSetId = fontSetId;

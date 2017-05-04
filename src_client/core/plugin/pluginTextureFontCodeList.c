@@ -50,7 +50,7 @@ int gamePluginTextureFontCodeListCreate(int codeListLength){
 }
 
 // フォントテクスチャ用文字リストの要素設定
-void gamePluginTextureFontCodeListSet(int codeListIndex, int index, int fontSetId, int code, int glId, int imgw, int imgh, double x, double y, double w, double h){
+void gamePluginTextureFontCodeListSet(int codeListIndex, int index, enum pluginTextureFontSetId fontSetId, int code, int glId, int imgw, int imgh, double x, double y, double w, double h){
 	struct pluginTextureFontCode *codeList = corePluginTextureFontCodeListGet(codeListIndex);
 	if(codeList == NULL){return;}
 	struct pluginTextureFontCode *data = &codeList[index];

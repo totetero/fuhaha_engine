@@ -125,7 +125,7 @@ static void createBuffer(struct popupCartridgeTest2Sample *this){
 		engineGraphicImageRectCreateArrayWhite(&this->imgBack, 0, 0, global.screen.w, global.screen.h);
 		engineGraphicImageFrameCreateArray(&this->imgFrame, wx, wy, ww, wh);
 		engineGraphicImageTextCreateArray(&this->imgTextTitle, wx + ww * 0.5, wy + 10 + 15 * 0.5, "タイトル");
-		engineGraphicFontSet(&this->fontTest, 1, "あい");
+		engineGraphicFontSet(&this->fontTest, PLUGINTEXTUREFONTSETID_DEFAULT, "あい");
 		enginePartsButtonBoxCreateArray(&this->btnBoxOk, "ボタン1");
 		enginePartsButtonBoxCreateArray(&this->btnBoxClose, "ボタン2");
 		enginePartsButtonBoxSetPosition(&this->btnBoxOk, wx + ww * 0.5 - 60 - 5, wy + wh - 40, 60, 30);

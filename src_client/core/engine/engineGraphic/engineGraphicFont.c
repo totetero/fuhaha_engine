@@ -58,7 +58,7 @@ void engineGraphicFontInit(struct engineGraphicFont *this){
 }
 
 // ネイティブ文字列描画構造体 文字列設定
-void engineGraphicFontSet(struct engineGraphicFont *this, int fontSetId, char *text){
+void engineGraphicFontSet(struct engineGraphicFont *this, enum pluginTextureFontSetId fontSetId, char *text){
 	// 一旦情報リセット
 	engineGraphicObjectVBODispose(this->egoIdVert);
 	engineGraphicObjectVBODispose(this->egoIdTexc);

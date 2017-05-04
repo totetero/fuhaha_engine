@@ -50,7 +50,7 @@ void platformPluginTextureLocal(void *param, char *src, void(*callback)(void *pa
 }
 
 // フォントテクスチャ作成 glIdとコールバックバッファの解放はプラットフォーム側で管理する
-void platformPluginTextureFont(void *param, int fontSetId, char *letterList, void(*callback)(void *param, PLUGINTEXTURE_FONT_CALLBACKPARAMS)){
+void platformPluginTextureFont(void *param, enum pluginTextureFontSetId fontSetId, char *letterList, void(*callback)(void *param, PLUGINTEXTURE_FONT_CALLBACKPARAMS)){
 	JNIEnv *env = getJNIEnv();
 	jclass cls = (*env)->FindClass(env, "com/totetero/fuhaha/AndroidPluginTexture");
 	jmethodID mid = (*env)->GetStaticMethodID(env, cls, "platformPluginTextureFont", "(IILjava/lang/String;)V");
