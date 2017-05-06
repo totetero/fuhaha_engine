@@ -250,7 +250,7 @@ mergeInto(LibraryManager.library, {
 				// historyAPI設定
 				window.history.pushState("nohb", null, "");
 				window.addEventListener("popstate", function(e){
-					if (e.originalEvent && !e.originalEvent.state){return;} // この行が必要なのかは不明
+					if(e.originalEvent && !e.originalEvent.state){return;} // この行が必要なのかは不明
 					if(!globalWebFuhahaSurface.isExit){
 						kbk = true; onKeyBack();
 						kbk = false; onKeyBack();
