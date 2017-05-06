@@ -9,9 +9,6 @@
 
 // 3DオブジェクトVBO構造体
 struct engineGraphicObjectVBOCage{
-	struct engineGraphicObjectVBOCage *next;
-	engineGraphicObjectVBOId egoId;
-	// VBOデータ
 	GLuint glId;
 	int length;
 	GLfloat *vertices;
@@ -19,9 +16,6 @@ struct engineGraphicObjectVBOCage{
 
 // 3DオブジェクトIBO構造体
 struct engineGraphicObjectIBOCage{
-	struct engineGraphicObjectIBOCage *next;
-	engineGraphicObjectIBOId egoId;
-	// IBOデータ
 	GLuint glId;
 	int length;
 	GLushort *indexes;
@@ -29,9 +23,6 @@ struct engineGraphicObjectIBOCage{
 
 // 3DオブジェクトTex構造体
 struct engineGraphicObjectTexCage{
-	struct engineGraphicObjectTexCage *next;
-	engineGraphicObjectTexId egoId;
-	// テクスチャデータ
 	struct engineGraphicObjectTexData *data;
 	enum engineGraphicObjectTexType type;
 };
@@ -74,29 +65,40 @@ static struct{
 		int imgh;
 	} defaultTexture;
 	// 3Dオブジェクトリスト
-	int egoIdCount;
 	struct engineGraphicObjectVBOCage *egoVBOList;
 	struct engineGraphicObjectIBOCage *egoIBOList;
 	struct engineGraphicObjectTexCage *egoTexList;
 	struct engineGraphicObjectTexData *texDataList;
+	int egoVBOLength;
+	int egoIBOLength;
+	int egoTexLength;
 } localGlobal = {0};
+
+// ----------------------------------------------------------------
+
+static int egoVBOId2Index(engineGraphicObjectVBOId egoId){return (int)(egoId - 1);}
+static int egoIBOId2Index(engineGraphicObjectIBOId egoId){return (int)(egoId - 1);}
+static int egoTexId2Index(engineGraphicObjectTexId egoId){return (int)(egoId - 1);}
+static engineGraphicObjectVBOId egoVBOIndex2Id(int egoIndex){return (engineGraphicObjectVBOId)(egoIndex + 1);}
+static engineGraphicObjectIBOId egoIBOIndex2Id(int egoIndex){return (engineGraphicObjectIBOId)(egoIndex + 1);}
+static engineGraphicObjectTexId egoTexIndex2Id(int egoIndex){return (engineGraphicObjectTexId)(egoIndex + 1);}
 
 // ----------------------------------------------------------------
 
 // 3DオブジェクトVBO解放
 static void egoVBOFree(struct engineGraphicObjectVBOCage *this){
+	if(this->vertices == NULL){return;}
 	glDeleteBuffers(1, &this->glId);
 	engineUtilMemoryInfoFree("engineGraphicObject vbo2", this->vertices);
 	this->vertices = NULL;
-	engineUtilMemoryInfoFree("engineGraphicObject vbo1", this);
 }
 
 // 3DオブジェクトIBO解放
 static void egoIBOFree(struct engineGraphicObjectIBOCage *this){
+	if(this->indexes == NULL){return;}
 	glDeleteBuffers(1, &this->glId);
 	engineUtilMemoryInfoFree("engineGraphicObject ibo2", this->indexes);
 	this->indexes = NULL;
-	engineUtilMemoryInfoFree("engineGraphicObject ibo1", this);
 }
 
 // テクスチャ情報解放
@@ -131,7 +133,8 @@ static void texDataFree(struct engineGraphicObjectTexData *this){
 
 // 3DオブジェクトTex解放
 static void egoTexFree(struct engineGraphicObjectTexCage *this){
-	engineUtilMemoryInfoFree("engineGraphicObject tex1", this);
+	if(this->data == NULL){return;}
+	this->data = NULL;
 }
 
 // ----------------------------------------------------------------
@@ -171,6 +174,7 @@ static void texDataFontCallback(void *param, PLUGINTEXTURE_FONT_CALLBACKPARAMS){
 
 // VBO作成
 static void egoVBOLoad(struct engineGraphicObjectVBOCage *this){
+	if(this->vertices == NULL){return;}
 	glGenBuffers(1, &this->glId);
 	glBindBuffer(GL_ARRAY_BUFFER, this->glId);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * this->length, this->vertices, GL_STATIC_DRAW);
@@ -179,6 +183,7 @@ static void egoVBOLoad(struct engineGraphicObjectVBOCage *this){
 
 // IBO作成
 static void egoIBOLoad(struct engineGraphicObjectIBOCage *this){
+	if(this->indexes == NULL){return;}
 	glGenBuffers(1, &this->glId);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->glId);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort) * this->length, this->indexes, GL_STATIC_DRAW);
@@ -210,63 +215,72 @@ static void texDataLoad(struct engineGraphicObjectTexData *this){
 
 // 3DオブジェクトTex読み込み完了確認
 bool engineGraphicObjectTexIsComplete(engineGraphicObjectTexId egoId){
-	struct engineGraphicObjectTexCage *temp = localGlobal.egoTexList;
-	while(temp != NULL){
-		if(temp->egoId == egoId){
-			if(temp->data == NULL){return false;}
-			return (temp->data->status == ENGINEGRAPHICOBJECTTEXDATASTATUS_LOADED);
-		}
-		temp = temp->next;
-	}
-	return false;
+	int egoIndex = egoTexId2Index(egoId);
+	if(egoIndex < 0 || localGlobal.egoTexLength <= egoIndex){return true;}
+	struct engineGraphicObjectTexCage *temp = &localGlobal.egoTexList[egoIndex];
+	return (temp->data != NULL && temp->data->status == ENGINEGRAPHICOBJECTTEXDATASTATUS_LOADED);
 }
 
 // ----------------------------------------------------------------
 
 // 3DオブジェクトVBO作成
 engineGraphicObjectVBOId engineGraphicObjectVBOCreate(int length, GLfloat *vertices){
+	int egoIndex = -1;
+	// 領域リストに空きがないか確認する
+	for(int i = 0; i < localGlobal.egoVBOLength; i++){if(localGlobal.egoVBOList[i].vertices == NULL){egoIndex =  i;}}
+	if(egoIndex < 0){
+		// 空きがなければ領域リストを拡張する
+		egoIndex = localGlobal.egoVBOLength;
+		int egoVBOLength = localGlobal.egoVBOLength + 10;
+		struct engineGraphicObjectVBOCage *egoVBOList = (struct engineGraphicObjectVBOCage*)engineUtilMemoryInfoCalloc("(permanent) engineGraphicObject vbo1", egoVBOLength, sizeof(struct engineGraphicObjectVBOCage));
+		if(localGlobal.egoVBOLength > 0){
+			memcpy(egoVBOList, localGlobal.egoVBOList, localGlobal.egoVBOLength * sizeof(struct engineGraphicObjectVBOCage));
+			engineUtilMemoryInfoFree("(permanent) engineGraphicObject vbo1", localGlobal.egoVBOList);
+		}
+		localGlobal.egoVBOLength = egoVBOLength;
+		localGlobal.egoVBOList = egoVBOList;
+	}
+
 	// データ作成
-	struct engineGraphicObjectVBOCage *obj = (struct engineGraphicObjectVBOCage*)engineUtilMemoryInfoCalloc("engineGraphicObject vbo1", 1, sizeof(struct engineGraphicObjectVBOCage));
-	obj->egoId = ++localGlobal.egoIdCount;
+	struct engineGraphicObjectVBOCage *obj = &localGlobal.egoVBOList[egoIndex];
 	obj->length = length;
 	size_t size = length * sizeof(GLfloat);
 	obj->vertices = (GLfloat*)engineUtilMemoryInfoMalloc("engineGraphicObject vbo2", size);
 	memcpy(obj->vertices, vertices, size);
 	//for(int i = 0; i < length; i++){obj->vertices[i] = (GLfloat)vertices[i];}
 	egoVBOLoad(obj);
-	// リスト登録
-	if(localGlobal.egoVBOList == NULL){
-		localGlobal.egoVBOList = obj;
-	}else{
-		struct engineGraphicObjectVBOCage *temp = localGlobal.egoVBOList;
-		while(temp->next != NULL){temp = temp->next;}
-		temp->next = obj;
-	}
-	obj->next = NULL;
-	return obj->egoId;
+
+	return egoVBOIndex2Id(egoIndex);
 }
 
 // 3DオブジェクトIBO作成
 engineGraphicObjectIBOId engineGraphicObjectIBOCreate(int length, GLushort *indexes){
+	int egoIndex = -1;
+	// 領域リストに空きがないか確認する
+	for(int i = 0; i < localGlobal.egoIBOLength; i++){if(localGlobal.egoIBOList[i].indexes == NULL){egoIndex =  i;}}
+	if(egoIndex < 0){
+		// 空きがなければ領域リストを拡張する
+		egoIndex = localGlobal.egoIBOLength;
+		int egoIBOLength = localGlobal.egoIBOLength + 10;
+		struct engineGraphicObjectIBOCage *egoIBOList = (struct engineGraphicObjectIBOCage*)engineUtilMemoryInfoCalloc("(permanent) engineGraphicObject ibo1", egoIBOLength, sizeof(struct engineGraphicObjectIBOCage));
+		if(localGlobal.egoIBOLength > 0){
+			memcpy(egoIBOList, localGlobal.egoIBOList, localGlobal.egoIBOLength * sizeof(struct engineGraphicObjectIBOCage));
+			engineUtilMemoryInfoFree("(permanent) engineGraphicObject ibo1", localGlobal.egoIBOList);
+		}
+		localGlobal.egoIBOLength = egoIBOLength;
+		localGlobal.egoIBOList = egoIBOList;
+	}
+
 	// データ作成
-	struct engineGraphicObjectIBOCage *obj = (struct engineGraphicObjectIBOCage*)engineUtilMemoryInfoCalloc("engineGraphicObject ibo1", 1, sizeof(struct engineGraphicObjectIBOCage));
-	obj->egoId = ++localGlobal.egoIdCount;
+	struct engineGraphicObjectIBOCage *obj = &localGlobal.egoIBOList[egoIndex];
 	obj->length = length;
 	size_t size = length * sizeof(GLushort);
 	obj->indexes = (GLushort*)engineUtilMemoryInfoMalloc("engineGraphicObject ibo2", size);
 	memcpy(obj->indexes, indexes, size);
 	//for(int i = 0; i < length; i++){obj->indexes[i] = (GLushort)indexes[i];}
 	egoIBOLoad(obj);
-	// リスト登録
-	if(localGlobal.egoIBOList == NULL){
-		localGlobal.egoIBOList = obj;
-	}else{
-		struct engineGraphicObjectIBOCage *temp = localGlobal.egoIBOList;
-		while(temp->next != NULL){temp = temp->next;}
-		temp->next = obj;
-	}
-	obj->next = NULL;
-	return obj->egoId;
+
+	return egoIBOIndex2Id(egoIndex);
 }
 
 // テクスチャ情報作成
@@ -313,21 +327,28 @@ static struct engineGraphicObjectTexData *texDataCreate(struct engineGraphicObje
 
 // 3DオブジェクトTex作成
 static engineGraphicObjectTexId texCageCreate(struct engineGraphicObjectTexArg *arg, enum engineGraphicObjectTexType type){
+	int egoIndex = -1;
+	// 領域リストに空きがないか確認する
+	for(int i = 0; i < localGlobal.egoTexLength; i++){if(localGlobal.egoTexList[i].data == NULL){egoIndex =  i;}}
+	if(egoIndex < 0){
+		// 空きがなければ領域リストを拡張する
+		egoIndex = localGlobal.egoTexLength;
+		int egoTexLength = localGlobal.egoTexLength + 10;
+		struct engineGraphicObjectTexCage *egoTexList = (struct engineGraphicObjectTexCage*)engineUtilMemoryInfoCalloc("(permanent) engineGraphicObject tex1", egoTexLength, sizeof(struct engineGraphicObjectTexCage));
+		if(localGlobal.egoTexLength > 0){
+			memcpy(egoTexList, localGlobal.egoTexList, localGlobal.egoTexLength * sizeof(struct engineGraphicObjectTexCage));
+			engineUtilMemoryInfoFree("(permanent) engineGraphicObject tex1", localGlobal.egoTexList);
+		}
+		localGlobal.egoTexLength = egoTexLength;
+		localGlobal.egoTexList = egoTexList;
+	}
+
 	// データ作成
-	struct engineGraphicObjectTexCage *obj = (struct engineGraphicObjectTexCage*)engineUtilMemoryInfoCalloc("engineGraphicObject tex1", 1, sizeof(struct engineGraphicObjectTexCage));
-	obj->egoId = ++localGlobal.egoIdCount;
+	struct engineGraphicObjectTexCage *obj = &localGlobal.egoTexList[egoIndex];
 	obj->data = texDataCreate(arg);
 	obj->type = type;
-	// リスト登録
-	if(localGlobal.egoTexList == NULL){
-		localGlobal.egoTexList = obj;
-	}else{
-		struct engineGraphicObjectTexCage *temp = localGlobal.egoTexList;
-		while(temp->next != NULL){temp = temp->next;}
-		temp->next = obj;
-	}
-	obj->next = NULL;
-	return obj->egoId;
+
+	return egoTexIndex2Id(egoIndex);
 }
 
 // 3DオブジェクトTex作成
@@ -352,130 +373,73 @@ engineGraphicObjectTexId engineGraphicObjectTexCreateFont(enum pluginTextureFont
 // VBOID取得
 bool engineGraphicObjectVBOGetGLId(engineGraphicObjectVBOId egoId, GLuint *glId){
 	if(glId == NULL){return false;}
-	struct engineGraphicObjectVBOCage *temp = localGlobal.egoVBOList;
-	while(temp != NULL){
-		if(temp->egoId == egoId){
-			*glId = temp->glId;
-			return true;
-		}
-		temp = temp->next;
-	}
-	return false;
+	int egoIndex = egoVBOId2Index(egoId);
+	if(egoIndex < 0 || localGlobal.egoVBOLength <= egoIndex){return false;}
+	struct engineGraphicObjectVBOCage *temp = &localGlobal.egoVBOList[egoIndex];
+	if(temp->vertices == NULL){return false;}
+	*glId = temp->glId;
+	return true;
 }
 
 // IBOID取得
 bool engineGraphicObjectIBOGetGLId(engineGraphicObjectIBOId egoId, GLuint *glId){
 	if(glId == NULL){return false;}
-	struct engineGraphicObjectIBOCage *temp = localGlobal.egoIBOList;
-	while(temp != NULL){
-		if(temp->egoId == egoId){
-			*glId = temp->glId;
-			return true;
-		}
-		temp = temp->next;
-	}
-	return false;
+	int egoIndex = egoIBOId2Index(egoId);
+	if(egoIndex < 0 || localGlobal.egoIBOLength <= egoIndex){return false;}
+	struct engineGraphicObjectIBOCage *temp = &localGlobal.egoIBOList[egoIndex];
+	if(temp->indexes == NULL){return false;}
+	*glId = temp->glId;
+	return true;
 }
 
 // テクスチャID取得
 bool engineGraphicObjectTexGetGLId(engineGraphicObjectTexId egoId, GLuint *glId, enum engineGraphicObjectTexType *type){
 	if(glId == NULL && type == NULL){return false;}
-	struct engineGraphicObjectTexCage *temp = localGlobal.egoTexList;
-	while(temp != NULL){
-		if(temp->egoId == egoId){
-			if(temp->data == NULL){return false;}
-			if(glId != NULL && temp->data->arg.type == ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEXTURELOCAL){*glId = temp->data->pluginTextureLocal.glId;}
-			if(glId != NULL && temp->data->arg.type == ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEXTUREFONT){*glId = localGlobal.defaultTexture.glId;}
-			if(glId != NULL && temp->data->arg.type == ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEST){*glId = localGlobal.defaultTexture.glId;}
-			if(type != NULL){*type = temp->type;}
-			return true;
-		}
-		temp = temp->next;
-	}
-	return false;
+	int egoIndex = egoTexId2Index(egoId);
+	if(egoIndex < 0 || localGlobal.egoTexLength <= egoIndex){return false;}
+	struct engineGraphicObjectTexCage *temp = &localGlobal.egoTexList[egoIndex];
+	if(temp->data == NULL){return false;}
+	if(glId != NULL && temp->data->arg.type == ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEXTURELOCAL){*glId = temp->data->pluginTextureLocal.glId;}
+	if(glId != NULL && temp->data->arg.type == ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEXTUREFONT){*glId = localGlobal.defaultTexture.glId;}
+	if(glId != NULL && temp->data->arg.type == ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEST){*glId = localGlobal.defaultTexture.glId;}
+	if(type != NULL){*type = temp->type;}
+	return true;
 }
 
 // テクスチャID取得
 bool engineGraphicObjectTexGetCodeList(engineGraphicObjectTexId egoId, int *codeListIndex, int *codeListLength, enum engineGraphicObjectTexType *type){
 	if(codeListIndex == NULL && codeListLength == NULL && type == NULL){return false;}
-	struct engineGraphicObjectTexCage *temp = localGlobal.egoTexList;
-	while(temp != NULL){
-		if(temp->egoId == egoId){
-			if(temp->data == NULL){return false;}
-			if(temp->data->arg.type == ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEXTUREFONT){
-				if(codeListIndex != NULL){*codeListIndex = temp->data->pluginTextureFont.codeListIndex;}
-				if(codeListLength != NULL){*codeListLength = temp->data->pluginTextureFont.codeListLength;}
-				if(type != NULL){*type = temp->type;}
-				return true;
-			}else{
-				return false;
-			}
-		}
-		temp = temp->next;
-	}
-	return false;
+	int egoIndex = egoTexId2Index(egoId);
+	if(egoIndex < 0 || localGlobal.egoTexLength <= egoIndex){return false;}
+	struct engineGraphicObjectTexCage *temp = &localGlobal.egoTexList[egoIndex];
+	if(temp->data == NULL){return false;}
+	if(temp->data->arg.type != ENGINEGRAPHICOBJECTTEXARGTYPE_PLUGINTEXTUREFONT){return false;}
+	if(codeListIndex != NULL){*codeListIndex = temp->data->pluginTextureFont.codeListIndex;}
+	if(codeListLength != NULL){*codeListLength = temp->data->pluginTextureFont.codeListLength;}
+	if(type != NULL){*type = temp->type;}
+	return true;
 }
 
 // ----------------------------------------------------------------
 
 // 3DオブジェクトVBO除去
 void engineGraphicObjectVBODispose(engineGraphicObjectVBOId egoId){
-	if(egoId == 0){return;}
-	int freeCount = 0;
-	struct engineGraphicObjectVBOCage *prev = NULL;
-	struct engineGraphicObjectVBOCage *temp = localGlobal.egoVBOList;
-	while(temp != NULL){
-		if(temp->egoId == egoId){
-			// リストから要素を外す
-			struct engineGraphicObjectVBOCage *dispose = temp;
-			temp = temp->next;
-			if(prev == NULL){localGlobal.egoVBOList = temp;}
-			else{prev->next = temp;}
-			// 要素の除去
-			egoVBOFree(dispose);
-			freeCount++;
-		}else{
-			prev = temp;
-			temp = temp->next;
-		}
-	}
-	if(freeCount < 1){trace("vbo free error -- no such pointer");}
-	if(freeCount > 1){trace("vbo free error -- too meny pointer");}
+	int egoIndex = egoVBOId2Index(egoId);
+	if(egoIndex < 0 || localGlobal.egoVBOLength <= egoIndex){return;}
+	egoVBOFree(&localGlobal.egoVBOList[egoIndex]);
 }
 
 // 3DオブジェクトIBO除去
 void engineGraphicObjectIBODispose(engineGraphicObjectIBOId egoId){
-	if(egoId == 0){return;}
-	int freeCount = 0;
-	struct engineGraphicObjectIBOCage *prev = NULL;
-	struct engineGraphicObjectIBOCage *temp = localGlobal.egoIBOList;
-	while(temp != NULL){
-		if(temp->egoId == egoId){
-			// リストから要素を外す
-			struct engineGraphicObjectIBOCage *dispose = temp;
-			temp = temp->next;
-			if(prev == NULL){localGlobal.egoIBOList = temp;}
-			else{prev->next = temp;}
-			// 要素の除去
-			egoIBOFree(dispose);
-			freeCount++;
-		}else{
-			prev = temp;
-			temp = temp->next;
-		}
-	}
-	if(freeCount < 1){trace("ibo free error -- no such pointer");}
-	if(freeCount > 1){trace("ibo free error -- too meny pointer");}
+	int egoIndex = egoIBOId2Index(egoId);
+	if(egoIndex < 0 || localGlobal.egoIBOLength <= egoIndex){return;}
+	egoIBOFree(&localGlobal.egoIBOList[egoIndex]);
 }
 
 // テクスチャ情報除去
 static void texDataDispose(struct engineGraphicObjectTexData *this){
 	// 使用中確認
-	struct engineGraphicObjectTexCage *tempTex = localGlobal.egoTexList;
-	while(tempTex != NULL){
-		if(tempTex->data == this){return;}
-		tempTex = tempTex->next;
-	}
+	for(int i = 0; i < localGlobal.egoTexLength; i++){if(localGlobal.egoTexList[i].data == this){return;}}
 	// 誰も使っていなければ除去
 	struct engineGraphicObjectTexData *prevData = NULL;
 	struct engineGraphicObjectTexData *tempData = localGlobal.texDataList;
@@ -496,58 +460,28 @@ static void texDataDispose(struct engineGraphicObjectTexData *this){
 
 // 3DオブジェクトTex除去
 void engineGraphicObjectTexDispose(engineGraphicObjectTexId egoId){
-	if(egoId == 0){return;}
-	int freeCount = 0;
-	struct engineGraphicObjectTexCage *prev = NULL;
-	struct engineGraphicObjectTexCage *temp = localGlobal.egoTexList;
-	while(temp != NULL){
-		if(temp->egoId == egoId){
-			// リストから要素を外す
-			struct engineGraphicObjectTexCage *dispose = temp;
-			temp = temp->next;
-			if(prev == NULL){localGlobal.egoTexList = temp;}
-			else{prev->next = temp;}
-			// 要素の除去
-			texDataDispose(dispose->data);
-			egoTexFree(dispose);
-			freeCount++;
-		}else{
-			prev = temp;
-			temp = temp->next;
-		}
-	}
-	if(freeCount < 1){trace("tex free error -- no such pointer");}
-	if(freeCount > 1){trace("tex free error -- too meny pointer");}
+	int egoIndex = egoTexId2Index(egoId);
+	if(egoIndex < 0 || localGlobal.egoTexLength <= egoIndex){return;}
+	struct engineGraphicObjectTexCage *cage = &localGlobal.egoTexList[egoIndex];
+	struct engineGraphicObjectTexData *data = cage->data;
+	egoTexFree(cage);
+	texDataDispose(data);
 }
 
 // 全3Dオブジェクト除去
 void engineGraphicObjectDispose(void){
-	struct engineGraphicObjectVBOCage *tempVBO = localGlobal.egoVBOList;
-	while(tempVBO != NULL){
-		struct engineGraphicObjectVBOCage *dispose = tempVBO;
-		tempVBO = tempVBO->next;
-		// 要素の除去
-		egoVBOFree(dispose);
-	}
+	for(int i = 0; i < localGlobal.egoVBOLength; i++){egoVBOFree(&localGlobal.egoVBOList[i]);}
+	for(int i = 0; i < localGlobal.egoIBOLength; i++){egoIBOFree(&localGlobal.egoIBOList[i]);}
+	for(int i = 0; i < localGlobal.egoTexLength; i++){egoTexFree(&localGlobal.egoTexList[i]);}
+	engineUtilMemoryInfoFree("(permanent) engineGraphicObject vbo1", localGlobal.egoVBOList);
+	engineUtilMemoryInfoFree("(permanent) engineGraphicObject ibo1", localGlobal.egoIBOList);
+	engineUtilMemoryInfoFree("(permanent) engineGraphicObject tex1", localGlobal.egoTexList);
 	localGlobal.egoVBOList = NULL;
-
-	struct engineGraphicObjectIBOCage *tempIBO = localGlobal.egoIBOList;
-	while(tempIBO != NULL){
-		struct engineGraphicObjectIBOCage *dispose = tempIBO;
-		tempIBO = tempIBO->next;
-		// 要素の除去
-		egoIBOFree(dispose);
-	}
 	localGlobal.egoIBOList = NULL;
-
-	struct engineGraphicObjectTexCage *tempTex = localGlobal.egoTexList;
-	while(tempTex != NULL){
-		struct engineGraphicObjectTexCage *dispose = tempTex;
-		tempTex = tempTex->next;
-		// 要素の除去
-		egoTexFree(dispose);
-	}
 	localGlobal.egoTexList = NULL;
+	localGlobal.egoVBOLength = 0;
+	localGlobal.egoIBOLength = 0;
+	localGlobal.egoTexLength = 0;
 
 	struct engineGraphicObjectTexData *tempData = localGlobal.texDataList;
 	while(tempData != NULL){
@@ -568,11 +502,10 @@ void engineGraphicObjectDispose(void){
 
 // 全データロード再読み込み
 void engineGraphicObjectReload(void){
-	struct engineGraphicObjectVBOCage *tempVBO = localGlobal.egoVBOList;
-	struct engineGraphicObjectIBOCage *tempIBO = localGlobal.egoIBOList;
+	for(int i = 0; i < localGlobal.egoVBOLength; i++){egoVBOLoad(&localGlobal.egoVBOList[i]);}
+	for(int i = 0; i < localGlobal.egoIBOLength; i++){egoIBOLoad(&localGlobal.egoIBOList[i]);}
+
 	struct engineGraphicObjectTexData *tempTex = localGlobal.texDataList;
-	while(tempVBO != NULL){egoVBOLoad(tempVBO); tempVBO = tempVBO->next;}
-	while(tempIBO != NULL){egoIBOLoad(tempIBO); tempIBO = tempIBO->next;}
 	while(tempTex != NULL){texDataLoad(tempTex); tempTex = tempTex->next;}
 
 	// 読み込み中に使うデフォルトテクスチャ作成
