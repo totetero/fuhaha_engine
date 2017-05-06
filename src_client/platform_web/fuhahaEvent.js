@@ -246,38 +246,53 @@ mergeInto(LibraryManager.library, {
 
 		var isBack = ccall("gameMainEventKeyIsBack", "null", [], []);
 		if(isBack){
-			// 監視ハッシュタグ作成
-			var isHashInit = false;
-			var firstHash = window.parent.location.hash;
-			var secondHash = "#h1";
-			var thirdHash = "#h2";
-			while(firstHash == secondHash || secondHash == thirdHash || thirdHash == firstHash){
-				secondHash = "#h" + Math.floor(Math.random() * 100 + 1);
-				thirdHash = "#h" + Math.floor(Math.random() * 100 + 1);
-			}
-			// 戻るためのハッシュタグ監視
-			(function hashObservation(){
-				if(!globalWebFuhahaSurface.isExit){
-					var currHash = window.parent.location.hash;
-					if(currHash == thirdHash){
-					}else if(currHash == secondHash){
-						window.parent.location.hash = thirdHash;
-						if(isHashInit){
-							// 戻るコマンド
-							kbk = true; onKeyBack();
-							kbk = false; onKeyBack();
-						}else{
-							isHashInit = true;
-						}
+			if(window.history && window.history.pushState){
+				// historyAPI設定
+				window.history.pushState("nohb", null, "");
+				window.addEventListener("popstate", function(e){
+					if (e.originalEvent && !e.originalEvent.state){return;} // この行が必要なのかは不明
+					if(!globalWebFuhahaSurface.isExit){
+						kbk = true; onKeyBack();
+						kbk = false; onKeyBack();
+						window.history.pushState("nohb", null, "");
 					}else{
-						window.parent.location.hash = secondHash;
+						window.parent.history.back();
 					}
-					setTimeout(hashObservation, 100);
-				}else{
-					// 終了状態処理 とりあえず一つ戻っておく
-					window.parent.history.back();
-				}
-			})();
+				});
+			}else{
+				// 監視ハッシュタグ作成
+				var isHashInit = false;
+				var firstHash = window.parent.location.hash;
+				var secondHash = "#h1";
+				var thirdHash = "#h2";
+				while(firstHash == secondHash || secondHash == thirdHash || thirdHash == firstHash){
+					secondHash = "#h" + Math.floor(Math.random() * 100 + 1);
+					thirdHash = "#h" + Math.floor(Math.random() * 100 + 1);
+				} 
+				// 戻るためのハッシュタグ監視
+				(function hashObservation(){
+					if(!globalWebFuhahaSurface.isExit){
+						var currHash = window.parent.location.hash;
+						if(currHash == thirdHash){
+						}else if(currHash == secondHash){
+							window.parent.location.hash = thirdHash;
+							if(isHashInit){
+								// 戻るコマンド
+								kbk = true; onKeyBack();
+								kbk = false; onKeyBack();
+							}else{
+								isHashInit = true;
+							}
+						}else{
+							window.parent.location.hash = secondHash;
+						}
+						setTimeout(hashObservation, 100);
+					}else{
+						// 終了状態処理 とりあえず一つ戻っておく
+						window.parent.history.back();
+					}
+				})();
+			}
 		}
 
 		// ----------------------------------------------------------------
