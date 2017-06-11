@@ -2,29 +2,31 @@
 #include "../../define/texpos.h"
 #include "../engineMath/engineMath.h"
 #include "../engineUtil/engineUtil.h"
-#include "engineGraphic.h"
+#include "../engineCtrl/engineCtrl.h"
+#include "../engineGraphic/engineGraphic.h"
+#include "engineLayout01.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
 // 描画
-static void draw(struct engineGraphicTrans *that, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
-	struct engineGraphicImageNumber *this = (struct engineGraphicImageNumber*)((char*)that - offsetof(struct engineGraphicImageNumber, trans));
-	engineGraphicImageNumberDraw(this, mat, color);
+static void draw(struct engineLayout01Trans *that, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
+	struct engineLayout01ImageNumber *this = (struct engineLayout01ImageNumber*)((char*)that - offsetof(struct engineLayout01ImageNumber, trans));
+	engineLayout01ImageNumberDraw(this, mat, color);
 }
 
 // 破棄
-static void dispose(struct engineGraphicTrans *that){
-	struct engineGraphicImageNumber *this = (struct engineGraphicImageNumber*)((char*)that - offsetof(struct engineGraphicImageNumber, trans));
-	engineGraphicImageNumberDispose(this);
+static void dispose(struct engineLayout01Trans *that){
+	struct engineLayout01ImageNumber *this = (struct engineLayout01ImageNumber*)((char*)that - offsetof(struct engineLayout01ImageNumber, trans));
+	engineLayout01ImageNumberDispose(this);
 }
 
 // ----------------------------------------------------------------
 
 // 数値列描画構造体 初期化
-void engineGraphicImageNumberInit(struct engineGraphicImageNumber *this){
-	engineGraphicTransInit(&this->trans);
+void engineLayout01ImageNumberInit(struct engineLayout01ImageNumber *this){
+	engineLayout01TransInit(&this->trans);
 	this->trans.draw = draw;
 	this->trans.dispose = dispose;
 	this->createArrayInfo.imgw = TEXSIZ_SYSTEM_W;
@@ -41,7 +43,7 @@ void engineGraphicImageNumberInit(struct engineGraphicImageNumber *this){
 }
 
 // 配列に数値列(utf8)の描画情報を追加
-void engineGraphicImageNumberCreateArray(struct engineGraphicImageNumber *this, double x, double y, int number){
+void engineLayout01ImageNumberCreateArray(struct engineLayout01ImageNumber *this, double x, double y, int number){
 	if(this == NULL){return;}
 
 	int vertIndex = engineGraphicBufferVretIndexGet();
@@ -73,20 +75,20 @@ void engineGraphicImageNumberCreateArray(struct engineGraphicImageNumber *this, 
 // ----------------------------------------------------------------
 
 // 数値列描画構造体 描画
-void engineGraphicImageNumberDraw(struct engineGraphicImageNumber *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
+void engineLayout01ImageNumberDraw(struct engineLayout01ImageNumber *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
 	// 桁数確認
 	int length = 0;
 	int tempValue = engineMathAbs(this->value);
 	do{tempValue /= 10; length++;}while(tempValue >= 1);
 
 	// バッファ登録
-	engineGraphicTransBindBuffer(&this->trans);
+	engineLayout01TransBindBuffer(&this->trans);
 	// 色登録
-	engineGraphicTransBindColor(&this->trans, color);
+	engineLayout01TransBindColor(&this->trans, color);
 	// 行列登録
 	struct engineMathMatrix44 tempMat1;
 	engineMathMat4Copy(&tempMat1, mat);
-	engineGraphicTransMultMatrix(&this->trans, &tempMat1);
+	engineLayout01TransMultMatrix(&this->trans, &tempMat1);
 	engineMathMat4Translate(&tempMat1, ((this->createArrayInfo.xalign > 0) ? 1.0 : (this->createArrayInfo.xalign == 0) ? 0.5 : 0.0) * length * this->width, 0, 0);
 
 	// 下の桁から描画
@@ -100,7 +102,7 @@ void engineGraphicImageNumberDraw(struct engineGraphicImageNumber *this, struct 
 }
 
 // 数値列描画構造体 破棄
-void engineGraphicImageNumberDispose(struct engineGraphicImageNumber *this){
+void engineLayout01ImageNumberDispose(struct engineLayout01ImageNumber *this){
 	this->faceIndex = 0;
 	this->faceNum = 0;
 }

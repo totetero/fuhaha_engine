@@ -2,29 +2,31 @@
 #include "../../define/texpos.h"
 #include "../engineMath/engineMath.h"
 #include "../engineUtil/engineUtil.h"
-#include "engineGraphic.h"
+#include "../engineCtrl/engineCtrl.h"
+#include "../engineGraphic/engineGraphic.h"
+#include "engineLayout01.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
 // 描画
-static void draw(struct engineGraphicTrans *that, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
-	struct engineGraphicImageFrame *this = (struct engineGraphicImageFrame*)((char*)that - offsetof(struct engineGraphicImageFrame, trans));
-	engineGraphicImageFrameDraw(this, mat, color);
+static void draw(struct engineLayout01Trans *that, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
+	struct engineLayout01ImageFrame *this = (struct engineLayout01ImageFrame*)((char*)that - offsetof(struct engineLayout01ImageFrame, trans));
+	engineLayout01ImageFrameDraw(this, mat, color);
 }
 
 // 破棄
-static void dispose(struct engineGraphicTrans *that){
-	struct engineGraphicImageFrame *this = (struct engineGraphicImageFrame*)((char*)that - offsetof(struct engineGraphicImageFrame, trans));
-	engineGraphicImageFrameDispose(this);
+static void dispose(struct engineLayout01Trans *that){
+	struct engineLayout01ImageFrame *this = (struct engineLayout01ImageFrame*)((char*)that - offsetof(struct engineLayout01ImageFrame, trans));
+	engineLayout01ImageFrameDispose(this);
 }
 
 // ----------------------------------------------------------------
 
 // 枠付描画構造体 初期化
-void engineGraphicImageFrameInit(struct engineGraphicImageFrame *this){
-	engineGraphicTransInit(&this->trans);
+void engineLayout01ImageFrameInit(struct engineLayout01ImageFrame *this){
+	engineLayout01TransInit(&this->trans);
 	this->trans.draw = draw;
 	this->trans.dispose = dispose;
 	this->createArrayInfo.imgw = TEXSIZ_SYSTEM_W;
@@ -41,7 +43,7 @@ void engineGraphicImageFrameInit(struct engineGraphicImageFrame *this){
 }
 
 // 配列に枠付の描画情報を追加
-void engineGraphicImageFrameCreateArray(struct engineGraphicImageFrame *this, double x, double y, double w, double h){
+void engineLayout01ImageFrameCreateArray(struct engineLayout01ImageFrame *this, double x, double y, double w, double h){
 	if(this == NULL){return;}
 
 	int vertIndex = engineGraphicBufferVretIndexGet();
@@ -95,16 +97,16 @@ void engineGraphicImageFrameCreateArray(struct engineGraphicImageFrame *this, do
 // ----------------------------------------------------------------
 
 // 枠付描画構造体 描画
-void engineGraphicImageFrameDraw(struct engineGraphicImageFrame *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
+void engineLayout01ImageFrameDraw(struct engineLayout01ImageFrame *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
 	// バッファ登録
-	engineGraphicTransBindBuffer(&this->trans);
+	engineLayout01TransBindBuffer(&this->trans);
 	// 色登録
-	engineGraphicTransBindColor(&this->trans, color);
+	engineLayout01TransBindColor(&this->trans, color);
 	// 行列登録
 	struct engineMathMatrix44 tempMat1;
 	struct engineMathMatrix44 tempMat2;
 	engineMathMat4Copy(&tempMat1, mat);
-	engineGraphicTransMultMatrix(&this->trans, &tempMat1);
+	engineLayout01TransMultMatrix(&this->trans, &tempMat1);
 	engineMathMat4Translate(&tempMat1, this->x + this->w * 0.5, this->y + this->h * 0.5, 0.0);
 
 	double bt = this->createArrayInfo.border.bt * this->createArrayInfo.scale;
@@ -185,7 +187,7 @@ void engineGraphicImageFrameDraw(struct engineGraphicImageFrame *this, struct en
 }
 
 // 枠付描画構造体 破棄
-void engineGraphicImageFrameDispose(struct engineGraphicImageFrame *this){
+void engineLayout01ImageFrameDispose(struct engineLayout01ImageFrame *this){
 	this->faceIndex = 0;
 	this->faceNum = 0;
 }

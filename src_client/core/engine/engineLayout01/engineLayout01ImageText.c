@@ -2,29 +2,31 @@
 #include "../../define/texpos.h"
 #include "../engineMath/engineMath.h"
 #include "../engineUtil/engineUtil.h"
-#include "engineGraphic.h"
+#include "../engineCtrl/engineCtrl.h"
+#include "../engineGraphic/engineGraphic.h"
+#include "engineLayout01.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
 // 描画
-static void draw(struct engineGraphicTrans *that, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
-	struct engineGraphicImageText *this = (struct engineGraphicImageText*)((char*)that - offsetof(struct engineGraphicImageText, trans));
-	engineGraphicImageTextDraw(this, mat, color);
+static void draw(struct engineLayout01Trans *that, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
+	struct engineLayout01ImageText *this = (struct engineLayout01ImageText*)((char*)that - offsetof(struct engineLayout01ImageText, trans));
+	engineLayout01ImageTextDraw(this, mat, color);
 }
 
 // 破棄
-static void dispose(struct engineGraphicTrans *that){
-	struct engineGraphicImageText *this = (struct engineGraphicImageText*)((char*)that - offsetof(struct engineGraphicImageText, trans));
-	engineGraphicImageTextDispose(this);
+static void dispose(struct engineLayout01Trans *that){
+	struct engineLayout01ImageText *this = (struct engineLayout01ImageText*)((char*)that - offsetof(struct engineLayout01ImageText, trans));
+	engineLayout01ImageTextDispose(this);
 }
 
 // ----------------------------------------------------------------
 
 // 文字列描画構造体 初期化
-void engineGraphicImageTextInit(struct engineGraphicImageText *this){
-	engineGraphicTransInit(&this->trans);
+void engineLayout01ImageTextInit(struct engineLayout01ImageText *this){
+	engineLayout01TransInit(&this->trans);
 	this->trans.draw = draw;
 	this->trans.dispose = dispose;
 	this->createArrayInfo.imgw = TEXSIZ_SYSTEM_W;
@@ -79,7 +81,7 @@ static int getRowNum(char *text){
 }
 
 // 配列に文字列(utf8)の描画情報を追加
-void engineGraphicImageTextCreateArray(struct engineGraphicImageText *this, double x, double y, char *text){
+void engineLayout01ImageTextCreateArray(struct engineLayout01ImageText *this, double x, double y, char *text){
 	if(this == NULL){return;}
 
 	int vertIndex = engineGraphicBufferVretIndexGet();
@@ -143,13 +145,13 @@ void engineGraphicImageTextCreateArray(struct engineGraphicImageText *this, doub
 // ----------------------------------------------------------------
 
 // 文字列描画構造体 描画
-void engineGraphicImageTextDraw(struct engineGraphicImageText *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
-	engineGraphicTransBindAll(&this->trans, mat, color);
+void engineLayout01ImageTextDraw(struct engineLayout01ImageText *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
+	engineLayout01TransBindAll(&this->trans, mat, color);
 	engineGraphicEngineDrawIndex(this->faceIndex * 3, this->faceNum * 3);
 }
 
 // 文字列描画構造体 破棄
-void engineGraphicImageTextDispose(struct engineGraphicImageText *this){
+void engineLayout01ImageTextDispose(struct engineLayout01ImageText *this){
 	this->faceIndex = 0;
 	this->faceNum = 0;
 }

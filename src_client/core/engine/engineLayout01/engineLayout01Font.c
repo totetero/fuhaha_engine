@@ -1,7 +1,9 @@
 #include "../../library.h"
 #include "../../plugin/pluginTexture.h"
 #include "../engineMath/engineMath.h"
-#include "engineGraphic.h"
+#include "../engineCtrl/engineCtrl.h"
+#include "../engineGraphic/engineGraphic.h"
+#include "engineLayout01.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -28,22 +30,22 @@
 // ----------------------------------------------------------------
 
 // 描画
-static void draw(struct engineGraphicTrans *that, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
-	struct engineGraphicFont *this = (struct engineGraphicFont*)((char*)that - offsetof(struct engineGraphicFont, trans));
-	engineGraphicFontDraw(this, mat, color);
+static void draw(struct engineLayout01Trans *that, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
+	struct engineLayout01Font *this = (struct engineLayout01Font*)((char*)that - offsetof(struct engineLayout01Font, trans));
+	engineLayout01FontDraw(this, mat, color);
 }
 
 // 破棄
-static void dispose(struct engineGraphicTrans *that){
-	struct engineGraphicFont *this = (struct engineGraphicFont*)((char*)that - offsetof(struct engineGraphicFont, trans));
-	engineGraphicFontDispose(this);
+static void dispose(struct engineLayout01Trans *that){
+	struct engineLayout01Font *this = (struct engineLayout01Font*)((char*)that - offsetof(struct engineLayout01Font, trans));
+	engineLayout01FontDispose(this);
 }
 
 // ----------------------------------------------------------------
 
 // ネイティブ文字列描画構造体 初期化
-void engineGraphicFontInit(struct engineGraphicFont *this){
-	engineGraphicTransInit(&this->trans);
+void engineLayout01FontInit(struct engineLayout01Font *this){
+	engineLayout01TransInit(&this->trans);
 	this->trans.draw = draw;
 	this->trans.dispose = dispose;
 	this->dynamicInfo.x = 0;
@@ -58,7 +60,7 @@ void engineGraphicFontInit(struct engineGraphicFont *this){
 }
 
 // ネイティブ文字列描画構造体 文字列設定
-void engineGraphicFontSet(struct engineGraphicFont *this, enum pluginTextureFontSetId fontSetId, char *text){
+void engineLayout01FontSet(struct engineLayout01Font *this, enum pluginTextureFontSetId fontSetId, char *text){
 	// 一旦情報リセット
 	engineGraphicObjectVBODispose(this->egoIdVert);
 	engineGraphicObjectVBODispose(this->egoIdTexc);
@@ -76,7 +78,7 @@ void engineGraphicFontSet(struct engineGraphicFont *this, enum pluginTextureFont
 }
 
 // バッファ作成
-static void createBuffer(struct engineGraphicFont *this){
+static void createBuffer(struct engineLayout01Font *this){
 	if(this->fontInfo.codeListIndex < 0){
 		// 情報取得
 		int egoId = this->fontInfo.egoIdTexFont;
@@ -243,7 +245,7 @@ static void createBuffer(struct engineGraphicFont *this){
 }
 
 // ネイティブ文字列描画構造体 描画
-void engineGraphicFontDraw(struct engineGraphicFont *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
+void engineLayout01FontDraw(struct engineLayout01Font *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
 	// 描画準備
 	createBuffer(this);
 	if(this->fontInfo.codeListIndex < 0){return;}
@@ -256,7 +258,7 @@ void engineGraphicFontDraw(struct engineGraphicFont *this, struct engineMathMatr
 	// 行列登録
 	struct engineMathMatrix44 tempMat1;
 	engineMathMat4Copy(&tempMat1, mat);
-	engineGraphicTransMultMatrix(&this->trans, &tempMat1);
+	engineLayout01TransMultMatrix(&this->trans, &tempMat1);
 	engineGraphicEngineSetMatrix(&tempMat1);
 
 	// 描画
@@ -273,7 +275,7 @@ void engineGraphicFontDraw(struct engineGraphicFont *this, struct engineMathMatr
 			newColor.g = color->g * (double)((tagColor >> 16) & 0xff) / 0xff;
 			newColor.b = color->b * (double)((tagColor >>  8) & 0xff) / 0xff;
 			newColor.a = color->a * (double)((tagColor >>  0) & 0xff) / 0xff;
-			engineGraphicTransBindColor(&this->trans, &newColor);
+			engineLayout01TransBindColor(&this->trans, &newColor);
 		}
 		engineGraphicEngineBindTextureGlId(codeList[i].glId, this->fontInfo.type);
 		engineGraphicEngineDrawIndex((this->faceIndex + (index++) * 2) * 3, 3 * 2);
@@ -282,8 +284,8 @@ void engineGraphicFontDraw(struct engineGraphicFont *this, struct engineMathMatr
 }
 
 // ネイティブ文字列描画構造体 破棄
-void engineGraphicFontDispose(struct engineGraphicFont *this){
-	engineGraphicFontSet(this, -1, NULL);
+void engineLayout01FontDispose(struct engineLayout01Font *this){
+	engineLayout01FontSet(this, -1, NULL);
 }
 
 // ----------------------------------------------------------------

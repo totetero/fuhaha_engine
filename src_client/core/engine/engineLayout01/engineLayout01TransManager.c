@@ -1,22 +1,24 @@
 #include "../../library.h"
 #include "../engineMath/engineMath.h"
 #include "../engineUtil/engineUtil.h"
-#include "engineGraphic.h"
+#include "../engineCtrl/engineCtrl.h"
+#include "../engineGraphic/engineGraphic.h"
+#include "engineLayout01.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
 // 要素の破棄
-static void disposeOne(struct engineGraphicTransManager *this, int index, bool isAll){
-	struct engineGraphicTrans *trans = this->transList[index];
+static void disposeOne(struct engineLayout01TransManager *this, int index, bool isAll){
+	struct engineLayout01Trans *trans = this->transList[index];
 	if(trans == NULL){return;}
 	// 要素をリストから取り除く
 	this->transList[index] = NULL;
 	if(!isAll){
 		// 子要素も再帰にて破棄
 		for(int i = 0; i < this->transLength; i++){
-			struct engineGraphicTrans *temp = this->transList[i];
+			struct engineLayout01Trans *temp = this->transList[i];
 			if(temp != NULL && temp->parent == trans){disposeOne(this, i, isAll);}
 		}
 	}
@@ -26,22 +28,22 @@ static void disposeOne(struct engineGraphicTransManager *this, int index, bool i
 }
 
 // もう使わない要素の破棄
-static void disposeMeny(struct engineGraphicTransManager *this, bool isAll){
+static void disposeMeny(struct engineLayout01TransManager *this, bool isAll){
 	for(int i = 0; i < this->transLength; i++){
-		struct engineGraphicTrans *trans = this->transList[i];
+		struct engineLayout01Trans *trans = this->transList[i];
 		if(trans == NULL){continue;}
 		if(isAll || !trans->isExist){disposeOne(this, i, isAll);}
 	}
 }
 
 // 変形管理構造体 リセット
-void engineGraphicTransManagerReset(struct engineGraphicTransManager *this){
+void engineLayout01TransManagerReset(struct engineLayout01TransManager *this){
 	// 要素を全て破棄
 	disposeMeny(this, true);
 }
 
 // 変形管理構造体 追加
-void engineGraphicTransManagerPush(struct engineGraphicTransManager *this, struct engineGraphicTrans *trans){
+void engineLayout01TransManagerPush(struct engineLayout01TransManager *this, struct engineLayout01Trans *trans){
 	// もう使わない要素の破棄
 	disposeMeny(this, false);
 	// 同じ要素がすでにあるか確認
@@ -69,27 +71,27 @@ void engineGraphicTransManagerPush(struct engineGraphicTransManager *this, struc
 }
 
 // 並べ替え関数
-static int engineGraphicTransList_sort(const void *a, const void *b){
-	struct engineGraphicTrans *trans1 = *(struct engineGraphicTrans**)a;
-	struct engineGraphicTrans *trans2 = *(struct engineGraphicTrans**)b;
+static int engineLayout01TransList_sort(const void *a, const void *b){
+	struct engineLayout01Trans *trans1 = *(struct engineLayout01Trans**)a;
+	struct engineLayout01Trans *trans2 = *(struct engineLayout01Trans**)b;
 	double zIndex1 = (trans1 != NULL) ? trans1->zIndex : 0;
 	double zIndex2 = (trans2 != NULL) ? trans2->zIndex : 0;
 	return (zIndex1 - zIndex2);
 }
 
 // 変形管理構造体 追加したすべての要素を描画
-void engineGraphicTransManagerDraw(struct engineGraphicTransManager *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
+void engineLayout01TransManagerDraw(struct engineLayout01TransManager *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
 	// もう使わない要素の破棄
 	disposeMeny(this, false);
 	// 並べ替え
-	qsort((void*)this->transList, this->transLength, sizeof(struct engineGraphicTrans*), engineGraphicTransList_sort);
+	qsort((void*)this->transList, this->transLength, sizeof(struct engineLayout01Trans*), engineLayout01TransList_sort);
 	// 描画
 	for(int i = 0; i < this->transLength; i++){
-		struct engineGraphicTrans *trans = this->transList[i];
+		struct engineLayout01Trans *trans = this->transList[i];
 		if(trans == NULL || trans->draw == NULL){continue;}
 		// 先祖を遡って表示確認
 		bool isVisible = true;
-		struct engineGraphicTrans *temp = trans;
+		struct engineLayout01Trans *temp = trans;
 		while(temp != NULL && isVisible){isVisible = temp->isVisible; temp = temp->parent;}
 		if(!isVisible){continue;}
 		// 描画する
@@ -98,7 +100,7 @@ void engineGraphicTransManagerDraw(struct engineGraphicTransManager *this, struc
 }
 
 // 変形管理構造体 破棄
-void engineGraphicTransManagerDispose(struct engineGraphicTransManager *this){
+void engineLayout01TransManagerDispose(struct engineLayout01TransManager *this){
 	// 要素を全て破棄
 	disposeMeny(this, true);
 	// 要素配列を破棄

@@ -3,7 +3,7 @@
 #include "../engineMath/engineMath.h"
 #include "../engineCtrl/engineCtrl.h"
 #include "../engineGraphic/engineGraphic.h"
-#include "engineParts.h"
+#include "engineLayout01.h"
 #include "../../game.h"
 
 // ----------------------------------------------------------------
@@ -11,30 +11,30 @@
 // ----------------------------------------------------------------
 
 // 描画
-static void draw(struct engineGraphicTrans *that, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
-	struct enginePartsButtonBox *this = (struct enginePartsButtonBox*)((char*)that - offsetof(struct enginePartsButtonBox, trans));
-	enginePartsButtonBoxDraw(this, mat, color);
+static void draw(struct engineLayout01Trans *that, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
+	struct engineLayout01ButtonBox *this = (struct engineLayout01ButtonBox*)((char*)that - offsetof(struct engineLayout01ButtonBox, trans));
+	engineLayout01ButtonBoxDraw(this, mat, color);
 }
 
 // 破棄
-static void dispose(struct engineGraphicTrans *that){
-	struct enginePartsButtonBox *this = (struct enginePartsButtonBox*)((char*)that - offsetof(struct enginePartsButtonBox, trans));
-	enginePartsButtonBoxDispose(this);
+static void dispose(struct engineLayout01Trans *that){
+	struct engineLayout01ButtonBox *this = (struct engineLayout01ButtonBox*)((char*)that - offsetof(struct engineLayout01ButtonBox, trans));
+	engineLayout01ButtonBoxDispose(this);
 }
 
 // ----------------------------------------------------------------
 
 // 表示箱付きボタン構造体 初期化
-void enginePartsButtonBoxInit(struct enginePartsButtonBox *this){
-	enginePartsButtonInit(&this->super);
-	engineGraphicTransInit(&this->trans);
+void engineLayout01ButtonBoxInit(struct engineLayout01ButtonBox *this){
+	engineLayout01ButtonInit(&this->super);
+	engineLayout01TransInit(&this->trans);
 	this->trans.draw = draw;
 	this->trans.dispose = dispose;
-	engineGraphicImageFrameInit(&this->imgNormal);
-	engineGraphicImageFrameInit(&this->imgSelect);
-	engineGraphicImageFrameInit(&this->imgActibve);
-	engineGraphicImageFrameInit(&this->imgInactive);
-	engineGraphicImageTextInit(&this->imgText);
+	engineLayout01ImageFrameInit(&this->imgNormal);
+	engineLayout01ImageFrameInit(&this->imgSelect);
+	engineLayout01ImageFrameInit(&this->imgActibve);
+	engineLayout01ImageFrameInit(&this->imgInactive);
+	engineLayout01ImageTextInit(&this->imgText);
 	this->imgNormal.createArrayInfo.texture.tu = TEXPOS_SYSTEM_BUTTONBASICNORMAL_X;
 	this->imgNormal.createArrayInfo.texture.tv = TEXPOS_SYSTEM_BUTTONBASICNORMAL_Y;
 	this->imgNormal.createArrayInfo.texture.tw = TEXPOS_SYSTEM_BUTTONBASICNORMAL_W;
@@ -65,8 +65,8 @@ void enginePartsButtonBoxInit(struct enginePartsButtonBox *this){
 }
 
 // 表示箱付きボタン構造体 静的位置設定
-void enginePartsButtonBoxSetPosition(struct enginePartsButtonBox *this, double x, double y, double w, double h){
-	enginePartsButtonSetPosition(&this->super, x, y, w, h);
+void engineLayout01ButtonBoxSetPosition(struct engineLayout01ButtonBox *this, double x, double y, double w, double h){
+	engineLayout01ButtonSetPosition(&this->super, x, y, w, h);
 	this->imgNormal.x = x;
 	this->imgNormal.y = y;
 	this->imgNormal.w = w;
@@ -86,22 +86,22 @@ void enginePartsButtonBoxSetPosition(struct enginePartsButtonBox *this, double x
 }
 
 // 表示箱付きボタン構造体 計算
-void enginePartsButtonBoxCalc(struct enginePartsButtonBox *this){
-	enginePartsButtonCalc(&this->super);
+void engineLayout01ButtonBoxCalc(struct engineLayout01ButtonBox *this){
+	engineLayout01ButtonCalc(&this->super);
 }
 
 // 表示箱付きボタン構造体 タッチ情報を使い回す計算
-void enginePartsButtonBoxSubCalc(struct enginePartsButtonBox *this, struct engineCtrlTouch *t, bool clickable){
-	enginePartsButtonSubCalc(&this->super, t, clickable);
+void engineLayout01ButtonBoxSubCalc(struct engineLayout01ButtonBox *this, struct engineCtrlTouch *t, bool clickable){
+	engineLayout01ButtonSubCalc(&this->super, t, clickable);
 }
 
 // 配列に表示箱付きボタンの描画情報を追加
-void enginePartsButtonBoxCreateArray(struct enginePartsButtonBox *this, char *text){
-	engineGraphicImageFrameCreateArray(&this->imgNormal, this->super.x, this->super.y, this->super.w, this->super.h);
-	engineGraphicImageFrameCreateArray(&this->imgSelect, this->super.x, this->super.y, this->super.w, this->super.h);
-	engineGraphicImageFrameCreateArray(&this->imgActibve, this->super.x, this->super.y, this->super.w, this->super.h);
-	engineGraphicImageFrameCreateArray(&this->imgInactive, this->super.x, this->super.y, this->super.w, this->super.h);
-	engineGraphicImageTextCreateArray(&this->imgText, 0, 0, text);
+void engineLayout01ButtonBoxCreateArray(struct engineLayout01ButtonBox *this, char *text){
+	engineLayout01ImageFrameCreateArray(&this->imgNormal, this->super.x, this->super.y, this->super.w, this->super.h);
+	engineLayout01ImageFrameCreateArray(&this->imgSelect, this->super.x, this->super.y, this->super.w, this->super.h);
+	engineLayout01ImageFrameCreateArray(&this->imgActibve, this->super.x, this->super.y, this->super.w, this->super.h);
+	engineLayout01ImageFrameCreateArray(&this->imgInactive, this->super.x, this->super.y, this->super.w, this->super.h);
+	engineLayout01ImageTextCreateArray(&this->imgText, 0, 0, text);
 	this->imgNormal.trans.parent = &this->trans;
 	this->imgSelect.trans.parent = &this->trans;
 	this->imgActibve.trans.parent = &this->trans;
@@ -112,34 +112,34 @@ void enginePartsButtonBoxCreateArray(struct enginePartsButtonBox *this, char *te
 // ----------------------------------------------------------------
 
 // 表示箱付きボタン構造体 描画
-void enginePartsButtonBoxDraw(struct enginePartsButtonBox *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
+void engineLayout01ButtonBoxDraw(struct engineLayout01ButtonBox *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
 	bool isInactive = (this->super.inactive && !this->super.active && !this->select);
 	// 領域内確認行列読み込み
 	struct engineMathMatrix44 tempMat1;
 	engineMathMat4Copy(&tempMat1, mat);
-	engineGraphicTransMultMatrix(&this->trans, &tempMat1);
-	enginePartsButtonSetMatrix(&this->super, &tempMat1);
+	engineLayout01TransMultMatrix(&this->trans, &tempMat1);
+	engineLayout01ButtonSetMatrix(&this->super, &tempMat1);
 	// ボタン枠描画
-	if(isInactive){engineGraphicImageFrameDraw(&this->imgInactive, mat, color);}
-	else if(this->super.active){engineGraphicImageFrameDraw(&this->imgActibve, mat, color);}
-	else if(this->select){engineGraphicImageFrameDraw(&this->imgSelect, mat, color);}
-	else{engineGraphicImageFrameDraw(&this->imgNormal, mat, color);}
+	if(isInactive){engineLayout01ImageFrameDraw(&this->imgInactive, mat, color);}
+	else if(this->super.active){engineLayout01ImageFrameDraw(&this->imgActibve, mat, color);}
+	else if(this->select){engineLayout01ImageFrameDraw(&this->imgSelect, mat, color);}
+	else{engineLayout01ImageFrameDraw(&this->imgNormal, mat, color);}
 	// 文字列描画
 	double x = this->super.x + this->super.w * 0.5;
 	double y = this->super.y + this->super.h * 0.5 + (this->super.active ? 1 : -1);
 	double bright = isInactive ? 0.5 : 0.0;
-	engineGraphicTransSetTranslate(&this->imgText.trans, x, y, 0.0);
-	engineGraphicTransSetColorRgba(&this->imgText.trans, bright, bright, bright, 1.0);
-	engineGraphicImageTextDraw(&this->imgText, mat, color);
+	engineLayout01TransSetTranslate(&this->imgText.trans, x, y, 0.0);
+	engineLayout01TransSetColorRgba(&this->imgText.trans, bright, bright, bright, 1.0);
+	engineLayout01ImageTextDraw(&this->imgText, mat, color);
 }
 
 // 表示箱付きボタン構造体 破棄
-void enginePartsButtonBoxDispose(struct enginePartsButtonBox *this){
-	engineGraphicImageFrameDispose(&this->imgNormal);
-	engineGraphicImageFrameDispose(&this->imgSelect);
-	engineGraphicImageFrameDispose(&this->imgActibve);
-	engineGraphicImageFrameDispose(&this->imgInactive);
-	engineGraphicImageTextDispose(&this->imgText);
+void engineLayout01ButtonBoxDispose(struct engineLayout01ButtonBox *this){
+	engineLayout01ImageFrameDispose(&this->imgNormal);
+	engineLayout01ImageFrameDispose(&this->imgSelect);
+	engineLayout01ImageFrameDispose(&this->imgActibve);
+	engineLayout01ImageFrameDispose(&this->imgInactive);
+	engineLayout01ImageTextDispose(&this->imgText);
 }
 
 // ----------------------------------------------------------------

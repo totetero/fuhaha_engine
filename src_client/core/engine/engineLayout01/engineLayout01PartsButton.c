@@ -2,7 +2,7 @@
 #include "../engineMath/engineMath.h"
 #include "../engineCtrl/engineCtrl.h"
 #include "../engineGraphic/engineGraphic.h"
-#include "engineParts.h"
+#include "engineLayout01.h"
 #include "../../game.h"
 
 // ----------------------------------------------------------------
@@ -10,7 +10,7 @@
 // ----------------------------------------------------------------
 
 // ボタン構造体 初期化
-void enginePartsButtonInit(struct enginePartsButton *this){
+void engineLayout01ButtonInit(struct engineLayout01Button *this){
 	this->x = 0;
 	this->y = 0;
 	this->w = 0;
@@ -29,7 +29,7 @@ void enginePartsButtonInit(struct enginePartsButton *this){
 }
 
 // ボタン構造体 静的位置設定
-void enginePartsButtonSetPosition(struct enginePartsButton *this, double x, double y, double w, double h){
+void engineLayout01ButtonSetPosition(struct engineLayout01Button *this, double x, double y, double w, double h){
 	this->x = x;
 	this->y = y;
 	this->w = w;
@@ -52,7 +52,7 @@ void enginePartsButtonSetPosition(struct enginePartsButton *this, double x, doub
 }
 
 // ボタン構造体 領域内確認行列読み込み
-void enginePartsButtonSetMatrix(struct enginePartsButton *this, struct engineMathMatrix44 *mat){
+void engineLayout01ButtonSetMatrix(struct engineLayout01Button *this, struct engineMathMatrix44 *mat){
 	this->isMatrix = true;
 	for(int i = 0; i < this->hitVertexLength; i++){
 		engineMathVec3MultiplyMat4(&this->hitVertex1[i], &this->hitVertex0[i], mat);
@@ -62,9 +62,9 @@ void enginePartsButtonSetMatrix(struct enginePartsButton *this, struct engineMat
 }
 
 // ボタン構造体 計算
-void enginePartsButtonCalc(struct enginePartsButton *this){
+void engineLayout01ButtonCalc(struct engineLayout01Button *this){
 	struct engineCtrlTouch *t = engineCtrlTouchGet(ENGINECTRLTOUCHID_BUTTON);
-	enginePartsButtonSubCalc(this, t, true);
+	engineLayout01ButtonSubCalc(this, t, true);
 	if(t != NULL){
 		if(this->active && !t->active){
 			engineCtrlTouchOwn();
@@ -75,7 +75,7 @@ void enginePartsButtonCalc(struct enginePartsButton *this){
 }
 
 // ボタン構造体 タッチ情報を使い回す計算
-void enginePartsButtonSubCalc(struct enginePartsButton *this, struct engineCtrlTouch *t, bool clickable){
+void engineLayout01ButtonSubCalc(struct engineLayout01Button *this, struct engineCtrlTouch *t, bool clickable){
 	if(this->inactive || !clickable){
 		// ボタン無効状態
 		this->active = false;
@@ -87,9 +87,9 @@ void enginePartsButtonSubCalc(struct enginePartsButton *this, struct engineCtrlT
 		this->active = false;
 	}else if(t->dn){
 		// ボタン押下中
-		this->active = (enginePartsButtonIsInner(this, t) == !!this->inner);
+		this->active = (engineLayout01ButtonIsInner(this, t) == !!this->inner);
 		// 子要素の範囲内では押下状態にならない
-		if(this->child != NULL){this->active = this->active && !(enginePartsButtonIsInner(this->child, t) == !!this->child->inner);}
+		if(this->child != NULL){this->active = this->active && !(engineLayout01ButtonIsInner(this->child, t) == !!this->child->inner);}
 	}else if(this->active){
 		// ボタンを放した瞬間
 		this->active = false;
@@ -98,7 +98,7 @@ void enginePartsButtonSubCalc(struct enginePartsButton *this, struct engineCtrlT
 }
 
 // ボタン構造体 タッチ領域内確認
-bool enginePartsButtonIsInner(struct enginePartsButton *this, struct engineCtrlTouch *t){
+bool engineLayout01ButtonIsInner(struct engineLayout01Button *this, struct engineCtrlTouch *t){
 	if(this->isMatrix){
 		// すべての辺に対し対象点との外積が全て同一符号なら内部
 		double crossz[sizeof(this->hitVertex1) / sizeof(*this->hitVertex1)];
