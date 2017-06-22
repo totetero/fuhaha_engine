@@ -1,5 +1,4 @@
 #include "../library.h"
-#include "../define/texpos.h"
 #include "../engine/engineMath/engineMath.h"
 #include "../engine/engineUtil/engineUtil.h"
 #include "../engine/engineCtrl/engineCtrl.h"

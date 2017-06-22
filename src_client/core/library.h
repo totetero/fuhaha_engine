@@ -15,7 +15,6 @@
 #include "define/define.h"
 
 //// ゲーム本体における共通部分インクルード順番の例
-//#include "define/texpos.h"
 //#include "plugin/pluginUtil.h"
 //#include "plugin/pluginData.h"
 //#include "plugin/pluginTexture.h"
