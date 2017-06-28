@@ -13,8 +13,10 @@
 struct pageCartridgeTest1{
 	struct engineCartridgePage super;
 
-	int bufferStatus;
-	int bufferScreen;
+	struct pageCartridgeTest1BufferCompare{
+		int sw;
+		int sh;
+	} bufferCompare;
 	engineGraphicObjectVBOId egoIdVert;
 	engineGraphicObjectVBOId egoIdTexc;
 	engineGraphicObjectIBOId egoIdFace;
@@ -47,12 +49,12 @@ static void calc(struct pageCartridgeTest1 *this){
 
 // バッファ作成
 static void createBuffer(struct pageCartridgeTest1 *this){
-	int status = 1;
-	int screen = (global.screen.w & 0xffff) | ((global.screen.h & 0xffff) << 16);
+	struct pageCartridgeTest1BufferCompare bufferCompare;
+	bufferCompare.sw = global.screen.w;
+	bufferCompare.sh = global.screen.h;
 
-	if(this->bufferStatus != status || this->bufferScreen != screen){
-		this->bufferStatus = status;
-		this->bufferScreen = screen;
+	if(memcmp(&this->bufferCompare, &bufferCompare, sizeof(struct pageCartridgeTest1BufferCompare))){
+		memcpy(&this->bufferCompare, &bufferCompare, sizeof(struct pageCartridgeTest1BufferCompare));
 
 		// バッファ作成開始
 		engineGraphicBufferBegin();

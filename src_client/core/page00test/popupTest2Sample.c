@@ -30,8 +30,10 @@ struct popupCartridgeTest2Sample{
 	struct engineLayout01ButtonBox btnBoxClose;
 	struct engineLayout01Button btnOuter;
 
-	int bufferStatus;
-	int bufferScreen;
+	struct popupCartridgeTest2SampleBufferCompare{
+		int sw;
+		int sh;
+	} bufferCompare;
 	engineGraphicObjectVBOId egoIdVert;
 	engineGraphicObjectVBOId egoIdTexc;
 	engineGraphicObjectIBOId egoIdFace;
@@ -104,12 +106,12 @@ static void calc(struct popupCartridgeTest2Sample *this){
 
 // バッファ作成
 static void createBuffer(struct popupCartridgeTest2Sample *this){
-	int status = 1;
-	int screen = (global.screen.w & 0xffff) | ((global.screen.h & 0xffff) << 16);
+	struct popupCartridgeTest2SampleBufferCompare bufferCompare;
+	bufferCompare.sw = global.screen.w;
+	bufferCompare.sh = global.screen.h;
 
-	if(this->bufferStatus != status || this->bufferScreen != screen){
-		this->bufferStatus = status;
-		this->bufferScreen = screen;
+	if(memcmp(&this->bufferCompare, &bufferCompare, sizeof(struct popupCartridgeTest2SampleBufferCompare))){
+		memcpy(&this->bufferCompare, &bufferCompare, sizeof(struct popupCartridgeTest2SampleBufferCompare));
 
 		// バッファ作成開始
 		engineGraphicBufferBegin();
