@@ -4,13 +4,8 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-// 各ページカートリッジ装填のコンストラクタ
-void pageTest1PushPage(void);
-void pageTest2PushPage(void);
-void pageTest3PushPage(void);
-
-// 最初のページカートリッジ装填
-#define ENGINECARTRIDGEPAGE_FIRST pageTest1PushPage
+#include "engineLayout02View.h"
+#include "engineLayout02ViewParts.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

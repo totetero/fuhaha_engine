@@ -4,13 +4,20 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-// 各ページカートリッジ装填のコンストラクタ
-void pageTest1PushPage(void);
-void pageTest2PushPage(void);
-void pageTest3PushPage(void);
+// 長方形表示構造体
+struct engineLayout02ViewPartsRect{
+	struct engineLayout02View super;
+	int tu;
+	int tv;
+	int tw;
+	int th;
+	int imgw;
+	int imgh;
+	struct engineMathVector4 color;
+};
 
-// 最初のページカートリッジ装填
-#define ENGINECARTRIDGEPAGE_FIRST pageTest1PushPage
+// 長方形表示構造体 作成
+struct engineLayout02ViewPartsRect *engineLayout02ViewPartsRectCreate();
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
