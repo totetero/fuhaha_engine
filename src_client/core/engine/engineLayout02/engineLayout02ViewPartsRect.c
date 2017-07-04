@@ -14,12 +14,9 @@ struct engineLayout02ViewPartsRectImplement{
 	struct engineLayout02ViewPartsRect super;
 
 	struct engineLayout02ViewPartsRectBufferCompare{
-		int tu;
-		int tv;
-		int tw;
-		int th;
 		int imgw;
 		int imgh;
+		struct{int tu; int tv; int tw; int th;} texture;
 	} bufferCompare;
 	engineGraphicObjectVBOId egoIdVert;
 	engineGraphicObjectVBOId egoIdTexc;
@@ -41,12 +38,12 @@ static void init(struct engineLayout02ViewPartsRectImplement *this){
 	this->egoIdTexTest = engineGraphicObjectTexCreateLocal("img/system.png", ENGINEGRAPHICOBJECTTEXTYPE_LINEAR);
 
 	// デフォルトパラメータ設定
-	this->super.tu = (int)engineMathRound(TEXPOS_SYSTEM_BOXWHITE_X + TEXPOS_SYSTEM_BOXWHITE_W * 0.25);
-	this->super.tv = (int)engineMathRound(TEXPOS_SYSTEM_BOXWHITE_Y + TEXPOS_SYSTEM_BOXWHITE_H * 0.25);
-	this->super.tw = (int)engineMathRound(TEXPOS_SYSTEM_BOXWHITE_W * 0.5);
-	this->super.th = (int)engineMathRound(TEXPOS_SYSTEM_BOXWHITE_H * 0.5);
 	this->super.imgw = TEXSIZ_SYSTEM_W;
 	this->super.imgh = TEXSIZ_SYSTEM_H;
+	this->super.texture.tu = (int)engineMathRound(TEXPOS_SYSTEM_BOXWHITE_X + TEXPOS_SYSTEM_BOXWHITE_W * 0.25);
+	this->super.texture.tv = (int)engineMathRound(TEXPOS_SYSTEM_BOXWHITE_Y + TEXPOS_SYSTEM_BOXWHITE_H * 0.25);
+	this->super.texture.tw = (int)engineMathRound(TEXPOS_SYSTEM_BOXWHITE_W * 0.5);
+	this->super.texture.th = (int)engineMathRound(TEXPOS_SYSTEM_BOXWHITE_H * 0.5);
 	this->super.color.r = 1.0;
 	this->super.color.g = 1.0;
 	this->super.color.b = 1.0;
@@ -77,12 +74,12 @@ static void createBufferArrayRect(struct engineLayout02ViewPartsRectImplement *t
 	int h = 1;
 	engineGraphicBufferPushTetraVert(x, y, w, h);
 	// テクスチャ座標データを生成
-	int tu = this->super.tu;
-	int tv = this->super.tv;
-	int tw = this->super.tw;
-	int th = this->super.th;
 	int imgw = this->super.imgw;
 	int imgh = this->super.imgh;
+	int tu = this->super.texture.tu;
+	int tv = this->super.texture.tv;
+	int tw = this->super.texture.tw;
+	int th = this->super.texture.th;
 	engineGraphicBufferPushTetraTexc(imgw, imgh, tu, tv, tw, th);
 	// インデックスデータを作成
 	for(int i = 0; i < tetraNum; i++){engineGraphicBufferPushTetraFace(vertIndex + i * 4);}
@@ -95,12 +92,12 @@ static void createBufferArrayRect(struct engineLayout02ViewPartsRectImplement *t
 // バッファ作成
 static void createBuffer(struct engineLayout02ViewPartsRectImplement *this){
 	struct engineLayout02ViewPartsRectBufferCompare bufferCompare;
-	bufferCompare.tu = this->super.tu;
-	bufferCompare.tv = this->super.tv;
-	bufferCompare.tw = this->super.tw;
-	bufferCompare.th = this->super.th;
 	bufferCompare.imgw = this->super.imgw;
 	bufferCompare.imgh = this->super.imgh;
+	bufferCompare.texture.tu = this->super.texture.tu;
+	bufferCompare.texture.tv = this->super.texture.tv;
+	bufferCompare.texture.tw = this->super.texture.tw;
+	bufferCompare.texture.th = this->super.texture.th;
 
 	if(memcmp(&this->bufferCompare, &bufferCompare, sizeof(struct engineLayout02ViewPartsRectBufferCompare))){
 		memcpy(&this->bufferCompare, &bufferCompare, sizeof(struct engineLayout02ViewPartsRectBufferCompare));
@@ -175,7 +172,7 @@ static void dispose(struct engineLayout02ViewPartsRectImplement *this){
 
 // ----------------------------------------------------------------
 
-// 表示要素構造体 作成
+// 画像描画構造体 作成
 struct engineLayout02ViewPartsRect *engineLayout02ViewPartsRectCreate(){
 	struct engineLayout02ViewPartsRectImplement *this = (struct engineLayout02ViewPartsRectImplement*)engineUtilMemoryInfoCalloc("engineLayout02ViewPartsRect", 1, sizeof(struct engineLayout02ViewPartsRectImplement));
 	init(this);

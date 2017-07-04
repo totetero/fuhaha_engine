@@ -37,7 +37,7 @@ static void calc(struct pageCartridgeTest3 *this){
 		engineLayout02ViewUtilPositionSetTop(this->viewRoot, 0);
 		engineLayout02ViewUtilPositionSetBottom(this->viewRoot, 0);
 
-		struct engineLayout02ViewPartsRect *viewTest = engineLayout02ViewPartsRectCreate();
+		struct engineLayout02ViewPartsFrame *viewTest = engineLayout02ViewPartsFrameCreate();
 		engineLayout02ViewUtilPositionSetLeft((struct engineLayout02View*)viewTest, 10);
 		engineLayout02ViewUtilPositionSetRight((struct engineLayout02View*)viewTest, 10);
 		engineLayout02ViewUtilPositionSetTop((struct engineLayout02View*)viewTest, 10);
