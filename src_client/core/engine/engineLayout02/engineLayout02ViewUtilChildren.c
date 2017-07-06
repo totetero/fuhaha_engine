@@ -5,83 +5,107 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
+// 双方向リストにおいて境界条件を無視するためのダミー設定
+static void dummySet(struct engineLayout02View *this, struct engineLayout02View *dummy){
+	if(this->children.childrenHead != NULL && this->children.childrenTail != NULL){
+		dummy->children.next = this->children.childrenHead;
+		dummy->children.prev = this->children.childrenTail;
+		dummy->children.next->children.prev = dummy;
+		dummy->children.prev->children.next = dummy;
+	}else{
+		// 要素がない場合
+		dummy->children.next = dummy;
+		dummy->children.prev = dummy;
+	}
+}
+
+// ダミー設定を本体に反映
+static void dummyUnset(struct engineLayout02View *this, struct engineLayout02View *dummy){
+	if(dummy != dummy->children.next && dummy != dummy->children.prev){
+		dummy->children.next->children.prev = NULL;
+		dummy->children.prev->children.next = NULL;
+		this->children.childrenHead = dummy->children.next;
+		this->children.childrenTail = dummy->children.prev;
+	}else{
+		// 要素がない場合
+		this->children.childrenHead = NULL;
+		this->children.childrenTail = NULL;
+	}
+}
+
 // 表示要素構造体子要素 子要素追加
 void engineLayout02ViewUtilChildrenAdd(struct engineLayout02View *this, struct engineLayout02View *child){
-	// 別の子要素でないか確認
-	if(child->children.prev != NULL || this->children.childrenHead == child){return;}
-	if(child->children.next != NULL || this->children.childrenTail == child){return;}
-	if(child->children.parent != NULL){return;}
-	if(this->children.childrenHead == NULL && this->children.childrenTail == NULL){
-		// 最初の要素追加
-		child->children.prev = NULL;
-		child->children.next = NULL;
-		child->children.parent = this;
-		this->children.childrenHead = child;
-		this->children.childrenTail = child;
-	}else if(this->children.childrenHead == NULL){
-		// ここには来ない
-	}else if(this->children.childrenTail == NULL){
-		// ここには来ない
-	}else{
-		// リストの最後に要素追加
-		child->children.prev = this->children.childrenTail;
-		child->children.next = NULL;
-		child->children.parent = this;
-		this->children.childrenTail->children.next = child;
-		this->children.childrenTail = child;
-	}
+	struct engineLayout02View dummy;
+	dummySet(this, &dummy);
+
+	// 子要素の親設定
+	child->children.parent = this;
+
+	// childをdummyの前に挿入
+	child->children.prev = dummy.children.prev;
+	child->children.next = &dummy;
+	dummy.children.prev->children.next = child;
+	dummy.children.prev = child;
+
+	dummyUnset(this, &dummy);
 }
 
 // 表示要素構造体子要素 子要素排除
 void engineLayout02ViewUtilChildrenRemove(struct engineLayout02View *this, struct engineLayout02View *child){
-	if(this->children.childrenHead == child && this->children.childrenTail == child){
-		// 最後の要素排除
-		this->children.childrenHead = NULL;
-		this->children.childrenTail = NULL;
-	}else if(this->children.childrenHead == child){
-		// リストの最初から要素除去
-		this->children.childrenHead = child->children.next;
-		this->children.childrenHead->children.prev = NULL;
-		child->children.next = NULL;
-	}else if(this->children.childrenTail == child){
-		// リストの最後から要素除去
-		this->children.childrenTail = child->children.prev;
-		this->children.childrenTail->children.next = NULL;
-		child->children.prev = NULL;
-	}else if(child->children.prev != NULL && child->children.next != NULL){
-		// リストの途中から要素除去
-		child->children.prev->children.next = child->children.next;
-		child->children.next->children.prev = child->children.prev;
-	}else{
-		// ここには来ない
-	}
-	// 子要素でなくする
-	child->children.parent = NULL;
+	struct engineLayout02View dummy;
+	dummySet(this, &dummy);
+
+	// childをリストから外す
+	child->children.prev->children.next = child->children.next;
+	child->children.next->children.prev = child->children.prev;
 	child->children.prev = NULL;
 	child->children.next = NULL;
+
+	// 子要素の親設定
+	child->children.parent = NULL;
+
+	dummyUnset(this, &dummy);
 }
 
 // ----------------------------------------------------------------
 
+static int compare(struct engineLayout02View *insert, struct engineLayout02View *find){
+	return insert->children.zIndex - find->children.zIndex;
+}
+
 // 子要素を並び替える 挿入ソート
 static void sortChildren(struct engineLayout02View *this){
-//	struct engineLayout02View *list = this->childrenHead;
-//	while(list != NULL){
-//		struct engineLayout02View *next = list->next;
-//		struct engineLayout02View *temp = this->childrenHead;
-//		while(temp != list && temp != NULL){
-//			if(isSwap(temp, list)){
-//				list->prev->next = list->next;
-//				break;
-//			}
-//			temp = temp->next;
-//		}
-//		list = next;
-//	}
+	struct engineLayout02View dummy;
+	dummySet(this, &dummy);
+
+	struct engineLayout02View *insert = dummy.children.next;
+	while(insert != &dummy){
+		struct engineLayout02View *keepNext = insert->children.next;
+		struct engineLayout02View *find = dummy.children.next;
+		while(find != insert){
+			if(compare(insert, find) > 0){
+				// insertをリストから外す
+				insert->children.prev->children.next = insert->children.next;
+				insert->children.next->children.prev = insert->children.prev;
+				// insertをfindの前に挿入
+				insert->children.prev = find->children.prev;
+				insert->children.next = find;
+				find->children.prev->children.next = insert;
+				find->children.prev = insert;
+				break;
+			}
+			find = find->children.next;
+		}
+		insert = keepNext;
+	}
+
+	dummyUnset(this, &dummy);
 }
 
 // 表示要素構造体子要素 計算
 void engineLayout02ViewUtilChildrenCalc(struct engineLayout02View *this){
+	// 子要素の並べ替え
+	sortChildren(this);
 	// 子要素の計算
 	struct engineLayout02View *temp = this->children.childrenHead;
 	while(temp != NULL){
