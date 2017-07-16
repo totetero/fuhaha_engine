@@ -15,6 +15,14 @@ class FuhahaGLViewController: GLKViewController{
 	override func viewDidLoad(){
 		super.viewDidLoad();
 
+		// lifecycle
+		NotificationCenter.default.removeObserver(self);
+		NotificationCenter.default.addObserver(self, selector: #selector(self.applicationWillResignActive), name: NSNotification.Name.UIApplicationWillResignActive, object: nil);
+		NotificationCenter.default.addObserver(self, selector: #selector(self.applicationDidEnterBackground), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil);
+		NotificationCenter.default.addObserver(self, selector: #selector(self.applicationWillEnterForeground), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil);
+		NotificationCenter.default.addObserver(self, selector: #selector(self.applicationDidBecomeActive), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil);
+		NotificationCenter.default.addObserver(self, selector: #selector(self.applicationWillTerminate), name: NSNotification.Name.UIApplicationWillTerminate, object: nil);
+
 		// openGL
 		self.context = EAGLContext(api: .openGLES2);
 		self.preferredFramesPerSecond = 60;
@@ -27,8 +35,14 @@ class FuhahaGLViewController: GLKViewController{
 		// controller
 		self.fuhahaEvent = FuhahaEvent();
 
+		// game
 		gameMainSurfaceCreated();
 		gameMainEventInit();
+	}
+
+	// 
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
 	}
 
 	// 描画時
@@ -44,25 +58,25 @@ class FuhahaGLViewController: GLKViewController{
 
 	// ----------------------------------------------------------------
 
-	// ライフタイムイベント アプリ閉じそう
-	static internal func applicationWillResignActive(){
+	// ライフサイクルイベント アプリ閉じそう
+	internal func applicationWillResignActive(){
 	}
 
-	// ライフタイムイベント アプリ閉じた
-	static internal func applicationDidEnterBackground(){
+	// ライフサイクルイベント アプリ閉じた
+	internal func applicationDidEnterBackground(){
 		gameMainSurfacePause();
 	}
 
-	// ライフタイムイベント アプリ開きそう
-	static internal func applicationWillEnterForeground(){
+	// ライフサイクルイベント アプリ開きそう
+	internal func applicationWillEnterForeground(){
 	}
 
-	// ライフタイムイベント アプリ開いた
-	static internal func applicationDidBecomeActive(){
+	// ライフサイクルイベント アプリ開いた
+	internal func applicationDidBecomeActive(){
 	}
 
-	// ライフタイムイベント フリックしてアプリを終了させた
-	static internal func applicationWillTerminate(){
+	// ライフサイクルイベント フリックしてアプリを終了させた
+	internal func applicationWillTerminate(){
 		gameMainSurfaceDestroy();
 	}
 
@@ -112,10 +126,16 @@ class FuhahaGLViewController: GLKViewController{
 
 	// 解放時
 	deinit{
+		// game
 		gameMainSurfaceDestroy();
+
+		// openGL
 		if(EAGLContext.current() === self.context){
 			EAGLContext.setCurrent(nil);
 		}
+
+		// lifecycle
+		NotificationCenter.default.removeObserver(self);
 	}
 
 	// ----------------------------------------------------------------
