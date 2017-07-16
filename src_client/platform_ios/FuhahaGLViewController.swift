@@ -40,11 +40,6 @@ class FuhahaGLViewController: GLKViewController{
 		gameMainEventInit();
 	}
 
-	// 
-	override func viewWillAppear(_ animated: Bool) {
-		super.viewWillAppear(animated)
-	}
-
 	// 描画時
 	override func glkView(_ view: GLKView, drawIn rect: CGRect){
 		gameMainSurfaceDrawFrame();
