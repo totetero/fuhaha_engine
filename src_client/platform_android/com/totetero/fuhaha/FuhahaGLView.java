@@ -53,7 +53,9 @@ public class FuhahaGLView extends GLSurfaceView implements Renderer{
 		this.setOnKeyListener(new View.OnKeyListener(){
 			@Override
 			public boolean onKey(View view, int keyCode, KeyEvent event){
-				return fuhahaEvent.dispatchKeyEvent(event);
+				boolean result = fuhahaEvent.dispatchKeyEvent(event);
+				if(!result && event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP){result = true; FuhahaGLView.platformMainSurfaceExit();}
+				return result;
 			}
 		});
 
