@@ -1,10 +1,12 @@
 package com.totetero.fuhaha;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.view.Window;
-import android.view.KeyEvent;
+import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.widget.LinearLayout;
+import android.widget.FrameLayout;
+import android.view.Window;
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -12,46 +14,46 @@ import android.widget.LinearLayout;
 
 // アクティビティ プログラムはここから
 public class FuhahaActivity extends Activity{
-	private FuhahaGLView glView;
+	private static final int FRAGMENT_FUHAHA_ID = 0x00000001;
 
+	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
+		// ルートレイアウト作成
 		LinearLayout layout = new LinearLayout(this);
 		layout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
 		layout.setOrientation(LinearLayout.VERTICAL);
 		this.setContentView(layout);
 
-		// ゲーム本体
-		this.glView = new FuhahaGLView(this);
-		this.glView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f));
-		layout.addView(this.glView);
+		// フラグメント用レイアウト作成
+		FrameLayout frame = new FrameLayout(this);
+		frame.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f));
+		frame.setId(FuhahaActivity.FRAGMENT_FUHAHA_ID);
+		layout.addView(frame);
+		// フラグメント作成
+		FragmentManager fragmentManager = getFragmentManager();
+		FragmentTransaction transaction = fragmentManager.beginTransaction();
+		transaction.add(frame.getId(), new FuhahaGLFragment());
+		transaction.commit();
 	}
 
+	@Override
 	protected void onPause(){
-		this.glView.onPause();
 		super.onPause();
 	}
 
+	@Override
 	protected void onResume(){
-		this.glView.onResume();
 		super.onResume();
 	}
 
+	@Override
 	protected void onDestroy(){
-		this.glView.onDestroy();
 		super.onDestroy();
 	}
 
-	public boolean dispatchKeyEvent(KeyEvent event){
-		return this.glView.dispatchKeyEvent(event) || super.dispatchKeyEvent(event);
-	}
-
-	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults){
-		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-		this.glView.onRequestPermissionsResult(requestCode, permissions, grantResults);
-	}
 }
 
 // ----------------------------------------------------------------

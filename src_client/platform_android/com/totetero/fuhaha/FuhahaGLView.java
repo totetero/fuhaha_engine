@@ -1,8 +1,9 @@
 package com.totetero.fuhaha;
 
 import android.app.Activity;
-import android.view.MotionEvent;
+import android.view.View;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
@@ -44,13 +45,22 @@ public class FuhahaGLView extends GLSurfaceView implements Renderer{
 		this.setEGLContextClientVersion(2);
 		this.setEGLConfigChooser(5, 6, 5, 0, 16, 8);
 		this.setRenderer(this);
-		
-		// controller
+
+		// イベントコントローラ
 		this.fuhahaEvent = new FuhahaEvent();
+		// キーイベント
+		this.setFocusableInTouchMode(true);
+		this.setOnKeyListener(new View.OnKeyListener(){
+			@Override
+			public boolean onKey(View view, int keyCode, KeyEvent event){
+				return fuhahaEvent.dispatchKeyEvent(event);
+			}
+		});
 
 		FuhahaGLView.nativeOnCreate();
 	}
 
+	@Override
 	public void onResume(){
 		FuhahaGLView.nativeOnResume();
 		AndroidPluginSound.onResume();
@@ -58,6 +68,7 @@ public class FuhahaGLView extends GLSurfaceView implements Renderer{
 		super.onResume();
 	}
 
+	@Override
 	public void onPause(){
 		FuhahaGLView.nativeOnPause();
 		AndroidPluginSound.onPause();
@@ -72,16 +83,19 @@ public class FuhahaGLView extends GLSurfaceView implements Renderer{
 	// ----------------------------------------------------------------
 
 	// GL初期化
+	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config){
 		FuhahaGLView.nativeGlSetup();
 	}
 
 	// GL画面サイズ変更
+	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height){
 		FuhahaGLView.nativeGlResize(width, height);
 	}
 
 	// GL描画
+	@Override
 	public void onDrawFrame(GL10 gl){
 		FuhahaGLView.nativeGlStep();
 	}
@@ -89,19 +103,9 @@ public class FuhahaGLView extends GLSurfaceView implements Renderer{
 	// ----------------------------------------------------------------
 
 	// タッチイベント
+	@Override
 	public boolean onTouchEvent(MotionEvent event){
 		return this.fuhahaEvent.onTouchEvent(event) || super.onTouchEvent(event);
-	}
-
-	// キーイベント
-	public boolean dispatchKeyEvent(KeyEvent event){
-		return this.fuhahaEvent.dispatchKeyEvent(event) || super.dispatchKeyEvent(event);
-	}
-
-	// ----------------------------------------------------------------
-
-	// パーミッションリクエストの応答を受け取る
-	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults){
 	}
 
 	// ----------------------------------------------------------------
