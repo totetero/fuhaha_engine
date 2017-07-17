@@ -74,6 +74,7 @@ void engineCartridgePageManagerDispose(void){
 		localGlobal.childPageList = cartridge->next;
 		cartridge->dispose(cartridge);
 	}
+	localGlobal.isLoadedSystem = false;
 }
 
 // ----------------------------------------------------------------
