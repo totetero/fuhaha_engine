@@ -62,17 +62,17 @@ public class FuhahaGLView extends GLSurfaceView implements Renderer{
 
 	@Override
 	public void onResume(){
-		FuhahaGLView.nativeOnResume();
-		AndroidPluginSound.onResume();
-		this.fuhahaEvent.onResume();
 		super.onResume();
+		FuhahaGLView.nativeOnResume();
+		this.fuhahaEvent.onResume();
+		AndroidPluginSound.onResume();
 	}
 
 	@Override
 	public void onPause(){
-		FuhahaGLView.nativeOnPause();
 		AndroidPluginSound.onPause();
 		this.fuhahaEvent.onPause();
+		FuhahaGLView.nativeOnPause();
 		super.onPause();
 	}
 
