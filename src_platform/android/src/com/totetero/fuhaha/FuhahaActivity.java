@@ -54,11 +54,6 @@ public class FuhahaActivity extends Activity{
 		super.onDestroy();
 	}
 
-	// バックボタンのイベントを無視する
-	@Override
-	public void onBackPressed(){
-	}
-
 }
 
 // ----------------------------------------------------------------
