@@ -42,15 +42,9 @@ pluginUtilCallbackId corePluginUtilCallbackSet(void *param, void *callback){
 	new->callbackId = ++localGlobal.callbackIdCount;
 	new->param = param;
 	new->callback = callback;
-
 	// 要素をリストに追加
-	if(localGlobal.list != NULL){
-		struct pluginUtilCallbackUnit *temp = localGlobal.list;
-		while(temp->next != NULL){temp = temp->next;}
-		temp->next = new;
-	}else{
-		localGlobal.list = new;
-	}
+	new->next = localGlobal.list;
+	localGlobal.list = new;
 
 	return new->callbackId;
 }
@@ -72,14 +66,13 @@ void *corePluginUtilCallbackGet(pluginUtilCallbackId callbackId, void **param, b
 				if(prev == NULL){localGlobal.list = temp;}
 				else{prev->next = temp;}
 				// 解放の代わりに要素のプール
+				dispose->next = NULL;
 				dispose->callbackId = 0;
 				dispose->param = NULL;
 				dispose->callback = NULL;
+				// 要素をプールに追加
 				dispose->next = localGlobal.pool;
 				localGlobal.pool = dispose;
-			}else{
-				prev = temp;
-				temp = temp->next;
 			}
 
 			return callback;
