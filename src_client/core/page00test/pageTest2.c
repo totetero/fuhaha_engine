@@ -54,7 +54,7 @@ static void init(struct pageCartridgeTest2 *this){
 	engineLayout01ButtonPickerInit(&this->btnPickerTest, 0);
 
 	// 画像読み込み
-	this->stat->egoIdTexSystem = engineGraphicObjectTexCreateLocal("img/system.png", ENGINEGRAPHICOBJECTTEXTYPE_LINEAR);
+	this->stat->egoIdTexSystem = engineGraphicTextureCreateLocal("img/system.png", ENGINEGRAPHICTEXTURETYPE_LINEAR);
 
 	this->step = 0;
 }
@@ -223,7 +223,7 @@ static void dispose(struct pageCartridgeTest2 *this){
 	engineGraphicObjectVBODispose(this->egoIdVert);
 	engineGraphicObjectVBODispose(this->egoIdTexc);
 	engineGraphicObjectIBODispose(this->egoIdFace);
-	engineGraphicObjectTexDispose(this->stat->egoIdTexSystem);
+	engineGraphicTextureDispose(this->stat->egoIdTexSystem);
 	engineUtilMemoryFree(this->stat);
 	engineUtilMemoryFree(this);
 }

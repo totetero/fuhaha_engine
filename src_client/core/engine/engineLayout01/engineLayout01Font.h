@@ -13,10 +13,10 @@ struct engineLayout01Font{
 	engineGraphicObjectVBOId egoIdTexc;
 	engineGraphicObjectIBOId egoIdFace;
 	struct{
-		engineGraphicObjectTexId egoIdTexFont;
+		engineGraphicTextureId egoIdTexFont;
 		int codeListIndex;
 		int codeListLength;
-		enum engineGraphicObjectTexType type;
+		enum engineGraphicTextureType type;
 		double textWidth;
 		double textHeight;
 	} fontInfo;

@@ -6,7 +6,7 @@
 
 // 変形構造体
 struct engineLayout01Trans{
-	engineGraphicObjectTexId *texture;
+	engineGraphicTextureId *texture;
 	engineGraphicObjectVBOId *vertVBO;
 	engineGraphicObjectVBOId *clorVBO;
 	engineGraphicObjectVBOId *texcVBO;

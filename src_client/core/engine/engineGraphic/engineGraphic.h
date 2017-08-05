@@ -5,9 +5,9 @@
 // ----------------------------------------------------------------
 
 // テクスチャタイプ列挙型
-enum engineGraphicObjectTexType{
-	ENGINEGRAPHICOBJECTTEXTYPE_LINEAR,
-	ENGINEGRAPHICOBJECTTEXTYPE_NEAREST,
+enum engineGraphicTextureType{
+	ENGINEGRAPHICTEXTURETYPE_LINEAR,
+	ENGINEGRAPHICTEXTURETYPE_NEAREST,
 };
 
 // 描画モード列挙型
@@ -50,7 +50,7 @@ enum engineGraphicEngineModeStencil{
 // 3Dオブジェクト識別子
 typedef int engineGraphicObjectVBOId;
 typedef int engineGraphicObjectIBOId;
-typedef int engineGraphicObjectTexId;
+typedef int engineGraphicTextureId;
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -70,32 +70,44 @@ void engineGraphicGameExit(void);
 engineGraphicObjectVBOId engineGraphicObjectVBOCreate(int length, GLfloat *vertices);
 // 3DオブジェクトIBO作成
 engineGraphicObjectIBOId engineGraphicObjectIBOCreate(int length, GLushort *indexes);
-// 3DオブジェクトTex作成
-engineGraphicObjectTexId engineGraphicObjectTexCreateLocal(char *src, enum engineGraphicObjectTexType type);
-engineGraphicObjectTexId engineGraphicObjectTexCreateFont(enum pluginTextureFontSetId fontSetId, char *letterList, enum engineGraphicObjectTexType type);
-
-// 3DオブジェクトTex読み込み完了確認
-bool engineGraphicObjectTexIsComplete(engineGraphicObjectTexId egoId);
 
 // VBOID取得
 bool engineGraphicObjectVBOGetGLId(engineGraphicObjectVBOId egoId, GLuint *glId);
 // IBOID取得
 bool engineGraphicObjectIBOGetGLId(engineGraphicObjectIBOId egoId, GLuint *glId);
-// テクスチャID取得
-bool engineGraphicObjectTexGetGLId(engineGraphicObjectTexId egoId, GLuint *glId, enum engineGraphicObjectTexType *type);
-bool engineGraphicObjectTexGetCodeList(engineGraphicObjectTexId egoId, int *codeListIndex, int *codeListLength, enum engineGraphicObjectTexType *type);
 
 // 3DオブジェクトVBO除去
 void engineGraphicObjectVBODispose(engineGraphicObjectVBOId egoId);
 // 3DオブジェクトIBO除去
 void engineGraphicObjectIBODispose(engineGraphicObjectIBOId egoId);
-// 3DオブジェクトTex除去
-void engineGraphicObjectTexDispose(engineGraphicObjectTexId egoId);
 // 全3Dオブジェクト除去
-void engineGraphicObjectDispose(void);
+void engineGraphicObjectDisposeAll(void);
 
 // 全データロード再読み込み
 void engineGraphicObjectReload(void);
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// -------- テクスチャ
+
+// テクスチャ作成
+engineGraphicTextureId engineGraphicTextureCreateLocal(char *src, enum engineGraphicTextureType type);
+engineGraphicTextureId engineGraphicTextureCreateFont(enum pluginTextureFontSetId fontSetId, char *letterList, enum engineGraphicTextureType type);
+
+// テクスチャ読み込み完了確認
+bool engineGraphicTextureIsComplete(engineGraphicTextureId egtId);
+
+// テクスチャID取得
+bool engineGraphicTextureGetGLId(engineGraphicTextureId egtId, GLuint *glId, enum engineGraphicTextureType *type);
+bool engineGraphicTextureGetCodeList(engineGraphicTextureId egtId, int *codeListIndex, int *codeListLength, enum engineGraphicTextureType *type);
+// テクスチャ除去
+void engineGraphicTextureDispose(engineGraphicTextureId egtId);
+// 全テクスチャ除去
+void engineGraphicTextureDisposeAll(void);
+
+// 全テクスチャロード再読み込み
+void engineGraphicTextureReload(void);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -142,8 +154,8 @@ void engineGraphicEngineSetStencilMode(enum engineGraphicEngineModeStencil mode)
 void engineGraphicEngineIgnoreDepthMode(bool isIgnore);
 
 // グラフィックエンジン命令 テクスチャを指定
-void engineGraphicEngineBindTexture(engineGraphicObjectTexId egoId);
-void engineGraphicEngineBindTextureGlId(GLuint glId, enum engineGraphicObjectTexType type);
+void engineGraphicEngineBindTexture(engineGraphicTextureId egtId);
+void engineGraphicEngineBindTextureGlId(GLuint glId, enum engineGraphicTextureType type);
 // グラフィックエンジン命令 VBO登録 頂点座標
 void engineGraphicEngineBindVertVBO(engineGraphicObjectVBOId egoId);
 // グラフィックエンジン命令 VBO登録 カラーrgb

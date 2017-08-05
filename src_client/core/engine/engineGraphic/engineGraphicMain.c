@@ -9,12 +9,14 @@
 void engineGraphicGameInit(void){
 	engineGraphicEngineInit();
 	engineGraphicObjectReload();
+	engineGraphicTextureReload();
 }
 
 // 3Dエンジン終了処理
 void engineGraphicGameExit(void){
 	engineGraphicBufferClean();
-	engineGraphicObjectDispose();
+	engineGraphicObjectDisposeAll();
+	engineGraphicTextureDisposeAll();
 	engineGraphicEngineExit();
 }
 

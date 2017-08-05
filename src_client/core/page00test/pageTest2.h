@@ -9,7 +9,7 @@ struct pageTest2Status{
 	// 射影行列
 	struct engineMathMatrix44 matOrtho;
 	// テクスチャ
-	engineGraphicObjectTexId egoIdTexSystem;
+	engineGraphicTextureId egoIdTexSystem;
 };
 
 // ----------------------------------------------------------------

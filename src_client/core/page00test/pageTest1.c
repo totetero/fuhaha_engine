@@ -20,7 +20,7 @@ struct pageCartridgeTest1{
 	engineGraphicObjectVBOId egoIdVert;
 	engineGraphicObjectVBOId egoIdTexc;
 	engineGraphicObjectIBOId egoIdFace;
-	engineGraphicObjectTexId egoIdTexTest;
+	engineGraphicTextureId egoIdTexTest;
 
 	int faceIndex;
 	int faceNum;
@@ -33,7 +33,7 @@ struct pageCartridgeTest1{
 // 初期化
 static void init(struct pageCartridgeTest1 *this){
 	// 画像読み込み
-	this->egoIdTexTest = engineGraphicObjectTexCreateLocal("test.png", ENGINEGRAPHICOBJECTTEXTYPE_LINEAR);
+	this->egoIdTexTest = engineGraphicTextureCreateLocal("test.png", ENGINEGRAPHICTEXTURETYPE_LINEAR);
 
 	this->step = 0;
 }
@@ -111,7 +111,7 @@ static void dispose(struct pageCartridgeTest1 *this){
 	engineGraphicObjectVBODispose(this->egoIdVert);
 	engineGraphicObjectVBODispose(this->egoIdTexc);
 	engineGraphicObjectIBODispose(this->egoIdFace);
-	engineGraphicObjectTexDispose(this->egoIdTexTest);
+	engineGraphicTextureDispose(this->egoIdTexTest);
 	engineUtilMemoryFree(this);
 }
 

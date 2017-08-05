@@ -65,16 +65,16 @@ void engineLayout01FontSet(struct engineLayout01Font *this, enum pluginTextureFo
 	engineGraphicObjectVBODispose(this->egoIdVert);
 	engineGraphicObjectVBODispose(this->egoIdTexc);
 	engineGraphicObjectIBODispose(this->egoIdFace);
-	engineGraphicObjectTexDispose(this->fontInfo.egoIdTexFont);
+	engineGraphicTextureDispose(this->fontInfo.egoIdTexFont);
 	this->egoIdVert = 0;
 	this->egoIdTexc = 0;
 	this->egoIdFace = 0;
 	this->fontInfo.egoIdTexFont = 0;
 	this->fontInfo.codeListIndex = -1;
 	this->fontInfo.codeListLength = 0;
-	this->fontInfo.type = ENGINEGRAPHICOBJECTTEXTYPE_LINEAR;
+	this->fontInfo.type = ENGINEGRAPHICTEXTURETYPE_LINEAR;
 	// 文字列設定
-	if(text != NULL){this->fontInfo.egoIdTexFont = engineGraphicObjectTexCreateFont(fontSetId, text, this->fontInfo.type);}
+	if(text != NULL){this->fontInfo.egoIdTexFont = engineGraphicTextureCreateFont(fontSetId, text, this->fontInfo.type);}
 }
 
 // バッファ作成
@@ -84,8 +84,8 @@ static void createBuffer(struct engineLayout01Font *this){
 		int egoId = this->fontInfo.egoIdTexFont;
 		int codeListIndex = -1;
 		int codeListLength = 0;
-		enum engineGraphicObjectTexType type = this->fontInfo.type;
-		engineGraphicObjectTexGetCodeList(egoId, &codeListIndex, &codeListLength, &type);
+		enum engineGraphicTextureType type = this->fontInfo.type;
+		engineGraphicTextureGetCodeList(egoId, &codeListIndex, &codeListLength, &type);
 		if(codeListIndex < 0){return;}
 		this->fontInfo.codeListIndex = codeListIndex;
 		this->fontInfo.codeListLength = codeListLength;

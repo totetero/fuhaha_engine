@@ -21,7 +21,7 @@ struct engineLayout02ViewPartsRectImplement{
 	engineGraphicObjectVBOId egoIdVert;
 	engineGraphicObjectVBOId egoIdTexc;
 	engineGraphicObjectIBOId egoIdFace;
-	engineGraphicObjectTexId egoIdTexTest;
+	engineGraphicTextureId egoIdTexTest;
 
 	int faceIndex;
 	int faceNum;
@@ -35,7 +35,7 @@ static void init(struct engineLayout02ViewPartsRectImplement *this){
 	engineLayout02ViewUtilPositionInit((struct engineLayout02View*)this);
 
 	// 画像読み込み
-	this->egoIdTexTest = engineGraphicObjectTexCreateLocal("img/system.png", ENGINEGRAPHICOBJECTTEXTYPE_LINEAR);
+	this->egoIdTexTest = engineGraphicTextureCreateLocal("img/system.png", ENGINEGRAPHICTEXTURETYPE_LINEAR);
 
 	// デフォルトパラメータ設定
 	this->super.imgw = TEXSIZ_SYSTEM_W;
@@ -165,7 +165,7 @@ static void dispose(struct engineLayout02ViewPartsRectImplement *this){
 	engineGraphicObjectVBODispose(this->egoIdVert);
 	engineGraphicObjectVBODispose(this->egoIdTexc);
 	engineGraphicObjectIBODispose(this->egoIdFace);
-	engineGraphicObjectTexDispose(this->egoIdTexTest);
+	engineGraphicTextureDispose(this->egoIdTexTest);
 	engineLayout02ViewUtilPositionDispose((struct engineLayout02View*)this);
 	engineUtilMemoryInfoFree("engineLayout02ViewPartsRect", this);
 }

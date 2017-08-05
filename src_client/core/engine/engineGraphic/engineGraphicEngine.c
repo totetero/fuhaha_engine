@@ -31,7 +31,7 @@ static struct{
 		enum engineGraphicEngineModeDraw modeDraw;
 		enum engineGraphicEngineModeStencil modeStencil;
 		GLboolean modeDepth;
-		enum engineGraphicObjectTexType texType;
+		enum engineGraphicTextureType texType;
 		struct engineMathVector4 color;
 		engineGraphicObjectVBOId vertVBO;
 		engineGraphicObjectVBOId clorVBO;
@@ -311,29 +311,29 @@ void engineGraphicEngineIgnoreDepthMode(bool isIgnore){
 // ----------------------------------------------------------------
 
 // グラフィックエンジン命令 テクスチャを指定
-void engineGraphicEngineBindTexture(engineGraphicObjectTexId egoId){
+void engineGraphicEngineBindTexture(engineGraphicTextureId egtId){
 	GLuint glId;
-	enum engineGraphicObjectTexType type;
-	if(!engineGraphicObjectTexGetGLId(egoId, &glId, &type)){return;}
+	enum engineGraphicTextureType type;
+	if(!engineGraphicTextureGetGLId(egtId, &glId, &type)){return;}
 	engineGraphicEngineBindTextureGlId(glId, type);
 }
 
 // グラフィックエンジン命令 テクスチャを指定
-void engineGraphicEngineBindTextureGlId(GLuint glId, enum engineGraphicObjectTexType type){
+void engineGraphicEngineBindTextureGlId(GLuint glId, enum engineGraphicTextureType type){
 	bool isBind = corePluginTextureIsBind(glId);
 	if(localGlobal.memory.texType == type && isBind){return;}
 
 	if(!isBind){glBindTexture(GL_TEXTURE_2D, glId);}
 
 	switch(type){
-		case ENGINEGRAPHICOBJECTTEXTYPE_LINEAR:
+		case ENGINEGRAPHICTEXTURETYPE_LINEAR:
 			// 線形補完 汎用
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 			break;
-		case ENGINEGRAPHICOBJECTTEXTYPE_NEAREST:
+		case ENGINEGRAPHICTEXTURETYPE_NEAREST:
 			// 最近傍法 ドット絵地形用
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
