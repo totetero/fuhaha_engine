@@ -241,7 +241,7 @@ static void createBuffer(struct engineLayout01Font *this){
 	this->faceNum = tetraNum * 2;
 
 	// バッファ作成完了
-	engineGraphicBufferEndCreate(&this->egoIdVert, NULL, &this->egoIdTexc, &this->egoIdFace);
+	engineGraphicBufferEnd(&this->egoIdVert, NULL, &this->egoIdTexc, &this->egoIdFace);
 }
 
 // ネイティブ文字列描画構造体 描画

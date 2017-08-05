@@ -144,13 +144,13 @@ void engineGraphicEngineIgnoreDepthMode(bool isIgnore);
 // グラフィックエンジン命令 テクスチャを指定
 void engineGraphicEngineBindTexture(engineGraphicObjectTexId egoId);
 void engineGraphicEngineBindTextureGlId(GLuint glId, enum engineGraphicObjectTexType type);
-// グラフィックエンジン命令 バッファ登録 頂点座標
+// グラフィックエンジン命令 VBO登録 頂点座標
 void engineGraphicEngineBindVertVBO(engineGraphicObjectVBOId egoId);
-// グラフィックエンジン命令 バッファ登録 カラーrgb
+// グラフィックエンジン命令 VBO登録 カラーrgb
 void engineGraphicEngineBindClorVBO(engineGraphicObjectVBOId egoId);
-// グラフィックエンジン命令 バッファ登録 テクスチャ座標
+// グラフィックエンジン命令 VBO登録 テクスチャ座標
 void engineGraphicEngineBindTexcVBO(engineGraphicObjectVBOId egoId);
-// グラフィックエンジン命令 バッファ登録 頂点インデックス
+// グラフィックエンジン命令 IBO登録 頂点インデックス
 void engineGraphicEngineBindFaceIBO(engineGraphicObjectIBOId egoId);
 
 // グラフィックエンジン命令 行列の設定
@@ -173,7 +173,7 @@ void engineGraphicEngineFlush(void);
 // バッファ作成開始
 void engineGraphicBufferBegin(void);
 // バッファ作成完了
-void engineGraphicBufferEndCreate(engineGraphicObjectVBOId *egoIdVert, engineGraphicObjectVBOId *egoIdClor, engineGraphicObjectVBOId *egoIdTexc, engineGraphicObjectIBOId *egoIdFace);
+void engineGraphicBufferEnd(engineGraphicObjectVBOId *egoIdVert, engineGraphicObjectVBOId *egoIdClor, engineGraphicObjectVBOId *egoIdTexc, engineGraphicObjectIBOId *egoIdFace);
 
 // 頂点座標配列に要素追加
 void engineGraphicBufferPushVert(double x, double y, double z);

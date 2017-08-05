@@ -345,7 +345,7 @@ void engineGraphicEngineBindTextureGlId(GLuint glId, enum engineGraphicObjectTex
 	localGlobal.memory.texType = type;
 }
 
-// グラフィックエンジン命令 バッファ登録 頂点座標
+// グラフィックエンジン命令 VBO登録 頂点座標
 void engineGraphicEngineBindVertVBO(engineGraphicObjectVBOId egoId){
 	if(localGlobal.memory.vertVBO == egoId){return;}
 	localGlobal.memory.vertVBO = egoId;
@@ -356,7 +356,7 @@ void engineGraphicEngineBindVertVBO(engineGraphicObjectVBOId egoId){
 	glVertexAttribPointer(localGlobal.memory.shader->attr_pos, 3, GL_FLOAT, GL_FALSE, 0, 0);
 }
 
-// グラフィックエンジン命令 バッファ登録 カラーrgb
+// グラフィックエンジン命令 VBO登録 カラーrgb
 void engineGraphicEngineBindClorVBO(engineGraphicObjectVBOId egoId){
 	if(localGlobal.memory.clorVBO == egoId){return;}
 	localGlobal.memory.clorVBO = egoId;
@@ -367,7 +367,7 @@ void engineGraphicEngineBindClorVBO(engineGraphicObjectVBOId egoId){
 	glVertexAttribPointer(localGlobal.memory.shader->attr_col, 3, GL_FLOAT, GL_FALSE, 0, 0);
 }
 
-// グラフィックエンジン命令 バッファ登録 テクスチャ座標
+// グラフィックエンジン命令 VBO登録 テクスチャ座標
 void engineGraphicEngineBindTexcVBO(engineGraphicObjectVBOId egoId){
 	if(localGlobal.memory.texcVBO == egoId){return;}
 	localGlobal.memory.texcVBO = egoId;
@@ -378,7 +378,7 @@ void engineGraphicEngineBindTexcVBO(engineGraphicObjectVBOId egoId){
 	glVertexAttribPointer(localGlobal.memory.shader->attr_uvc, 2, GL_FLOAT, GL_FALSE, 0, 0);
 }
 
-// グラフィックエンジン命令 バッファ登録 頂点インデックス
+// グラフィックエンジン命令 IBO登録 頂点インデックス
 void engineGraphicEngineBindFaceIBO(engineGraphicObjectIBOId egoId){
 	if(localGlobal.memory.faceIBO == egoId){return;}
 	localGlobal.memory.faceIBO = egoId;

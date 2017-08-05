@@ -34,7 +34,7 @@ void engineGraphicBufferBegin(void){
 }
 
 // バッファ作成完了
-void engineGraphicBufferEndCreate(engineGraphicObjectVBOId *egoIdVert, engineGraphicObjectVBOId *egoIdClor, engineGraphicObjectVBOId *egoIdTexc, engineGraphicObjectIBOId *egoIdFace){
+void engineGraphicBufferEnd(engineGraphicObjectVBOId *egoIdVert, engineGraphicObjectVBOId *egoIdClor, engineGraphicObjectVBOId *egoIdTexc, engineGraphicObjectIBOId *egoIdFace){
 	if(egoIdVert != NULL){engineGraphicObjectVBODispose(*egoIdVert); *egoIdVert = engineGraphicObjectVBOCreate(localGlobal.buffVertIndex, localGlobal.buffVert);}
 	if(egoIdClor != NULL){engineGraphicObjectVBODispose(*egoIdClor); *egoIdClor = engineGraphicObjectVBOCreate(localGlobal.buffClorIndex, localGlobal.buffClor);}
 	if(egoIdTexc != NULL){engineGraphicObjectVBODispose(*egoIdTexc); *egoIdTexc = engineGraphicObjectVBOCreate(localGlobal.buffTexcIndex, localGlobal.buffTexc);}
