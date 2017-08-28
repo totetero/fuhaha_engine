@@ -74,6 +74,8 @@
 		9C8D02421C99CCEB00F2CFFB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C8D02401C99CCEB00F2CFFB /* Main.storyboard */; };
 		9C8D02441C99CCEB00F2CFFB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C8D02431C99CCEB00F2CFFB /* Assets.xcassets */; };
 		9C8D02471C99CCEB00F2CFFB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C8D02451C99CCEB00F2CFFB /* LaunchScreen.storyboard */; };
+		9CD4806A1F5457D400E502FC /* engineGraphicStencil.c in Sources */ = {isa = PBXBuildFile; fileRef = 9CD480681F5457D400E502FC /* engineGraphicStencil.c */; };
+		9CD4806B1F5457D400E502FC /* engineGraphicTexture.c in Sources */ = {isa = PBXBuildFile; fileRef = 9CD480691F5457D400E502FC /* engineGraphicTexture.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -177,6 +179,8 @@
 		9C8D02431C99CCEB00F2CFFB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9C8D02461C99CCEB00F2CFFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9C8D02481C99CCEB00F2CFFB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9CD480681F5457D400E502FC /* engineGraphicStencil.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = engineGraphicStencil.c; sourceTree = "<group>"; };
+		9CD480691F5457D400E502FC /* engineGraphicTexture.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = engineGraphicTexture.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -272,6 +276,8 @@
 				9C067B501F1AF07A009679A9 /* engineGraphicMain.c */,
 				9C067B511F1AF07A009679A9 /* engineGraphicObject.c */,
 				9C067B521F1AF07A009679A9 /* engineGraphicShader.c */,
+				9CD480681F5457D400E502FC /* engineGraphicStencil.c */,
+				9CD480691F5457D400E502FC /* engineGraphicTexture.c */,
 			);
 			path = engineGraphic;
 			sourceTree = "<group>";
@@ -544,12 +550,14 @@
 				9C067BD11F1AF07A009679A9 /* IosPluginData.swift in Sources */,
 				9C067BBC1F1AF07A009679A9 /* engineMathMatrix.c in Sources */,
 				9C067BD51F1AF07A009679A9 /* IosPluginPreference.swift in Sources */,
+				9CD4806B1F5457D400E502FC /* engineGraphicTexture.c in Sources */,
 				9C067BAE1F1AF07A009679A9 /* engineLayout01ImageNumber.c in Sources */,
 				9C067BA51F1AF07A009679A9 /* engineDataJson.c in Sources */,
 				9C067BD71F1AF07A009679A9 /* IosPluginSound.swift in Sources */,
 				9C067BD61F1AF07A009679A9 /* iosPluginSound.m in Sources */,
 				9C067BC21F1AF07A009679A9 /* pageTest1.c in Sources */,
 				9C067BCF1F1AF07A009679A9 /* FuhahaGLViewController.swift in Sources */,
+				9CD4806A1F5457D400E502FC /* engineGraphicStencil.c in Sources */,
 				9C067BC11F1AF07A009679A9 /* gameMain.c in Sources */,
 				9C067BCA1F1AF07A009679A9 /* pluginTextureMemory.c in Sources */,
 				9C067BD01F1AF07A009679A9 /* iosPluginData.m in Sources */,
