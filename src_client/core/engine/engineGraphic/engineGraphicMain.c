@@ -8,6 +8,7 @@
 // 3Dエンジン初期化処理
 void engineGraphicGameInit(void){
 	engineGraphicEngineInit();
+	engineGraphicStencilInit();
 	engineGraphicObjectReload();
 	engineGraphicTextureReload();
 }

@@ -29,8 +29,8 @@ static struct{
 	struct{
 		struct engineGraphicEngineShader *shader;
 		enum engineGraphicEngineModeDraw modeDraw;
-		enum engineGraphicEngineModeStencil modeStencil;
-		GLboolean modeDepth;
+		bool modeDepthMask;
+		bool modeDepthTest;
 		enum engineGraphicTextureType texType;
 		struct engineMathVector4 color;
 		engineGraphicObjectVBOId vertVBO;
@@ -70,8 +70,8 @@ void engineGraphicEngineInit(void){
 
 	localGlobal.memory.shader = NULL;
 	localGlobal.memory.modeDraw = -1;
-	localGlobal.memory.modeStencil = -1;
-	localGlobal.memory.modeDepth = GL_TRUE;
+	localGlobal.memory.modeDepthMask = true;
+	localGlobal.memory.modeDepthTest = true;
 	engineMathVec4Set(&localGlobal.memory.color, 0, 0, 0, -1);
 	engineGraphicEngineMemoryResetVBO();
 	engineGraphicEngineMemoryResetIBO();
@@ -79,7 +79,6 @@ void engineGraphicEngineInit(void){
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClearDepthf(1.0f);
-	glClearStencil(0);
 	glCullFace(GL_BACK);
 	//glEnable(GL_TEXTURE_2D); // コメントを外すとブラウザでなんか警告が出る
 	glEnable(GL_BLEND);
@@ -97,20 +96,14 @@ void engineGraphicEngineExit(void){
 
 // グラフィックエンジン命令 描画のクリア
 void engineGraphicEngineClearAll(void){
-	if(!localGlobal.memory.modeDepth){glDepthMask(GL_TRUE);}
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	engineGraphicEngineSetStencilMode(ENGINEGRAPHICENGINEMODESTENCIL_NONE);
-	if(!localGlobal.memory.modeDepth){glDepthMask(localGlobal.memory.modeDepth);}
+	if(!localGlobal.memory.modeDepthMask){glDepthMask(GL_TRUE);}
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	if(!localGlobal.memory.modeDepthMask){glDepthMask(GL_FALSE);}
 }
 
 // グラフィックエンジン命令 深度バッファのクリア
 void engineGraphicEngineClearDepth(void){
 	glClear(GL_DEPTH_BUFFER_BIT);
-}
-
-// グラフィックエンジン命令 ステンシルバッファのクリア
-void engineGraphicEngineClearStencil(void){
-	glClear(GL_STENCIL_BUFFER_BIT);
 }
 
 // 重複動作阻止のためのVBO状態記録をリセット
@@ -162,35 +155,45 @@ void engineGraphicEngineSetDrawMode(enum engineGraphicEngineModeDraw mode){
 	switch(mode){
 		case ENGINEGRAPHICENGINEMODEDRAW_NORMAL:
 			// 汎用モード (VertBuf TexcBuf)
-			glDepthMask(localGlobal.memory.modeDepth = GL_TRUE);
+			localGlobal.memory.modeDepthMask = true;
+			localGlobal.memory.modeDepthTest = true;
+			glDepthMask(GL_TRUE);
 			glEnable(GL_DEPTH_TEST);
 			glDisable(GL_CULL_FACE);
 			glBlendFuncSeparate(GL_ONE, GL_ZERO, GL_ZERO, GL_ONE);
 			break;
 		case ENGINEGRAPHICENGINEMODEDRAW_2D:
 			// 2D描画モード (VertBuf TexcBuf)
-			glDepthMask(localGlobal.memory.modeDepth = GL_FALSE);
+			localGlobal.memory.modeDepthMask = false;
+			localGlobal.memory.modeDepthTest = false;
+			glDepthMask(GL_FALSE);
 			glDisable(GL_DEPTH_TEST);
 			glDisable(GL_CULL_FACE);
 			glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ZERO, GL_ONE); // 半透明アルファ合成
 			break;
 		case ENGINEGRAPHICENGINEMODEDRAW_ALPHA_ADD:
 			// アルファ合成モード (VertBuf TexcBuf)
-			glDepthMask(localGlobal.memory.modeDepth = GL_FALSE);
+			localGlobal.memory.modeDepthMask = false;
+			localGlobal.memory.modeDepthTest = true;
+			glDepthMask(GL_FALSE);
 			glEnable(GL_DEPTH_TEST);
 			glDisable(GL_CULL_FACE);
 			glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE, GL_ZERO, GL_ONE); // 加算合成
 			break;
 		case ENGINEGRAPHICENGINEMODEDRAW_HKNW:
 			// ハコニワ地形モード (VertBuf Clor3Buf TexcBuf)
-			glDepthMask(localGlobal.memory.modeDepth = GL_TRUE);
+			localGlobal.memory.modeDepthMask = true;
+			localGlobal.memory.modeDepthTest = true;
+			glDepthMask(GL_TRUE);
 			glEnable(GL_DEPTH_TEST);
 			glEnable(GL_CULL_FACE);
 			glBlendFuncSeparate(GL_ONE, GL_ZERO, GL_ZERO, GL_ONE);
 			break;
 		case ENGINEGRAPHICENGINEMODEDRAW_SPHERE:
 			// スフィア地形モード (VertBuf Clor3Buf)
-			glDepthMask(localGlobal.memory.modeDepth = GL_TRUE);
+			localGlobal.memory.modeDepthMask = true;
+			localGlobal.memory.modeDepthTest = true;
+			glDepthMask(GL_TRUE);
 			glEnable(GL_DEPTH_TEST);
 			glEnable(GL_CULL_FACE);
 			glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ZERO, GL_ONE); // 半透明アルファ合成
@@ -198,112 +201,22 @@ void engineGraphicEngineSetDrawMode(enum engineGraphicEngineModeDraw mode){
 	}
 }
 
-// グラフィックエンジン命令 ステンシルマスクモード設定
-void engineGraphicEngineSetStencilMode(enum engineGraphicEngineModeStencil mode){
-	if(localGlobal.memory.modeStencil == mode){return;}
-	localGlobal.memory.modeStencil = mode;
-
-	// ステンシル有効設定
-	if(mode != ENGINEGRAPHICENGINEMODESTENCIL_NONE){glEnable(GL_STENCIL_TEST);}else{glDisable(GL_STENCIL_TEST);}
-
-	// ステンシル以外の描画制限設定
-	switch(mode){
-		case ENGINEGRAPHICENGINEMODESTENCIL_MASK_0:
-		case ENGINEGRAPHICENGINEMODESTENCIL_MASK_1:
-		case ENGINEGRAPHICENGINEMODESTENCIL_MASK_2:
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ1_MASK_0:
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ1_MASK_2:
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_GE1_MASK_0:
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_GE1_MASK_INCR:
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_LE1_MASK_0:
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_LE1_MASK_INCR:
-			glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-			glDepthMask(GL_FALSE);
-			break;
-		default:
-			glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-			glDepthMask(localGlobal.memory.modeDepth);
-			break;
-	}
-
-	// ステンシル条件設定
-	switch(mode){
-		case ENGINEGRAPHICENGINEMODESTENCIL_NONE: break;
-		case ENGINEGRAPHICENGINEMODESTENCIL_MASK_0:              glStencilFunc(GL_ALWAYS, 0, ~0); break;
-		case ENGINEGRAPHICENGINEMODESTENCIL_MASK_1:              glStencilFunc(GL_ALWAYS, 1, ~0); break;
-		case ENGINEGRAPHICENGINEMODESTENCIL_MASK_2:              glStencilFunc(GL_ALWAYS, 2, ~0); break;
-		case ENGINEGRAPHICENGINEMODESTENCIL_WRITE_0:             glStencilFunc(GL_ALWAYS, 0, ~0); break;
-		case ENGINEGRAPHICENGINEMODESTENCIL_WRITE_1:             glStencilFunc(GL_ALWAYS, 1, ~0); break;
-		case ENGINEGRAPHICENGINEMODESTENCIL_WRITE_2:             glStencilFunc(GL_ALWAYS, 2, ~0); break;
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ0:            glStencilFunc(GL_EQUAL,  0, ~0); break;
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ1:            glStencilFunc(GL_EQUAL,  1, ~0); break;
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ2:            glStencilFunc(GL_EQUAL,  2, ~0); break;
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ1_MASK_0:     glStencilFunc(GL_EQUAL,  1, ~0); break;
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ1_WRITE_0:    glStencilFunc(GL_EQUAL,  1, ~0); break;
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ1_MASK_2:     glStencilFunc(GL_EQUAL,  1, ~0); break;
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ1_WRITE_2:    glStencilFunc(GL_EQUAL,  1, ~0); break;
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_GE1:            glStencilFunc(GL_LEQUAL, 1, ~0); break;
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_GE1_MASK_0:     glStencilFunc(GL_LEQUAL, 1, ~0); break;
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_GE1_WRITE_0:    glStencilFunc(GL_LEQUAL, 1, ~0); break;
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_GE1_MASK_INCR:  glStencilFunc(GL_LEQUAL, 1, ~0); break;
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_GE1_WRITE_INCR: glStencilFunc(GL_LEQUAL, 1, ~0); break;
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_LE1:            glStencilFunc(GL_GEQUAL, 1, ~0); break;
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_LE1_MASK_0:     glStencilFunc(GL_GEQUAL, 1, ~0); break;
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_LE1_WRITE_0:    glStencilFunc(GL_GEQUAL, 1, ~0); break;
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_LE1_MASK_INCR:  glStencilFunc(GL_GEQUAL, 1, ~0); break;
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_LE1_WRITE_INCR: glStencilFunc(GL_GEQUAL, 1, ~0); break;
-	}
-
-	// ステンシル条件設定
-	switch(mode){
-		case ENGINEGRAPHICENGINEMODESTENCIL_MASK_0:
-		case ENGINEGRAPHICENGINEMODESTENCIL_MASK_1:
-		case ENGINEGRAPHICENGINEMODESTENCIL_MASK_2:
-		case ENGINEGRAPHICENGINEMODESTENCIL_WRITE_0:
-		case ENGINEGRAPHICENGINEMODESTENCIL_WRITE_1:
-		case ENGINEGRAPHICENGINEMODESTENCIL_WRITE_2:
-			// マスクの書き込み
-			glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-			break;
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ0:
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ1:
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ2:
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_GE1:
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_LE1:
-			// マスク使用
-			glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-			break;
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ1_MASK_0:
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ1_WRITE_0:
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_GE1_MASK_0:
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_GE1_WRITE_0:
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_LE1_MASK_0:
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_LE1_WRITE_0:
-			// マスク書き換え 0にする
-			glStencilOp(GL_KEEP, GL_KEEP, GL_ZERO);
-			break;
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ1_MASK_2:
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ1_WRITE_2:
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_GE1_MASK_INCR:
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_GE1_WRITE_INCR:
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_LE1_MASK_INCR:
-		case ENGINEGRAPHICENGINEMODESTENCIL_READ_LE1_WRITE_INCR:
-			// マスク書き換え 1増加
-			glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
-			break;
-		default:
-			break;
+// グラフィックエンジン命令 深度バッファを一時的に無効化
+void engineGraphicEngineIgnoreDepthMask(bool isIgnore){
+	if(!localGlobal.memory.modeDepthMask){return;}
+	if(isIgnore){
+		glDepthMask(GL_FALSE);
+	}else{
+		glDepthMask(GL_TRUE);
 	}
 }
 
 // グラフィックエンジン命令 深度バッファを一時的に無効化
-void engineGraphicEngineIgnoreDepthMode(bool isIgnore){
-	if(!localGlobal.memory.modeDepth){return;}
+void engineGraphicEngineIgnoreDepthTest(bool isIgnore){
+	if(!localGlobal.memory.modeDepthTest){return;}
 	if(isIgnore){
-		glDepthMask(GL_FALSE);
 		glDisable(GL_DEPTH_TEST);
 	}else{
-		glDepthMask(GL_TRUE);
 		glEnable(GL_DEPTH_TEST);
 	}
 }

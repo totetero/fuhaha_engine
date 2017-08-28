@@ -20,31 +20,31 @@ enum engineGraphicEngineModeDraw{
 };
 
 // ステンシルマスクモード列挙型
-enum engineGraphicEngineModeStencil{
-	ENGINEGRAPHICENGINEMODESTENCIL_NONE,
-	ENGINEGRAPHICENGINEMODESTENCIL_MASK_0,
-	ENGINEGRAPHICENGINEMODESTENCIL_MASK_1,
-	ENGINEGRAPHICENGINEMODESTENCIL_MASK_2,
-	ENGINEGRAPHICENGINEMODESTENCIL_WRITE_0,
-	ENGINEGRAPHICENGINEMODESTENCIL_WRITE_1,
-	ENGINEGRAPHICENGINEMODESTENCIL_WRITE_2,
-	ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ0,
-	ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ1,
-	ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ2,
-	ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ1_MASK_0,
-	ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ1_WRITE_0,
-	ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ1_MASK_2,
-	ENGINEGRAPHICENGINEMODESTENCIL_READ_EQ1_WRITE_2,
-	ENGINEGRAPHICENGINEMODESTENCIL_READ_GE1,
-	ENGINEGRAPHICENGINEMODESTENCIL_READ_GE1_MASK_0,
-	ENGINEGRAPHICENGINEMODESTENCIL_READ_GE1_WRITE_0,
-	ENGINEGRAPHICENGINEMODESTENCIL_READ_GE1_MASK_INCR,
-	ENGINEGRAPHICENGINEMODESTENCIL_READ_GE1_WRITE_INCR,
-	ENGINEGRAPHICENGINEMODESTENCIL_READ_LE1,
-	ENGINEGRAPHICENGINEMODESTENCIL_READ_LE1_MASK_0,
-	ENGINEGRAPHICENGINEMODESTENCIL_READ_LE1_WRITE_0,
-	ENGINEGRAPHICENGINEMODESTENCIL_READ_LE1_MASK_INCR,
-	ENGINEGRAPHICENGINEMODESTENCIL_READ_LE1_WRITE_INCR,
+enum engineGraphicStencilMode{
+	ENGINEGRAPHICSTENCILMODE_NONE,
+	ENGINEGRAPHICSTENCILMODE_MASK_0,
+	ENGINEGRAPHICSTENCILMODE_MASK_1,
+	ENGINEGRAPHICSTENCILMODE_MASK_2,
+	ENGINEGRAPHICSTENCILMODE_WRITE_0,
+	ENGINEGRAPHICSTENCILMODE_WRITE_1,
+	ENGINEGRAPHICSTENCILMODE_WRITE_2,
+	ENGINEGRAPHICSTENCILMODE_READ_EQ0,
+	ENGINEGRAPHICSTENCILMODE_READ_EQ1,
+	ENGINEGRAPHICSTENCILMODE_READ_EQ2,
+	ENGINEGRAPHICSTENCILMODE_READ_EQ1_MASK_0,
+	ENGINEGRAPHICSTENCILMODE_READ_EQ1_WRITE_0,
+	ENGINEGRAPHICSTENCILMODE_READ_EQ1_MASK_2,
+	ENGINEGRAPHICSTENCILMODE_READ_EQ1_WRITE_2,
+	ENGINEGRAPHICSTENCILMODE_READ_GE1,
+	ENGINEGRAPHICSTENCILMODE_READ_GE1_MASK_0,
+	ENGINEGRAPHICSTENCILMODE_READ_GE1_WRITE_0,
+	ENGINEGRAPHICSTENCILMODE_READ_GE1_MASK_INCR,
+	ENGINEGRAPHICSTENCILMODE_READ_GE1_WRITE_INCR,
+	ENGINEGRAPHICSTENCILMODE_READ_LE1,
+	ENGINEGRAPHICSTENCILMODE_READ_LE1_MASK_0,
+	ENGINEGRAPHICSTENCILMODE_READ_LE1_WRITE_0,
+	ENGINEGRAPHICSTENCILMODE_READ_LE1_MASK_INCR,
+	ENGINEGRAPHICSTENCILMODE_READ_LE1_WRITE_INCR,
 };
 
 // 3Dオブジェクト識別子
@@ -137,8 +137,6 @@ void engineGraphicEngineExit(void);
 void engineGraphicEngineClearAll(void);
 // グラフィックエンジン命令 深度バッファのクリア
 void engineGraphicEngineClearDepth(void);
-// グラフィックエンジン命令 ステンシルバッファのクリア
-void engineGraphicEngineClearStencil(void);
 // 重複動作阻止のためのVBO状態記録をリセット
 void engineGraphicEngineMemoryResetVBO(void);
 // 重複動作阻止のためのIBO状態記録をリセット
@@ -148,10 +146,9 @@ void engineGraphicEngineMemoryResetTex(void);
 
 // グラフィックエンジン命令 描画モード設定
 void engineGraphicEngineSetDrawMode(enum engineGraphicEngineModeDraw mode);
-// グラフィックエンジン命令 ステンシルマスクモード設定
-void engineGraphicEngineSetStencilMode(enum engineGraphicEngineModeStencil mode);
 // グラフィックエンジン命令 深度バッファを一時的に無効化
-void engineGraphicEngineIgnoreDepthMode(bool isIgnore);
+void engineGraphicEngineIgnoreDepthMask(bool isIgnore);
+void engineGraphicEngineIgnoreDepthTest(bool isIgnore);
 
 // グラフィックエンジン命令 テクスチャを指定
 void engineGraphicEngineBindTexture(engineGraphicTextureId egtId);
@@ -176,6 +173,20 @@ void engineGraphicEngineDrawIndex(int offset, int count);
 
 // グラフィックエンジン命令クラス 描画確定
 void engineGraphicEngineFlush(void);
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// -------- ステンシル
+
+// ステンシル初期化
+void engineGraphicStencilInit(void);
+
+// ステンシルバッファのクリア
+void engineGraphicStencilClear(void);
+
+// ステンシルマスクモード設定
+void engineGraphicStencilSetMode(enum engineGraphicStencilMode mode);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
