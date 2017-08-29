@@ -20,9 +20,7 @@ void gameMainSurfaceDrawFrame(void){
 	engineCtrlTouchCalc();
 	engineCartridgePageManagerCalc();
 	// 描画
-	engineGraphicEngineClearAll();
 	engineCartridgePageManagerDraw();
-	engineGraphicEngineFlush();
 }
 
 // opengl中断

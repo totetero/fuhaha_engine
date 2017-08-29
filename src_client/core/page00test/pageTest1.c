@@ -82,6 +82,8 @@ static void createBuffer(struct pageCartridgeTest1 *this){
 
 // 描画
 static void draw(struct pageCartridgeTest1 *this){
+	engineGraphicEngineClearAll();
+
 	// 描画準備
 	createBuffer(this);
 
@@ -98,6 +100,8 @@ static void draw(struct pageCartridgeTest1 *this){
 	engineGraphicEngineSetMatrix(&tempMat1);
 	engineGraphicEngineSetColorRgba(1.0, 1.0, 1.0, 1.0);
 	engineGraphicEngineDrawIndex(this->faceIndex * 3, this->faceNum * 3);
+
+	engineGraphicEngineFlush();
 }
 
 // ----------------------------------------------------------------

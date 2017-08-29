@@ -21,37 +21,36 @@ struct pageCartridgeTest3{
 
 // 初期化
 static void init(struct pageCartridgeTest3 *this){
+	// ルート作成
+	this->viewRoot = engineLayout02ViewCreate();
+	engineLayout02ViewUtilPositionSetLeft(this->viewRoot, 0);
+	engineLayout02ViewUtilPositionSetRight(this->viewRoot, 0);
+	engineLayout02ViewUtilPositionSetTop(this->viewRoot, 0);
+	engineLayout02ViewUtilPositionSetBottom(this->viewRoot, 0);
+
+	// フレーム作成
+	struct engineLayout02ViewPartsFrame *viewTest = engineLayout02ViewPartsFrameCreate();
+	engineLayout02ViewUtilPositionSetLeft((struct engineLayout02View*)viewTest, 10);
+	engineLayout02ViewUtilPositionSetRight((struct engineLayout02View*)viewTest, 10);
+	engineLayout02ViewUtilPositionSetTop((struct engineLayout02View*)viewTest, 10);
+	engineLayout02ViewUtilPositionSetBottom((struct engineLayout02View*)viewTest, 10);
+	engineLayout02ViewUtilChildrenAdd(this->viewRoot, (struct engineLayout02View*)viewTest);
 }
 
 // ----------------------------------------------------------------
 
 // 計算
 static void calc(struct pageCartridgeTest3 *this){
-	// ビュー処理
-	engineLayout02ViewUtilPositionModeSetCalc();
-	if(this->viewRoot == NULL){
-		// ビュー作成
-		this->viewRoot = engineLayout02ViewCreate();
-		engineLayout02ViewUtilPositionSetLeft(this->viewRoot, 0);
-		engineLayout02ViewUtilPositionSetRight(this->viewRoot, 0);
-		engineLayout02ViewUtilPositionSetTop(this->viewRoot, 0);
-		engineLayout02ViewUtilPositionSetBottom(this->viewRoot, 0);
-
-		struct engineLayout02ViewPartsFrame *viewTest = engineLayout02ViewPartsFrameCreate();
-		engineLayout02ViewUtilPositionSetLeft((struct engineLayout02View*)viewTest, 10);
-		engineLayout02ViewUtilPositionSetRight((struct engineLayout02View*)viewTest, 10);
-		engineLayout02ViewUtilPositionSetTop((struct engineLayout02View*)viewTest, 10);
-		engineLayout02ViewUtilPositionSetBottom((struct engineLayout02View*)viewTest, 10);
-		engineLayout02ViewUtilChildrenAdd(this->viewRoot, (struct engineLayout02View*)viewTest);
-	}
 	engineLayout02ViewCalc((struct engineLayout02View*)this->viewRoot);
-	engineLayout02ViewUtilPositionModeSetDraw();
 }
 
 // ----------------------------------------------------------------
 
 // 描画
 static void draw(struct pageCartridgeTest3 *this){
+	engineLayout02ViewUtilPositionModeSetDraw();
+	engineGraphicEngineClearAll();
+
 	struct engineMathMatrix44 tempMat1;
 	engineMathMat4Ortho(&tempMat1, -global.screen.offset.x, global.screen.w + global.screen.offset.x, global.screen.h + global.screen.offset.y, -global.screen.offset.y, -1, 1);
 
@@ -64,6 +63,9 @@ static void draw(struct pageCartridgeTest3 *this){
 	engineGraphicEngineSetDrawMode(ENGINEGRAPHICENGINEMODEDRAW_2D);
 
 	engineLayout02ViewDraw((struct engineLayout02View*)this->viewRoot, &tempMat1, &tempColor1);
+
+	engineGraphicEngineFlush();
+	engineLayout02ViewUtilPositionModeSetCalc();
 }
 
 // ----------------------------------------------------------------

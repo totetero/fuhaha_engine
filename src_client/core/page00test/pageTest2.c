@@ -188,6 +188,8 @@ static void createBuffer(struct pageCartridgeTest2 *this){
 
 // 描画
 static void draw(struct pageCartridgeTest2 *this){
+	engineGraphicEngineClearAll();
+
 	// 描画準備
 	createBuffer(this);
 
@@ -207,6 +209,8 @@ static void draw(struct pageCartridgeTest2 *this){
 
 	// ポップアップ描画
 	engineCartridgePopupManagerDraw(&this->popupManager);
+
+	engineGraphicEngineFlush();
 }
 
 // ----------------------------------------------------------------
