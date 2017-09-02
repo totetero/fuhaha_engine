@@ -2,13 +2,13 @@
 #include "../../plugin/pluginUtil.h"
 #include "../engineGraphic/engineGraphic.h"
 #include "engineCartridge.h"
-#include "engineCartridgeDefine.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
 static struct{
+	void (*createFirstCartridge)();
 	struct engineCartridgePage *childPageList;
 	bool isLoadedSystem;
 } localGlobal = {0};
@@ -16,7 +16,8 @@ static struct{
 // ----------------------------------------------------------------
 
 // ゲームのページ管理 初期化
-void engineCartridgePageManagerInit(void){
+void engineCartridgePageManagerInit(void(*createFirstCartridge)()){
+	localGlobal.createFirstCartridge = createFirstCartridge;
 }
 
 // ゲームのページ管理 計算
@@ -26,7 +27,7 @@ void engineCartridgePageManagerCalc(void){
 		if(platformPluginUtilIsLoading()){return;}
 		localGlobal.isLoadedSystem = true;
 		// 最初のページカートリッジ装填
-		if(localGlobal.childPageList == NULL){ENGINECARTRIDGEPAGE_FIRST();}
+		if(localGlobal.childPageList == NULL){localGlobal.createFirstCartridge();}
 	}
 
 	// ゲームカートリッジ計算

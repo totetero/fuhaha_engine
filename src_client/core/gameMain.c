@@ -8,10 +8,24 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
+// 各ページカートリッジ装填のコンストラクタ
+void pageTest1PushPage(void);
+void pageTest2PushPage(void);
+void pageTest3PushPage(void);
+
+// 最初のページカートリッジ作成
+void createFirstCartridge(void){
+	pageTest1PushPage();
+}
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+
 // opengl初期化
 void gameMainSurfaceCreated(void){
 	engineGraphicGameInit();
-	engineCartridgePageManagerInit();
+	engineCartridgePageManagerInit(createFirstCartridge);
 }
 
 // opengl描画

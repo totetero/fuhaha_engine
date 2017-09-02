@@ -17,7 +17,7 @@ struct engineCartridgePage{
 };
 
 // ゲームのページ管理 初期化
-void engineCartridgePageManagerInit(void);
+void engineCartridgePageManagerInit(void(*createFirstCartridge)());
 // ゲームのページ管理 計算
 void engineCartridgePageManagerCalc(void);
 // ゲームのページ管理 描画

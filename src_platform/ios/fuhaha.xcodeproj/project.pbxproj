@@ -84,7 +84,6 @@
 		9C067B3C1F1AF07A009679A9 /* definePluginTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = definePluginTexture.h; sourceTree = "<group>"; };
 		9C067B3D1F1AF07A009679A9 /* texpos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = texpos.h; sourceTree = "<group>"; };
 		9C067B401F1AF07A009679A9 /* engineCartridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = engineCartridge.h; sourceTree = "<group>"; };
-		9C067B411F1AF07A009679A9 /* engineCartridgeDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = engineCartridgeDefine.h; sourceTree = "<group>"; };
 		9C067B421F1AF07A009679A9 /* engineCartridgePage.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = engineCartridgePage.c; sourceTree = "<group>"; };
 		9C067B431F1AF07A009679A9 /* engineCartridgePopup.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = engineCartridgePopup.c; sourceTree = "<group>"; };
 		9C067B451F1AF07A009679A9 /* engineCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = engineCtrl.h; sourceTree = "<group>"; };
@@ -240,7 +239,6 @@
 			isa = PBXGroup;
 			children = (
 				9C067B401F1AF07A009679A9 /* engineCartridge.h */,
-				9C067B411F1AF07A009679A9 /* engineCartridgeDefine.h */,
 				9C067B421F1AF07A009679A9 /* engineCartridgePage.c */,
 				9C067B431F1AF07A009679A9 /* engineCartridgePopup.c */,
 			);
