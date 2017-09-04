@@ -60,13 +60,13 @@ static double engineMathAtan1(double x){
 double engineMathAsin(double x){
 	if(x >  1){return  ENGINEMATH_PI * 0.5;}
 	if(x < -1){return -ENGINEMATH_PI * 0.5;}
-	return engineMathAtan1(x / engineMathSqrt(1 - x * x));
+	return engineMathAtan2(x, engineMathSqrt(1 - x * x));
 }
 double engineMathAcos(double x){
 	if(x >  1){return 0;}
 	if(x < -1){return ENGINEMATH_PI;}
 	if(engineMathAbs(x) < DBL_EPSILON){return ENGINEMATH_PI * 0.5;}
-	return engineMathAtan1(engineMathSqrt(1 - x * x) / x);
+	return engineMathAtan2(engineMathSqrt(1 - x * x), x);
 }
 double engineMathAtan2(double y, double x){
 	bool isInfy = isinf(y);
