@@ -9,6 +9,7 @@
 //double engineMathSqrt(double x){return sqrt(x);}
 //double engineMathCos(double x){return cos(x);}
 //double engineMathSin(double x){return sin(x);}
+//double engineMathTan(double x){return tan(x);}
 //double engineMathAcos(double x){return acos(x);}
 //double engineMathAsin(double x){return asin(x);}
 //double engineMathAtan2(double y, double x){return atan2(y, x);}
@@ -43,6 +44,7 @@ double engineMathSin(double x){
 	return sum;
 }
 double engineMathCos(double x){return engineMathSin(ENGINEMATH_PI * 0.5 - x);}
+double engineMathTan(double x){return engineMathSin(x) / engineMathCos(x);}
 
 // 逆三角関数を求める
 static double engineMathAtan1(double x){

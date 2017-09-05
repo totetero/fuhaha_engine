@@ -49,6 +49,7 @@
 double engineMathSqrt(double x);
 double engineMathCos(double x);
 double engineMathSin(double x);
+double engineMathTan(double x);
 double engineMathAcos(double x);
 double engineMathAsin(double x);
 double engineMathAtan2(double y, double x);
