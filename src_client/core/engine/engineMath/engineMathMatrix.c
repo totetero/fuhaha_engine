@@ -66,6 +66,30 @@ void engineMathMat4Frustum(struct engineMathMatrix44 *mat, double left, double r
 	mat->m33 = 0;
 }
 
+// 透視射影行列
+void engineMathMat4Perspective(struct engineMathMatrix44 *mat, double fovy, double aspect, double near, double far){
+	double ratioX = (aspect > 1) ? (1.0 / aspect) : 1.0;
+	double ratioY = (aspect > 1) ? 1.0 : (1.0 * aspect);
+	double f = 1 / engineMathTan(fovy / 2);
+	double nf = 1 / (near - far);
+	mat->m00 = (GLfloat)(f * ratioX);
+	mat->m01 = 0;
+	mat->m02 = 0;
+	mat->m03 = 0;
+	mat->m10 = 0;
+	mat->m11 = (GLfloat)(f * ratioY);
+	mat->m12 = 0;
+	mat->m13 = 0;
+	mat->m20 = 0;
+	mat->m21 = 0;
+	mat->m22 = (GLfloat)((far + near) * nf);
+	mat->m23 = -1;
+	mat->m30 = 0;
+	mat->m31 = 0;
+	mat->m32 = (GLfloat)((far * near * 2) * nf);
+	mat->m33 = 0;
+}
+
 // ----------------------------------------------------------------
 
 // 行列の掛け合わせ

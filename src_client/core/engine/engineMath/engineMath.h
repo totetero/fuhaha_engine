@@ -72,6 +72,7 @@ void engineMathMat4Identity(struct engineMathMatrix44 *mat);
 void engineMathMat4Ortho(struct engineMathMatrix44 *mat, double left, double right, double bottom, double top, double near, double far);
 // 透視射影行列
 void engineMathMat4Frustum(struct engineMathMatrix44 *mat, double left, double right, double bottom, double top, double near, double far);
+void engineMathMat4Perspective(struct engineMathMatrix44 *mat, double fovy, double aspect, double near, double far);
 // 行列の掛け合わせ
 void engineMathMat4Multiply(struct engineMathMatrix44 *mat, struct engineMathMatrix44 *m0, struct engineMathMatrix44 *m1);
 // 平行移動
