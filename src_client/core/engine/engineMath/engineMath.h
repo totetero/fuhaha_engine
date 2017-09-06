@@ -73,6 +73,8 @@ void engineMathMat4Ortho(struct engineMathMatrix44 *mat, double left, double rig
 // 透視射影行列
 void engineMathMat4Frustum(struct engineMathMatrix44 *mat, double left, double right, double bottom, double top, double near, double far);
 void engineMathMat4Perspective(struct engineMathMatrix44 *mat, double fovy, double aspect, double near, double far);
+// カメラ行列
+void engineMathMat4LookAt(struct engineMathMatrix44 *mat, double eyeX, double eyeY, double eyeZ, double centerX, double centerY, double centerZ, double upX, double upY, double upZ);
 // 行列の掛け合わせ
 void engineMathMat4Multiply(struct engineMathMatrix44 *mat, struct engineMathMatrix44 *m0, struct engineMathMatrix44 *m1);
 // 平行移動

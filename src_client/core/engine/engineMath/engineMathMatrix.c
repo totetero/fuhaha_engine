@@ -90,6 +90,51 @@ void engineMathMat4Perspective(struct engineMathMatrix44 *mat, double fovy, doub
 	mat->m33 = 0;
 }
 
+// カメラ行列
+void engineMathMat4LookAt(struct engineMathMatrix44 *mat, double eyeX, double eyeY, double eyeZ, double centerX, double centerY, double centerZ, double upX, double upY, double upZ){
+	double zx = eyeX - centerX;
+	double zy = eyeY - centerY;
+	double zz = eyeZ - centerZ;
+	if(engineMathAbs(zx) < DBL_EPSILON && engineMathAbs(zy) < DBL_EPSILON && engineMathAbs(zz) < DBL_EPSILON){engineMathMat4Identity(mat); return;}
+	double zr = engineMathSqrt(zx * zx + zy * zy + zz * zz);
+	double zri = 1 / zr;
+	zx *= zri;
+	zy *= zri;
+	zz *= zri;
+	double xx = upY * zz - upZ * zy;
+	double xy = upZ * zx - upX * zz;
+	double xz = upX * zy - upY * zx;
+	double xr = engineMathSqrt(xx * xx + xy * xy + xz * xz);
+	double xri = (engineMathAbs(xr) < DBL_EPSILON) ? 0 : (1 / xr);
+	xx *= xri;
+	xy *= xri;
+	xz *= xri;
+	double yx = zy * xz - zz * xy;
+	double yy = zz * xx - zx * xz;
+	double yz = zx * xy - zy * xx;
+	double yr = engineMathSqrt(yx * yx + yy * yy + yz * yz);
+	double yri = (engineMathAbs(yr) < DBL_EPSILON) ? 0 : (1 / yr);
+	yx *= yri;
+	yy *= yri;
+	yz *= yri;
+	mat->m00 = xx;
+	mat->m01 = yx;
+	mat->m02 = zx;
+	mat->m03 = 0;
+	mat->m10 = xy;
+	mat->m11 = yy;
+	mat->m12 = zy;
+	mat->m13 = 0;
+	mat->m20 = xz;
+	mat->m21 = yz;
+	mat->m22 = zz;
+	mat->m23 = 0;
+	mat->m30 = -(xx * eyeX + xy * eyeY + xz * eyeZ);
+	mat->m31 = -(yx * eyeX + yy * eyeY + yz * eyeZ);
+	mat->m32 = -(zx * eyeX + zy * eyeY + zz * eyeZ);
+	mat->m33 = 1;
+}
+
 // ----------------------------------------------------------------
 
 // 行列の掛け合わせ
