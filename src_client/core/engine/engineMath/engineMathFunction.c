@@ -14,6 +14,9 @@
 //double engineMathAsin(double x){return asin(x);}
 //double engineMathAtan2(double y, double x){return atan2(y, x);}
 double engineMathPow(double x, double y){return pow(x, y);}
+double engineMathLogE(double x){return log(x);}
+double engineMathLog2(double x){return log2(x);}
+double engineMathLog10(double x){return log10(x);}
 double engineMathAbs(double x){return fabs(x);}
 double engineMathCeil(double x){return ceil(x);}
 double engineMathRound(double x){return round(x);}
