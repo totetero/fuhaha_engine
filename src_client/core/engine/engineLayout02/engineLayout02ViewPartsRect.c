@@ -118,9 +118,6 @@ static void draw(struct engineLayout02ViewPartsRectImplement *this, struct engin
 	// 描画準備
 	createBuffer(this);
 
-	// 子要素描画
-	engineLayout02ViewUtilChildrenDraw((struct engineLayout02View*)this, mat, color);
-
 	// バッファ登録
 	engineGraphicEngineBindTexture(this->egoIdTexTest);
 	engineGraphicEngineBindVertVBO(this->egoIdVert);
@@ -146,6 +143,9 @@ static void draw(struct engineLayout02ViewPartsRectImplement *this, struct engin
 
 	// 描画
 	engineGraphicEngineDrawIndex(this->faceIndex * 3, this->faceNum * 3);
+
+	// 子要素描画
+	engineLayout02ViewUtilChildrenDraw((struct engineLayout02View*)this, mat, color);
 }
 
 // ----------------------------------------------------------------
