@@ -58,11 +58,13 @@ void engineLayout02ViewUtilPositionModeSetDraw(){
 
 // 表示要素構造体位置関係 初期化
 void engineLayout02ViewUtilPositionInit(struct engineLayout02View *this){
+	if(localGlobal.isModeDraw){return;}
 	localGlobal.generationCount++;
 }
 
 // 表示要素構造体位置関係 破棄
 void engineLayout02ViewUtilPositionDispose(struct engineLayout02View *this){
+	if(localGlobal.isModeDraw){return;}
 	localGlobal.generationCount++;
 }
 
@@ -215,8 +217,10 @@ void engineLayout02ViewUtilPositionUnsetVerticalCentering(struct engineLayout02V
 // 表示要素構造体 レイアウト取得
 
 static void calcLayout(struct engineLayout02View *this){
-	// 情報更新確認
-	if(this->position.layout.generationCount == localGlobal.generationCount){return;}
+	// 情報更新確認 
+	bool isInitialLayout = (this->position.layout.generationCount == 0);
+	bool isDrawUpdate = (localGlobal.isModeDraw && this->position.layout.generationCount != localGlobal.generationCount);
+	if(!isInitialLayout && !isDrawUpdate){return;}
 	this->position.layout.generationCount = localGlobal.generationCount;
 
 	// 親要素レイアウト取得
