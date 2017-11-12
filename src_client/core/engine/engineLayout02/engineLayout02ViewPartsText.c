@@ -74,6 +74,12 @@ static void init(struct engineLayout02ViewPartsTextImplement *this){
 	this->super.fontStyle.maxHeight = 0;
 	this->super.fontStyle.xalign = 0;
 	this->super.fontStyle.yalign = 0;
+	this->super.fontStyle.outline.size = 0.0;
+	this->super.fontStyle.outline.quality = 8;
+	this->super.fontStyle.outline.color.r = 0.0;
+	this->super.fontStyle.outline.color.g = 0.0;
+	this->super.fontStyle.outline.color.b = 0.0;
+	this->super.fontStyle.outline.color.a = 1.0;
 	this->super.color.r = 1.0;
 	this->super.color.g = 1.0;
 	this->super.color.b = 1.0;
@@ -279,6 +285,29 @@ static void createBuffer(struct engineLayout02ViewPartsTextImplement *this){
 	}
 }
 
+// 文字列描画
+static void drawText(struct engineLayout02ViewPartsTextImplement *this, struct pluginTextureFontCode *codeList, struct engineMathVector4 *color1, struct engineMathVector4 *color2){
+	int index = 0;
+	uint32_t tagColor = 0x00000000;
+	for(int i = 0; i < this->fontInfo.codeListLength; i++){
+		struct pluginTextureFontCode *codeData = &codeList[i];
+		if(codeData->layout.colIndex < 0){continue;}
+		if(index == 0 || tagColor != codeData->tag.color){
+			// 色変更
+			tagColor = codeData->tag.color;
+			struct engineMathVector4 tempColor1;
+			tempColor1.r = color1->r * color2->r * (double)((tagColor >> 24) & 0xff) / 0xff;
+			tempColor1.g = color1->g * color2->g * (double)((tagColor >> 16) & 0xff) / 0xff;
+			tempColor1.b = color1->b * color2->b * (double)((tagColor >>  8) & 0xff) / 0xff;
+			tempColor1.a = color1->a * color2->a * (double)((tagColor >>  0) & 0xff) / 0xff;
+			engineGraphicEngineSetColorVec(&tempColor1);
+		}
+		engineGraphicEngineBindTextureGlId(codeData->glId, this->fontInfo.type);
+		engineGraphicEngineDrawIndex((this->faceIndex + (index++) * 2) * 3, 3 * 2);
+		if(this->super.fontStyle.wordNum > 0 && index >= this->super.fontStyle.wordNum){break;}
+	}
+}
+
 // 描画
 static void draw(struct engineLayout02ViewPartsTextImplement *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
 	if(this->egoIdTexTest > 0){
@@ -286,11 +315,14 @@ static void draw(struct engineLayout02ViewPartsTextImplement *this, struct engin
 		createBuffer(this);
 
 		if(this->fontInfo.codeListIndex >= 0){
+			// 情報取得
+			struct pluginTextureFontCode *codeList = corePluginTextureFontCodeListGet(this->fontInfo.codeListIndex);
+
 			// バッファ登録
 			engineGraphicEngineBindVertVBO(this->egoIdVert);
 			engineGraphicEngineBindTexcVBO(this->egoIdTexc);
 			engineGraphicEngineBindFaceIBO(this->egoIdFace);
-			// 行列登録
+			// 行列登録準備
 			double x = engineLayout02ViewUtilPositionGetX((struct engineLayout02View*)this);
 			double y = engineLayout02ViewUtilPositionGetY((struct engineLayout02View*)this);
 			double w = engineLayout02ViewUtilPositionGetW((struct engineLayout02View*)this);
@@ -298,33 +330,25 @@ static void draw(struct engineLayout02ViewPartsTextImplement *this, struct engin
 			x += (w - this->fontInfo.textWidth) * ((this->super.fontStyle.xalign > 0) ? 0.0 : (this->super.fontStyle.xalign == 0) ? 0.5 : 1.0);
 			y += (h - this->fontInfo.textHeight) * ((this->super.fontStyle.yalign > 0) ? 0.0 : (this->super.fontStyle.yalign == 0) ? 0.5 : 1.0);
 			struct engineMathMatrix44 tempMat1;
+
+			// アウトライン描画
+			if(this->super.fontStyle.outline.size > 0){
+				for(int i = 0; i < this->super.fontStyle.outline.quality; i++){
+					double theta = 2 * ENGINEMATH_PI * i / (double)this->super.fontStyle.outline.quality;
+					double outlineX = x + this->super.fontStyle.outline.size * engineMathCos(theta);
+					double outlineY = y + this->super.fontStyle.outline.size * engineMathSin(theta);
+					engineMathMat4Copy(&tempMat1, mat);
+					engineMathMat4Translate(&tempMat1, outlineX, outlineY, 0.0);
+					engineGraphicEngineSetMatrix(&tempMat1);
+					drawText(this, codeList, color, &this->super.fontStyle.outline.color);
+				}
+			}
+
+			// 文字列描画
 			engineMathMat4Copy(&tempMat1, mat);
 			engineMathMat4Translate(&tempMat1, x, y, 0.0);
 			engineGraphicEngineSetMatrix(&tempMat1);
-
-			// 情報取得
-			struct pluginTextureFontCode *codeList = corePluginTextureFontCodeListGet(this->fontInfo.codeListIndex);
-
-			// 描画
-			int index = 0;
-			uint32_t tagColor = 0x00000000;
-			for(int i = 0; i < this->fontInfo.codeListLength; i++){
-				struct pluginTextureFontCode *codeData = &codeList[i];
-				if(codeData->layout.colIndex < 0){continue;}
-				if(index == 0 || tagColor != codeData->tag.color){
-					// 色変更
-					tagColor = codeData->tag.color;
-					struct engineMathVector4 tempColor1;
-					tempColor1.r = this->super.color.r * color->r * (double)((tagColor >> 24) & 0xff) / 0xff;
-					tempColor1.g = this->super.color.g * color->g * (double)((tagColor >> 16) & 0xff) / 0xff;
-					tempColor1.b = this->super.color.b * color->b * (double)((tagColor >>  8) & 0xff) / 0xff;
-					tempColor1.a = this->super.color.a * color->a * (double)((tagColor >>  0) & 0xff) / 0xff;
-					engineGraphicEngineSetColorVec(&tempColor1);
-				}
-				engineGraphicEngineBindTextureGlId(codeData->glId, this->fontInfo.type);
-				engineGraphicEngineDrawIndex((this->faceIndex + (index++) * 2) * 3, 3 * 2);
-				if(this->super.fontStyle.wordNum > 0 && index >= this->super.fontStyle.wordNum){break;}
-			}
+			drawText(this, codeList, color, &this->super.color);
 		}
 	}
 

@@ -48,6 +48,7 @@ struct engineLayout02ViewPartsText{
 		int maxHeight;
 		int xalign;
 		int yalign;
+		struct{double size; int quality; struct engineMathVector4 color;} outline;
 	} fontStyle;
 	struct engineMathVector4 color;
 };
