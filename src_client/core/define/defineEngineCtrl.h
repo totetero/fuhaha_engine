@@ -4,13 +4,15 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-typedef unsigned char byte;
-
-#include "./definePluginTexture.h"
-#include "./defineEngineMath.h"
-#include "./defineEngineCtrl.h"
-
-#include "./texpos.h"
+// タッチ識別ID列挙型
+enum engineCtrlTouchId{
+	ENGINECTRLTOUCHID_NONE,
+	ENGINECTRLTOUCHID_TEST1,
+	ENGINECTRLTOUCHID_TEST2,
+	ENGINECTRLTOUCHID_CONTROLLER,
+	ENGINECTRLTOUCHID_BUTTON,
+	ENGINECTRLTOUCHID_SCREEN,
+};
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

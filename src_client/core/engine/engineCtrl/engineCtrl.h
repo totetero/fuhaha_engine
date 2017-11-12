@@ -25,16 +25,6 @@ struct engineCtrlTouch{
 	bool active;
 };
 
-// タッチ識別ID列挙型
-enum engineCtrlTouchId{
-	ENGINECTRLTOUCHID_NONE,
-	ENGINECTRLTOUCHID_TEST1,
-	ENGINECTRLTOUCHID_TEST2,
-	ENGINECTRLTOUCHID_CONTROLLER,
-	ENGINECTRLTOUCHID_BUTTON,
-	ENGINECTRLTOUCHID_SCREEN,
-};
-
 // ----------------------------------------------------------------
 
 // コントローラ状態メインループ計算
