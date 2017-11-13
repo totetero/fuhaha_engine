@@ -18,7 +18,7 @@ struct pageTest2Status{
 
 // サンプルポップアップ処理
 struct engineCartridgePopup *popupTest2SampleCreate(struct pageTest2Status *stat);
-int popupTest2SampleResult(struct engineCartridgePopup *that);
+int popupTest2SampleResult(struct engineCartridgePopup *this);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
