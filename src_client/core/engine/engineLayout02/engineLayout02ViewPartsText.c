@@ -374,13 +374,14 @@ static void dispose(struct engineLayout02ViewPartsTextImplement *this){
 	engineGraphicObjectVBODispose(this->egoIdTexc);
 	engineGraphicObjectIBODispose(this->egoIdFace);
 	engineGraphicTextureDispose(this->egoIdTexTest);
+	engineLayout02ViewUtilChildrenRemove(((struct engineLayout02View*)this)->children.parent, (struct engineLayout02View*)this);
 	engineLayout02ViewUtilPositionDispose((struct engineLayout02View*)this);
 	engineUtilMemoryInfoFree("engineLayout02ViewPartsText", this);
 }
 
 // ----------------------------------------------------------------
 
-// 画像描画構造体 作成
+// 文字列描画構造体 作成
 struct engineLayout02ViewPartsText *engineLayout02ViewPartsTextCreate(){
 	struct engineLayout02ViewPartsTextImplement *this = (struct engineLayout02ViewPartsTextImplement*)engineUtilMemoryInfoCalloc("engineLayout02ViewPartsText", 1, sizeof(struct engineLayout02ViewPartsTextImplement));
 	init(this);
