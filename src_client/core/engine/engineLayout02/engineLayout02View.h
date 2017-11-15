@@ -148,6 +148,7 @@ struct engineLayout02View *engineLayout02ViewCreate();
 #define engineLayout02ViewDraw(this, mat, color) (this)->draw(this, mat, color)
 #define engineLayout02ViewPause(this) (this)->pause(this)
 #define engineLayout02ViewDispose(this) (this)->dispose(this)
+#define engineLayout02ViewDetouch(this) engineLayout02ViewUtilChildrenRemove((this)->children.parent, this)
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

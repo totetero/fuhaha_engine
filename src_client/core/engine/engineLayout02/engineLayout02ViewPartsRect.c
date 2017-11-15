@@ -166,8 +166,8 @@ static void dispose(struct engineLayout02ViewPartsRectImplement *this){
 	engineGraphicObjectVBODispose(this->egoIdTexc);
 	engineGraphicObjectIBODispose(this->egoIdFace);
 	engineGraphicTextureDispose(this->egoIdTexTest);
-	engineLayout02ViewUtilChildrenRemove(((struct engineLayout02View*)this)->children.parent, (struct engineLayout02View*)this);
 	engineLayout02ViewUtilPositionDispose((struct engineLayout02View*)this);
+	engineLayout02ViewDetouch((struct engineLayout02View*)this);
 	engineUtilMemoryInfoFree("engineLayout02ViewPartsRect", this);
 }
 

@@ -36,8 +36,8 @@ static void dispose(struct engineLayout02View *this){
 	engineLayout02ViewUtilChildrenDispose((struct engineLayout02View*)this);
 
 	// 自要素破棄
-	engineLayout02ViewUtilChildrenRemove(((struct engineLayout02View*)this)->children.parent, (struct engineLayout02View*)this);
 	engineLayout02ViewUtilPositionDispose((struct engineLayout02View*)this);
+	engineLayout02ViewDetouch((struct engineLayout02View*)this);
 	engineUtilMemoryInfoFree("engineLayout02View", this);
 }
 
