@@ -123,6 +123,20 @@ double engineLayout02ViewUtilPositionGetY(struct engineLayout02View *this);
 double engineLayout02ViewUtilPositionGetW(struct engineLayout02View *this);
 double engineLayout02ViewUtilPositionGetH(struct engineLayout02View *this);
 
+// 表示要素構造体位置関係 設定ショートカット
+void engineLayout02ViewUtilPositionSetLtRtTpBm(struct engineLayout02View *this, double lt, double rt, double tp, double bm);
+void engineLayout02ViewUtilPositionSetLtTpWtHt(struct engineLayout02View *this, double lt, double tp, double wt, double ht);
+void engineLayout02ViewUtilPositionSetMargin(struct engineLayout02View *this, double margin);
+void engineLayout02ViewUtilPositionSetMarginHorizontal(struct engineLayout02View *this, double margin);
+void engineLayout02ViewUtilPositionSetMarginVertical(struct engineLayout02View *this, double margin);
+void engineLayout02ViewUtilPositionSetPadding(struct engineLayout02View *this, double padding);
+void engineLayout02ViewUtilPositionSetPaddingHorizontal(struct engineLayout02View *this, double padding);
+void engineLayout02ViewUtilPositionSetPaddingVertical(struct engineLayout02View *this, double padding);
+void engineLayout02ViewUtilPositionUnsetPosition(struct engineLayout02View *this);
+void engineLayout02ViewUtilPositionUnsetSize(struct engineLayout02View *this);
+void engineLayout02ViewUtilPositionUnsetMargin(struct engineLayout02View *this);
+void engineLayout02ViewUtilPositionUnsetPadding(struct engineLayout02View *this);
+
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

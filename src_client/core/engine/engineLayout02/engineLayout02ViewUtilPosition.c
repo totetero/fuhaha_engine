@@ -290,4 +290,57 @@ double engineLayout02ViewUtilPositionGetH(struct engineLayout02View *this){calcL
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
+// 表示要素構造体 設定ショートカット
+
+void engineLayout02ViewUtilPositionSetLtRtTpBm(struct engineLayout02View *this, double lt, double rt, double tp, double bm){
+	engineLayout02ViewUtilPositionSetLeft(this, lt);
+	engineLayout02ViewUtilPositionSetRight(this, rt);
+	engineLayout02ViewUtilPositionSetTop(this, tp);
+	engineLayout02ViewUtilPositionSetBottom(this, bm);
+}
+
+void engineLayout02ViewUtilPositionSetLtTpWtHt(struct engineLayout02View *this, double lt, double tp, double wt, double ht){
+	engineLayout02ViewUtilPositionSetLeft(this, lt);
+	engineLayout02ViewUtilPositionSetTop(this, tp);
+	engineLayout02ViewUtilPositionSetWidth(this, wt);
+	engineLayout02ViewUtilPositionSetHeight(this, ht);
+}
+
+void engineLayout02ViewUtilPositionSetMargin(struct engineLayout02View *this, double margin){
+	engineLayout02ViewUtilPositionSetMarginLeft(this, margin);
+	engineLayout02ViewUtilPositionSetMarginRight(this, margin);
+	engineLayout02ViewUtilPositionSetMarginTop(this, margin);
+	engineLayout02ViewUtilPositionSetMarginBottom(this, margin);
+}
+
+void engineLayout02ViewUtilPositionSetMarginHorizontal(struct engineLayout02View *this, double margin){
+	engineLayout02ViewUtilPositionSetMarginLeft(this, margin);
+	engineLayout02ViewUtilPositionSetMarginRight(this, margin);
+}
+
+void engineLayout02ViewUtilPositionSetMarginVertical(struct engineLayout02View *this, double margin){
+	engineLayout02ViewUtilPositionSetMarginTop(this, margin);
+	engineLayout02ViewUtilPositionSetMarginBottom(this, margin);
+}
+
+void engineLayout02ViewUtilPositionSetPadding(struct engineLayout02View *this, double padding){
+	engineLayout02ViewUtilPositionSetPaddingLeft(this, padding);
+	engineLayout02ViewUtilPositionSetPaddingRight(this, padding);
+	engineLayout02ViewUtilPositionSetPaddingTop(this, padding);
+	engineLayout02ViewUtilPositionSetPaddingBottom(this, padding);
+}
+
+void engineLayout02ViewUtilPositionSetPaddingHorizontal(struct engineLayout02View *this, double padding){
+	engineLayout02ViewUtilPositionSetPaddingLeft(this, padding);
+	engineLayout02ViewUtilPositionSetPaddingRight(this, padding);
+}
+
+void engineLayout02ViewUtilPositionSetPaddingVertical(struct engineLayout02View *this, double padding){
+	engineLayout02ViewUtilPositionSetPaddingTop(this, padding);
+	engineLayout02ViewUtilPositionSetPaddingBottom(this, padding);
+}
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
 

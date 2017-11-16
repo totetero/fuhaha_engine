@@ -23,26 +23,17 @@ struct pageCartridgeTest3{
 static void init(struct pageCartridgeTest3 *this){
 	// ルート作成
 	this->viewRoot = engineLayout02ViewCreate();
-	engineLayout02ViewUtilPositionSetLeft(this->viewRoot, 0);
-	engineLayout02ViewUtilPositionSetRight(this->viewRoot, 0);
-	engineLayout02ViewUtilPositionSetTop(this->viewRoot, 0);
-	engineLayout02ViewUtilPositionSetBottom(this->viewRoot, 0);
+	engineLayout02ViewUtilPositionSetLtRtTpBm(this->viewRoot, 0, 0, 0, 0);
 
 	// フレーム作成
 	struct engineLayout02ViewPartsFrame *viewTestFrame = engineLayout02ViewPartsFrameCreate();
-	engineLayout02ViewUtilPositionSetLeft((struct engineLayout02View*)viewTestFrame, 10);
-	engineLayout02ViewUtilPositionSetRight((struct engineLayout02View*)viewTestFrame, 10);
-	engineLayout02ViewUtilPositionSetTop((struct engineLayout02View*)viewTestFrame, 10);
-	engineLayout02ViewUtilPositionSetBottom((struct engineLayout02View*)viewTestFrame, 10);
+	engineLayout02ViewUtilPositionSetLtRtTpBm((struct engineLayout02View*)viewTestFrame, 10, 10, 10, 10);
 	engineLayout02ViewUtilChildrenAdd(this->viewRoot, (struct engineLayout02View*)viewTestFrame);
 
-	// テキスト作成作成
+	// テキスト作成
 	struct engineLayout02ViewPartsText *viewTestText = engineLayout02ViewPartsTextCreate();
 	engineLayout02ViewPartsTextSet(viewTestText, PLUGINTEXTUREFONTSETID_DEFAULT, "文字列描画<br>文字列描画<br>文字列描画");
-	engineLayout02ViewUtilPositionSetLeft((struct engineLayout02View*)viewTestText, 10);
-	engineLayout02ViewUtilPositionSetRight((struct engineLayout02View*)viewTestText, 10);
-	engineLayout02ViewUtilPositionSetTop((struct engineLayout02View*)viewTestText, 10);
-	engineLayout02ViewUtilPositionSetBottom((struct engineLayout02View*)viewTestText, 10);
+	engineLayout02ViewUtilPositionSetLtRtTpBm((struct engineLayout02View*)viewTestText, 10, 10, 10, 10);
 	engineLayout02ViewUtilChildrenAdd((struct engineLayout02View*)viewTestFrame, (struct engineLayout02View*)viewTestText);
 	viewTestText->fontStyle.xalign = 1;
 	viewTestText->fontStyle.yalign = 1;
