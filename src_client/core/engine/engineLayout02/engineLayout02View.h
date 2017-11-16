@@ -19,6 +19,7 @@ struct engineLayout02ViewUtilChildren{
 	struct engineLayout02View *childrenHead;
 	struct engineLayout02View *childrenTail;
 	double zIndex;
+	bool isInactive;
 	bool isInvisible;
 };
 

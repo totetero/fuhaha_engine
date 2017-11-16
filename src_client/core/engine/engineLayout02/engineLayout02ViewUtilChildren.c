@@ -114,7 +114,7 @@ void engineLayout02ViewUtilChildrenCalc(struct engineLayout02View *this){
 	// 子要素の計算
 	struct engineLayout02View *temp = this->children.childrenHead;
 	while(temp != NULL){
-		temp->calc(temp);
+		if(!temp->children.isInactive){temp->calc(temp);}
 		temp = temp->children.next;
 	}
 }
