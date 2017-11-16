@@ -19,6 +19,7 @@ struct engineLayout02ViewUtilChildren{
 	struct engineLayout02View *childrenHead;
 	struct engineLayout02View *childrenTail;
 	double zIndex;
+	bool isInvisible;
 };
 
 // 表示要素構造体子要素 子要素追加

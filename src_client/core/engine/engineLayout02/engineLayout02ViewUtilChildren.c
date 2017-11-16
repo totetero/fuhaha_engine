@@ -124,7 +124,7 @@ void engineLayout02ViewUtilChildrenDraw(struct engineLayout02View *this, struct 
 	// 子要素の描画
 	struct engineLayout02View *temp = this->children.childrenHead;
 	while(temp != NULL){
-		temp->draw(temp, mat, color);
+		if(!temp->children.isInvisible){temp->draw(temp, mat, color);}
 		temp = temp->children.next;
 	}
 }
