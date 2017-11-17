@@ -88,7 +88,7 @@ static void sortChildren(struct engineLayout02View *this){
 		struct engineLayout02View *keepNext = insert->children.next;
 		struct engineLayout02View *find = dummy.children.next;
 		while(find != insert){
-			if(compare(insert, find) > 0){
+			if(compare(insert, find) < 0){
 				// insertをリストから外す
 				insert->children.prev->children.next = insert->children.next;
 				insert->children.next->children.prev = insert->children.prev;
