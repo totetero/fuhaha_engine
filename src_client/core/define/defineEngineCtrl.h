@@ -3,6 +3,7 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
+// -------- タッチ処理
 
 // タッチ識別ID列挙型
 enum engineCtrlTouchId{
@@ -12,6 +13,29 @@ enum engineCtrlTouchId{
 	ENGINECTRLTOUCHID_CONTROLLER,
 	ENGINECTRLTOUCHID_BUTTON,
 	ENGINECTRLTOUCHID_SCREEN,
+};
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// -------- ボタン処理
+
+// ボタン状態構造体
+struct engineCtrlButton{
+	struct{
+		enum engineCtrlTouchId touchId;
+		bool isInactiveMove;
+		bool isInactiveCalc;
+		bool isZKey;
+		bool isXKey;
+		bool isCKey;
+		bool isVKey;
+		bool isOutside;
+	} setting;
+	struct{
+		bool isActive;
+		bool isTrigger;
+	} status;
 };
 
 // ----------------------------------------------------------------

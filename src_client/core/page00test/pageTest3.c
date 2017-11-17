@@ -15,6 +15,7 @@ struct pageCartridgeTest3{
 	struct engineCartridgePage super;
 
 	struct engineLayout02View *viewRoot;
+	struct engineLayout02ViewPartsButtonBox *viewTestButton;
 };
 
 // ----------------------------------------------------------------
@@ -30,19 +31,32 @@ static void init(struct pageCartridgeTest3 *this){
 	engineLayout02ViewUtilPositionSetLtRtTpBm((struct engineLayout02View*)viewTestFrame, 10, 10, 10, 10);
 	engineLayout02ViewUtilChildrenAdd(this->viewRoot, (struct engineLayout02View*)viewTestFrame);
 
-	// テキスト作成
-	struct engineLayout02ViewPartsText *viewTestText = engineLayout02ViewPartsTextCreate();
-	engineLayout02ViewPartsTextSet(viewTestText, PLUGINTEXTUREFONTSETID_DEFAULT, "文字列描画<br>文字列描画<br>文字列描画");
-	engineLayout02ViewUtilPositionSetLtRtTpBm((struct engineLayout02View*)viewTestText, 10, 10, 10, 10);
-	engineLayout02ViewUtilChildrenAdd((struct engineLayout02View*)viewTestFrame, (struct engineLayout02View*)viewTestText);
-	viewTestText->fontStyle.xalign = 1;
-	viewTestText->fontStyle.yalign = 1;
+	// ボタン作成
+	this->viewTestButton = engineLayout02ViewPartsButtonBoxCreate();
+	engineLayout02ViewUtilPositionSetBottom((struct engineLayout02View*)this->viewTestButton, 10);
+	engineLayout02ViewUtilPositionSetWidth((struct engineLayout02View*)this->viewTestButton, 100);
+	engineLayout02ViewUtilPositionSetHeight((struct engineLayout02View*)this->viewTestButton, 30);
+	engineLayout02ViewUtilPositionSetHorizontalCentering((struct engineLayout02View*)this->viewTestButton);
+	engineLayout02ViewUtilChildrenAdd((struct engineLayout02View*)viewTestFrame, (struct engineLayout02View*)this->viewTestButton);
+	// ボタンテキスト作成
+	struct engineLayout02ViewPartsText *viewTestButtonText = engineLayout02ViewPartsTextCreate();
+	engineLayout02ViewPartsTextSet(viewTestButtonText, PLUGINTEXTUREFONTSETID_DEFAULT, "テストボタン");
+	engineLayout02ViewUtilPositionSetLtRtTpBm((struct engineLayout02View*)viewTestButtonText, 0, 0, 0, 0);
+	engineLayout02ViewUtilChildrenAdd((struct engineLayout02View*)this->viewTestButton->viewInner, (struct engineLayout02View*)viewTestButtonText);
 }
 
 // ----------------------------------------------------------------
 
 // 計算
 static void calc(struct pageCartridgeTest3 *this){
+	// ボタン処理
+	engineLayout02ViewPartsButtonBoxCalcButton(this->viewTestButton);
+	if(this->viewTestButton->button.status.isTrigger){
+		this->viewTestButton->button.status.isTrigger = false;
+		// ボタン押下時
+		trace("press button");
+	}
+
 	engineLayout02ViewCalc((struct engineLayout02View*)this->viewRoot);
 }
 
