@@ -132,10 +132,6 @@ void engineLayout02ViewUtilPositionSetMarginVertical(struct engineLayout02View *
 void engineLayout02ViewUtilPositionSetPadding(struct engineLayout02View *this, double padding);
 void engineLayout02ViewUtilPositionSetPaddingHorizontal(struct engineLayout02View *this, double padding);
 void engineLayout02ViewUtilPositionSetPaddingVertical(struct engineLayout02View *this, double padding);
-void engineLayout02ViewUtilPositionUnsetPosition(struct engineLayout02View *this);
-void engineLayout02ViewUtilPositionUnsetSize(struct engineLayout02View *this);
-void engineLayout02ViewUtilPositionUnsetMargin(struct engineLayout02View *this);
-void engineLayout02ViewUtilPositionUnsetPadding(struct engineLayout02View *this);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
