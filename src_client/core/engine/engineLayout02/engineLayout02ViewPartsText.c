@@ -327,26 +327,33 @@ static void draw(struct engineLayout02ViewPartsTextImplement *this, struct engin
 			double y = engineLayout02ViewUtilPositionGetY((struct engineLayout02View*)this);
 			double w = engineLayout02ViewUtilPositionGetW((struct engineLayout02View*)this);
 			double h = engineLayout02ViewUtilPositionGetH((struct engineLayout02View*)this);
-			x += (w - this->fontInfo.textWidth) * ((this->super.fontStyle.xalign > 0) ? 0.0 : (this->super.fontStyle.xalign == 0) ? 0.5 : 1.0);
-			y += (h - this->fontInfo.textHeight) * ((this->super.fontStyle.yalign > 0) ? 0.0 : (this->super.fontStyle.yalign == 0) ? 0.5 : 1.0);
 			struct engineMathMatrix44 tempMat1;
+			struct engineMathMatrix44 tempMat2;
+			if(engineLayout02ViewUtilPositionIsTransform((struct engineLayout02View*)this)){
+				engineMathMat4Multiply(&tempMat1, mat, engineLayout02ViewUtilPositionGetTransformMatrix((struct engineLayout02View*)this));
+			}else{
+				engineMathMat4Copy(&tempMat1, mat);
+				engineMathMat4Translate(&tempMat1, x, y, 0.0);
+			}
+			// 文字揃えの位置移動
+			double alignX = (w - this->fontInfo.textWidth) * ((this->super.fontStyle.xalign > 0) ? 0.0 : (this->super.fontStyle.xalign == 0) ? 0.5 : 1.0);
+			double alignY = (h - this->fontInfo.textHeight) * ((this->super.fontStyle.yalign > 0) ? 0.0 : (this->super.fontStyle.yalign == 0) ? 0.5 : 1.0);
+			engineMathMat4Translate(&tempMat1, alignX, alignY, 0.0);
 
 			// アウトライン描画
 			if(this->super.fontStyle.outline.size > 0){
 				for(int i = 0; i < this->super.fontStyle.outline.quality; i++){
 					double theta = 2 * ENGINEMATH_PI * i / (double)this->super.fontStyle.outline.quality;
-					double outlineX = x + this->super.fontStyle.outline.size * engineMathCos(theta);
-					double outlineY = y + this->super.fontStyle.outline.size * engineMathSin(theta);
-					engineMathMat4Copy(&tempMat1, mat);
-					engineMathMat4Translate(&tempMat1, outlineX, outlineY, 0.0);
-					engineGraphicEngineSetMatrix(&tempMat1);
+					double outlineX = this->super.fontStyle.outline.size * engineMathCos(theta);
+					double outlineY = this->super.fontStyle.outline.size * engineMathSin(theta);
+					engineMathMat4Copy(&tempMat2, &tempMat1);
+					engineMathMat4Translate(&tempMat2, outlineX, outlineY, 0.0);
+					engineGraphicEngineSetMatrix(&tempMat2);
 					drawText(this, codeList, color, &this->super.fontStyle.outline.color);
 				}
 			}
 
 			// 文字列描画
-			engineMathMat4Copy(&tempMat1, mat);
-			engineMathMat4Translate(&tempMat1, x, y, 0.0);
 			engineGraphicEngineSetMatrix(&tempMat1);
 			drawText(this, codeList, color, &this->super.color);
 		}

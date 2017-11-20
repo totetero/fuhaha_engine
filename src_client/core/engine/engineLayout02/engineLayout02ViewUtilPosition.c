@@ -1,4 +1,5 @@
 #include "../../library.h"
+#include "../engineMath/engineMath.h"
 #include "../engineUtil/engineUtil.h"
 #include "./engineLayout02.h"
 #include "../../game.h"
@@ -189,6 +190,52 @@ void engineLayout02ViewUtilPositionSetVerticalCentering(struct engineLayout02Vie
 	localGlobal.generationCount++;
 }
 
+void engineLayout02ViewUtilPositionSetTransformOrigin(struct engineLayout02View *this, double originX, double originY){
+	if(localGlobal.isModeDraw){return;}
+	if(!this->position.style.transform.isActive){
+		this->position.style.transform.isActive = true;
+		engineMathMat4Identity(&this->position.style.transform.matrix);
+	}
+	this->position.style.transform.originX = originX;
+	this->position.style.transform.originY = originY;
+	localGlobal.generationCount++;
+}
+
+void engineLayout02ViewUtilPositionSetTransformMatrix(struct engineLayout02View *this, struct engineMathMatrix44 *matrix){
+	if(localGlobal.isModeDraw){return;}
+	if(!this->position.style.transform.isActive){
+		this->position.style.transform.isActive = true;
+		this->position.style.transform.originX = 0.5;
+		this->position.style.transform.originY = 0.5;
+	}
+	engineMathMat4Copy(&this->position.style.transform.matrix, matrix);
+	localGlobal.generationCount++;
+}
+
+void engineLayout02ViewUtilPositionSetTransformScale(struct engineLayout02View *this, double x, double y, double z){
+	if(localGlobal.isModeDraw){return;}
+	if(!this->position.style.transform.isActive){
+		this->position.style.transform.isActive = true;
+		this->position.style.transform.originX = 0.5;
+		this->position.style.transform.originY = 0.5;
+		engineMathMat4Identity(&this->position.style.transform.matrix);
+	}
+	engineMathMat4Scale(&this->position.style.transform.matrix, x, y, z);
+	localGlobal.generationCount++;
+}
+
+void engineLayout02ViewUtilPositionSetTransformRotate(struct engineLayout02View *this, double rad){
+	if(localGlobal.isModeDraw){return;}
+	if(!this->position.style.transform.isActive){
+		this->position.style.transform.isActive = true;
+		this->position.style.transform.originX = 0.5;
+		this->position.style.transform.originY = 0.5;
+		engineMathMat4Identity(&this->position.style.transform.matrix);
+	}
+	engineMathMat4RotateZ(&this->position.style.transform.matrix, rad);
+	localGlobal.generationCount++;
+}
+
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -210,6 +257,7 @@ void engineLayout02ViewUtilPositionUnsetPaddingTop(struct engineLayout02View *th
 void engineLayout02ViewUtilPositionUnsetPaddingBottom(struct engineLayout02View *this){if(localGlobal.isModeDraw){return;} this->position.style.paddingBottom.isActive = false; localGlobal.generationCount++;}
 void engineLayout02ViewUtilPositionUnsetHorizontalCentering(struct engineLayout02View *this){if(localGlobal.isModeDraw){return;} this->position.style.horizontalCentering.isActive = false; localGlobal.generationCount++;}
 void engineLayout02ViewUtilPositionUnsetVerticalCentering(struct engineLayout02View *this){if(localGlobal.isModeDraw){return;} this->position.style.verticalCentering.isActive = false; localGlobal.generationCount++;}
+void engineLayout02ViewUtilPositionUnsetTransform(struct engineLayout02View *this){if(localGlobal.isModeDraw){return;} this->position.style.transform.isActive = false; localGlobal.generationCount++;}
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -280,12 +328,38 @@ static void calcLayout(struct engineLayout02View *this){
 		this->position.layout.h = (isHt ? valHt : ((isTp && isBm && parentH > valTp + valBm) ? (parentH - valTp - valBm) : 0));
 		this->position.layout.y = parentY + (isTp ? valTp : (isBm ? (parentH - valBm - this->position.layout.h) : 0));
 	}
+
+	// 行列変形計算
+	bool isParentTransform = (this->children.parent != NULL && engineLayout02ViewUtilPositionIsTransform(this->children.parent));
+	if(isParentTransform || this->position.style.transform.isActive){
+		struct engineMathMatrix44 *layoutMatrix = &this->position.layout.transform.matrix;
+		// 親要素行列取得
+		if(isParentTransform){
+			engineMathMat4Copy(layoutMatrix, engineLayout02ViewUtilPositionGetTransformMatrix(this->children.parent));
+		}else{
+			engineMathMat4Identity(layoutMatrix);
+			engineMathMat4Translate(layoutMatrix, parentX, parentY, 0.0);
+		}
+		// 自要素行列計算
+		double x0 = this->position.layout.w * this->position.style.transform.originX;
+		double y0 = this->position.layout.h * this->position.style.transform.originY;
+		double x1 = this->position.layout.x - parentX;
+		double y1 = this->position.layout.y - parentY;
+		engineMathMat4Translate(layoutMatrix, x0 + x1, y0 + y1, 0.0);
+		if(this->position.style.transform.isActive){engineMathMat4Multiply(layoutMatrix, layoutMatrix, &this->position.style.transform.matrix);}
+		engineMathMat4Translate(layoutMatrix, -x0, -y0, 0.0);
+		this->position.layout.transform.isActive = true;
+	}else{
+		this->position.layout.transform.isActive = false;
+	}
 }
 
 double engineLayout02ViewUtilPositionGetX(struct engineLayout02View *this){calcLayout(this); return this->position.layout.x;}
 double engineLayout02ViewUtilPositionGetY(struct engineLayout02View *this){calcLayout(this); return this->position.layout.y;}
 double engineLayout02ViewUtilPositionGetW(struct engineLayout02View *this){calcLayout(this); return this->position.layout.w;}
 double engineLayout02ViewUtilPositionGetH(struct engineLayout02View *this){calcLayout(this); return this->position.layout.h;}
+bool engineLayout02ViewUtilPositionIsTransform(struct engineLayout02View *this){calcLayout(this); return this->position.layout.transform.isActive;}
+struct engineMathMatrix44 *engineLayout02ViewUtilPositionGetTransformMatrix(struct engineLayout02View *this){calcLayout(this); return &this->position.layout.transform.matrix;}
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

@@ -60,6 +60,7 @@ struct engineLayout02ViewUtilPosition{
 		struct{bool isActive; double value;} paddingBottom;
 		struct{bool isActive;} horizontalCentering;
 		struct{bool isActive;} verticalCentering;
+		struct{bool isActive; double originX; double originY; struct engineMathMatrix44 matrix;} transform;
 	} style;
 
 	struct engineLayout02ViewLayout{
@@ -68,6 +69,7 @@ struct engineLayout02ViewUtilPosition{
 		double y;
 		double w;
 		double h;
+		struct{bool isActive; struct engineMathMatrix44 matrix;} transform;
 	} layout;
 };
 
@@ -98,6 +100,10 @@ void engineLayout02ViewUtilPositionSetPaddingTop(struct engineLayout02View *this
 void engineLayout02ViewUtilPositionSetPaddingBottom(struct engineLayout02View *this, double value);
 void engineLayout02ViewUtilPositionSetVerticalCentering(struct engineLayout02View *this);
 void engineLayout02ViewUtilPositionSetHorizontalCentering(struct engineLayout02View *this);
+void engineLayout02ViewUtilPositionSetTransformOrigin(struct engineLayout02View *this, double originX, double originY);
+void engineLayout02ViewUtilPositionSetTransformMatrix(struct engineLayout02View *this, struct engineMathMatrix44 *matrix);
+void engineLayout02ViewUtilPositionSetTransformScale(struct engineLayout02View *this, double x, double y, double z);
+void engineLayout02ViewUtilPositionSetTransformRotate(struct engineLayout02View *this, double rad);
 
 // 表示要素構造体位置関係 レイアウト解除
 void engineLayout02ViewUtilPositionUnsetLeft(struct engineLayout02View *this);
@@ -116,12 +122,15 @@ void engineLayout02ViewUtilPositionUnsetPaddingTop(struct engineLayout02View *th
 void engineLayout02ViewUtilPositionUnsetPaddingBottom(struct engineLayout02View *this);
 void engineLayout02ViewUtilPositionUnsetVerticalCentering(struct engineLayout02View *this);
 void engineLayout02ViewUtilPositionUnsetHorizontalCentering(struct engineLayout02View *this);
+void engineLayout02ViewUtilPositionUnsetTransform(struct engineLayout02View *this);
 
 // 表示要素構造体位置関係 レイアウト取得
 double engineLayout02ViewUtilPositionGetX(struct engineLayout02View *this);
 double engineLayout02ViewUtilPositionGetY(struct engineLayout02View *this);
 double engineLayout02ViewUtilPositionGetW(struct engineLayout02View *this);
 double engineLayout02ViewUtilPositionGetH(struct engineLayout02View *this);
+bool engineLayout02ViewUtilPositionIsTransform(struct engineLayout02View *this);
+struct engineMathMatrix44 *engineLayout02ViewUtilPositionGetTransformMatrix(struct engineLayout02View *this);
 
 // 表示要素構造体位置関係 設定ショートカット
 void engineLayout02ViewUtilPositionSetLtRtTpBm(struct engineLayout02View *this, double lt, double rt, double tp, double bm);

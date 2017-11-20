@@ -155,8 +155,13 @@ static void draw(struct engineLayout02ViewPartsFrameImplement *this, struct engi
 	double h = engineLayout02ViewUtilPositionGetH((struct engineLayout02View*)this);
 	struct engineMathMatrix44 tempMat1;
 	struct engineMathMatrix44 tempMat2;
-	engineMathMat4Copy(&tempMat1, mat);
-	engineMathMat4Translate(&tempMat1, x + w * 0.5, y + h * 0.5, 0.0);
+	if(engineLayout02ViewUtilPositionIsTransform((struct engineLayout02View*)this)){
+		engineMathMat4Multiply(&tempMat1, mat, engineLayout02ViewUtilPositionGetTransformMatrix((struct engineLayout02View*)this));
+	}else{
+		engineMathMat4Copy(&tempMat1, mat);
+		engineMathMat4Translate(&tempMat1, x, y, 0.0);
+	}
+	engineMathMat4Translate(&tempMat1, w * 0.5, h * 0.5, 0.0);
 	// 色登録
 	engineGraphicEngineSetColorVec(color);
 
