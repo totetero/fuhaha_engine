@@ -42,7 +42,7 @@ void engineCtrlTouchFree(void);
 // -------- ボタン処理
 
 // ボタン状態構造体 計算
-void engineCtrlButtonCalc(struct engineCtrlButton *this, double x0, double y0, double x1, double y1);
+void engineCtrlButtonCalc(struct engineCtrlButton *this, void *innerParam, bool(*isInner)(void *innerParam, void *touchParam));
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

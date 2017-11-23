@@ -7,7 +7,7 @@
 // ----------------------------------------------------------------
 
 // ボタン状態構造体 計算
-void engineCtrlButtonCalc(struct engineCtrlButton *this, double x0, double y0, double x1, double y1){
+void engineCtrlButtonCalc(struct engineCtrlButton *this, void *innerParam, bool(*isInner)(void *touchParam, void *innerParam)){
 	struct engineCtrlTouch *t = engineCtrlTouchGet(this->setting.touchId);
 	bool isActiveBefore = this->status.isActive;
 
@@ -22,8 +22,7 @@ void engineCtrlButtonCalc(struct engineCtrlButton *this, double x0, double y0, d
 				this->status.isActive = false;
 			}else{
 				// ボタン押下中
-				bool isInner = (x0 < t->screen.x && t->screen.x < x1 && y0 < t->screen.y && t->screen.y < y1);
-				this->status.isActive = (isInner != this->setting.isOutside);
+				this->status.isActive = (isInner(innerParam, t) != this->setting.isOutside);
 			}
 
 			if(!t->active){

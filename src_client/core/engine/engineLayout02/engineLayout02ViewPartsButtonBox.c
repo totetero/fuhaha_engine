@@ -134,13 +134,23 @@ struct engineLayout02ViewPartsButtonBox *engineLayout02ViewPartsButtonBoxCreate(
 	return this;
 }
 
-// 標準ボタン構造体 ボタン処理
-void engineLayout02ViewPartsButtonBoxCalcButton(struct engineLayout02ViewPartsButtonBox *this){
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+
+bool engineLayout02ViewPartsButtonBoxIsInner(struct engineLayout02ViewPartsButtonBox *this, struct engineCtrlTouch *touchParam){
+	double sx = touchParam->screen.x;
+	double sy = touchParam->screen.y;
 	double x0 = engineLayout02ViewUtilPositionGetX((struct engineLayout02View*)this);
 	double y0 = engineLayout02ViewUtilPositionGetY((struct engineLayout02View*)this);
 	double x1 = x0 + engineLayout02ViewUtilPositionGetW((struct engineLayout02View*)this);
 	double y1 = y0 + engineLayout02ViewUtilPositionGetH((struct engineLayout02View*)this);
-	engineCtrlButtonCalc(&this->button, x0, y0, x1, y1);
+	return (x0 < sx && sx < x1 && y0 < sy && sy < y1);
+}
+
+// 標準ボタン構造体 ボタン処理
+void engineLayout02ViewPartsButtonBoxCalcButton(struct engineLayout02ViewPartsButtonBox *this){
+	engineCtrlButtonCalc(&this->button, this, (bool(*)(void*, void*))engineLayout02ViewPartsButtonBoxIsInner);
 }
 
 // ----------------------------------------------------------------
