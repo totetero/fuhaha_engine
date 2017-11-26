@@ -276,28 +276,35 @@ static void calcLayout(struct engineLayout02View *this){
 	double parentY = localGlobal.screen.y;
 	double parentW = localGlobal.screen.w;
 	double parentH = localGlobal.screen.h;
+	struct engineMathMatrix44 *parentMatrix = NULL;
+	double currentX = parentX;
+	double currentY = parentY;
+	double currentW = parentW;
+	double currentH = parentH;
 	if(this->children.parent != NULL){
-		parentX = engineLayout02ViewUtilPositionGetX(this->children.parent);
-		parentY = engineLayout02ViewUtilPositionGetY(this->children.parent);
-		parentW = engineLayout02ViewUtilPositionGetW(this->children.parent);
-		parentH = engineLayout02ViewUtilPositionGetH(this->children.parent);
+		calcLayout(this->children.parent);
+		parentMatrix = this->children.parent->position.layout.transform.isActive ? &this->children.parent->position.layout.transform.matrix : NULL;
+		currentX = parentX = this->children.parent->position.layout.x;
+		currentY = parentY = this->children.parent->position.layout.y;
+		currentW = parentW = this->children.parent->position.layout.w;
+		currentH = parentH = this->children.parent->position.layout.h;
 		double paddingLt = (this->children.parent->position.style.paddingLeft.isActive ? this->children.parent->position.style.paddingLeft.value : 0);
 		double paddingRt = (this->children.parent->position.style.paddingRight.isActive ? this->children.parent->position.style.paddingRight.value : 0);
 		double paddingTp = (this->children.parent->position.style.paddingTop.isActive ? this->children.parent->position.style.paddingTop.value : 0);
 		double paddingBm = (this->children.parent->position.style.paddingBottom.isActive ? this->children.parent->position.style.paddingBottom.value : 0);
-		parentX += paddingLt;
-		parentY += paddingTp;
-		parentW -= paddingLt + paddingRt;
-		parentH -= paddingTp + paddingBm;
+		currentX += paddingLt;
+		currentY += paddingTp;
+		currentW -= paddingLt + paddingRt;
+		currentH -= paddingTp + paddingBm;
 	}
 	double marginLt = (this->position.style.marginLeft.isActive ? this->position.style.marginLeft.value : 0);
 	double marginRt = (this->position.style.marginRight.isActive ? this->position.style.marginRight.value : 0);
 	double marginTp = (this->position.style.marginTop.isActive ? this->position.style.marginTop.value : 0);
 	double marginBm = (this->position.style.marginBottom.isActive ? this->position.style.marginBottom.value : 0);
-	parentX += marginLt;
-	parentY += marginTp;
-	parentW -= marginLt + marginRt;
-	parentH -= marginTp + marginBm;
+	currentX += marginLt;
+	currentY += marginTp;
+	currentW -= marginLt + marginRt;
+	currentH -= marginTp + marginBm;
 
 	// 自要素レイアウト計算 水平軸
 	bool isLt = this->position.style.left.isActive;
@@ -308,10 +315,10 @@ static void calcLayout(struct engineLayout02View *this){
 	double valWh = this->position.style.width.value;
 	if(this->position.style.horizontalCentering.isActive){
 		this->position.layout.w = (isWh ? valWh : ((isLt && isRt) ? (valLt + valRt) : 0));
-		this->position.layout.x = parentX + parentW * 0.5 - (isLt ? valLt : (isRt ? (this->position.layout.w - isRt) : (this->position.layout.w * 0.5)));
+		this->position.layout.x = currentX + currentW * 0.5 - (isLt ? valLt : (isRt ? (this->position.layout.w - isRt) : (this->position.layout.w * 0.5)));
 	}else{
-		this->position.layout.w = (isWh ? valWh : ((isLt && isRt && parentW > valLt + valRt) ? (parentW - valLt - valRt) : 0));
-		this->position.layout.x = parentX + (isLt ? valLt : (isRt ? (parentW - valRt - this->position.layout.w) : 0));
+		this->position.layout.w = (isWh ? valWh : ((isLt && isRt && currentW > valLt + valRt) ? (currentW - valLt - valRt) : 0));
+		this->position.layout.x = currentX + (isLt ? valLt : (isRt ? (currentW - valRt - this->position.layout.w) : 0));
 	}
 
 	// 自要素レイアウト計算 垂直軸
@@ -323,19 +330,18 @@ static void calcLayout(struct engineLayout02View *this){
 	double valHt = this->position.style.height.value;
 	if(this->position.style.verticalCentering.isActive){
 		this->position.layout.h = (isHt ? valHt : ((isTp && isBm) ? (valTp + valBm) : 0));
-		this->position.layout.y = parentY + parentH * 0.5 - (isTp ? valTp : (isBm ? (this->position.layout.h - isBm) : (this->position.layout.h * 0.5)));
+		this->position.layout.y = currentY + currentH * 0.5 - (isTp ? valTp : (isBm ? (this->position.layout.h - isBm) : (this->position.layout.h * 0.5)));
 	}else{
-		this->position.layout.h = (isHt ? valHt : ((isTp && isBm && parentH > valTp + valBm) ? (parentH - valTp - valBm) : 0));
-		this->position.layout.y = parentY + (isTp ? valTp : (isBm ? (parentH - valBm - this->position.layout.h) : 0));
+		this->position.layout.h = (isHt ? valHt : ((isTp && isBm && currentH > valTp + valBm) ? (currentH - valTp - valBm) : 0));
+		this->position.layout.y = currentY + (isTp ? valTp : (isBm ? (currentH - valBm - this->position.layout.h) : 0));
 	}
 
 	// 行列変形計算
-	bool isParentTransform = (this->children.parent != NULL && engineLayout02ViewUtilPositionIsTransform(this->children.parent));
-	if(isParentTransform || this->position.style.transform.isActive){
+	if(parentMatrix != NULL || this->position.style.transform.isActive){
 		struct engineMathMatrix44 *layoutMatrix = &this->position.layout.transform.matrix;
 		// 親要素行列取得
-		if(isParentTransform){
-			engineMathMat4Copy(layoutMatrix, engineLayout02ViewUtilPositionGetTransformMatrix(this->children.parent));
+		if(parentMatrix != NULL){
+			engineMathMat4Copy(layoutMatrix, parentMatrix);
 		}else{
 			engineMathMat4Identity(layoutMatrix);
 			engineMathMat4Translate(layoutMatrix, parentX, parentY, 0.0);
@@ -348,6 +354,24 @@ static void calcLayout(struct engineLayout02View *this){
 		engineMathMat4Translate(layoutMatrix, x0 + x1, y0 + y1, 0.0);
 		if(this->position.style.transform.isActive){engineMathMat4Multiply(layoutMatrix, layoutMatrix, &this->position.style.transform.matrix);}
 		engineMathMat4Translate(layoutMatrix, -x0, -y0, 0.0);
+		// 変形座標計算
+		this->position.layout.transform.point[0].x = 0;
+		this->position.layout.transform.point[0].y = 0;
+		this->position.layout.transform.point[0].z = 0;
+		this->position.layout.transform.point[1].x = 0;
+		this->position.layout.transform.point[1].y = this->position.layout.h;
+		this->position.layout.transform.point[1].z = 0;
+		this->position.layout.transform.point[2].x = this->position.layout.w;
+		this->position.layout.transform.point[2].y = this->position.layout.h;
+		this->position.layout.transform.point[2].z = 0;
+		this->position.layout.transform.point[3].x = this->position.layout.w;
+		this->position.layout.transform.point[3].y = 0;
+		this->position.layout.transform.point[3].z = 0;
+		engineMathVec3MultiplyMat4(&this->position.layout.transform.point[0], &this->position.layout.transform.point[0], &this->position.layout.transform.matrix);
+		engineMathVec3MultiplyMat4(&this->position.layout.transform.point[1], &this->position.layout.transform.point[1], &this->position.layout.transform.matrix);
+		engineMathVec3MultiplyMat4(&this->position.layout.transform.point[2], &this->position.layout.transform.point[2], &this->position.layout.transform.matrix);
+		engineMathVec3MultiplyMat4(&this->position.layout.transform.point[3], &this->position.layout.transform.point[3], &this->position.layout.transform.matrix);
+		// 行列変形フラグ
 		this->position.layout.transform.isActive = true;
 	}else{
 		this->position.layout.transform.isActive = false;
@@ -358,8 +382,40 @@ double engineLayout02ViewUtilPositionGetX(struct engineLayout02View *this){calcL
 double engineLayout02ViewUtilPositionGetY(struct engineLayout02View *this){calcLayout(this); return this->position.layout.y;}
 double engineLayout02ViewUtilPositionGetW(struct engineLayout02View *this){calcLayout(this); return this->position.layout.w;}
 double engineLayout02ViewUtilPositionGetH(struct engineLayout02View *this){calcLayout(this); return this->position.layout.h;}
-bool engineLayout02ViewUtilPositionIsTransform(struct engineLayout02View *this){calcLayout(this); return this->position.layout.transform.isActive;}
-struct engineMathMatrix44 *engineLayout02ViewUtilPositionGetTransformMatrix(struct engineLayout02View *this){calcLayout(this); return &this->position.layout.transform.matrix;}
+
+void engineLayout02ViewUtilPositionTransformCalcMatrix(struct engineLayout02View *this, struct engineMathMatrix44 *dstMat, struct engineMathMatrix44 *srcMat){
+	calcLayout(this);
+	if(this->position.layout.transform.isActive){
+		engineMathMat4Multiply(dstMat, srcMat, &this->position.layout.transform.matrix);
+	}else{
+		double x = this->position.layout.x;
+		double y = this->position.layout.y;
+		engineMathMat4Copy(dstMat, srcMat);
+		engineMathMat4Translate(dstMat, x, y, 0.0);
+	}
+}
+
+bool engineLayout02ViewUtilPositionTransformIsInner(struct engineLayout02View *this, double sx, double sy){
+	if(this->position.layout.transform.isActive){
+		// すべての辺に対し対象点との外積が全て同一符号なら内部
+		struct engineMathVector3 *v0 = &this->position.layout.transform.point[0];
+		struct engineMathVector3 *v1 = &this->position.layout.transform.point[1];
+		struct engineMathVector3 *v2 = &this->position.layout.transform.point[2];
+		struct engineMathVector3 *v3 = &this->position.layout.transform.point[3];
+		double crossZ01 = (sx - v0->x) * (v1->y - v0->y) - (v1->x - v0->x) * (sy - v0->y);
+		double crossZ12 = (sx - v1->x) * (v2->y - v1->y) - (v2->x - v1->x) * (sy - v1->y);
+		double crossZ23 = (sx - v2->x) * (v3->y - v2->y) - (v3->x - v2->x) * (sy - v2->y);
+		double crossZ30 = (sx - v3->x) * (v0->y - v3->y) - (v0->x - v3->x) * (sy - v3->y);
+		return (crossZ01 * crossZ12 > 0 && crossZ12 * crossZ23 > 0 && crossZ23 * crossZ30 > 0);
+	}else{
+		// 矩形内部判定
+		double x0 = this->position.layout.x;
+		double y0 = this->position.layout.y;
+		double x1 = x0 + this->position.layout.w;
+		double y1 = y0 + this->position.layout.h;
+		return (x0 < sx && sx < x1 && y0 < sy && sy < y1);
+	}
+}
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

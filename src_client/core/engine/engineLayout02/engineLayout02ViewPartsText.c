@@ -323,18 +323,11 @@ static void draw(struct engineLayout02ViewPartsTextImplement *this, struct engin
 			engineGraphicEngineBindTexcVBO(this->egoIdTexc);
 			engineGraphicEngineBindFaceIBO(this->egoIdFace);
 			// 行列登録準備
-			double x = engineLayout02ViewUtilPositionGetX((struct engineLayout02View*)this);
-			double y = engineLayout02ViewUtilPositionGetY((struct engineLayout02View*)this);
 			double w = engineLayout02ViewUtilPositionGetW((struct engineLayout02View*)this);
 			double h = engineLayout02ViewUtilPositionGetH((struct engineLayout02View*)this);
 			struct engineMathMatrix44 tempMat1;
 			struct engineMathMatrix44 tempMat2;
-			if(engineLayout02ViewUtilPositionIsTransform((struct engineLayout02View*)this)){
-				engineMathMat4Multiply(&tempMat1, mat, engineLayout02ViewUtilPositionGetTransformMatrix((struct engineLayout02View*)this));
-			}else{
-				engineMathMat4Copy(&tempMat1, mat);
-				engineMathMat4Translate(&tempMat1, x, y, 0.0);
-			}
+			engineLayout02ViewUtilPositionTransformCalcMatrix((struct engineLayout02View*)this, &tempMat1, mat);
 			// 文字揃えの位置移動
 			double alignX = (w - this->fontInfo.textWidth) * ((this->super.fontStyle.xalign > 0) ? 0.0 : (this->super.fontStyle.xalign == 0) ? 0.5 : 1.0);
 			double alignY = (h - this->fontInfo.textHeight) * ((this->super.fontStyle.yalign > 0) ? 0.0 : (this->super.fontStyle.yalign == 0) ? 0.5 : 1.0);

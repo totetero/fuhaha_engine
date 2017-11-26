@@ -69,7 +69,11 @@ struct engineLayout02ViewUtilPosition{
 		double y;
 		double w;
 		double h;
-		struct{bool isActive; struct engineMathMatrix44 matrix;} transform;
+		struct{
+			bool isActive;
+			struct engineMathMatrix44 matrix;
+			struct engineMathVector3 point[4];
+		} transform;
 	} layout;
 };
 
@@ -129,8 +133,9 @@ double engineLayout02ViewUtilPositionGetX(struct engineLayout02View *this);
 double engineLayout02ViewUtilPositionGetY(struct engineLayout02View *this);
 double engineLayout02ViewUtilPositionGetW(struct engineLayout02View *this);
 double engineLayout02ViewUtilPositionGetH(struct engineLayout02View *this);
-bool engineLayout02ViewUtilPositionIsTransform(struct engineLayout02View *this);
-struct engineMathMatrix44 *engineLayout02ViewUtilPositionGetTransformMatrix(struct engineLayout02View *this);
+// 表示要素構造体位置関係 変形レイアウト
+void engineLayout02ViewUtilPositionTransformCalcMatrix(struct engineLayout02View *this, struct engineMathMatrix44 *dstMat, struct engineMathMatrix44 *srcMat);
+bool engineLayout02ViewUtilPositionTransformIsInner(struct engineLayout02View *this, double sx, double sy);
 
 // 表示要素構造体位置関係 設定ショートカット
 void engineLayout02ViewUtilPositionSetLtRtTpBm(struct engineLayout02View *this, double lt, double rt, double tp, double bm);

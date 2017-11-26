@@ -124,17 +124,10 @@ static void draw(struct engineLayout02ViewPartsRectImplement *this, struct engin
 	engineGraphicEngineBindTexcVBO(this->egoIdTexc);
 	engineGraphicEngineBindFaceIBO(this->egoIdFace);
 	// 行列登録
-	double x = engineLayout02ViewUtilPositionGetX((struct engineLayout02View*)this);
-	double y = engineLayout02ViewUtilPositionGetY((struct engineLayout02View*)this);
 	double w = engineLayout02ViewUtilPositionGetW((struct engineLayout02View*)this);
 	double h = engineLayout02ViewUtilPositionGetH((struct engineLayout02View*)this);
 	struct engineMathMatrix44 tempMat1;
-	if(engineLayout02ViewUtilPositionIsTransform((struct engineLayout02View*)this)){
-		engineMathMat4Multiply(&tempMat1, mat, engineLayout02ViewUtilPositionGetTransformMatrix((struct engineLayout02View*)this));
-	}else{
-		engineMathMat4Copy(&tempMat1, mat);
-		engineMathMat4Translate(&tempMat1, x, y, 0.0);
-	}
+	engineLayout02ViewUtilPositionTransformCalcMatrix((struct engineLayout02View*)this, &tempMat1, mat);
 	engineMathMat4Scale(&tempMat1, w, h, 1.0);
 	engineGraphicEngineSetMatrix(&tempMat1);
 	// 色登録
