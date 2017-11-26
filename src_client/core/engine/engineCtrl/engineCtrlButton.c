@@ -8,35 +8,34 @@
 
 // ボタン状態構造体 計算
 void engineCtrlButtonCalc(struct engineCtrlButton *this, void *innerParam, bool(*isInner)(void *touchParam, void *innerParam)){
-	struct engineCtrlTouch *t = engineCtrlTouchGet(this->setting.touchId);
-	bool isActiveBefore = this->status.isActive;
-
 	// タッチ処理
+	struct engineCtrlTouch *t = engineCtrlTouchGet(this->setting.touchId);
 	if(t != NULL){
 		if(t->dn){
 			if(this->setting.isInactiveCalc){
 				// ボタン無効状態
-				this->status.isActive = false;
+				this->status.isTouchActive = false;
 			}else if(t->mv && this->setting.isInactiveMove){
 				// 移動したらボタン無効化
-				this->status.isActive = false;
+				this->status.isTouchActive = false;
 			}else{
 				// ボタン押下中
-				this->status.isActive = (isInner(innerParam, t) != this->setting.isOutside);
+				this->status.isTouchActive = (isInner(innerParam, t) != this->setting.isOutside);
 			}
 
 			if(!t->active){
 				// タッチ開始時
-				if(this->status.isActive){engineCtrlTouchOwn();}
+				if(this->status.isTouchActive){engineCtrlTouchOwn();}
 			}
 		}else{
 			// タッチ終了時
 			engineCtrlTouchFree();
-			this->status.isActive = false;
+			if(this->status.isTouchActive){this->status.isTrigger = true;}
+			this->status.isTouchActive = false;
 		}
 	}else{
 		// タッチ無し
-		this->status.isActive = false;
+		this->status.isTouchActive = false;
 	}
 
 	// 対応キー押下確認
@@ -45,10 +44,11 @@ void engineCtrlButtonCalc(struct engineCtrlButton *this, void *innerParam, bool(
 	isKeyActive = isKeyActive || (this->setting.isXKey && global.key.xb.isActive);
 	isKeyActive = isKeyActive || (this->setting.isCKey && global.key.cb.isActive);
 	isKeyActive = isKeyActive || (this->setting.isVKey && global.key.vb.isActive);
-	if(isKeyActive){this->status.isActive = true;}
+	if(!isKeyActive && this->status.isKeyActive){this->status.isTrigger = true;}
+	this->status.isKeyActive = isKeyActive;
 
-	// トリガー確認
-	if(isActiveBefore && !this->status.isActive){this->status.isTrigger = true;}
+	// ボタン押下状態
+	this->status.isActive = (this->status.isTouchActive || this->status.isKeyActive);
 }
 
 // ----------------------------------------------------------------

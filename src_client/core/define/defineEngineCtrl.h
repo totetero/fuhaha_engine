@@ -33,6 +33,8 @@ struct engineCtrlButton{
 		bool isOutside;
 	} setting;
 	struct{
+		bool isTouchActive;
+		bool isKeyActive;
 		bool isActive;
 		bool isTrigger;
 	} status;
