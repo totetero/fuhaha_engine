@@ -14,7 +14,8 @@ struct engineLayout02ViewPartsRect{
 };
 
 // 画像描画構造体 作成
-struct engineLayout02ViewPartsRect *engineLayout02ViewPartsRectCreate();
+struct engineLayout02ViewPartsRect *engineLayout02ViewPartsRectCreate(int imgw, int imgh, int tu, int tv, int tw, int th);
+struct engineLayout02ViewPartsRect *engineLayout02ViewPartsRectCreateWhite();
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

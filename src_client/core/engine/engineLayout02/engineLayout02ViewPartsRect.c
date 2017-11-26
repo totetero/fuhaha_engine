@@ -38,12 +38,6 @@ static void init(struct engineLayout02ViewPartsRectImplement *this){
 	this->egoIdTexTest = engineGraphicTextureCreateLocal("img/system.png", ENGINEGRAPHICTEXTURETYPE_LINEAR);
 
 	// デフォルトパラメータ設定
-	this->super.imgw = TEXSIZ_SYSTEM_W;
-	this->super.imgh = TEXSIZ_SYSTEM_H;
-	this->super.texture.tu = (int)engineMathRound(TEXPOS_SYSTEM_BOXWHITE_X + TEXPOS_SYSTEM_BOXWHITE_W * 0.25);
-	this->super.texture.tv = (int)engineMathRound(TEXPOS_SYSTEM_BOXWHITE_Y + TEXPOS_SYSTEM_BOXWHITE_H * 0.25);
-	this->super.texture.tw = (int)engineMathRound(TEXPOS_SYSTEM_BOXWHITE_W * 0.5);
-	this->super.texture.th = (int)engineMathRound(TEXPOS_SYSTEM_BOXWHITE_H * 0.5);
 	this->super.color.r = 1.0;
 	this->super.color.g = 1.0;
 	this->super.color.b = 1.0;
@@ -171,9 +165,15 @@ static void dispose(struct engineLayout02ViewPartsRectImplement *this){
 // ----------------------------------------------------------------
 
 // 画像描画構造体 作成
-struct engineLayout02ViewPartsRect *engineLayout02ViewPartsRectCreate(){
+struct engineLayout02ViewPartsRect *engineLayout02ViewPartsRectCreate(int imgw, int imgh, int tu, int tv, int tw, int th){
 	struct engineLayout02ViewPartsRectImplement *this = (struct engineLayout02ViewPartsRectImplement*)engineUtilMemoryInfoCalloc("engineLayout02ViewPartsRect", 1, sizeof(struct engineLayout02ViewPartsRectImplement));
 	init(this);
+	this->super.imgw = imgw;
+	this->super.imgh = imgh;
+	this->super.texture.tu = tu;
+	this->super.texture.tv = tv;
+	this->super.texture.tw = tw;
+	this->super.texture.th = th;
 
 	struct engineLayout02View *view = (struct engineLayout02View*)this;
 	view->calc = (void(*)(struct engineLayout02View*))calc;
@@ -181,6 +181,17 @@ struct engineLayout02ViewPartsRect *engineLayout02ViewPartsRectCreate(){
 	view->pause = (void(*)(struct engineLayout02View*))pause;
 	view->dispose = (void(*)(struct engineLayout02View*))dispose;
 	return (struct engineLayout02ViewPartsRect*)this;
+}
+
+// 画像描画構造体 作成
+struct engineLayout02ViewPartsRect *engineLayout02ViewPartsRectCreateWhite(){
+	int imgw = TEXSIZ_SYSTEM_W;
+	int imgh = TEXSIZ_SYSTEM_H;
+	int tu = (int)engineMathRound(TEXPOS_SYSTEM_BOXWHITE_X + TEXPOS_SYSTEM_BOXWHITE_W * 0.25);
+	int tv = (int)engineMathRound(TEXPOS_SYSTEM_BOXWHITE_Y + TEXPOS_SYSTEM_BOXWHITE_H * 0.25);
+	int tw = (int)engineMathRound(TEXPOS_SYSTEM_BOXWHITE_W * 0.5);
+	int th = (int)engineMathRound(TEXPOS_SYSTEM_BOXWHITE_H * 0.5);
+	return engineLayout02ViewPartsRectCreate(imgw, imgh, tu, tv, tw, th);
 }
 
 // ----------------------------------------------------------------
