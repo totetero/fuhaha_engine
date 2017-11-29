@@ -7,7 +7,7 @@
 // ----------------------------------------------------------------
 
 // ボタン状態構造体 計算
-void engineCtrlButtonCalc(struct engineCtrlButton *this, void *innerParam, bool(*isInner)(void *touchParam, void *innerParam)){
+void engineCtrlButtonCalc(struct engineCtrlButton *this, void *innerParam, bool(*isInner)(void *innerParam, void *touchParam)){
 	// タッチ処理
 	struct engineCtrlTouch *t = engineCtrlTouchGet(this->setting.touchId);
 	if(t != NULL){
