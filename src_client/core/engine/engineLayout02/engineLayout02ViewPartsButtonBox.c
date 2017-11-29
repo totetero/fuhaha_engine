@@ -140,9 +140,9 @@ struct engineLayout02ViewPartsButtonBox *engineLayout02ViewPartsButtonBoxCreate(
 
 // ボタン内側確認
 bool engineLayout02ViewPartsButtonBoxIsInner(struct engineLayout02ViewPartsButtonBox *this, struct engineCtrlTouch *touchParam){
-	double sx = touchParam->screen.x;
-	double sy = touchParam->screen.y;
-	return engineLayout02ViewUtilPositionTransformIsInner((struct engineLayout02View*)this, sx, sy);
+	double x = touchParam->screen.x;
+	double y = touchParam->screen.y;
+	return engineLayout02ViewUtilPositionTransformIsInner((struct engineLayout02View*)this, x, y);
 }
 
 // 標準ボタン構造体 ボタン処理

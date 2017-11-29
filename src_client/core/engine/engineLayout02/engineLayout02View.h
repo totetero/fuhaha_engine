@@ -135,7 +135,7 @@ double engineLayout02ViewUtilPositionGetW(struct engineLayout02View *this);
 double engineLayout02ViewUtilPositionGetH(struct engineLayout02View *this);
 // 表示要素構造体位置関係 変形レイアウト
 void engineLayout02ViewUtilPositionTransformCalcMatrix(struct engineLayout02View *this, struct engineMathMatrix44 *dstMat, struct engineMathMatrix44 *srcMat);
-bool engineLayout02ViewUtilPositionTransformIsInner(struct engineLayout02View *this, double sx, double sy);
+bool engineLayout02ViewUtilPositionTransformIsInner(struct engineLayout02View *this, double x, double y);
 
 // 表示要素構造体位置関係 設定ショートカット
 void engineLayout02ViewUtilPositionSetLtRtTpBm(struct engineLayout02View *this, double lt, double rt, double tp, double bm);

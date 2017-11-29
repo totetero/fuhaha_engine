@@ -395,17 +395,17 @@ void engineLayout02ViewUtilPositionTransformCalcMatrix(struct engineLayout02View
 	}
 }
 
-bool engineLayout02ViewUtilPositionTransformIsInner(struct engineLayout02View *this, double sx, double sy){
+bool engineLayout02ViewUtilPositionTransformIsInner(struct engineLayout02View *this, double x, double y){
 	if(this->position.layout.transform.isActive){
 		// すべての辺に対し対象点との外積が全て同一符号なら内部
 		struct engineMathVector3 *v0 = &this->position.layout.transform.point[0];
 		struct engineMathVector3 *v1 = &this->position.layout.transform.point[1];
 		struct engineMathVector3 *v2 = &this->position.layout.transform.point[2];
 		struct engineMathVector3 *v3 = &this->position.layout.transform.point[3];
-		double crossZ01 = (sx - v0->x) * (v1->y - v0->y) - (v1->x - v0->x) * (sy - v0->y);
-		double crossZ12 = (sx - v1->x) * (v2->y - v1->y) - (v2->x - v1->x) * (sy - v1->y);
-		double crossZ23 = (sx - v2->x) * (v3->y - v2->y) - (v3->x - v2->x) * (sy - v2->y);
-		double crossZ30 = (sx - v3->x) * (v0->y - v3->y) - (v0->x - v3->x) * (sy - v3->y);
+		double crossZ01 = (x - v0->x) * (v1->y - v0->y) - (v1->x - v0->x) * (y - v0->y);
+		double crossZ12 = (x - v1->x) * (v2->y - v1->y) - (v2->x - v1->x) * (y - v1->y);
+		double crossZ23 = (x - v2->x) * (v3->y - v2->y) - (v3->x - v2->x) * (y - v2->y);
+		double crossZ30 = (x - v3->x) * (v0->y - v3->y) - (v0->x - v3->x) * (y - v3->y);
 		return (crossZ01 * crossZ12 > 0 && crossZ12 * crossZ23 > 0 && crossZ23 * crossZ30 > 0);
 	}else{
 		// 矩形内部判定
@@ -413,7 +413,7 @@ bool engineLayout02ViewUtilPositionTransformIsInner(struct engineLayout02View *t
 		double y0 = this->position.layout.y;
 		double x1 = x0 + this->position.layout.w;
 		double y1 = y0 + this->position.layout.h;
-		return (x0 < sx && sx < x1 && y0 < sy && sy < y1);
+		return (x0 < x && x < x1 && y0 < y && y < y1);
 	}
 }
 
