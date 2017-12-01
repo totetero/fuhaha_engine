@@ -34,9 +34,6 @@ static void init(struct engineLayout02ViewPartsRectImplement *this){
 	// レイアウト初期化
 	engineLayout02ViewUtilPositionInit((struct engineLayout02View*)this);
 
-	// 画像読み込み
-	this->egoIdTexTest = engineGraphicTextureCreateLocal("img/system.png", ENGINEGRAPHICTEXTURETYPE_LINEAR);
-
 	// デフォルトパラメータ設定
 	this->super.color.r = 1.0;
 	this->super.color.g = 1.0;
@@ -175,9 +172,11 @@ static void dispose(struct engineLayout02ViewPartsRectImplement *this){
 // ----------------------------------------------------------------
 
 // 画像描画構造体 作成
-struct engineLayout02ViewPartsRect *engineLayout02ViewPartsRectCreate(int imgw, int imgh, int tu, int tv, int tw, int th){
+struct engineLayout02ViewPartsRect *engineLayout02ViewPartsRectCreate(char *src, int imgw, int imgh, int tu, int tv, int tw, int th){
 	struct engineLayout02ViewPartsRectImplement *this = (struct engineLayout02ViewPartsRectImplement*)engineUtilMemoryInfoCalloc("engineLayout02ViewPartsRect", 1, sizeof(struct engineLayout02ViewPartsRectImplement));
 	init(this);
+	// 画像読み込み
+	this->egoIdTexTest = engineGraphicTextureCreateLocal(src, ENGINEGRAPHICTEXTURETYPE_LINEAR);
 	this->super.imgw = imgw;
 	this->super.imgh = imgh;
 	this->super.texture.tu = tu;
@@ -202,7 +201,7 @@ struct engineLayout02ViewPartsRect *engineLayout02ViewPartsRectCreateWhite(){
 	int tv = (int)engineMathRound(TEXPOS_SYSTEM_BOXWHITE_Y + TEXPOS_SYSTEM_BOXWHITE_H * 0.25);
 	int tw = (int)engineMathRound(TEXPOS_SYSTEM_BOXWHITE_W * 0.5);
 	int th = (int)engineMathRound(TEXPOS_SYSTEM_BOXWHITE_H * 0.5);
-	return engineLayout02ViewPartsRectCreate(imgw, imgh, tu, tv, tw, th);
+	return engineLayout02ViewPartsRectCreate("img/system.png", imgw, imgh, tu, tv, tw, th);
 }
 
 // ----------------------------------------------------------------
