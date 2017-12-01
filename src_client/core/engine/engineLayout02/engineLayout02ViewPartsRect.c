@@ -46,6 +46,16 @@ static void init(struct engineLayout02ViewPartsRectImplement *this){
 
 // ----------------------------------------------------------------
 
+// タッチ処理
+static bool touch(struct engineLayout02ViewPartsRectImplement *this, int touchIndex, double x, double y, bool dn, bool mv, bool isCancel){
+	isCancel = (isCancel || ((struct engineLayout02View*)this)->interact.setting.isDisable);
+
+	bool isActive = false;
+	isActive = engineLayout02ViewUtilChildrenTouch((struct engineLayout02View*)this, touchIndex, x, y, dn, mv, isCancel || isActive) || isActive;
+	isActive = engineLayout02ViewUtilInteractTouch((struct engineLayout02View*)this, touchIndex, x, y, dn, mv, isCancel || isActive) || isActive;
+	return isActive;
+}
+
 // 計算
 static void calc(struct engineLayout02ViewPartsRectImplement *this){
 	// 子要素計算
@@ -176,6 +186,7 @@ struct engineLayout02ViewPartsRect *engineLayout02ViewPartsRectCreate(int imgw, 
 	this->super.texture.th = th;
 
 	struct engineLayout02View *view = (struct engineLayout02View*)this;
+	view->touch = (bool(*)(struct engineLayout02View*, int touchIndex, double x, double y, bool dn, bool mv, bool isCancel))touch;
 	view->calc = (void(*)(struct engineLayout02View*))calc;
 	view->draw = (void(*)(struct engineLayout02View*, struct engineMathMatrix44*, struct engineMathVector4*))draw;
 	view->pause = (void(*)(struct engineLayout02View*))pause;

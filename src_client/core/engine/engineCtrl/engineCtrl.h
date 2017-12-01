@@ -5,15 +5,27 @@
 // ----------------------------------------------------------------
 // -------- タッチ処理
 
+// タッチ識別ID列挙型
+enum engineCtrlTouchId{
+	ENGINECTRLTOUCHID_NONE,
+	ENGINECTRLTOUCHID_TEST1,
+	ENGINECTRLTOUCHID_TEST2,
+	ENGINECTRLTOUCHID_CONTROLLER,
+	ENGINECTRLTOUCHID_BUTTON,
+	ENGINECTRLTOUCHID_SCREEN,
+};
+
 // タッチ状態構造体
 struct engineCtrlTouch{
+	// タッチID
+	enum engineCtrlTouchId touchId;
+	// ウインドウ内位置
 	struct{
-		// ウインドウ内位置
 		int x;
 		int y;
 	} window;
+	// スクリーン内位置
 	struct{
-		// スクリーン内位置
 		int x;
 		int y;
 	} screen;
@@ -35,14 +47,6 @@ struct engineCtrlTouch *engineCtrlTouchGet(enum engineCtrlTouchId touchId);
 void engineCtrlTouchOwn(void);
 // 取得して占有したタッチ情報の解放
 void engineCtrlTouchFree(void);
-
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
-// -------- ボタン処理
-
-// ボタン状態構造体 計算
-void engineCtrlButtonCalc(struct engineCtrlButton *this, void *innerParam, bool(*isInner)(void *innerParam, void *touchParam));
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

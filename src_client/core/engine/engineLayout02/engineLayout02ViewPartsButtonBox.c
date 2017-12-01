@@ -14,7 +14,6 @@ static void init(struct engineLayout02ViewPartsButtonBox *this){
 	// レイアウト初期化
 	engineLayout02ViewUtilPositionInit((struct engineLayout02View*)this);
 
-	this->button.setting.touchId = ENGINECTRLTOUCHID_BUTTON;
 	this->frameNormal = engineLayout02ViewPartsFrameCreate();
 	this->frameSelect = engineLayout02ViewPartsFrameCreate();
 	this->frameActibve = engineLayout02ViewPartsFrameCreate();
@@ -59,6 +58,16 @@ static void init(struct engineLayout02ViewPartsButtonBox *this){
 
 // ----------------------------------------------------------------
 
+// タッチ処理
+static bool touch(struct engineLayout02ViewPartsButtonBox *this, int touchIndex, double x, double y, bool dn, bool mv, bool isCancel){
+	isCancel = (isCancel || ((struct engineLayout02View*)this)->interact.setting.isDisable);
+
+	bool isActive = false;
+	isActive = engineLayout02ViewUtilChildrenTouch((struct engineLayout02View*)this, touchIndex, x, y, dn, mv, isCancel || isActive) || isActive;
+	isActive = engineLayout02ViewUtilInteractTouch((struct engineLayout02View*)this, touchIndex, x, y, dn, mv, isCancel || isActive) || isActive;
+	return isActive;
+}
+
 // 計算
 static void calc(struct engineLayout02ViewPartsButtonBox *this){
 	// ボタンの見た目を状態に合わせて変える
@@ -66,7 +75,7 @@ static void calc(struct engineLayout02ViewPartsButtonBox *this){
 	this->frameSelect->super.children.isInvisible = true;
 	this->frameActibve->super.children.isInvisible = true;
 	this->frameInactive->super.children.isInvisible = true;
-	if(this->button.status.isActive){
+	if(this->super.interact.status.isHover){
 		// 押下状態
 		this->frameActibve->super.children.isInvisible = false;
 		engineLayout02ViewUtilPositionSetPaddingTop(this->viewInner, 2);
@@ -127,27 +136,12 @@ struct engineLayout02ViewPartsButtonBox *engineLayout02ViewPartsButtonBoxCreate(
 	init(this);
 
 	struct engineLayout02View *view = (struct engineLayout02View*)this;
+	view->touch = (bool(*)(struct engineLayout02View*, int touchIndex, double x, double y, bool dn, bool mv, bool isCancel))touch;
 	view->calc = (void(*)(struct engineLayout02View*))calc;
 	view->draw = (void(*)(struct engineLayout02View*, struct engineMathMatrix44*, struct engineMathVector4*))draw;
 	view->pause = (void(*)(struct engineLayout02View*))pause;
 	view->dispose = (void(*)(struct engineLayout02View*))dispose;
 	return this;
-}
-
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
-
-// ボタン内側確認
-bool engineLayout02ViewPartsButtonBoxIsInner(struct engineLayout02ViewPartsButtonBox *this, struct engineCtrlTouch *touchParam){
-	double x = touchParam->screen.x;
-	double y = touchParam->screen.y;
-	return engineLayout02ViewUtilPositionTransformIsInner((struct engineLayout02View*)this, x, y);
-}
-
-// 標準ボタン構造体 ボタン処理
-void engineLayout02ViewPartsButtonBoxCalcButton(struct engineLayout02ViewPartsButtonBox *this){
-	engineCtrlButtonCalc(&this->button, this, (bool(*)(void*, void*))engineLayout02ViewPartsButtonBoxIsInner);
 }
 
 // ----------------------------------------------------------------

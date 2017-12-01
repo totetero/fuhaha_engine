@@ -66,7 +66,6 @@ void engineLayout02ViewPartsTextSet(struct engineLayout02ViewPartsText *this, en
 // 標準ボタン構造体
 struct engineLayout02ViewPartsButtonBox{
 	struct engineLayout02View super;
-	struct engineCtrlButton button;
 	bool isSelect;
 	bool isInactiveDraw;
 	struct engineLayout02ViewPartsFrame *frameNormal;
@@ -78,8 +77,6 @@ struct engineLayout02ViewPartsButtonBox{
 
 // 標準ボタン構造体 作成
 struct engineLayout02ViewPartsButtonBox *engineLayout02ViewPartsButtonBoxCreate();
-// 標準ボタン構造体 ボタン処理
-void engineLayout02ViewPartsButtonBoxCalcButton(struct engineLayout02ViewPartsButtonBox *this);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

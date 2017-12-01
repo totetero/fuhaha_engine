@@ -49,14 +49,17 @@ static void init(struct pageCartridgeTest3 *this){
 
 // 計算
 static void calc(struct pageCartridgeTest3 *this){
+	// ルート基盤タッチ処理
+	engineLayout02ViewUtilInteractTouchRoot((struct engineLayout02View*)this->viewRoot, false);
+
 	// ボタン処理
-	engineLayout02ViewPartsButtonBoxCalcButton(this->viewTestButton);
-	if(this->viewTestButton->button.status.isTrigger){
-		this->viewTestButton->button.status.isTrigger = false;
+	if(((struct engineLayout02View*)this->viewTestButton)->interact.status.isTriggerUp){
+		((struct engineLayout02View*)this->viewTestButton)->interact.status.isTriggerUp = false;
 		// ボタン押下時
 		trace("press button");
 	}
 
+	// ルート計算処理
 	engineLayout02ViewCalc((struct engineLayout02View*)this->viewRoot);
 }
 
@@ -78,6 +81,7 @@ static void draw(struct pageCartridgeTest3 *this){
 
 	engineGraphicEngineSetDrawMode(ENGINEGRAPHICENGINEMODEDRAW_2D);
 
+	// ルート描画処理
 	engineLayout02ViewDraw((struct engineLayout02View*)this->viewRoot, &tempMat1, &tempColor1);
 
 	engineGraphicEngineFlush();

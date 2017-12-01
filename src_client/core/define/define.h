@@ -8,7 +8,6 @@ typedef unsigned char byte;
 
 #include "./definePluginTexture.h"
 #include "./defineEngineMath.h"
-#include "./defineEngineCtrl.h"
 
 #include "./texpos.h"
 

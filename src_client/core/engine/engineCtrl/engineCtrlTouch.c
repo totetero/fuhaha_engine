@@ -9,7 +9,6 @@
 static struct{
 	struct engineCtrlTouchLocal{
 		struct engineCtrlTouch touch;
-		enum engineCtrlTouchId touchId;
 		struct{
 			int tempx;
 			int tempy;
@@ -59,7 +58,7 @@ void engineCtrlTouchCalc(void){
 
 		if(localTouch->free){
 			// タッチ解放実行
-			localTouch->touchId = ENGINECTRLTOUCHID_NONE;
+			localTouch->touch.touchId = ENGINECTRLTOUCHID_NONE;
 			localTouch->free = false;
 		}
 	}
@@ -71,7 +70,7 @@ struct engineCtrlTouch *engineCtrlTouchGet(enum engineCtrlTouchId touchId){
 	// 自分で占有済みのタッチ情報を探す
 	for(int i = 0; i < (int)(sizeof(localGlobal.list) / sizeof(*localGlobal.list)); i++){
 		localGlobal.tempTouch = &localGlobal.list[i];
-		if(!localGlobal.tempTouch->trigger && localGlobal.tempTouch->touchId == touchId){
+		if(!localGlobal.tempTouch->trigger && localGlobal.tempTouch->touch.touchId == touchId){
 			localGlobal.tempTouch->touch.active = true;
 			return &localGlobal.tempTouch->touch;
 		}
@@ -93,7 +92,7 @@ struct engineCtrlTouch *engineCtrlTouchGet(enum engineCtrlTouchId touchId){
 void engineCtrlTouchOwn(void){
 	if(localGlobal.tempTouch != NULL){
 		localGlobal.tempTouch->trigger = false;
-		localGlobal.tempTouch->touchId = localGlobal.tempTouchId;
+		localGlobal.tempTouch->touch.touchId = localGlobal.tempTouchId;
 	}
 }
 

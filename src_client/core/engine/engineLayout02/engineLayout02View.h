@@ -28,6 +28,8 @@ void engineLayout02ViewUtilChildrenAdd(struct engineLayout02View *this, struct e
 // 表示要素構造体子要素 子要素排除
 void engineLayout02ViewUtilChildrenRemove(struct engineLayout02View *this, struct engineLayout02View *child);
 
+// 表示要素構造体子要素 タッチ処理
+bool engineLayout02ViewUtilChildrenTouch(struct engineLayout02View *this, int touchIndex, double x, double y, bool dn, bool mv, bool isCancel);
 // 表示要素構造体子要素 計算
 void engineLayout02ViewUtilChildrenCalc(struct engineLayout02View *this);
 // 表示要素構造体子要素 描画
@@ -151,11 +153,44 @@ void engineLayout02ViewUtilPositionSetPaddingVertical(struct engineLayout02View 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
+// 表示要素構造体対話型
+struct engineLayout02ViewUtilInteract{
+	struct{
+		bool isMoveableX;
+		bool isMoveableY;
+		bool isDisable;
+	} setting;
+	struct{
+		int touchIndex;
+		bool isActive;
+		bool isHover;
+		bool isMove;
+		bool isTriggerDn;
+		bool isTriggerUp;
+		int startX;
+		int startY;
+		int currX;
+		int currY;
+	} status;
+};
+
+// 表示要素構造体対話型 タッチ処理
+bool engineLayout02ViewUtilInteractTouch(struct engineLayout02View *this, int touchIndex, double x, double y, bool dn, bool mv, bool isCancel);
+
+// 表示要素構造体対話型 基盤タッチ処理
+void engineLayout02ViewUtilInteractTouchRoot(struct engineLayout02View *this, bool isCancel);
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+
 // 表示要素構造体
 struct engineLayout02View{
 	struct engineLayout02ViewUtilChildren children;
 	struct engineLayout02ViewUtilPosition position;
+	struct engineLayout02ViewUtilInteract interact;
 
+	bool (*touch)(struct engineLayout02View *this, int touchIndex, double x, double y, bool dn, bool mv, bool isCancel);
 	void (*calc)(struct engineLayout02View *this);
 	void (*draw)(struct engineLayout02View *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color);
 	void (*pause)(struct engineLayout02View *this);
@@ -170,6 +205,7 @@ struct engineLayout02View *engineLayout02ViewCreate();
 // ----------------------------------------------------------------
 // ユーティリティマクロ
 
+#define engineLayout02ViewTouch(this, touchId, x, y, dn, mv, isCancel) (this)->touch(this, touchId, x, y, dn, mv, isCancel)
 #define engineLayout02ViewCalc(this) (this)->calc(this)
 #define engineLayout02ViewDraw(this, mat, color) (this)->draw(this, mat, color)
 #define engineLayout02ViewPause(this) (this)->pause(this)

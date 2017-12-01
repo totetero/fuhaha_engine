@@ -107,6 +107,18 @@ static void sortChildren(struct engineLayout02View *this){
 	dummyUnset(this, &dummy);
 }
 
+// 表示要素構造体子要素 タッチ処理
+bool engineLayout02ViewUtilChildrenTouch(struct engineLayout02View *this, int touchIndex, double x, double y, bool dn, bool mv, bool isCancel){
+	bool isActive = false;
+	struct engineLayout02View *temp = this->children.childrenHead;
+	while(temp != NULL){
+		isCancel = isCancel || isActive;
+		if(!temp->children.isInactive && !temp->children.isInvisible){isActive = temp->touch(temp, touchIndex, x, y, dn, mv, isCancel);}
+		temp = temp->children.next;
+	}
+	return isActive;
+}
+
 // 表示要素構造体子要素 計算
 void engineLayout02ViewUtilChildrenCalc(struct engineLayout02View *this){
 	// 子要素の並べ替え
