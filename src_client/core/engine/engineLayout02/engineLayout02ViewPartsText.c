@@ -405,6 +405,13 @@ struct engineLayout02ViewPartsText *engineLayout02ViewPartsTextCreate(){
 	return (struct engineLayout02ViewPartsText*)this;
 }
 
+// 文字列描画構造体 作成 同時に文字列設定
+struct engineLayout02ViewPartsText *engineLayout02ViewPartsTextCreateText(char *text){
+	struct engineLayout02ViewPartsText *this = engineLayout02ViewPartsTextCreate();
+	engineLayout02ViewPartsTextSet(this, PLUGINTEXTUREFONTSETID_DEFAULT, text);
+	return this;
+}
+
 // 文字列描画構造体 文字列設定
 void engineLayout02ViewPartsTextSet(struct engineLayout02ViewPartsText *that, enum pluginTextureFontSetId fontSetId, char *text){
 	struct engineLayout02ViewPartsTextImplement *this = (struct engineLayout02ViewPartsTextImplement*)that;

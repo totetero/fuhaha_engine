@@ -193,7 +193,7 @@ struct engineLayout02ViewPartsRect *engineLayout02ViewPartsRectCreate(char *src,
 	return (struct engineLayout02ViewPartsRect*)this;
 }
 
-// 画像描画構造体 作成
+// 画像描画構造体 作成 白四角
 struct engineLayout02ViewPartsRect *engineLayout02ViewPartsRectCreateWhite(){
 	int imgw = TEXSIZ_SYSTEM_W;
 	int imgh = TEXSIZ_SYSTEM_H;

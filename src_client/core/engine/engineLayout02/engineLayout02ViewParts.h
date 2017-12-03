@@ -56,6 +56,7 @@ struct engineLayout02ViewPartsText{
 
 // 文字列描画構造体 作成
 struct engineLayout02ViewPartsText *engineLayout02ViewPartsTextCreate();
+struct engineLayout02ViewPartsText *engineLayout02ViewPartsTextCreateText(char *text);
 // 文字列描画構造体 文字列設定
 void engineLayout02ViewPartsTextSet(struct engineLayout02ViewPartsText *this, enum pluginTextureFontSetId fontSetId, char *text);
 
@@ -77,6 +78,7 @@ struct engineLayout02ViewPartsButtonBox{
 
 // 標準ボタン構造体 作成
 struct engineLayout02ViewPartsButtonBox *engineLayout02ViewPartsButtonBoxCreate();
+struct engineLayout02ViewPartsButtonBox *engineLayout02ViewPartsButtonBoxCreateText(char *text);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

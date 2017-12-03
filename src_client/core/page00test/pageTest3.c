@@ -32,17 +32,12 @@ static void init(struct pageCartridgeTest3 *this){
 	engineLayout02ViewUtilChildrenAdd(this->viewRoot, (struct engineLayout02View*)viewTestFrame);
 
 	// ボタン作成
-	this->viewTestButton = engineLayout02ViewPartsButtonBoxCreate();
+	this->viewTestButton = engineLayout02ViewPartsButtonBoxCreateText("テストボタン");
 	engineLayout02ViewUtilPositionSetBottom((struct engineLayout02View*)this->viewTestButton, 10);
 	engineLayout02ViewUtilPositionSetWidth((struct engineLayout02View*)this->viewTestButton, 100);
 	engineLayout02ViewUtilPositionSetHeight((struct engineLayout02View*)this->viewTestButton, 30);
 	engineLayout02ViewUtilPositionSetHorizontalCentering((struct engineLayout02View*)this->viewTestButton);
 	engineLayout02ViewUtilChildrenAdd((struct engineLayout02View*)viewTestFrame, (struct engineLayout02View*)this->viewTestButton);
-	// ボタンテキスト作成
-	struct engineLayout02ViewPartsText *viewTestButtonText = engineLayout02ViewPartsTextCreate();
-	engineLayout02ViewPartsTextSet(viewTestButtonText, PLUGINTEXTUREFONTSETID_DEFAULT, "テストボタン");
-	engineLayout02ViewUtilPositionSetLtRtTpBm((struct engineLayout02View*)viewTestButtonText, 0, 0, 0, 0);
-	engineLayout02ViewUtilChildrenAdd((struct engineLayout02View*)this->viewTestButton->viewInner, (struct engineLayout02View*)viewTestButtonText);
 }
 
 // ----------------------------------------------------------------
