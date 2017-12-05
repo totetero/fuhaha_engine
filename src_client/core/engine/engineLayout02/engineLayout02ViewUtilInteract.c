@@ -39,7 +39,7 @@ bool engineLayout02ViewUtilInteractTouch(struct engineLayout02View *this, int to
 			this->interact.status.isHover = engineLayout02ViewUtilPositionTransformIsInner(this, x, y);
 			this->interact.status.currX = x;
 			this->interact.status.currY = y;
-			if(!this->interact.status.isMove){
+			if(mv && !this->interact.status.isMove){
 				int dx = x - this->interact.status.startX;
 				int dy = y - this->interact.status.startY;
 				if(dx * dx + dy * dy > 5 * 5){

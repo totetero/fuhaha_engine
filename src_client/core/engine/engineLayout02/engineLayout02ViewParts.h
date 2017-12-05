@@ -84,3 +84,22 @@ struct engineLayout02ViewPartsButtonBox *engineLayout02ViewPartsButtonBoxCreateT
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
+// スクローラ構造体
+struct engineLayout02ViewPartsScroller{
+	struct engineLayout02View super;
+	struct{double x; double y;} position;
+	struct{double x; double y;} velocity;
+	struct{double w; double h;} inner;
+	struct{struct engineLayout02ViewPartsScroller *parentScroller; bool isChildrenMove;} bubbling;
+	struct engineLayout02View *viewInner;
+	struct engineLayout02View *viewBarX;
+	struct engineLayout02View *viewBarY;
+};
+
+// スクローラ構造体 作成
+struct engineLayout02ViewPartsScroller *engineLayout02ViewPartsScrollerCreate();
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+
