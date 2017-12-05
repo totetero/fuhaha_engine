@@ -160,9 +160,9 @@ static struct engineGraphicTextureData *texDataCreate(struct engineGraphicTextur
 			if(arg->type == ENGINEGRAPHICTEXTUREARGTYPE_PLUGINTEXTURELOCAL){
 				if(strcmp(temp->arg.pluginTextureLocal.src, arg->pluginTextureLocal.src) == 0){return temp;}
 			}else if(arg->type == ENGINEGRAPHICTEXTUREARGTYPE_PLUGINTEXTUREFONT){
-				bool isSame = false;
-				if(!isSame && temp->arg.pluginTextureFont.fontSetId == arg->pluginTextureFont.fontSetId){isSame = true;}
-				if(!isSame && strcmp(temp->arg.pluginTextureFont.letterList, arg->pluginTextureFont.letterList) == 0){isSame = true;}
+				bool isSame = true;
+				if(isSame && temp->arg.pluginTextureFont.fontSetId != arg->pluginTextureFont.fontSetId){isSame = false;}
+				if(isSame && strcmp(temp->arg.pluginTextureFont.letterList, arg->pluginTextureFont.letterList) != 0){isSame = false;}
 				if(isSame){return temp;}
 			}else if(arg->type == ENGINEGRAPHICTEXTUREARGTYPE_PLUGINTEST){
 				return temp;
