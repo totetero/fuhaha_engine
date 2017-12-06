@@ -39,10 +39,14 @@ static void init(struct pageCartridgeTest3 *this){
 	engineLayout02ViewUtilPositionSetHorizontalCentering((struct engineLayout02View*)this->viewTestButton);
 	engineLayout02ViewUtilChildrenAdd((struct engineLayout02View*)viewTestFrame, (struct engineLayout02View*)this->viewTestButton);
 
+	// スクローラマスク作成
+	struct engineLayout02ViewPartsMaskRect *viewTestScrollerMask = engineLayout02ViewPartsMaskRectCreate();
+	engineLayout02ViewUtilPositionSetLtRtTpBm((struct engineLayout02View*)viewTestScrollerMask, 10, 10, 10, 100);
+	engineLayout02ViewUtilChildrenAdd((struct engineLayout02View*)viewTestFrame, (struct engineLayout02View*)viewTestScrollerMask);
 	// スクローラ作成
 	struct engineLayout02ViewPartsScroller *viewTestScroller = engineLayout02ViewPartsScrollerCreate();
-	engineLayout02ViewUtilPositionSetLtRtTpBm((struct engineLayout02View*)viewTestScroller, 10, 10, 10, 100);
-	engineLayout02ViewUtilChildrenAdd((struct engineLayout02View*)viewTestFrame, (struct engineLayout02View*)viewTestScroller);
+	engineLayout02ViewUtilPositionSetLtRtTpBm((struct engineLayout02View*)viewTestScroller, 0, 0, 0, 0);
+	engineLayout02ViewUtilChildrenAdd((struct engineLayout02View*)viewTestScrollerMask, (struct engineLayout02View*)viewTestScroller);
 	viewTestScroller->inner.w = 1000;
 	viewTestScroller->inner.h = 1000;
 	// 水平軸スクロールバー作成
@@ -96,6 +100,7 @@ static void calc(struct pageCartridgeTest3 *this){
 static void draw(struct pageCartridgeTest3 *this){
 	engineLayout02ViewUtilPositionModeSetDraw();
 	engineGraphicEngineClearAll();
+	engineGraphicStencilClear();
 
 	struct engineMathMatrix44 tempMat1;
 	engineMathMat4Ortho(&tempMat1, -global.screen.offset.x, global.screen.w + global.screen.offset.x, global.screen.h + global.screen.offset.y, -global.screen.offset.y, -1, 1);
@@ -107,6 +112,7 @@ static void draw(struct pageCartridgeTest3 *this){
 	tempColor1.a = 1.0;
 
 	engineGraphicEngineSetDrawMode(ENGINEGRAPHICENGINEMODEDRAW_2D);
+	engineGraphicStencilStackMaskRead();
 
 	// ルート描画処理
 	engineLayout02ViewDraw((struct engineLayout02View*)this->viewRoot, &tempMat1, &tempColor1);

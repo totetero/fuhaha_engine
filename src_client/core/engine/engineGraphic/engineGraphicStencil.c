@@ -10,18 +10,22 @@ static struct{
 	struct{
 		enum engineGraphicStencilMode modeStencil;
 	} memory;
+	int stackMaskLevel;
 } localGlobal = {0};
 
 // ステンシル初期化
 void engineGraphicStencilInit(void){
-	localGlobal.memory.modeStencil = -1;
+	localGlobal.memory.modeStencil = ENGINEGRAPHICSTENCILMODE_UNKNOWN;
 	glClearStencil(0);
 }
 
 // ステンシルバッファのクリア
 void engineGraphicStencilClear(void){
 	glClear(GL_STENCIL_BUFFER_BIT);
+	localGlobal.stackMaskLevel = 0;
 }
+
+// ----------------------------------------------------------------
 
 // ステンシルマスクモード設定
 void engineGraphicStencilSetMode(enum engineGraphicStencilMode mode){
@@ -29,9 +33,16 @@ void engineGraphicStencilSetMode(enum engineGraphicStencilMode mode){
 	localGlobal.memory.modeStencil = mode;
 
 	// ステンシル有効設定
-	if(mode != ENGINEGRAPHICSTENCILMODE_NONE){glEnable(GL_STENCIL_TEST);}else{glDisable(GL_STENCIL_TEST);}
+	switch(mode){
+		case ENGINEGRAPHICSTENCILMODE_NONE:
+			glDisable(GL_STENCIL_TEST);
+			break;
+		default:
+			glEnable(GL_STENCIL_TEST);
+			break;
+	}
 
-	// ステンシル以外の描画制限設定
+	// ステンシル以外の描画制限
 	switch(mode){
 		case ENGINEGRAPHICSTENCILMODE_MASK_0:
 		case ENGINEGRAPHICSTENCILMODE_MASK_1:
@@ -42,10 +53,12 @@ void engineGraphicStencilSetMode(enum engineGraphicStencilMode mode){
 		case ENGINEGRAPHICSTENCILMODE_READ_GE1_MASK_INCR:
 		case ENGINEGRAPHICSTENCILMODE_READ_LE1_MASK_0:
 		case ENGINEGRAPHICSTENCILMODE_READ_LE1_MASK_INCR:
+			// ステンシル以外の描画制限設定
 			glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 			engineGraphicEngineIgnoreDepthMask(true);
 			break;
 		default:
+			// ステンシル以外の描画制限解除
 			glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 			engineGraphicEngineIgnoreDepthMask(false);
 			break;
@@ -54,6 +67,7 @@ void engineGraphicStencilSetMode(enum engineGraphicStencilMode mode){
 	// ステンシル条件設定
 	switch(mode){
 		case ENGINEGRAPHICSTENCILMODE_NONE: break;
+		case ENGINEGRAPHICSTENCILMODE_UNKNOWN: break;
 		case ENGINEGRAPHICSTENCILMODE_MASK_0:              glStencilFunc(GL_ALWAYS, 0, ~0); break;
 		case ENGINEGRAPHICSTENCILMODE_MASK_1:              glStencilFunc(GL_ALWAYS, 1, ~0); break;
 		case ENGINEGRAPHICSTENCILMODE_MASK_2:              glStencilFunc(GL_ALWAYS, 2, ~0); break;
@@ -81,6 +95,10 @@ void engineGraphicStencilSetMode(enum engineGraphicStencilMode mode){
 
 	// ステンシル条件設定
 	switch(mode){
+		case ENGINEGRAPHICSTENCILMODE_NONE:
+		case ENGINEGRAPHICSTENCILMODE_UNKNOWN:
+			// 何もしない
+			break;
 		case ENGINEGRAPHICSTENCILMODE_MASK_0:
 		case ENGINEGRAPHICSTENCILMODE_MASK_1:
 		case ENGINEGRAPHICSTENCILMODE_MASK_2:
@@ -116,9 +134,57 @@ void engineGraphicStencilSetMode(enum engineGraphicStencilMode mode){
 			// マスク書き換え 1増加
 			glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
 			break;
-		default:
-			break;
 	}
+}
+
+// ----------------------------------------------------------------
+
+// ステンシルスタックマスク設定
+void engineGraphicStencilStackMaskRead(){
+	localGlobal.memory.modeStencil = ENGINEGRAPHICSTENCILMODE_UNKNOWN;
+
+	// ステンシル有効設定
+	glEnable(GL_STENCIL_TEST);
+	// ステンシル以外の描画制限解除
+	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+	engineGraphicEngineIgnoreDepthMask(false);
+	// ステンシル条件設定
+	glStencilFunc(GL_LEQUAL, localGlobal.stackMaskLevel, ~0);
+	glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+}
+
+// ステンシルスタックマスク加算描画
+void engineGraphicStencilStackMaskWriteIncrement(){
+	localGlobal.memory.modeStencil = ENGINEGRAPHICSTENCILMODE_UNKNOWN;
+
+	// ステンシル有効設定
+	glEnable(GL_STENCIL_TEST);
+	// ステンシル以外の描画制限設定
+	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+	engineGraphicEngineIgnoreDepthMask(true);
+	// ステンシル条件設定
+	glStencilFunc(GL_ALWAYS, 0, ~0);
+	glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
+
+	// 加算
+	localGlobal.stackMaskLevel++;
+}
+
+// ステンシルスタックマスク減算描画
+void engineGraphicStencilStackMaskWriteDecrement(){
+	localGlobal.memory.modeStencil = ENGINEGRAPHICSTENCILMODE_UNKNOWN;
+
+	// ステンシル有効設定
+	glEnable(GL_STENCIL_TEST);
+	// ステンシル以外の描画制限設定
+	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+	engineGraphicEngineIgnoreDepthMask(true);
+	// ステンシル条件設定
+	glStencilFunc(GL_ALWAYS, 0, ~0);
+	glStencilOp(GL_KEEP, GL_KEEP, GL_DECR);
+
+	// 減算
+	localGlobal.stackMaskLevel--;
 }
 
 // ----------------------------------------------------------------

@@ -103,3 +103,15 @@ struct engineLayout02ViewPartsScroller *engineLayout02ViewPartsScrollerCreate();
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
+// 長方形マスク構造体
+struct engineLayout02ViewPartsMaskRect{
+	struct engineLayout02View super;
+};
+
+// 長方形マスク構造体 作成
+struct engineLayout02ViewPartsMaskRect *engineLayout02ViewPartsMaskRectCreate();
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+
