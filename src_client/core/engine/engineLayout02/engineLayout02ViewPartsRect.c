@@ -45,8 +45,6 @@ static void init(struct engineLayout02ViewPartsRectImplement *this){
 
 // タッチ処理
 static bool touch(struct engineLayout02ViewPartsRectImplement *this, int touchIndex, double x, double y, bool dn, bool mv, bool isCancel){
-	isCancel = (isCancel || ((struct engineLayout02View*)this)->interact.setting.isDisable);
-
 	bool isActive = false;
 	isActive = engineLayout02ViewUtilChildrenTouch((struct engineLayout02View*)this, touchIndex, x, y, dn, mv, isCancel || isActive) || isActive;
 	isActive = engineLayout02ViewUtilInteractTouch((struct engineLayout02View*)this, touchIndex, x, y, dn, mv, isCancel || isActive) || isActive;

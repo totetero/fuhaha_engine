@@ -20,6 +20,8 @@ struct engineLayout02ViewPartsScrollerImplement{
 static void init(struct engineLayout02ViewPartsScrollerImplement *this){
 	// レイアウト初期化
 	engineLayout02ViewUtilPositionInit((struct engineLayout02View*)this);
+	this->super.super.interact.setting.isTouchable = true;
+
 	this->super.viewInner = engineLayout02ViewCreate();
 	this->super.viewBarX = engineLayout02ViewCreate();
 	this->super.viewBarY = engineLayout02ViewCreate();
@@ -32,7 +34,6 @@ static void init(struct engineLayout02ViewPartsScrollerImplement *this){
 
 // タッチ処理
 static bool touch(struct engineLayout02ViewPartsScrollerImplement *this, int touchIndex, double x, double y, bool dn, bool mv, bool isCancel){
-	isCancel = (isCancel || ((struct engineLayout02View*)this)->interact.setting.isDisable);
 	// タッチ開始時に親要素の範囲外ならば子要素はタッチ開始できない
 	if(dn && !mv && !engineLayout02ViewUtilPositionTransformIsInner((struct engineLayout02View*)this, x, y)){isCancel = true;}
 

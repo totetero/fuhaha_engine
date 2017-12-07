@@ -9,6 +9,7 @@
 
 // 表示要素構造体対話型 タッチ処理
 bool engineLayout02ViewUtilInteractTouch(struct engineLayout02View *this, int touchIndex, double x, double y, bool dn, bool mv, bool isCancel){
+	isCancel = (isCancel || !this->interact.setting.isTouchable);
 	if(!this->interact.status.isActive){
 		if(dn && !mv && !isCancel && engineLayout02ViewUtilPositionTransformIsInner(this, x, y)){
 			// タッチ開始

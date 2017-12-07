@@ -156,9 +156,9 @@ void engineLayout02ViewUtilPositionSetPaddingVertical(struct engineLayout02View 
 // 表示要素構造体対話型
 struct engineLayout02ViewUtilInteract{
 	struct{
+		bool isTouchable;
 		bool isMoveableX;
 		bool isMoveableY;
-		bool isDisable;
 	} setting;
 	struct{
 		int touchIndex;

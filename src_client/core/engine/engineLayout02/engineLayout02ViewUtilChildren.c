@@ -110,11 +110,12 @@ static void sortChildren(struct engineLayout02View *this){
 // 表示要素構造体子要素 タッチ処理
 bool engineLayout02ViewUtilChildrenTouch(struct engineLayout02View *this, int touchIndex, double x, double y, bool dn, bool mv, bool isCancel){
 	bool isActive = false;
-	struct engineLayout02View *temp = this->children.childrenHead;
+	// 子要素のタッチ処理 表示手前から先に処理する
+	struct engineLayout02View *temp = this->children.childrenTail;
 	while(temp != NULL){
-		isCancel = isCancel || isActive;
-		if(!temp->children.isInactive && !temp->children.isInvisible){isActive = temp->touch(temp, touchIndex, x, y, dn, mv, isCancel);}
-		temp = temp->children.next;
+		isCancel = isCancel || isActive || temp->children.isInactive;
+		isActive = temp->touch(temp, touchIndex, x, y, dn, mv, isCancel);
+		temp = temp->children.prev;
 	}
 	return isActive;
 }
@@ -133,7 +134,7 @@ void engineLayout02ViewUtilChildrenCalc(struct engineLayout02View *this){
 
 // 表示要素構造体子要素 描画
 void engineLayout02ViewUtilChildrenDraw(struct engineLayout02View *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
-	// 子要素の描画
+	// 子要素の描画 表示奥から先に処理する
 	struct engineLayout02View *temp = this->children.childrenHead;
 	while(temp != NULL){
 		if(!temp->children.isInvisible){temp->draw(temp, mat, color);}
