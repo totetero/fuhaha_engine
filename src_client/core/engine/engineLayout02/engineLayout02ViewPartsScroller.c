@@ -153,7 +153,7 @@ static void dispose(struct engineLayout02ViewPartsScrollerImplement *this){
 
 // ----------------------------------------------------------------
 
-// 画像描画構造体 作成
+// スクローラ構造体 作成
 struct engineLayout02ViewPartsScroller *engineLayout02ViewPartsScrollerCreate(){
 	struct engineLayout02ViewPartsScrollerImplement *this = (struct engineLayout02ViewPartsScrollerImplement*)engineUtilMemoryInfoCalloc("engineLayout02ViewPartsScroller", 1, sizeof(struct engineLayout02ViewPartsScrollerImplement));
 	init(this);
