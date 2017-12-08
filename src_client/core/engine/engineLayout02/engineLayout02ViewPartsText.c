@@ -107,6 +107,22 @@ static void calc(struct engineLayout02ViewPartsTextImplement *this){
 
 // ----------------------------------------------------------------
 
+// 文字列作成完了確認
+static void checkTexture(struct engineLayout02ViewPartsTextImplement *this){
+	if(this->fontInfo.codeListIndex < 0){
+		int codeListIndex = -1;
+		int codeListLength = 0;
+		enum engineGraphicTextureType type = this->fontInfo.type;
+		engineGraphicTextureGetCodeList(this->egoIdTexTest, &codeListIndex, &codeListLength, &type);
+		if(codeListIndex >= 0){
+			this->fontInfo.codeListIndex = codeListIndex;
+			this->fontInfo.codeListLength = codeListLength;
+			this->fontInfo.type = type;
+			this->generationCount++;
+		}
+	}
+}
+
 // バッファ配列作成準備ステップ1 タグ処理
 static void prepareCreateBufferArrayText1(struct engineLayout02ViewPartsTextImplement *this, struct pluginTextureFontCode *codeList){
 	double size = this->super.fontStyle.size * 1.0;
@@ -252,20 +268,6 @@ static void createBufferArrayText(struct engineLayout02ViewPartsTextImplement *t
 
 // バッファ作成
 static void createBuffer(struct engineLayout02ViewPartsTextImplement *this){
-	if(this->fontInfo.codeListIndex < 0){
-		// 文字列作成完了確認
-		int codeListIndex = -1;
-		int codeListLength = 0;
-		enum engineGraphicTextureType type = this->fontInfo.type;
-		engineGraphicTextureGetCodeList(this->egoIdTexTest, &codeListIndex, &codeListLength, &type);
-		if(codeListIndex >= 0){
-			this->fontInfo.codeListIndex = codeListIndex;
-			this->fontInfo.codeListLength = codeListLength;
-			this->fontInfo.type = type;
-			this->generationCount++;
-		}
-	}
-
 	struct engineLayout02ViewPartsTextBufferCompare bufferCompare;
 	bufferCompare.generationCount = this->generationCount;
 	bufferCompare.size = this->super.fontStyle.size;
@@ -281,11 +283,13 @@ static void createBuffer(struct engineLayout02ViewPartsTextImplement *this){
 		engineGraphicBufferBegin();
 
 		// バッファ配列作成
-		struct pluginTextureFontCode *codeList = corePluginTextureFontCodeListGet(this->fontInfo.codeListIndex);
-		prepareCreateBufferArrayText1(this, codeList);
-		prepareCreateBufferArrayText2(this, codeList);
-		prepareCreateBufferArrayText3(this, codeList);
-		createBufferArrayText(this, codeList);
+		if(this->fontInfo.codeListIndex >= 0){
+			struct pluginTextureFontCode *codeList = corePluginTextureFontCodeListGet(this->fontInfo.codeListIndex);
+			prepareCreateBufferArrayText1(this, codeList);
+			prepareCreateBufferArrayText2(this, codeList);
+			prepareCreateBufferArrayText3(this, codeList);
+			createBufferArrayText(this, codeList);
+		}
 
 		// バッファ作成完了
 		engineGraphicBufferEnd(&this->egoIdVert, NULL, &this->egoIdTexc, &this->egoIdFace);
@@ -319,6 +323,7 @@ static void drawText(struct engineLayout02ViewPartsTextImplement *this, struct p
 static void draw(struct engineLayout02ViewPartsTextImplement *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
 	if(this->egoIdTexTest > 0){
 		// 描画準備
+		checkTexture(this);
 		createBuffer(this);
 
 		if(this->fontInfo.codeListIndex >= 0){
