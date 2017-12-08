@@ -14,12 +14,14 @@ struct engineLayout02ViewPartsMaskRectImplement{
 	struct engineLayout02ViewPartsMaskRect super;
 
 	struct engineLayout02ViewPartsMaskRectBufferCompare{
-		int status;
+		int generationCount;
 	} bufferCompare;
 	engineGraphicObjectVBOId egoIdVert;
 	engineGraphicObjectVBOId egoIdTexc;
 	engineGraphicObjectIBOId egoIdFace;
 	engineGraphicTextureId egoIdTexTest;
+
+	int generationCount;
 
 	int faceIndex;
 	int faceNum;
@@ -31,6 +33,7 @@ struct engineLayout02ViewPartsMaskRectImplement{
 static void init(struct engineLayout02ViewPartsMaskRectImplement *this){
 	// レイアウト初期化
 	engineLayout02ViewUtilPositionInit((struct engineLayout02View*)this);
+	this->generationCount++;
 }
 
 // ----------------------------------------------------------------
@@ -83,7 +86,7 @@ static void createBufferArrayRect(struct engineLayout02ViewPartsMaskRectImplemen
 // バッファ作成
 static void createBuffer(struct engineLayout02ViewPartsMaskRectImplement *this){
 	struct engineLayout02ViewPartsMaskRectBufferCompare bufferCompare;
-	bufferCompare.status = 1;
+	bufferCompare.generationCount = this->generationCount;
 
 	if(memcmp(&this->bufferCompare, &bufferCompare, sizeof(struct engineLayout02ViewPartsMaskRectBufferCompare))){
 		memcpy(&this->bufferCompare, &bufferCompare, sizeof(struct engineLayout02ViewPartsMaskRectBufferCompare));

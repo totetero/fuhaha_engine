@@ -34,16 +34,8 @@
 struct engineLayout02ViewPartsTextImplement{
 	struct engineLayout02ViewPartsText super;
 
-	struct{
-		int codeListIndex;
-		int codeListLength;
-		enum engineGraphicTextureType type;
-		int colNum;
-		double textWidth;
-		double textHeight;
-	} fontInfo;
-
 	struct engineLayout02ViewPartsTextBufferCompare{
+		int generationCount;
 		double size;
 		int lineNum;
 		int maxWidth;
@@ -54,6 +46,16 @@ struct engineLayout02ViewPartsTextImplement{
 	engineGraphicObjectVBOId egoIdTexc;
 	engineGraphicObjectIBOId egoIdFace;
 	engineGraphicTextureId egoIdTexTest;
+
+	int generationCount;
+	struct{
+		int codeListIndex;
+		int codeListLength;
+		enum engineGraphicTextureType type;
+		int colNum;
+		double textWidth;
+		double textHeight;
+	} fontInfo;
 
 	int faceIndex;
 	int faceNum;
@@ -250,14 +252,6 @@ static void createBufferArrayText(struct engineLayout02ViewPartsTextImplement *t
 
 // バッファ作成
 static void createBuffer(struct engineLayout02ViewPartsTextImplement *this){
-	struct engineLayout02ViewPartsTextBufferCompare bufferCompare;
-	bufferCompare.size = this->super.fontStyle.size;
-	bufferCompare.lineNum = this->super.fontStyle.lineNum;
-	bufferCompare.maxWidth = this->super.fontStyle.maxWidth;
-	bufferCompare.maxHeight = this->super.fontStyle.maxHeight;
-	bufferCompare.xalign = this->super.fontStyle.xalign;
-
-	bool shouldCreateBuffer = false;
 	if(this->fontInfo.codeListIndex < 0){
 		// 文字列作成完了確認
 		int codeListIndex = -1;
@@ -268,14 +262,19 @@ static void createBuffer(struct engineLayout02ViewPartsTextImplement *this){
 			this->fontInfo.codeListIndex = codeListIndex;
 			this->fontInfo.codeListLength = codeListLength;
 			this->fontInfo.type = type;
-			shouldCreateBuffer = true;
+			this->generationCount++;
 		}
-	}else if(memcmp(&this->bufferCompare, &bufferCompare, sizeof(struct engineLayout02ViewPartsTextBufferCompare))){
-		// 情報更新確認
-		shouldCreateBuffer = true;
 	}
 
-	if(shouldCreateBuffer){
+	struct engineLayout02ViewPartsTextBufferCompare bufferCompare;
+	bufferCompare.generationCount = this->generationCount;
+	bufferCompare.size = this->super.fontStyle.size;
+	bufferCompare.lineNum = this->super.fontStyle.lineNum;
+	bufferCompare.maxWidth = this->super.fontStyle.maxWidth;
+	bufferCompare.maxHeight = this->super.fontStyle.maxHeight;
+	bufferCompare.xalign = this->super.fontStyle.xalign;
+
+	if(memcmp(&this->bufferCompare, &bufferCompare, sizeof(struct engineLayout02ViewPartsTextBufferCompare))){
 		memcpy(&this->bufferCompare, &bufferCompare, sizeof(struct engineLayout02ViewPartsTextBufferCompare));
 
 		// バッファ作成開始
@@ -414,19 +413,13 @@ struct engineLayout02ViewPartsText *engineLayout02ViewPartsTextCreateText(char *
 void engineLayout02ViewPartsTextSet(struct engineLayout02ViewPartsText *that, enum pluginTextureFontSetId fontSetId, char *text){
 	struct engineLayout02ViewPartsTextImplement *this = (struct engineLayout02ViewPartsTextImplement*)that;
 	// 一旦情報リセット
-	engineGraphicObjectVBODispose(this->egoIdVert);
-	engineGraphicObjectVBODispose(this->egoIdTexc);
-	engineGraphicObjectIBODispose(this->egoIdFace);
-	engineGraphicTextureDispose(this->egoIdTexTest);
-	this->egoIdVert = 0;
-	this->egoIdTexc = 0;
-	this->egoIdFace = 0;
-	this->egoIdTexTest = 0;
 	this->fontInfo.codeListIndex = -1;
 	this->fontInfo.codeListLength = 0;
 	this->fontInfo.type = ENGINEGRAPHICTEXTURETYPE_LINEAR;
+	this->generationCount++;
 	// 文字列作成開始
-	if(text != NULL){this->egoIdTexTest = engineGraphicTextureCreateFont(fontSetId, text, this->fontInfo.type);}
+	engineGraphicTextureDispose(this->egoIdTexTest);
+	this->egoIdTexTest = (text != NULL) ? engineGraphicTextureCreateFont(fontSetId, text, this->fontInfo.type) : 0;
 }
 
 // ----------------------------------------------------------------
