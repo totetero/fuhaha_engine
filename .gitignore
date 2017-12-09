@@ -6,17 +6,17 @@
 .DS_Store
 *.swp
 
-src_platform/web/obj/game.js
-src_platform/web/obj/game.js.mem
-src_platform/web/obj/MakeDepends.mk
-src_platform/web/obj/*.o
-src_platform/web/bin
+src_client_fuhaha/web/obj/game.js
+src_client_fuhaha/web/obj/game.js.mem
+src_client_fuhaha/web/obj/MakeDepends.mk
+src_client_fuhaha/web/obj/*.o
+src_client_fuhaha/web/bin
 
-src_platform/android/.gradle
-src_platform/android/build
-src_platform/android/assets
+src_client_fuhaha/android/.gradle
+src_client_fuhaha/android/build
+src_client_fuhaha/android/assets
 
-src_platform/ios/assets
+src_client_fuhaha/ios/assets
 
 # ----------------------------------------------------------------
 # ----------------------------------------------------------------

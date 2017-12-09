@@ -34,7 +34,7 @@ libHttp.createServer(function(req, res){
 		}else{
 			// ファイルサーバ
 			var filePaths = [];
-			filePaths.push(libPath.join(process.cwd(), "/src_platform/web/bin" + req.url));
+			filePaths.push(libPath.join(process.cwd(), "/src_client_fuhaha/web/bin" + req.url));
 			fuhahaFileServer.fileServer(req, res, filePaths);
 		}
 		next(null);
