@@ -1,17 +1,15 @@
-#pragma once
+#include "../../library.h"
+#include "engineUtil.h"
+#include "../../game.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-typedef unsigned char byte;
-
-#include "./defineGlobal.h"
-
-#include "./definePluginTexture.h"
-#include "./defineEngineMath.h"
-
-#include "./texpos.h"
+// ゲーム終了
+void engineUtilSystemExit(void){
+	platformMainSurfaceExit();
+}
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

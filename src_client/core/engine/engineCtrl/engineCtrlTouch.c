@@ -1,6 +1,5 @@
 #include "../../library.h"
 #include "engineCtrl.h"
-#include "../../game.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -26,7 +25,7 @@ static struct{
 void engineCtrlTouchCalc(void){
 	for(int i = 0; i < (int)(sizeof(localGlobal.list) / sizeof(*localGlobal.list)); i++){
 		struct engineCtrlTouchLocal *localTouch = &localGlobal.list[i];
-		struct touch *globalTouch = &global.touch[i];
+		struct globalTouch *globalTouch = &global.touch[i];
 		if(globalTouch->dn.triggerActive){
 			// 押した直後
 			globalTouch->dn.triggerActive = false;

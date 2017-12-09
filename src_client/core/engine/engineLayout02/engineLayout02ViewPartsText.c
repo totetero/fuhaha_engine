@@ -4,7 +4,6 @@
 #include "../engineUtil/engineUtil.h"
 #include "../engineGraphic/engineGraphic.h"
 #include "./engineLayout02.h"
-#include "../../game.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

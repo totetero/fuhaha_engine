@@ -5,7 +5,6 @@
 #include "../engine/engineGraphic/engineGraphic.h"
 #include "../engine/engineCartridge/engineCartridge.h"
 #include "../engine/engineLayout01/engineLayout01.h"
-#include "../game.h"
 #include "pageTest2.h"
 
 // ----------------------------------------------------------------

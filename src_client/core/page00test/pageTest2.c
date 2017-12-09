@@ -5,7 +5,6 @@
 #include "../engine/engineGraphic/engineGraphic.h"
 #include "../engine/engineCartridge/engineCartridge.h"
 #include "../engine/engineLayout01/engineLayout01.h"
-#include "../game.h"
 #include "pageTest2.h"
 
 // ----------------------------------------------------------------
@@ -114,7 +113,7 @@ static bool calcButton(struct pageCartridgeTest2 *this){
 	if(global.key.bk.triggerInactive){
 		global.key.bk.triggerInactive = false;
 		// 終了
-		platformMainSurfaceExit();
+		engineUtilSystemExit();
 	}
 
 	return false;

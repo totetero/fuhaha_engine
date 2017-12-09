@@ -2,7 +2,6 @@
 #include "../engineMath/engineMath.h"
 #include "../engineUtil/engineUtil.h"
 #include "./engineLayout02.h"
-#include "../../game.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

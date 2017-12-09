@@ -3,7 +3,6 @@
 #include "../engineUtil/engineUtil.h"
 #include "../engineCtrl/engineCtrl.h"
 #include "./engineLayout02.h"
-#include "../../game.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
