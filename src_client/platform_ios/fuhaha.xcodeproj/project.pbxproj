@@ -515,7 +515,7 @@
 				TargetAttributes = {
 					9C8D02381C99CCEB00F2CFFB = {
 						CreatedOnToolsVersion = 7.2.1;
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 0920;
 					};
 				};
 			};
@@ -752,7 +752,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.fuhaha;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = ../fuhahaEngine/ios/fuhaha_engine_bridgingHeader.h;
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -765,7 +766,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.fuhaha;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = ../fuhahaEngine/ios/fuhaha_engine_bridgingHeader.h;
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};

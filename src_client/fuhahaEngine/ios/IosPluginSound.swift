@@ -22,14 +22,14 @@ class IosPluginSound: NSObject{
 	// ----------------------------------------------------------------
 
 	// BGM読込
-	static internal func platformPluginSoundBgmLoad(_ bgmId: UInt32, src: String){
+	@objc static internal func platformPluginSoundBgmLoad(_ bgmId: UInt32, src: String){
 		if(bgmId <= 0){return;}
 		if(IosPluginSound.bgmList[bgmId] != nil){return;}
 		IosPluginSound.bgmList[bgmId] = IosPluginSound.FuhahaBgmItem(src: src, bgmId: bgmId);
 	}
 
 	// BGM再生
-	static internal func platformPluginSoundBgmPlay(_ bgmId: UInt32){
+	@objc static internal func platformPluginSoundBgmPlay(_ bgmId: UInt32){
 		IosPluginSound.bgmZeroId = bgmId;
 		let oldVolume = IosPluginSound.bgmVolume;
 		if(oldVolume > 0){IosPluginSound.bgmPlay(bgmId);}
@@ -50,12 +50,12 @@ class IosPluginSound: NSObject{
 	}
 
 	// BGMトーンダウン
-	static internal func platformPluginSoundBgmToneDown(_ volume: Double){
+	@objc static internal func platformPluginSoundBgmToneDown(_ volume: Double){
 		IosPluginSound.bgmToneDown = Float(volume);
 	}
 
 	// BGM設定音量
-	static internal func platformPluginSoundBgmVolume(_ volume: Double){
+	@objc static internal func platformPluginSoundBgmVolume(_ volume: Double){
 		// 音量をゼロにした瞬間とゼロから戻した瞬間
 		let oldVolume = IosPluginSound.bgmVolume;
 		if(oldVolume > 0 && volume <= 0){IosPluginSound.bgmPlay(0);}
@@ -87,7 +87,7 @@ class IosPluginSound: NSObject{
 		}
 
 		// タイマーコールバック
-		func playTimer(_ timer: Timer?){
+		@objc func playTimer(_ timer: Timer?){
 			if(self.playing()){
 				Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(self.playTimer(_:)), userInfo: nil, repeats: false);
 			}
@@ -140,19 +140,19 @@ class IosPluginSound: NSObject{
 	// ----------------------------------------------------------------
 
 	// SE読込
-	static internal func platformPluginSoundSeLoad(_ seId: UInt32, src: String){
+	@objc static internal func platformPluginSoundSeLoad(_ seId: UInt32, src: String){
 		if(seId <= 0){return;}
 		if(IosPluginSound.seList[seId] != nil){return;}
 		IosPluginSound.seList[seId] = IosPluginSound.FuhahaSeItem(src: src);
 	}
 
 	// SE再生
-	static internal func platformPluginSoundSePlay(_ seId: UInt32){
+	@objc static internal func platformPluginSoundSePlay(_ seId: UInt32){
 		IosPluginSound.seList[seId]?.play();
 	}
 
 	// SE設定音量
-	static internal func platformPluginSoundSeVolume(_ volume: Double){
+	@objc static internal func platformPluginSoundSeVolume(_ volume: Double){
 		IosPluginSound.seVolume = Float(volume);
 	}
 

@@ -35,7 +35,7 @@ class IosPluginTexture: NSObject{
 	// ----------------------------------------------------------------
 
 	// ローカルデータ読み込み
-	static internal func platformPluginTextureLocal(_ callbackId: Int32, src: String){
+	@objc static internal func platformPluginTextureLocal(_ callbackId: Int32, src: String){
 		IosPluginUtil.nativePluginUtilLoadingIncrement();
 
 		DispatchQueue(label: "fuhahaCreateTextureLocal").async(execute: {
@@ -72,14 +72,14 @@ class IosPluginTexture: NSObject{
 	}
 
 	// フォントテクスチャ作成
-	static internal func platformPluginTextureFont(_ callbackId: Int32, fontSetId: Int32, letterList: String){
+	@objc static internal func platformPluginTextureFont(_ callbackId: Int32, fontSetId: Int32, letterList: String){
 		IosPluginUtil.nativePluginUtilLoadingIncrement();
 
 		// フォント準備
 		let font: UIFont = IosPluginTexture.getFontSet(fontSetId);
 
-		let letterLength: Int32 = Int32(letterList.characters.count);
-		let strLetterList: [String] = letterList.characters.map{(c: Character) -> String in return String(c);}
+		let letterLength: Int32 = Int32(letterList.count);
+		let strLetterList: [String] = letterList.map{(c: Character) -> String in return String(c);}
 		var objLetterList: [IosPluginTexture.ObjLetter?] = Array<IosPluginTexture.ObjLetter?>(repeating: nil, count: Int(letterLength));
 
 		// 文字サイズの計測
@@ -93,7 +93,7 @@ class IosPluginTexture: NSObject{
 		for i: Int in (0 ..< Int(letterLength)){
 			objLetterList[i] = IosPluginTexture.ObjLetter();
 			let objLetter: IosPluginTexture.ObjLetter = objLetterList[i]!;
-			let size: CGSize = strLetterList[i].size(attributes: [NSFontAttributeName : font]);
+			let size: CGSize = strLetterList[i].size(withAttributes: [NSAttributedStringKey.font : font]);
 			objLetter.code = Int32(strLetterList[i].unicodeScalars.first!.value);
 			objLetter.w = Double(size.width);
 			objLetter.h = Double(size.height);
@@ -120,7 +120,7 @@ class IosPluginTexture: NSObject{
 			for i: Int in (0..<12){let size: Int = (1 << i); if(maxHeight <= Double(size)){maxHeight = Double(size); break;}}
 			// 文字キャンバス作成
 			UIGraphicsBeginImageContext(CGSize(width: Int(maxWidth), height: Int(maxHeight)));
-			let attrs: [String: NSObject] = [NSFontAttributeName: font, NSForegroundColorAttributeName: UIColor.white, NSParagraphStyleAttributeName: NSMutableParagraphStyle()];
+			let attrs: [NSAttributedStringKey: NSObject] = [NSAttributedStringKey.font: font, NSAttributedStringKey.foregroundColor: UIColor.white, NSAttributedStringKey.paragraphStyle: NSMutableParagraphStyle()];
 			lineWidth = margin;
 			lineHeight = margin;
 			maxHeight = margin;
@@ -178,7 +178,7 @@ class IosPluginTexture: NSObject{
 	}
 
 	// フォントテクスチャ破棄
-	static internal func platformPluginTextureFontDispose(_ codeListIndex: Int32){
+	@objc static internal func platformPluginTextureFontDispose(_ codeListIndex: Int32){
 		let fontData: IosPluginTexture.FontData? = IosPluginTexture.fontList![codeListIndex];
 		if(fontData == nil){return;}
 		var glId: GLuint = GLuint(fontData!.glId);

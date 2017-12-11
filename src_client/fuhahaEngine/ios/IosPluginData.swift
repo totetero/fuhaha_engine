@@ -9,7 +9,7 @@ class IosPluginData: NSObject{
 	// ----------------------------------------------------------------
 
 	// HTTP通信 
-	static internal func platformPluginDataHttp(_ callbackId: Int32, url: String, request: String){
+	@objc static internal func platformPluginDataHttp(_ callbackId: Int32, url: String, request: String){
 		IosPluginUtil.nativePluginUtilLoadingIncrement();
 
 		// 通信準備
@@ -44,7 +44,7 @@ class IosPluginData: NSObject{
 	}
 
 	// ローカルデータ読み込み
-	static internal func platformPluginDataLocal(_ callbackId: Int32, src: String){
+	@objc static internal func platformPluginDataLocal(_ callbackId: Int32, src: String){
 		IosPluginUtil.nativePluginUtilLoadingIncrement();
 
 		DispatchQueue(label: "fuhahaLoadLocalData").async(execute: {

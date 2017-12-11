@@ -54,24 +54,24 @@ class FuhahaGLViewController: GLKViewController{
 	// ----------------------------------------------------------------
 
 	// ライフサイクルイベント アプリ閉じそう
-	internal func applicationWillResignActive(){
+	@objc internal func applicationWillResignActive(){
 	}
 
 	// ライフサイクルイベント アプリ閉じた
-	internal func applicationDidEnterBackground(){
+	@objc internal func applicationDidEnterBackground(){
 		gameMainSurfacePause();
 	}
 
 	// ライフサイクルイベント アプリ開きそう
-	internal func applicationWillEnterForeground(){
+	@objc internal func applicationWillEnterForeground(){
 	}
 
 	// ライフサイクルイベント アプリ開いた
-	internal func applicationDidBecomeActive(){
+	@objc internal func applicationDidBecomeActive(){
 	}
 
 	// ライフサイクルイベント フリックしてアプリを終了させた
-	internal func applicationWillTerminate(){
+	@objc internal func applicationWillTerminate(){
 		gameMainSurfaceDestroy();
 	}
 
@@ -100,7 +100,7 @@ class FuhahaGLViewController: GLKViewController{
 	// ----------------------------------------------------------------
 
 	// アプリ終了命令
-	static internal func platformMainSurfaceExit(){
+	@objc static internal func platformMainSurfaceExit(){
 		exit(1);
 	}
 
