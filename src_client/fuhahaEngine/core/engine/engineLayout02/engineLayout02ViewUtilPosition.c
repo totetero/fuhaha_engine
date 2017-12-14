@@ -177,15 +177,15 @@ void engineLayout02ViewUtilPositionSetPaddingBottom(struct engineLayout02View *t
 	localGlobal.generationCount++;
 }
 
-void engineLayout02ViewUtilPositionSetHorizontalCentering(struct engineLayout02View *this){
+void engineLayout02ViewUtilPositionSetCenteringHorizontal(struct engineLayout02View *this){
 	if(localGlobal.isModeDraw){return;}
-	this->position.style.horizontalCentering.isActive = true;
+	this->position.style.centeringHorizontal.isActive = true;
 	localGlobal.generationCount++;
 }
 
-void engineLayout02ViewUtilPositionSetVerticalCentering(struct engineLayout02View *this){
+void engineLayout02ViewUtilPositionSetCenteringVertical(struct engineLayout02View *this){
 	if(localGlobal.isModeDraw){return;}
-	this->position.style.verticalCentering.isActive = true;
+	this->position.style.centeringVertical.isActive = true;
 	localGlobal.generationCount++;
 }
 
@@ -254,8 +254,8 @@ void engineLayout02ViewUtilPositionUnsetPaddingLeft(struct engineLayout02View *t
 void engineLayout02ViewUtilPositionUnsetPaddingRight(struct engineLayout02View *this){if(localGlobal.isModeDraw){return;} this->position.style.paddingRight.isActive = false; localGlobal.generationCount++;}
 void engineLayout02ViewUtilPositionUnsetPaddingTop(struct engineLayout02View *this){if(localGlobal.isModeDraw){return;} this->position.style.paddingTop.isActive = false; localGlobal.generationCount++;}
 void engineLayout02ViewUtilPositionUnsetPaddingBottom(struct engineLayout02View *this){if(localGlobal.isModeDraw){return;} this->position.style.paddingBottom.isActive = false; localGlobal.generationCount++;}
-void engineLayout02ViewUtilPositionUnsetHorizontalCentering(struct engineLayout02View *this){if(localGlobal.isModeDraw){return;} this->position.style.horizontalCentering.isActive = false; localGlobal.generationCount++;}
-void engineLayout02ViewUtilPositionUnsetVerticalCentering(struct engineLayout02View *this){if(localGlobal.isModeDraw){return;} this->position.style.verticalCentering.isActive = false; localGlobal.generationCount++;}
+void engineLayout02ViewUtilPositionUnsetCenteringHorizontal(struct engineLayout02View *this){if(localGlobal.isModeDraw){return;} this->position.style.centeringHorizontal.isActive = false; localGlobal.generationCount++;}
+void engineLayout02ViewUtilPositionUnsetCenteringVertical(struct engineLayout02View *this){if(localGlobal.isModeDraw){return;} this->position.style.centeringVertical.isActive = false; localGlobal.generationCount++;}
 void engineLayout02ViewUtilPositionUnsetTransform(struct engineLayout02View *this){if(localGlobal.isModeDraw){return;} this->position.style.transform.isActive = false; localGlobal.generationCount++;}
 
 // ----------------------------------------------------------------
@@ -312,7 +312,7 @@ static void calcLayout(struct engineLayout02View *this){
 	double valLt = this->position.style.left.value;
 	double valRt = this->position.style.right.value;
 	double valWh = this->position.style.width.value;
-	if(this->position.style.horizontalCentering.isActive){
+	if(this->position.style.centeringHorizontal.isActive){
 		this->position.layout.w = (isWh ? valWh : ((isLt && isRt) ? (valLt + valRt) : 0));
 		this->position.layout.x = currentX + currentW * 0.5 - (isLt ? valLt : (isRt ? (this->position.layout.w - isRt) : (this->position.layout.w * 0.5)));
 	}else{
@@ -327,7 +327,7 @@ static void calcLayout(struct engineLayout02View *this){
 	double valTp = this->position.style.top.value;
 	double valBm = this->position.style.bottom.value;
 	double valHt = this->position.style.height.value;
-	if(this->position.style.verticalCentering.isActive){
+	if(this->position.style.centeringVertical.isActive){
 		this->position.layout.h = (isHt ? valHt : ((isTp && isBm) ? (valTp + valBm) : 0));
 		this->position.layout.y = currentY + currentH * 0.5 - (isTp ? valTp : (isBm ? (this->position.layout.h - isBm) : (this->position.layout.h * 0.5)));
 	}else{

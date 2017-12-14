@@ -30,7 +30,7 @@ static void init(struct pageCartridgeTest3 *this){
 	engineLayout02ViewUtilPositionSetBottom((struct engineLayout02View*)this->viewTestButton, 10);
 	engineLayout02ViewUtilPositionSetWidth((struct engineLayout02View*)this->viewTestButton, 100);
 	engineLayout02ViewUtilPositionSetHeight((struct engineLayout02View*)this->viewTestButton, 30);
-	engineLayout02ViewUtilPositionSetHorizontalCentering((struct engineLayout02View*)this->viewTestButton);
+	engineLayout02ViewUtilPositionSetCenteringHorizontal((struct engineLayout02View*)this->viewTestButton);
 	engineLayout02ViewUtilChildrenAdd((struct engineLayout02View*)viewTestFrame, (struct engineLayout02View*)this->viewTestButton);
 
 	// スクローラマスク作成

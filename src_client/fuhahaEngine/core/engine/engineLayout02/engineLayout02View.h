@@ -60,8 +60,8 @@ struct engineLayout02ViewUtilPosition{
 		struct{bool isActive; double value;} paddingRight;
 		struct{bool isActive; double value;} paddingTop;
 		struct{bool isActive; double value;} paddingBottom;
-		struct{bool isActive;} horizontalCentering;
-		struct{bool isActive;} verticalCentering;
+		struct{bool isActive;} centeringHorizontal;
+		struct{bool isActive;} centeringVertical;
 		struct{bool isActive; double originX; double originY; struct engineMathMatrix44 matrix;} transform;
 	} style;
 
@@ -104,8 +104,8 @@ void engineLayout02ViewUtilPositionSetPaddingLeft(struct engineLayout02View *thi
 void engineLayout02ViewUtilPositionSetPaddingRight(struct engineLayout02View *this, double value);
 void engineLayout02ViewUtilPositionSetPaddingTop(struct engineLayout02View *this, double value);
 void engineLayout02ViewUtilPositionSetPaddingBottom(struct engineLayout02View *this, double value);
-void engineLayout02ViewUtilPositionSetVerticalCentering(struct engineLayout02View *this);
-void engineLayout02ViewUtilPositionSetHorizontalCentering(struct engineLayout02View *this);
+void engineLayout02ViewUtilPositionSetCenteringVertical(struct engineLayout02View *this);
+void engineLayout02ViewUtilPositionSetCenteringHorizontal(struct engineLayout02View *this);
 void engineLayout02ViewUtilPositionSetTransformOrigin(struct engineLayout02View *this, double originX, double originY);
 void engineLayout02ViewUtilPositionSetTransformMatrix(struct engineLayout02View *this, struct engineMathMatrix44 *matrix);
 void engineLayout02ViewUtilPositionSetTransformScale(struct engineLayout02View *this, double x, double y, double z);
@@ -126,8 +126,8 @@ void engineLayout02ViewUtilPositionUnsetPaddingLeft(struct engineLayout02View *t
 void engineLayout02ViewUtilPositionUnsetPaddingRight(struct engineLayout02View *this);
 void engineLayout02ViewUtilPositionUnsetPaddingTop(struct engineLayout02View *this);
 void engineLayout02ViewUtilPositionUnsetPaddingBottom(struct engineLayout02View *this);
-void engineLayout02ViewUtilPositionUnsetVerticalCentering(struct engineLayout02View *this);
-void engineLayout02ViewUtilPositionUnsetHorizontalCentering(struct engineLayout02View *this);
+void engineLayout02ViewUtilPositionUnsetCenteringVertical(struct engineLayout02View *this);
+void engineLayout02ViewUtilPositionUnsetCenteringHorizontal(struct engineLayout02View *this);
 void engineLayout02ViewUtilPositionUnsetTransform(struct engineLayout02View *this);
 
 // 表示要素構造体位置関係 レイアウト取得
