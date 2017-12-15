@@ -35,11 +35,13 @@ struct engineLayout02ViewPartsTextImplement{
 
 	struct engineLayout02ViewPartsTextBufferCompare{
 		int generationCount;
-		double size;
-		int lineNum;
-		int maxWidth;
-		int maxHeight;
-		int xalign;
+		struct{
+			double size;
+			int lineNum;
+			int maxWidth;
+			int maxHeight;
+			int xalign;
+		} fontStyle;
 	} bufferCompare;
 	engineGraphicObjectVBOId egoIdVert;
 	engineGraphicObjectVBOId egoIdTexc;
@@ -269,11 +271,11 @@ static void createBufferArrayText(struct engineLayout02ViewPartsTextImplement *t
 static void createBuffer(struct engineLayout02ViewPartsTextImplement *this){
 	struct engineLayout02ViewPartsTextBufferCompare bufferCompare;
 	bufferCompare.generationCount = this->generationCount;
-	bufferCompare.size = this->super.fontStyle.size;
-	bufferCompare.lineNum = this->super.fontStyle.lineNum;
-	bufferCompare.maxWidth = this->super.fontStyle.maxWidth;
-	bufferCompare.maxHeight = this->super.fontStyle.maxHeight;
-	bufferCompare.xalign = this->super.fontStyle.xalign;
+	bufferCompare.fontStyle.size = this->super.fontStyle.size;
+	bufferCompare.fontStyle.lineNum = this->super.fontStyle.lineNum;
+	bufferCompare.fontStyle.maxWidth = this->super.fontStyle.maxWidth;
+	bufferCompare.fontStyle.maxHeight = this->super.fontStyle.maxHeight;
+	bufferCompare.fontStyle.xalign = this->super.fontStyle.xalign;
 
 	if(memcmp(&this->bufferCompare, &bufferCompare, sizeof(struct engineLayout02ViewPartsTextBufferCompare))){
 		memcpy(&this->bufferCompare, &bufferCompare, sizeof(struct engineLayout02ViewPartsTextBufferCompare));
