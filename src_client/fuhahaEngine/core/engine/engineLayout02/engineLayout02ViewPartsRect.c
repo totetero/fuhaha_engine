@@ -13,9 +13,7 @@ struct engineLayout02ViewPartsRectImplement{
 	struct engineLayout02ViewPartsRect super;
 
 	struct engineLayout02ViewPartsRectBufferCompare{
-		int imgw;
-		int imgh;
-		struct{int tu; int tv; int tw; int th;} texture;
+		struct{int imgw; int imgh; int tu; int tv; int tw; int th;} texture;
 	} bufferCompare;
 	engineGraphicObjectVBOId egoIdVert;
 	engineGraphicObjectVBOId egoIdTexc;
@@ -72,8 +70,8 @@ static void createBufferArrayRect(struct engineLayout02ViewPartsRectImplement *t
 	int h = 1;
 	engineGraphicBufferPushTetraVert(x, y, w, h);
 	// テクスチャ座標データを生成
-	int imgw = this->super.imgw;
-	int imgh = this->super.imgh;
+	int imgw = this->super.texture.imgw;
+	int imgh = this->super.texture.imgh;
 	int tu = this->super.texture.tu;
 	int tv = this->super.texture.tv;
 	int tw = this->super.texture.tw;
@@ -90,8 +88,8 @@ static void createBufferArrayRect(struct engineLayout02ViewPartsRectImplement *t
 // バッファ作成
 static void createBuffer(struct engineLayout02ViewPartsRectImplement *this){
 	struct engineLayout02ViewPartsRectBufferCompare bufferCompare;
-	bufferCompare.imgw = this->super.imgw;
-	bufferCompare.imgh = this->super.imgh;
+	bufferCompare.texture.imgw = this->super.texture.imgw;
+	bufferCompare.texture.imgh = this->super.texture.imgh;
 	bufferCompare.texture.tu = this->super.texture.tu;
 	bufferCompare.texture.tv = this->super.texture.tv;
 	bufferCompare.texture.tw = this->super.texture.tw;
@@ -174,8 +172,8 @@ struct engineLayout02ViewPartsRect *engineLayout02ViewPartsRectCreate(char *src,
 	init(this);
 	// 画像読み込み
 	this->egoIdTexTest = engineGraphicTextureCreateLocal(src, ENGINEGRAPHICTEXTURETYPE_LINEAR);
-	this->super.imgw = imgw;
-	this->super.imgh = imgh;
+	this->super.texture.imgw = imgw;
+	this->super.texture.imgh = imgh;
 	this->super.texture.tu = tu;
 	this->super.texture.tv = tv;
 	this->super.texture.tw = tw;

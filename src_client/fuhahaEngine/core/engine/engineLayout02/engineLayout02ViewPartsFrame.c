@@ -13,9 +13,7 @@ struct engineLayout02ViewPartsFrameImplement{
 	struct engineLayout02ViewPartsFrame super;
 
 	struct engineLayout02ViewPartsFrameBufferCompare{
-		int imgw;
-		int imgh;
-		struct{int tu; int tv; int tw; int th;} texture;
+		struct{int imgw; int imgh; int tu; int tv; int tw; int th;} texture;
 		struct{int bt; int bb; int br; int bl;} border;
 	} bufferCompare;
 	engineGraphicObjectVBOId egoIdVert;
@@ -38,8 +36,8 @@ static void init(struct engineLayout02ViewPartsFrameImplement *this){
 	this->egoIdTexTest = engineGraphicTextureCreateLocal("img/system.png", ENGINEGRAPHICTEXTURETYPE_LINEAR);
 
 	// デフォルトパラメータ設定
-	this->super.imgw = TEXSIZ_SYSTEM_W;
-	this->super.imgh = TEXSIZ_SYSTEM_H;
+	this->super.texture.imgw = TEXSIZ_SYSTEM_W;
+	this->super.texture.imgh = TEXSIZ_SYSTEM_H;
 	this->super.texture.tu = TEXPOS_SYSTEM_BOXBASIC_X;
 	this->super.texture.tv = TEXPOS_SYSTEM_BOXBASIC_Y;
 	this->super.texture.tw = TEXPOS_SYSTEM_BOXBASIC_W;
@@ -85,14 +83,14 @@ static void createBufferArrayRect(struct engineLayout02ViewPartsFrameImplement *
 	double bb = this->super.border.bb;
 	double br = this->super.border.br;
 	double bl = this->super.border.bl;
-	double x1 = -1.5; double u1 = (tu                           ) / this->super.imgw;
-	double x2 = -0.5; double u2 = (tu + bl                      ) / this->super.imgw;
-	double x3 =  0.5; double u3 = (tu + bl + (tw - bl - br)     ) / this->super.imgw;
-	double x4 =  1.5; double u4 = (tu + bl + (tw - bl - br) + br) / this->super.imgw;
-	double y1 = -1.5; double v1 = (tv                           ) / this->super.imgh;
-	double y2 = -0.5; double v2 = (tv + bt                      ) / this->super.imgh;
-	double y3 =  0.5; double v3 = (tv + bt + (th - bt - bb)     ) / this->super.imgh;
-	double y4 =  1.5; double v4 = (tv + bt + (th - bt - bb) + bb) / this->super.imgh;
+	double x1 = -1.5; double u1 = (tu                           ) / this->super.texture.imgw;
+	double x2 = -0.5; double u2 = (tu + bl                      ) / this->super.texture.imgw;
+	double x3 =  0.5; double u3 = (tu + bl + (tw - bl - br)     ) / this->super.texture.imgw;
+	double x4 =  1.5; double u4 = (tu + bl + (tw - bl - br) + br) / this->super.texture.imgw;
+	double y1 = -1.5; double v1 = (tv                           ) / this->super.texture.imgh;
+	double y2 = -0.5; double v2 = (tv + bt                      ) / this->super.texture.imgh;
+	double y3 =  0.5; double v3 = (tv + bt + (th - bt - bb)     ) / this->super.texture.imgh;
+	double y4 =  1.5; double v4 = (tv + bt + (th - bt - bb) + bb) / this->super.texture.imgh;
 	engineGraphicBufferPushVert(x1, y1, 0.0); engineGraphicBufferPushVert(x2, y1, 0.0); engineGraphicBufferPushVert(x3, y1, 0.0); engineGraphicBufferPushVert(x4, y1, 0.0);
 	engineGraphicBufferPushVert(x1, y2, 0.0); engineGraphicBufferPushVert(x2, y2, 0.0); engineGraphicBufferPushVert(x3, y2, 0.0); engineGraphicBufferPushVert(x4, y2, 0.0);
 	engineGraphicBufferPushVert(x1, y3, 0.0); engineGraphicBufferPushVert(x2, y3, 0.0); engineGraphicBufferPushVert(x3, y3, 0.0); engineGraphicBufferPushVert(x4, y3, 0.0);
@@ -120,8 +118,8 @@ static void createBufferArrayRect(struct engineLayout02ViewPartsFrameImplement *
 // バッファ作成
 static void createBuffer(struct engineLayout02ViewPartsFrameImplement *this){
 	struct engineLayout02ViewPartsFrameBufferCompare bufferCompare;
-	bufferCompare.imgw = this->super.imgw;
-	bufferCompare.imgh = this->super.imgh;
+	bufferCompare.texture.imgw = this->super.texture.imgw;
+	bufferCompare.texture.imgh = this->super.texture.imgh;
 	bufferCompare.texture.tu = this->super.texture.tu;
 	bufferCompare.texture.tv = this->super.texture.tv;
 	bufferCompare.texture.tw = this->super.texture.tw;
