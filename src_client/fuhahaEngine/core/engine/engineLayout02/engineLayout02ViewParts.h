@@ -57,6 +57,49 @@ struct engineLayout02ViewPartsText *engineLayout02ViewPartsTextCreateText(char *
 void engineLayout02ViewPartsTextSet(struct engineLayout02ViewPartsText *this, enum pluginTextureFontSetId fontSetId, char *text);
 
 // ----------------------------------------------------------------
+
+// 画像文字列描画構造体
+struct engineLayout02ViewPartsImageText{
+	struct engineLayout02View super;
+	struct{int imgw; int imgh; int tu; int tv; int tw; int th;} alphabet;
+	struct{int tu; int tv;} hiragana;
+	struct{int tu; int tv;} katakana;
+	struct{
+		double scale;
+		int xalign;
+		int yalign;
+	} fontStyle;
+	struct engineMathVector4 color;
+};
+
+// 画像文字列描画構造体 作成
+struct engineLayout02ViewPartsImageText *engineLayout02ViewPartsImageTextCreate(char *src, int imgw, int imgh, int tu, int tv, int tw, int th);
+struct engineLayout02ViewPartsImageText *engineLayout02ViewPartsImageTextCreateDefault(char *text);
+// 画像文字列描画構造体 文字列設定(utf8)
+void engineLayout02ViewPartsImageTextSet(struct engineLayout02ViewPartsImageText *this, char *text);
+
+// ----------------------------------------------------------------
+
+// 画像数字描画構造体
+struct engineLayout02ViewPartsImageNumber{
+	struct engineLayout02View super;
+	struct{int imgw; int imgh; int tu; int tv; int tw; int th;} number;
+	struct{
+		double scale;
+		int xalign;
+		int yalign;
+	} fontStyle;
+	struct engineMathVector4 color;
+	int value;
+};
+
+// 画像数字描画構造体 作成
+struct engineLayout02ViewPartsImageNumber *engineLayout02ViewPartsImageNumberCreate(char *src, int imgw, int imgh, int tu, int tv, int tw, int th);
+struct engineLayout02ViewPartsImageNumber *engineLayout02ViewPartsImageNumberCreateDefault(int value);
+// 画像文字列描画構造体 数値設定
+void engineLayout02ViewPartsImageNumberSet(struct engineLayout02ViewPartsImageNumber *this, int value);
+
+// ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
