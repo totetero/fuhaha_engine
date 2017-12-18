@@ -51,10 +51,10 @@ struct engineLayout02ViewPartsFontText{
 };
 
 // フォント文字列描画構造体 作成
-struct engineLayout02ViewPartsFontText *engineLayout02ViewPartsFontTextCreate();
+struct engineLayout02ViewPartsFontText *engineLayout02ViewPartsFontTextCreate(enum pluginTextureFontSetId fontSetId);
 struct engineLayout02ViewPartsFontText *engineLayout02ViewPartsFontTextCreateDefault(char *text);
 // フォント文字列描画構造体 文字列設定
-void engineLayout02ViewPartsFontTextSet(struct engineLayout02ViewPartsFontText *this, enum pluginTextureFontSetId fontSetId, char *text);
+void engineLayout02ViewPartsFontTextSet(struct engineLayout02ViewPartsFontText *this, char *text);
 
 // ----------------------------------------------------------------
 

@@ -50,6 +50,18 @@ struct engineLayout02ViewPartsFontTextImplement{
 
 	int generationCount;
 	struct{
+		char *buff;
+		int length;
+		int generationCount;
+		enum pluginTextureFontSetId fontSetId;
+		enum engineGraphicTextureType textureType;
+		struct engineLayout02ViewPartsFontTextTextCompare{
+			int generationCount;
+			enum pluginTextureFontSetId fontSetId;
+			enum engineGraphicTextureType textureType;
+		} textCompare;
+	} textInfo;
+	struct{
 		int codeListIndex;
 		int codeListLength;
 		enum engineGraphicTextureType type;
@@ -108,12 +120,29 @@ static void calc(struct engineLayout02ViewPartsFontTextImplement *this){
 
 // ----------------------------------------------------------------
 
-// 文字列作成完了確認
+// プラットフォーム文字列作成
 static void checkTexture(struct engineLayout02ViewPartsFontTextImplement *this){
-	if(this->fontInfo.codeListIndex < 0){
+	// プラットフォーム文字列作成 開始確認
+	struct engineLayout02ViewPartsFontTextTextCompare textCompare;
+	textCompare.generationCount = this->textInfo.generationCount;
+	textCompare.fontSetId = this->textInfo.fontSetId;
+	textCompare.textureType = this->textInfo.textureType;
+	if(memcmp(&this->textInfo.textCompare, &textCompare, sizeof(struct engineLayout02ViewPartsFontTextTextCompare))){
+		memcpy(&this->textInfo.textCompare, &textCompare, sizeof(struct engineLayout02ViewPartsFontTextTextCompare));
+		// 一旦情報リセット
+		this->fontInfo.codeListIndex = -1;
+		this->fontInfo.codeListLength = 0;
+		this->generationCount++;
+		// 文字列作成開始
+		engineGraphicTextureDispose(this->egoIdTexTest);
+		this->egoIdTexTest = (this->textInfo.buff != NULL) ? engineGraphicTextureCreateFont(this->textInfo.fontSetId, this->textInfo.buff, this->textInfo.textureType) : 0;
+	}
+
+	// プラットフォーム文字列作成 完了確認
+	if(this->egoIdTexTest > 0 && this->fontInfo.codeListIndex < 0){
 		int codeListIndex = -1;
 		int codeListLength = 0;
-		enum engineGraphicTextureType type = this->fontInfo.type;
+		enum engineGraphicTextureType type = this->textInfo.textureType;
 		engineGraphicTextureGetCodeList(this->egoIdTexTest, &codeListIndex, &codeListLength, &type);
 		if(codeListIndex >= 0){
 			this->fontInfo.codeListIndex = codeListIndex;
@@ -284,7 +313,7 @@ static void createBuffer(struct engineLayout02ViewPartsFontTextImplement *this){
 		engineGraphicBufferBegin();
 
 		// バッファ配列作成
-		if(this->fontInfo.codeListIndex >= 0){
+		if(this->egoIdTexTest > 0 && this->fontInfo.codeListIndex >= 0){
 			struct pluginTextureFontCode *codeList = corePluginTextureFontCodeListGet(this->fontInfo.codeListIndex);
 			prepareCreateBufferArrayText1(this, codeList);
 			prepareCreateBufferArrayText2(this, codeList);
@@ -325,47 +354,45 @@ static void drawText(struct engineLayout02ViewPartsFontTextImplement *this, stru
 
 // 描画
 static void draw(struct engineLayout02ViewPartsFontTextImplement *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
-	if(this->egoIdTexTest > 0){
-		// 描画準備
-		checkTexture(this);
-		createBuffer(this);
+	// 描画準備
+	checkTexture(this);
+	createBuffer(this);
 
-		if(this->fontInfo.codeListIndex >= 0){
-			// 情報取得
-			struct pluginTextureFontCode *codeList = corePluginTextureFontCodeListGet(this->fontInfo.codeListIndex);
+	if(this->egoIdTexTest > 0 && this->fontInfo.codeListIndex >= 0){
+		// 情報取得
+		struct pluginTextureFontCode *codeList = corePluginTextureFontCodeListGet(this->fontInfo.codeListIndex);
 
-			// バッファ登録
-			engineGraphicEngineBindVertVBO(this->egoIdVert);
-			engineGraphicEngineBindTexcVBO(this->egoIdTexc);
-			engineGraphicEngineBindFaceIBO(this->egoIdFace);
-			// 行列登録準備
-			double w = engineLayout02ViewUtilPositionGetW((struct engineLayout02View*)this);
-			double h = engineLayout02ViewUtilPositionGetH((struct engineLayout02View*)this);
-			struct engineMathMatrix44 tempMat1;
-			struct engineMathMatrix44 tempMat2;
-			engineLayout02ViewUtilPositionTransformCalcMatrix((struct engineLayout02View*)this, &tempMat1, mat);
-			// 文字揃えの位置移動
-			double alignX = (w - this->fontInfo.textWidth) * ((this->super.fontStyle.xalign > 0) ? 0.0 : (this->super.fontStyle.xalign == 0) ? 0.5 : 1.0);
-			double alignY = (h - this->fontInfo.textHeight) * ((this->super.fontStyle.yalign > 0) ? 0.0 : (this->super.fontStyle.yalign == 0) ? 0.5 : 1.0);
-			engineMathMat4Translate(&tempMat1, alignX, alignY, 0.0);
+		// バッファ登録
+		engineGraphicEngineBindVertVBO(this->egoIdVert);
+		engineGraphicEngineBindTexcVBO(this->egoIdTexc);
+		engineGraphicEngineBindFaceIBO(this->egoIdFace);
+		// 行列登録準備
+		double w = engineLayout02ViewUtilPositionGetW((struct engineLayout02View*)this);
+		double h = engineLayout02ViewUtilPositionGetH((struct engineLayout02View*)this);
+		struct engineMathMatrix44 tempMat1;
+		struct engineMathMatrix44 tempMat2;
+		engineLayout02ViewUtilPositionTransformCalcMatrix((struct engineLayout02View*)this, &tempMat1, mat);
+		// 文字揃えの位置移動
+		double alignX = (w - this->fontInfo.textWidth) * ((this->super.fontStyle.xalign > 0) ? 0.0 : (this->super.fontStyle.xalign == 0) ? 0.5 : 1.0);
+		double alignY = (h - this->fontInfo.textHeight) * ((this->super.fontStyle.yalign > 0) ? 0.0 : (this->super.fontStyle.yalign == 0) ? 0.5 : 1.0);
+		engineMathMat4Translate(&tempMat1, alignX, alignY, 0.0);
 
-			// アウトライン描画
-			if(this->super.fontStyle.outline.size > 0){
-				for(int i = 0; i < this->super.fontStyle.outline.quality; i++){
-					double theta = 2 * ENGINEMATH_PI * i / (double)this->super.fontStyle.outline.quality;
-					double outlineX = this->super.fontStyle.outline.size * engineMathCos(theta);
-					double outlineY = this->super.fontStyle.outline.size * engineMathSin(theta);
-					engineMathMat4Copy(&tempMat2, &tempMat1);
-					engineMathMat4Translate(&tempMat2, outlineX, outlineY, 0.0);
-					engineGraphicEngineSetMatrix(&tempMat2);
-					drawText(this, codeList, color, &this->super.fontStyle.outline.color);
-				}
+		// アウトライン描画
+		if(this->super.fontStyle.outline.size > 0){
+			for(int i = 0; i < this->super.fontStyle.outline.quality; i++){
+				double theta = 2 * ENGINEMATH_PI * i / (double)this->super.fontStyle.outline.quality;
+				double outlineX = this->super.fontStyle.outline.size * engineMathCos(theta);
+				double outlineY = this->super.fontStyle.outline.size * engineMathSin(theta);
+				engineMathMat4Copy(&tempMat2, &tempMat1);
+				engineMathMat4Translate(&tempMat2, outlineX, outlineY, 0.0);
+				engineGraphicEngineSetMatrix(&tempMat2);
+				drawText(this, codeList, color, &this->super.fontStyle.outline.color);
 			}
-
-			// 文字列描画
-			engineGraphicEngineSetMatrix(&tempMat1);
-			drawText(this, codeList, color, &this->super.color);
 		}
+
+		// 文字列描画
+		engineGraphicEngineSetMatrix(&tempMat1);
+		drawText(this, codeList, color, &this->super.color);
 	}
 
 	// 子要素描画
@@ -390,6 +417,7 @@ static void dispose(struct engineLayout02ViewPartsFontTextImplement *this){
 	engineGraphicObjectVBODispose(this->egoIdTexc);
 	engineGraphicObjectIBODispose(this->egoIdFace);
 	engineGraphicTextureDispose(this->egoIdTexTest);
+	if(this->textInfo.buff != NULL){engineUtilMemoryInfoFree("engineLayout02ViewPartsFontText textBuff", this->textInfo.buff);}
 	engineLayout02ViewUtilPositionDispose((struct engineLayout02View*)this);
 	engineLayout02ViewDetouch((struct engineLayout02View*)this);
 	engineUtilMemoryInfoFree("engineLayout02ViewPartsFontText", this);
@@ -398,9 +426,11 @@ static void dispose(struct engineLayout02ViewPartsFontTextImplement *this){
 // ----------------------------------------------------------------
 
 // フォント文字列描画構造体 作成
-struct engineLayout02ViewPartsFontText *engineLayout02ViewPartsFontTextCreate(){
+struct engineLayout02ViewPartsFontText *engineLayout02ViewPartsFontTextCreate(enum pluginTextureFontSetId fontSetId){
 	struct engineLayout02ViewPartsFontTextImplement *this = (struct engineLayout02ViewPartsFontTextImplement*)engineUtilMemoryInfoCalloc("engineLayout02ViewPartsFontText", 1, sizeof(struct engineLayout02ViewPartsFontTextImplement));
 	init(this);
+	this->textInfo.fontSetId = fontSetId;
+	this->textInfo.textureType = ENGINEGRAPHICTEXTURETYPE_LINEAR;
 
 	struct engineLayout02View *view = (struct engineLayout02View*)this;
 	view->touch = (bool(*)(struct engineLayout02View*, int touchIndex, double x, double y, bool dn, bool mv, bool isCancel))touch;
@@ -413,22 +443,31 @@ struct engineLayout02ViewPartsFontText *engineLayout02ViewPartsFontTextCreate(){
 
 // フォント文字列描画構造体 作成 デフォルト
 struct engineLayout02ViewPartsFontText *engineLayout02ViewPartsFontTextCreateDefault(char *text){
-	struct engineLayout02ViewPartsFontText *this = engineLayout02ViewPartsFontTextCreate();
-	engineLayout02ViewPartsFontTextSet(this, PLUGINTEXTUREFONTSETID_DEFAULT, text);
+	struct engineLayout02ViewPartsFontText *this = engineLayout02ViewPartsFontTextCreate(PLUGINTEXTUREFONTSETID_DEFAULT);
+	engineLayout02ViewPartsFontTextSet(this, text);
 	return this;
 }
 
 // フォント文字列描画構造体 文字列設定
-void engineLayout02ViewPartsFontTextSet(struct engineLayout02ViewPartsFontText *that, enum pluginTextureFontSetId fontSetId, char *text){
+void engineLayout02ViewPartsFontTextSet(struct engineLayout02ViewPartsFontText *that, char *text){
 	struct engineLayout02ViewPartsFontTextImplement *this = (struct engineLayout02ViewPartsFontTextImplement*)that;
-	// 一旦情報リセット
-	this->fontInfo.codeListIndex = -1;
-	this->fontInfo.codeListLength = 0;
-	this->fontInfo.type = ENGINEGRAPHICTEXTURETYPE_LINEAR;
-	this->generationCount++;
-	// 文字列作成開始
-	engineGraphicTextureDispose(this->egoIdTexTest);
-	this->egoIdTexTest = (text != NULL) ? engineGraphicTextureCreateFont(fontSetId, text, this->fontInfo.type) : 0;
+	// 文字列領域作成
+	int textLength = (text != NULL) ? (strlen(text) + 1) : 0;
+	if(this->textInfo.length < textLength){
+		if(this->textInfo.buff != NULL){engineUtilMemoryInfoFree("engineLayout02ViewPartsFontText textBuff", this->textInfo.buff);}
+		this->textInfo.buff = (char*)engineUtilMemoryInfoMalloc("engineLayout02ViewPartsFontText textBuff", textLength * sizeof(char));
+		this->textInfo.length = textLength;
+	}
+	// 文字列保存
+	if(this->textInfo.buff != NULL){
+		if(text != NULL){
+			strcpy(this->textInfo.buff, text);
+		}else{
+			strcpy(this->textInfo.buff, "");
+		}
+	}
+	// 世代交代
+	this->textInfo.generationCount++;
 }
 
 // ----------------------------------------------------------------

@@ -28,8 +28,7 @@ struct engineLayout02ViewPartsImageTextImplement{
 	engineGraphicTextureId egoIdTexTest;
 
 	int generationCount;
-	char *textBuff;
-	int textLength;
+	struct{char *buff; int length;} textInfo;
 
 	int faceIndex;
 	int faceNum;
@@ -107,9 +106,9 @@ static void createBufferArrayText(struct engineLayout02ViewPartsImageTextImpleme
 	int faceIndex = engineGraphicBufferFaceIndexGet();
 	int tetraNum = 0;
 
-	if(this->textBuff != NULL){
+	if(this->textInfo.buff != NULL){
 		// 頂点座標データとテクスチャ座標データを生成
-		char *textPtr = this->textBuff;
+		char *textPtr = this->textInfo.buff;
 		int col = 0;
 		int row = 0;
 		int colmax = getColNum(textPtr);
@@ -246,7 +245,7 @@ static void dispose(struct engineLayout02ViewPartsImageTextImplement *this){
 	engineGraphicObjectVBODispose(this->egoIdTexc);
 	engineGraphicObjectIBODispose(this->egoIdFace);
 	engineGraphicTextureDispose(this->egoIdTexTest);
-	if(this->textBuff != NULL){engineUtilMemoryInfoFree("engineLayout02ViewPartsImageText text", this->textBuff);}
+	if(this->textInfo.buff != NULL){engineUtilMemoryInfoFree("engineLayout02ViewPartsImageText textBuff", this->textInfo.buff);}
 	engineLayout02ViewUtilPositionDispose((struct engineLayout02View*)this);
 	engineLayout02ViewDetouch((struct engineLayout02View*)this);
 	engineUtilMemoryInfoFree("engineLayout02ViewPartsImageText", this);
@@ -298,17 +297,17 @@ void engineLayout02ViewPartsImageTextSet(struct engineLayout02ViewPartsImageText
 	struct engineLayout02ViewPartsImageTextImplement *this = (struct engineLayout02ViewPartsImageTextImplement*)that;
 	// 文字列領域作成
 	int textLength = (text != NULL) ? (strlen(text) + 1) : 0;
-	if(this->textLength < textLength){
-		if(this->textBuff != NULL){engineUtilMemoryInfoFree("engineLayout02ViewPartsImageText textBuff", this->textBuff);}
-		this->textBuff = (char*)engineUtilMemoryInfoMalloc("engineLayout02ViewPartsImageText textBuff", textLength * sizeof(char));
-		this->textLength = textLength;
+	if(this->textInfo.length < textLength){
+		if(this->textInfo.buff != NULL){engineUtilMemoryInfoFree("engineLayout02ViewPartsImageText textBuff", this->textInfo.buff);}
+		this->textInfo.buff = (char*)engineUtilMemoryInfoMalloc("engineLayout02ViewPartsImageText textBuff", textLength * sizeof(char));
+		this->textInfo.length = textLength;
 	}
 	// 文字列保存
-	if(this->textBuff != NULL){
+	if(this->textInfo.buff != NULL){
 		if(text != NULL){
-			strcpy(this->textBuff, text);
+			strcpy(this->textInfo.buff, text);
 		}else{
-			strcpy(this->textBuff, "");
+			strcpy(this->textInfo.buff, "");
 		}
 	}
 	// 世代交代
