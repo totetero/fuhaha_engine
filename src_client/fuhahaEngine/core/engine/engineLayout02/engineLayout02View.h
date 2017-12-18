@@ -25,8 +25,8 @@ struct engineLayout02ViewUtilChildren{
 
 // 表示要素構造体子要素 子要素追加
 void engineLayout02ViewUtilChildrenAdd(struct engineLayout02View *this, struct engineLayout02View *child);
-// 表示要素構造体子要素 子要素排除
-void engineLayout02ViewUtilChildrenRemove(struct engineLayout02View *this, struct engineLayout02View *child);
+// 表示要素構造体子要素 子要素除外
+void engineLayout02ViewUtilChildrenRemove(struct engineLayout02View *this, struct engineLayout02View *child, bool isDispose);
 
 // 表示要素構造体子要素 タッチ処理
 bool engineLayout02ViewUtilChildrenTouch(struct engineLayout02View *this, int touchIndex, double x, double y, bool dn, bool mv, bool isCancel);
@@ -210,7 +210,7 @@ struct engineLayout02View *engineLayout02ViewCreate();
 #define engineLayout02ViewDraw(this, mat, color) (this)->draw(this, mat, color)
 #define engineLayout02ViewPause(this) (this)->pause(this)
 #define engineLayout02ViewDispose(this) (this)->dispose(this)
-#define engineLayout02ViewDetouch(this) engineLayout02ViewUtilChildrenRemove((this)->children.parent, this)
+#define engineLayout02ViewDetouch(this) engineLayout02ViewUtilChildrenRemove((this)->children.parent, this, false)
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

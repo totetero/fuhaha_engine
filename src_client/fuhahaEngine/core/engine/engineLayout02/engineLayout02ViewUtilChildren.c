@@ -36,7 +36,7 @@ static void dummyUnset(struct engineLayout02View *this, struct engineLayout02Vie
 // 表示要素構造体子要素 子要素追加
 void engineLayout02ViewUtilChildrenAdd(struct engineLayout02View *this, struct engineLayout02View *child){
 	if(child->children.parent == this){return;}
-	if(child->children.parent != NULL){engineLayout02ViewUtilChildrenRemove(child->children.parent, child);}
+	if(child->children.parent != NULL){engineLayout02ViewUtilChildrenRemove(child->children.parent, child, false);}
 
 	struct engineLayout02View dummy;
 	dummySet(this, &dummy);
@@ -53,8 +53,8 @@ void engineLayout02ViewUtilChildrenAdd(struct engineLayout02View *this, struct e
 	dummyUnset(this, &dummy);
 }
 
-// 表示要素構造体子要素 子要素排除
-void engineLayout02ViewUtilChildrenRemove(struct engineLayout02View *this, struct engineLayout02View *child){
+// 表示要素構造体子要素 子要素除外
+void engineLayout02ViewUtilChildrenRemove(struct engineLayout02View *this, struct engineLayout02View *child, bool isDispose){
 	if(child->children.parent != this){return;}
 
 	struct engineLayout02View dummy;
@@ -70,6 +70,12 @@ void engineLayout02ViewUtilChildrenRemove(struct engineLayout02View *this, struc
 	child->children.parent = NULL;
 
 	dummyUnset(this, &dummy);
+
+	if(isDispose){
+		// 子要素破棄
+		child->pause(child);
+		child->dispose(child);
+	}
 }
 
 // ----------------------------------------------------------------
