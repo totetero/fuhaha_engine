@@ -290,6 +290,9 @@ static void createBuffer(struct engineLayout02ViewPartsFontTextImplement *this){
 			prepareCreateBufferArrayText2(this, codeList);
 			prepareCreateBufferArrayText3(this, codeList);
 			createBufferArrayText(this, codeList);
+		}else{
+			this->faceIndex = 0;
+			this->faceNum = 0;
 		}
 
 		// バッファ作成完了
@@ -394,7 +397,7 @@ static void dispose(struct engineLayout02ViewPartsFontTextImplement *this){
 
 // ----------------------------------------------------------------
 
-// 文字列描画構造体 作成
+// フォント文字列描画構造体 作成
 struct engineLayout02ViewPartsFontText *engineLayout02ViewPartsFontTextCreate(){
 	struct engineLayout02ViewPartsFontTextImplement *this = (struct engineLayout02ViewPartsFontTextImplement*)engineUtilMemoryInfoCalloc("engineLayout02ViewPartsFontText", 1, sizeof(struct engineLayout02ViewPartsFontTextImplement));
 	init(this);
@@ -408,14 +411,14 @@ struct engineLayout02ViewPartsFontText *engineLayout02ViewPartsFontTextCreate(){
 	return (struct engineLayout02ViewPartsFontText*)this;
 }
 
-// 文字列描画構造体 作成 同時に文字列設定
-struct engineLayout02ViewPartsFontText *engineLayout02ViewPartsFontTextCreateText(char *text){
+// フォント文字列描画構造体 作成 デフォルト
+struct engineLayout02ViewPartsFontText *engineLayout02ViewPartsFontTextCreateDefault(char *text){
 	struct engineLayout02ViewPartsFontText *this = engineLayout02ViewPartsFontTextCreate();
 	engineLayout02ViewPartsFontTextSet(this, PLUGINTEXTUREFONTSETID_DEFAULT, text);
 	return this;
 }
 
-// 文字列描画構造体 文字列設定
+// フォント文字列描画構造体 文字列設定
 void engineLayout02ViewPartsFontTextSet(struct engineLayout02ViewPartsFontText *that, enum pluginTextureFontSetId fontSetId, char *text){
 	struct engineLayout02ViewPartsFontTextImplement *this = (struct engineLayout02ViewPartsFontTextImplement*)that;
 	// 一旦情報リセット

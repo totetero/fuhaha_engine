@@ -28,7 +28,8 @@ struct engineLayout02ViewPartsImageTextImplement{
 	engineGraphicTextureId egoIdTexTest;
 
 	int generationCount;
-	char *text;
+	char *textBuff;
+	int textLength;
 
 	int faceIndex;
 	int faceNum;
@@ -106,48 +107,50 @@ static void createBufferArrayText(struct engineLayout02ViewPartsImageTextImpleme
 	int faceIndex = engineGraphicBufferFaceIndexGet();
 	int tetraNum = 0;
 
-	// 頂点座標データとテクスチャ座標データを生成
-	char *txtPtr = this->text;
-	int col = 0;
-	int row = 0;
-	int colmax = getColNum(txtPtr);
-	int rowmax = getRowNum(txtPtr);
-	int tw = this->super.alphabet.tw / 16;
-	int th = this->super.alphabet.th / 6;
-	while(*txtPtr){
-		if(*txtPtr == '\n'){
-			txtPtr++;
-			col++;
-			row = 0;
-			rowmax = getRowNum(txtPtr);
-		}else{
-			unsigned int code = getUtf8Code((unsigned char *)txtPtr);
-			if(0x1f <= code && code !=0x7f){
-				int tu = this->super.alphabet.tu;
-				int tv = this->super.alphabet.tv;
-				if(0x20 <= code && code <= 0x7f){
-					code = code - 0x20;
-				}else if(0x3040 <= code && code <= 0x309f){
-					tu = this->super.hiragana.tu;
-					tv = this->super.hiragana.tv;
-					code = code - 0x3040;
-				}else if(0x30a0 <= code && code <= 0x30ff){
-					tu = this->super.katakana.tu;
-					tv = this->super.katakana.tv;
-					code = code - 0x30a0;
-				}else{
-					code = 0;
+	if(this->textBuff != NULL){
+		// 頂点座標データとテクスチャ座標データを生成
+		char *textPtr = this->textBuff;
+		int col = 0;
+		int row = 0;
+		int colmax = getColNum(textPtr);
+		int rowmax = getRowNum(textPtr);
+		int tw = this->super.alphabet.tw / 16;
+		int th = this->super.alphabet.th / 6;
+		while(*textPtr){
+			if(*textPtr == '\n'){
+				textPtr++;
+				col++;
+				row = 0;
+				rowmax = getRowNum(textPtr);
+			}else{
+				unsigned int code = getUtf8Code((unsigned char *)textPtr);
+				if(0x1f <= code && code !=0x7f){
+					int tu = this->super.alphabet.tu;
+					int tv = this->super.alphabet.tv;
+					if(0x20 <= code && code <= 0x7f){
+						code = code - 0x20;
+					}else if(0x3040 <= code && code <= 0x309f){
+						tu = this->super.hiragana.tu;
+						tv = this->super.hiragana.tv;
+						code = code - 0x3040;
+					}else if(0x30a0 <= code && code <= 0x30ff){
+						tu = this->super.katakana.tu;
+						tv = this->super.katakana.tv;
+						code = code - 0x30a0;
+					}else{
+						code = 0;
+					}
+					double x1 = (row - rowmax * ((this->super.fontStyle.xalign > 0) ? 0.0 : (this->super.fontStyle.xalign == 0) ? 0.5 : 1.0)) * tw;
+					double y1 = (col - colmax * ((this->super.fontStyle.yalign > 0) ? 0.0 : (this->super.fontStyle.yalign == 0) ? 0.5 : 1.0)) * th;
+					int u1 = tu + tw * (code % 16);
+					int v1 = tv + th * engineMathFloor(code / 16);
+					engineGraphicBufferPushTetraVert(x1, y1, tw, th);
+					engineGraphicBufferPushTetraTexc(this->super.alphabet.imgw, this->super.alphabet.imgh, u1, v1, tw, th);
+					tetraNum++;
+					row++;
 				}
-				double x1 = (row - rowmax * ((this->super.fontStyle.xalign > 0) ? 0.0 : (this->super.fontStyle.xalign == 0) ? 0.5 : 1.0)) * tw;
-				double y1 = (col - colmax * ((this->super.fontStyle.yalign > 0) ? 0.0 : (this->super.fontStyle.yalign == 0) ? 0.5 : 1.0)) * th;
-				int u1 = tu + tw * (code % 16);
-				int v1 = tv + th * engineMathFloor(code / 16);
-				engineGraphicBufferPushTetraVert(x1, y1, tw, th);
-				engineGraphicBufferPushTetraTexc(this->super.alphabet.imgw, this->super.alphabet.imgh, u1, v1, tw, th);
-				tetraNum++;
-				row++;
+				textPtr++;
 			}
-			txtPtr++;
 		}
 	}
 
@@ -243,7 +246,7 @@ static void dispose(struct engineLayout02ViewPartsImageTextImplement *this){
 	engineGraphicObjectVBODispose(this->egoIdTexc);
 	engineGraphicObjectIBODispose(this->egoIdFace);
 	engineGraphicTextureDispose(this->egoIdTexTest);
-	if(this->text != NULL){engineUtilMemoryInfoFree("engineLayout02ViewPartsImageText text", this->text);}
+	if(this->textBuff != NULL){engineUtilMemoryInfoFree("engineLayout02ViewPartsImageText text", this->textBuff);}
 	engineLayout02ViewUtilPositionDispose((struct engineLayout02View*)this);
 	engineLayout02ViewDetouch((struct engineLayout02View*)this);
 	engineUtilMemoryInfoFree("engineLayout02ViewPartsImageText", this);
@@ -293,13 +296,20 @@ struct engineLayout02ViewPartsImageText *engineLayout02ViewPartsImageTextCreateD
 // 画像文字列描画構造体 文字列設定(utf8)
 void engineLayout02ViewPartsImageTextSet(struct engineLayout02ViewPartsImageText *that, char *text){
 	struct engineLayout02ViewPartsImageTextImplement *this = (struct engineLayout02ViewPartsImageTextImplement*)that;
+	// 文字列領域作成
+	int textLength = (text != NULL) ? (strlen(text) + 1) : 0;
+	if(this->textLength < textLength){
+		if(this->textBuff != NULL){engineUtilMemoryInfoFree("engineLayout02ViewPartsImageText textBuff", this->textBuff);}
+		this->textBuff = (char*)engineUtilMemoryInfoMalloc("engineLayout02ViewPartsImageText textBuff", textLength * sizeof(char));
+		this->textLength = textLength;
+	}
 	// 文字列保存
-	if(this->text != NULL){engineUtilMemoryInfoFree("engineLayout02ViewPartsImageText text", this->text);}
-	if(text != NULL){
-		this->text = (char*)engineUtilMemoryInfoMalloc("engineLayout02ViewPartsImageText text", (strlen(text) + 1) * sizeof(char));
-		strcpy(this->text, text);
-	}else{
-		this->text = NULL;
+	if(this->textBuff != NULL){
+		if(text != NULL){
+			strcpy(this->textBuff, text);
+		}else{
+			strcpy(this->textBuff, "");
+		}
 	}
 	// 世代交代
 	this->generationCount++;

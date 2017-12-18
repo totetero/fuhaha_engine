@@ -221,13 +221,8 @@ struct engineLayout02ViewPartsImageNumber *engineLayout02ViewPartsImageNumberCre
 	int tw = tw0 * 10;
 	int th = th0 * 1;
 	struct engineLayout02ViewPartsImageNumber *this = engineLayout02ViewPartsImageNumberCreate("img/system.png", imgw, imgh, tu, tv, tw, th);
-	engineLayout02ViewPartsImageNumberSet(this, value);
-	return this;
-}
-
-// 画像数字描画構造体 数値設定
-void engineLayout02ViewPartsImageNumberSet(struct engineLayout02ViewPartsImageNumber *this, int value){
 	this->value = value;
+	return this;
 }
 
 // ----------------------------------------------------------------

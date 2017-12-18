@@ -152,7 +152,7 @@ struct engineLayout02ViewPartsButtonBox *engineLayout02ViewPartsButtonBoxCreate(
 // 標準ボタン構造体 作成 テキスト付き
 struct engineLayout02ViewPartsButtonBox *engineLayout02ViewPartsButtonBoxCreateText(char *text){
 	struct engineLayout02ViewPartsButtonBox *this = engineLayout02ViewPartsButtonBoxCreate();
-	struct engineLayout02ViewPartsFontText *viewText = engineLayout02ViewPartsFontTextCreateText(text);
+	struct engineLayout02ViewPartsFontText *viewText = engineLayout02ViewPartsFontTextCreateDefault(text);
 	engineLayout02ViewUtilPositionSetLtRtTpBm((struct engineLayout02View*)viewText, 0, 0, 0, 0);
 	engineLayout02ViewUtilChildrenAdd((struct engineLayout02View*)this->viewInner, (struct engineLayout02View*)viewText);
 	return this;

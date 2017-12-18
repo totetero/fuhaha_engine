@@ -34,7 +34,7 @@ struct engineLayout02ViewPartsFrame *engineLayout02ViewPartsFrameCreate();
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-// 文字列描画構造体
+// フォント文字列描画構造体
 struct engineLayout02ViewPartsFontText{
 	struct engineLayout02View super;
 	struct{
@@ -50,10 +50,10 @@ struct engineLayout02ViewPartsFontText{
 	struct engineMathVector4 color;
 };
 
-// 文字列描画構造体 作成
+// フォント文字列描画構造体 作成
 struct engineLayout02ViewPartsFontText *engineLayout02ViewPartsFontTextCreate();
-struct engineLayout02ViewPartsFontText *engineLayout02ViewPartsFontTextCreateText(char *text);
-// 文字列描画構造体 文字列設定
+struct engineLayout02ViewPartsFontText *engineLayout02ViewPartsFontTextCreateDefault(char *text);
+// フォント文字列描画構造体 文字列設定
 void engineLayout02ViewPartsFontTextSet(struct engineLayout02ViewPartsFontText *this, enum pluginTextureFontSetId fontSetId, char *text);
 
 // ----------------------------------------------------------------
@@ -96,8 +96,6 @@ struct engineLayout02ViewPartsImageNumber{
 // 画像数字描画構造体 作成
 struct engineLayout02ViewPartsImageNumber *engineLayout02ViewPartsImageNumberCreate(char *src, int imgw, int imgh, int tu, int tv, int tw, int th);
 struct engineLayout02ViewPartsImageNumber *engineLayout02ViewPartsImageNumberCreateDefault(int value);
-// 画像文字列描画構造体 数値設定
-void engineLayout02ViewPartsImageNumberSet(struct engineLayout02ViewPartsImageNumber *this, int value);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
