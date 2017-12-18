@@ -35,7 +35,7 @@ struct engineLayout02ViewPartsFrame *engineLayout02ViewPartsFrameCreate();
 // ----------------------------------------------------------------
 
 // 文字列描画構造体
-struct engineLayout02ViewPartsText{
+struct engineLayout02ViewPartsFontText{
 	struct engineLayout02View super;
 	struct{
 		double size;
@@ -51,10 +51,10 @@ struct engineLayout02ViewPartsText{
 };
 
 // 文字列描画構造体 作成
-struct engineLayout02ViewPartsText *engineLayout02ViewPartsTextCreate();
-struct engineLayout02ViewPartsText *engineLayout02ViewPartsTextCreateText(char *text);
+struct engineLayout02ViewPartsFontText *engineLayout02ViewPartsFontTextCreate();
+struct engineLayout02ViewPartsFontText *engineLayout02ViewPartsFontTextCreateText(char *text);
 // 文字列描画構造体 文字列設定
-void engineLayout02ViewPartsTextSet(struct engineLayout02ViewPartsText *this, enum pluginTextureFontSetId fontSetId, char *text);
+void engineLayout02ViewPartsFontTextSet(struct engineLayout02ViewPartsFontText *this, enum pluginTextureFontSetId fontSetId, char *text);
 
 // ----------------------------------------------------------------
 

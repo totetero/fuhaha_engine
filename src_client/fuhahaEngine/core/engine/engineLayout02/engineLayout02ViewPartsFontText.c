@@ -30,10 +30,10 @@
 // ----------------------------------------------------------------
 
 // 構造体実体
-struct engineLayout02ViewPartsTextImplement{
-	struct engineLayout02ViewPartsText super;
+struct engineLayout02ViewPartsFontTextImplement{
+	struct engineLayout02ViewPartsFontText super;
 
-	struct engineLayout02ViewPartsTextBufferCompare{
+	struct engineLayout02ViewPartsFontTextBufferCompare{
 		int generationCount;
 		struct{
 			double size;
@@ -65,7 +65,7 @@ struct engineLayout02ViewPartsTextImplement{
 // ----------------------------------------------------------------
 
 // 初期化
-static void init(struct engineLayout02ViewPartsTextImplement *this){
+static void init(struct engineLayout02ViewPartsFontTextImplement *this){
 	// レイアウト初期化
 	engineLayout02ViewUtilPositionInit((struct engineLayout02View*)this);
 
@@ -93,7 +93,7 @@ static void init(struct engineLayout02ViewPartsTextImplement *this){
 // ----------------------------------------------------------------
 
 // タッチ処理
-static bool touch(struct engineLayout02ViewPartsTextImplement *this, int touchIndex, double x, double y, bool dn, bool mv, bool isCancel){
+static bool touch(struct engineLayout02ViewPartsFontTextImplement *this, int touchIndex, double x, double y, bool dn, bool mv, bool isCancel){
 	bool isActive = false;
 	isActive = engineLayout02ViewUtilChildrenTouch((struct engineLayout02View*)this, touchIndex, x, y, dn, mv, isCancel || isActive) || isActive;
 	isActive = engineLayout02ViewUtilInteractTouch((struct engineLayout02View*)this, touchIndex, x, y, dn, mv, isCancel || isActive) || isActive;
@@ -101,7 +101,7 @@ static bool touch(struct engineLayout02ViewPartsTextImplement *this, int touchIn
 }
 
 // 計算
-static void calc(struct engineLayout02ViewPartsTextImplement *this){
+static void calc(struct engineLayout02ViewPartsFontTextImplement *this){
 	// 子要素計算
 	engineLayout02ViewUtilChildrenCalc((struct engineLayout02View*)this);
 }
@@ -109,7 +109,7 @@ static void calc(struct engineLayout02ViewPartsTextImplement *this){
 // ----------------------------------------------------------------
 
 // 文字列作成完了確認
-static void checkTexture(struct engineLayout02ViewPartsTextImplement *this){
+static void checkTexture(struct engineLayout02ViewPartsFontTextImplement *this){
 	if(this->fontInfo.codeListIndex < 0){
 		int codeListIndex = -1;
 		int codeListLength = 0;
@@ -125,7 +125,7 @@ static void checkTexture(struct engineLayout02ViewPartsTextImplement *this){
 }
 
 // バッファ配列作成準備ステップ1 タグ処理
-static void prepareCreateBufferArrayText1(struct engineLayout02ViewPartsTextImplement *this, struct pluginTextureFontCode *codeList){
+static void prepareCreateBufferArrayText1(struct engineLayout02ViewPartsFontTextImplement *this, struct pluginTextureFontCode *codeList){
 	double size = this->super.fontStyle.size * 1.0;
 	uint32_t tagColor = 0xFFFFFFFF;
 	for(int i = 0; i < this->fontInfo.codeListLength; i++){
@@ -176,7 +176,7 @@ static void prepareCreateBufferArrayText1(struct engineLayout02ViewPartsTextImpl
 }
 
 // バッファ配列作成準備ステップ2 改行と全体の大きさを計算する
-static void prepareCreateBufferArrayText2(struct engineLayout02ViewPartsTextImplement *this, struct pluginTextureFontCode *codeList){
+static void prepareCreateBufferArrayText2(struct engineLayout02ViewPartsFontTextImplement *this, struct pluginTextureFontCode *codeList){
 	double rowWidth = 0;
 	double rowWidthMax = 0;
 	int rowIndex = 0;
@@ -222,7 +222,7 @@ static void prepareCreateBufferArrayText2(struct engineLayout02ViewPartsTextImpl
 }
 
 // バッファ配列作成準備ステップ3 それぞれの文字の位置を計算する
-static void prepareCreateBufferArrayText3(struct engineLayout02ViewPartsTextImplement *this, struct pluginTextureFontCode *codeList){
+static void prepareCreateBufferArrayText3(struct engineLayout02ViewPartsFontTextImplement *this, struct pluginTextureFontCode *codeList){
 	for(int i = 0; i < this->fontInfo.colNum; i++){
 		int rowWidth = 0;
 		if(this->super.fontStyle.xalign <= 0){
@@ -246,7 +246,7 @@ static void prepareCreateBufferArrayText3(struct engineLayout02ViewPartsTextImpl
 }
 
 // バッファ配列作成
-static void createBufferArrayText(struct engineLayout02ViewPartsTextImplement *this, struct pluginTextureFontCode *codeList){
+static void createBufferArrayText(struct engineLayout02ViewPartsFontTextImplement *this, struct pluginTextureFontCode *codeList){
 	int vertIndex = engineGraphicBufferVretIndexGet();
 	int faceIndex = engineGraphicBufferFaceIndexGet();
 	int tetraNum = 0;
@@ -268,8 +268,8 @@ static void createBufferArrayText(struct engineLayout02ViewPartsTextImplement *t
 }
 
 // バッファ作成
-static void createBuffer(struct engineLayout02ViewPartsTextImplement *this){
-	struct engineLayout02ViewPartsTextBufferCompare bufferCompare;
+static void createBuffer(struct engineLayout02ViewPartsFontTextImplement *this){
+	struct engineLayout02ViewPartsFontTextBufferCompare bufferCompare;
 	bufferCompare.generationCount = this->generationCount;
 	bufferCompare.fontStyle.size = this->super.fontStyle.size;
 	bufferCompare.fontStyle.lineNum = this->super.fontStyle.lineNum;
@@ -277,8 +277,8 @@ static void createBuffer(struct engineLayout02ViewPartsTextImplement *this){
 	bufferCompare.fontStyle.maxHeight = this->super.fontStyle.maxHeight;
 	bufferCompare.fontStyle.xalign = this->super.fontStyle.xalign;
 
-	if(memcmp(&this->bufferCompare, &bufferCompare, sizeof(struct engineLayout02ViewPartsTextBufferCompare))){
-		memcpy(&this->bufferCompare, &bufferCompare, sizeof(struct engineLayout02ViewPartsTextBufferCompare));
+	if(memcmp(&this->bufferCompare, &bufferCompare, sizeof(struct engineLayout02ViewPartsFontTextBufferCompare))){
+		memcpy(&this->bufferCompare, &bufferCompare, sizeof(struct engineLayout02ViewPartsFontTextBufferCompare));
 
 		// バッファ作成開始
 		engineGraphicBufferBegin();
@@ -298,7 +298,7 @@ static void createBuffer(struct engineLayout02ViewPartsTextImplement *this){
 }
 
 // 文字列描画
-static void drawText(struct engineLayout02ViewPartsTextImplement *this, struct pluginTextureFontCode *codeList, struct engineMathVector4 *color1, struct engineMathVector4 *color2){
+static void drawText(struct engineLayout02ViewPartsFontTextImplement *this, struct pluginTextureFontCode *codeList, struct engineMathVector4 *color1, struct engineMathVector4 *color2){
 	int index = 0;
 	uint32_t tagColor = 0x00000000;
 	for(int i = 0; i < this->fontInfo.codeListLength; i++){
@@ -321,7 +321,7 @@ static void drawText(struct engineLayout02ViewPartsTextImplement *this, struct p
 }
 
 // 描画
-static void draw(struct engineLayout02ViewPartsTextImplement *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
+static void draw(struct engineLayout02ViewPartsFontTextImplement *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
 	if(this->egoIdTexTest > 0){
 		// 描画準備
 		checkTexture(this);
@@ -372,13 +372,13 @@ static void draw(struct engineLayout02ViewPartsTextImplement *this, struct engin
 // ----------------------------------------------------------------
 
 // 一時停止
-static void pause(struct engineLayout02ViewPartsTextImplement *this){
+static void pause(struct engineLayout02ViewPartsFontTextImplement *this){
 	// 子要素一時停止
 	engineLayout02ViewUtilChildrenPause((struct engineLayout02View*)this);
 }
 
 // 破棄
-static void dispose(struct engineLayout02ViewPartsTextImplement *this){
+static void dispose(struct engineLayout02ViewPartsFontTextImplement *this){
 	// 子要素破棄
 	engineLayout02ViewUtilChildrenDispose((struct engineLayout02View*)this);
 
@@ -389,14 +389,14 @@ static void dispose(struct engineLayout02ViewPartsTextImplement *this){
 	engineGraphicTextureDispose(this->egoIdTexTest);
 	engineLayout02ViewUtilPositionDispose((struct engineLayout02View*)this);
 	engineLayout02ViewDetouch((struct engineLayout02View*)this);
-	engineUtilMemoryInfoFree("engineLayout02ViewPartsText", this);
+	engineUtilMemoryInfoFree("engineLayout02ViewPartsFontText", this);
 }
 
 // ----------------------------------------------------------------
 
 // 文字列描画構造体 作成
-struct engineLayout02ViewPartsText *engineLayout02ViewPartsTextCreate(){
-	struct engineLayout02ViewPartsTextImplement *this = (struct engineLayout02ViewPartsTextImplement*)engineUtilMemoryInfoCalloc("engineLayout02ViewPartsText", 1, sizeof(struct engineLayout02ViewPartsTextImplement));
+struct engineLayout02ViewPartsFontText *engineLayout02ViewPartsFontTextCreate(){
+	struct engineLayout02ViewPartsFontTextImplement *this = (struct engineLayout02ViewPartsFontTextImplement*)engineUtilMemoryInfoCalloc("engineLayout02ViewPartsFontText", 1, sizeof(struct engineLayout02ViewPartsFontTextImplement));
 	init(this);
 
 	struct engineLayout02View *view = (struct engineLayout02View*)this;
@@ -405,19 +405,19 @@ struct engineLayout02ViewPartsText *engineLayout02ViewPartsTextCreate(){
 	view->draw = (void(*)(struct engineLayout02View*, struct engineMathMatrix44*, struct engineMathVector4*))draw;
 	view->pause = (void(*)(struct engineLayout02View*))pause;
 	view->dispose = (void(*)(struct engineLayout02View*))dispose;
-	return (struct engineLayout02ViewPartsText*)this;
+	return (struct engineLayout02ViewPartsFontText*)this;
 }
 
 // 文字列描画構造体 作成 同時に文字列設定
-struct engineLayout02ViewPartsText *engineLayout02ViewPartsTextCreateText(char *text){
-	struct engineLayout02ViewPartsText *this = engineLayout02ViewPartsTextCreate();
-	engineLayout02ViewPartsTextSet(this, PLUGINTEXTUREFONTSETID_DEFAULT, text);
+struct engineLayout02ViewPartsFontText *engineLayout02ViewPartsFontTextCreateText(char *text){
+	struct engineLayout02ViewPartsFontText *this = engineLayout02ViewPartsFontTextCreate();
+	engineLayout02ViewPartsFontTextSet(this, PLUGINTEXTUREFONTSETID_DEFAULT, text);
 	return this;
 }
 
 // 文字列描画構造体 文字列設定
-void engineLayout02ViewPartsTextSet(struct engineLayout02ViewPartsText *that, enum pluginTextureFontSetId fontSetId, char *text){
-	struct engineLayout02ViewPartsTextImplement *this = (struct engineLayout02ViewPartsTextImplement*)that;
+void engineLayout02ViewPartsFontTextSet(struct engineLayout02ViewPartsFontText *that, enum pluginTextureFontSetId fontSetId, char *text){
+	struct engineLayout02ViewPartsFontTextImplement *this = (struct engineLayout02ViewPartsFontTextImplement*)that;
 	// 一旦情報リセット
 	this->fontInfo.codeListIndex = -1;
 	this->fontInfo.codeListLength = 0;
