@@ -276,22 +276,24 @@ static void prepareCreateBufferArrayText3(struct engineLayout02ViewPartsFontText
 
 // バッファ配列作成
 static void createBufferArrayText(struct engineLayout02ViewPartsFontTextImplement *this, struct pluginTextureFontCode *codeList){
+	// バッファポインタ取得
 	int vertIndex = engineGraphicBufferVretIndexGet();
 	int faceIndex = engineGraphicBufferFaceIndexGet();
 	int tetraNum = 0;
 
+	// 頂点座標データとテクスチャ座標データを生成
 	for(int i = 0; i < this->fontInfo.codeListLength; i++){
 		struct pluginTextureFontCode *codeData = &codeList[i];
 		if(codeData->layout.colIndex < 0){continue;}
 		tetraNum++;
-		// 頂点座標データを生成
 		engineGraphicBufferPushTetraVert(codeData->layout.x, codeData->layout.y, codeData->layout.w, codeData->layout.h);
-		// テクスチャ座標データを生成
 		engineGraphicBufferPushTetraTexc(codeData->imgw, codeData->imgh, codeData->x, codeData->y, codeData->w, codeData->h);
 	}
+
 	// インデックスデータを作成
 	for(int i = 0; i < tetraNum; i++){engineGraphicBufferPushTetraFace(vertIndex + i * 4);}
 
+	// バッファパラメータ記録
 	this->faceIndex = faceIndex;
 	this->faceNum = tetraNum * 2;
 }
@@ -377,8 +379,8 @@ static void draw(struct engineLayout02ViewPartsFontTextImplement *this, struct e
 		double alignY = (h - this->fontInfo.textHeight) * ((this->super.fontStyle.yalign > 0) ? 0.0 : (this->super.fontStyle.yalign == 0) ? 0.5 : 1.0);
 		engineMathMat4Translate(&tempMat1, alignX, alignY, 0.0);
 
-		// アウトライン描画
 		if(this->super.fontStyle.outline.size > 0){
+			// アウトライン描画
 			for(int i = 0; i < this->super.fontStyle.outline.quality; i++){
 				double theta = 2 * ENGINEMATH_PI * i / (double)this->super.fontStyle.outline.quality;
 				double outlineX = this->super.fontStyle.outline.size * engineMathCos(theta);

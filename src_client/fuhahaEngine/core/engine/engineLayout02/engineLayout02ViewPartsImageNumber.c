@@ -134,7 +134,6 @@ static void draw(struct engineLayout02ViewPartsImageNumberImplement *this, struc
 	double y0 = h * ((this->super.fontStyle.yalign > 0) ? 0.0 : (this->super.fontStyle.yalign == 0) ? 0.5 : 1.0);
 	engineMathMat4Translate(&tempMat1, x0, y0, 0);
 	engineMathMat4Scale(&tempMat1, this->super.fontStyle.scale, this->super.fontStyle.scale, 1.0);
-	//engineGraphicEngineSetMatrix(&tempMat1);
 	// 色登録
 	struct engineMathVector4 tempColor1;
 	tempColor1.r = this->super.color.r * color->r;

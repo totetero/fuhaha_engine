@@ -58,6 +58,25 @@ void engineLayout02ViewPartsFontTextSet(struct engineLayout02ViewPartsFontText *
 
 // ----------------------------------------------------------------
 
+// フォント数字描画構造体
+struct engineLayout02ViewPartsFontNumber{
+	struct engineLayout02View super;
+	struct{
+		double size;
+		int xalign;
+		int yalign;
+		struct{double size; int quality; struct engineMathVector4 color;} outline;
+	} fontStyle;
+	struct engineMathVector4 color;
+	int value;
+};
+
+// フォント数字描画構造体 作成
+struct engineLayout02ViewPartsFontNumber *engineLayout02ViewPartsFontNumberCreate(enum pluginTextureFontSetId fontSetId);
+struct engineLayout02ViewPartsFontNumber *engineLayout02ViewPartsFontNumberCreateDefault(int value);
+
+// ----------------------------------------------------------------
+
 // 画像文字列描画構造体
 struct engineLayout02ViewPartsImageText{
 	struct engineLayout02View super;
