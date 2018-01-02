@@ -32,7 +32,7 @@ mergeInto(LibraryManager.library, {
 		var value = "web";
 		var size = lengthBytesUTF8(value) + 1;
 		var buff = ccall("corePluginUtilMemoryTemporary", null, [null], [size]);
-		Module.stringToUTF8(value, buff, size);
+		stringToUTF8(value, buff, size);
 		return buff;
 	},
 
@@ -47,7 +47,7 @@ mergeInto(LibraryManager.library, {
 		}
 		var size = lengthBytesUTF8(value) + 1;
 		var buff = ccall("corePluginUtilMemoryTemporary", null, [null], [size]);
-		Module.stringToUTF8(value, buff, size);
+		stringToUTF8(value, buff, size);
 		return buff;
 	},
 

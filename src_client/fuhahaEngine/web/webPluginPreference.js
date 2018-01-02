@@ -13,7 +13,7 @@ mergeInto(LibraryManager.library, {
 		if(str == null){return null;}
 		var size = lengthBytesUTF8(str) + 1;
 		var buff = ccall("corePluginUtilMemoryTemporary", null, [null], [size]);
-		Module.stringToUTF8(str, buff, size);
+		stringToUTF8(str, buff, size);
 		return buff;
 	},
 

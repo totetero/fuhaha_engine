@@ -26,14 +26,14 @@ mergeInto(LibraryManager.library, {
 					size = byteArray.byteLength;
 					if(size > 0){
 						buff = ccall("gamePluginUtilMemoryMalloc", null, ["string", null], ["pluginData", size]); // バッファの解放はゲーム側で行う
-						Module.writeArrayToMemory(byteArray, buff);
+						writeArrayToMemory(byteArray, buff);
 					}
 				}else{
 					//// 通信失敗
 					//var message = "failed";
 					//size = lengthBytesUTF8(message) + 1;
 					//buff = ccall("gamePluginUtilMemoryMalloc", null, ["string", null], ["pluginData", size]); // バッファの解放はゲーム側で行う
-					//Module.stringToUTF8(message, buff, size);
+					//stringToUTF8(message, buff, size);
 				}
 				Module.nativePluginUtilLoadingDecrement();
 				ccall("gamePluginDataHttpCallbackCall", null, [null, null, null], [callbackId, buff, size]);
@@ -62,14 +62,14 @@ mergeInto(LibraryManager.library, {
 					size = byteArray.byteLength;
 					if(size > 0){
 						buff = ccall("gamePluginUtilMemoryMalloc", null, ["string", null], ["pluginData", size]); // バッファの解放はゲーム側で行う
-						Module.writeArrayToMemory(byteArray, buff);
+						writeArrayToMemory(byteArray, buff);
 					}
 				}else{
 					//// 通信失敗
 					//var message = "failed";
 					//size = lengthBytesUTF8(message) + 1;
 					//buff = ccall("gamePluginUtilMemoryMalloc", null, ["string", null], ["pluginData", size]); // バッファの解放はゲーム側で行う
-					//Module.stringToUTF8(message, buff, size);
+					//stringToUTF8(message, buff, size);
 				}
 				Module.nativePluginUtilLoadingDecrement();
 				ccall("gamePluginDataLocalCallbackCall", null, [null, null, null], [callbackId, buff, size]);
