@@ -41,11 +41,11 @@ release: clean build
 build: $(TARGET)
 	mkdir -p bin
 	rsync -av $(TARGET) game.html frame.html bin/
-	[[ ! -f $(TARGET).mem ]] || rsync -av $(TARGET).mem bin/
+	test ! -f $(TARGET).mem || rsync -av $(TARGET).mem bin/
 
 clean:
 	-rm $(TARGET) $(DEPEND) $(OBJS)
-	[[ ! -f $(TARGET).mem ]] || rm $(TARGET).mem
+	test ! -f $(TARGET).mem || rm $(TARGET).mem
 
 # --------------------------------
 
