@@ -1,17 +1,17 @@
 #!/bin/bash
 
-[ $# -eq 0 ] && sh $0 help && exit
-[ $# -eq 1 ] && [ $1 = "first" ] && sh $0 create start install put && exit
-[ $# -eq 1 ] && [ $1 = "last" ] && sh $0 stop clear && exit
+[ ${#} -eq 0 ] && sh ${0} help && exit
+[ ${#} -eq 1 ] && [ ${1} = "first" ] && sh ${0} create start install put && exit
+[ ${#} -eq 1 ] && [ ${1} = "last" ] && sh ${0} stop clear && exit
 
 DOCKER_CONTAINER_NAME_01=docker-fuhaha-builder
 DOCKER_LINUX=ubuntu:16.04
-PROJECT=fuhaha_engine
+PROJECT=${PWD##*/}
 
 # makeコマンド
-[ $# -ge 1 ] && [ $1 = "make" ] && {
+[ ${#} -ge 1 ] && [ ${1} = "make" ] && {
 	# 最初にファイル転送
-	rsync --blocking-io -e 'docker exec -i' -rltDv ./ ${DOCKER_CONTAINER_NAME_01}:/root/${PROJECT}/
+	sh ${0} put
 	# makeコマンド作成
 	COMMAND=":"
 	COMMAND+=" && . ~/emsdk-portable/emsdk_env.sh"
@@ -23,16 +23,16 @@ PROJECT=fuhaha_engine
 	exit
 }
 
-for ARG in "$@" ; do
-	echo -------- $ARG start --------
+for ARG in "${@}" ; do
+	echo -------- ${ARG} start --------
 	# 引数解釈
-	case $ARG in
+	case ${ARG} in
 		status)
 			docker network ls && echo '--------' && docker images && echo '--------' && docker ps -a
 			;;
 		create)
 			docker create --name ${DOCKER_CONTAINER_NAME_01} --publish 8080:8080 --interactive --tty ${DOCKER_LINUX} /bin/bash --login
-			[ $? -gt 0 ] && exit
+			[ ${?} -gt 0 ] && exit
 			;;
 		start)
 			docker start ${DOCKER_CONTAINER_NAME_01}
@@ -71,10 +71,10 @@ for ARG in "$@" ; do
 			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'cd /root/emsdk-portable && ./emsdk activate sdk-1.37.27-64bit'
 			;;
 		sync_put|put)
-			rsync --blocking-io -e 'docker exec -i' -rltDv ./ ${DOCKER_CONTAINER_NAME_01}:/root/${PROJECT}/
+			rsync --blocking-io -e 'docker exec -i' -rltDv ./ ${DOCKER_CONTAINER_NAME_01}:/root/${PROJECT}/ --exclude='.git'
 			;;
 		sync_get|get)
-			rsync --blocking-io -e 'docker exec -i' -rltDv ${DOCKER_CONTAINER_NAME_01}:/root/${PROJECT}/ ./
+			rsync --blocking-io -e 'docker exec -i' -rltDv ${DOCKER_CONTAINER_NAME_01}:/root/${PROJECT}/ ./ --exclude='.git'
 			;;
 		web_debug)
 			COMMAND="cd /root/${PROJECT} && . ~/emsdk-portable/emsdk_env.sh && make copy && make -C src_client/platform_web debug"
@@ -104,6 +104,6 @@ for ARG in "$@" ; do
 		*)
 			echo nothing to do
 	esac
-	echo -------- $ARG exit --------
+	echo -------- ${ARG} exit --------
 done
 
