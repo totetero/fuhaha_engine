@@ -99,7 +99,7 @@ mergeInto(LibraryManager.library, {
 								this.source.loop = true;
 								this.source.buffer = this.buffer;
 								this.source.connect(this.gain);
-								this.gain.value = 0.0;
+								this.gain.gain.setValueAtTime(0.0, globalWebPluginSound.soundContext.currentTime);
 								this.gain.connect(globalWebPluginSound.bgmVolumeGain);
 								sourceStart(this.source, globalWebPluginSound.soundContext.currentTime);
 								this.countPrev = 0;
@@ -187,7 +187,7 @@ mergeInto(LibraryManager.library, {
 		if(oldVolume > 0 && volume <= 0){globalWebPluginSound.bgmPlay(0);}
 		if(oldVolume <= 0 && volume > 0){globalWebPluginSound.bgmPlay(globalWebPluginSound.bgmZeroId);}
 
-		globalWebPluginSound.bgmVolumeGain.gain.value = volume;
+		globalWebPluginSound.bgmVolumeGain.gain.setValueAtTime(volume, globalWebPluginSound.soundContext.currentTime);
 	},
 
 	// ----------------------------------------------------------------
@@ -209,7 +209,7 @@ mergeInto(LibraryManager.library, {
 	// SE設定音量
 	platformPluginSoundSeVolume: function(volume){
 		if(globalWebPluginSound.soundContext == null){return;}
-		globalWebPluginSound.seVolumeGain.gain.value = volume;
+		globalWebPluginSound.seVolumeGain.gain.setValueAtTime(volume, globalWebPluginSound.soundContext.currentTime);
 	},
 
 	// ----------------------------------------------------------------
