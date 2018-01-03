@@ -104,13 +104,13 @@ for ARG in "${@}" ; do
 		sync_put|put)
 			RSYNC_SRC=./
 			RSYNC_DST=${DOCKER_CONTAINER_NAME_01}:/root/${PROJECT}/
-			RSYNC_COMMAND="rsync --blocking-io -e 'docker exec -i' --exclude='.git' -rltDv"
+			RSYNC_COMMAND="rsync --blocking-io -e 'docker exec -i' --exclude='.git' --filter=':- .gitignore' -rltDv"
 			eval ${RSYNC_COMMAND} ${RSYNC_SRC} ${RSYNC_DST}
 			;;
 		sync_get|get)
 			RSYNC_SRC=${DOCKER_CONTAINER_NAME_01}:/root/${PROJECT}/
 			RSYNC_DST=./
-			RSYNC_COMMAND="rsync --blocking-io -e 'docker exec -i' --exclude='.git' -rltDv"
+			RSYNC_COMMAND="rsync --blocking-io -e 'docker exec -i' --exclude='.git' --filter=':- .gitignore' -rltDv"
 			eval ${RSYNC_COMMAND} ${RSYNC_SRC} ${RSYNC_DST}
 			;;
 		serve)
