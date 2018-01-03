@@ -15,15 +15,25 @@ PROJECT=${PWD##*/}
 [ ${#} -ge 1 ] && [ ${1} = "make" ] && {
 	# 最初にファイル転送
 	sh ${0} put
-	# makeコマンド作成
-	COMMAND="cd /root/${PROJECT}"
-	COMMAND+=" && export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64"
-	COMMAND+=" && export ANDROID_HOME=/opt/android-sdk-${ANDROID_SDK_VERSION}"
-	COMMAND+=" && export ANDROID_NDK_HOME=/opt/android-ndk-${ANDROID_NDK_VERSION}"
-	COMMAND+=" && . /opt/emsdk-portable/emsdk_env.sh"
-	COMMAND+=" && ${@}"
-	# makeコマンド実行
-	docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c "${COMMAND}"
+	echo -------- make start --------
+	# makeコマンド作成と実行
+	MAKE_COMMAND="cd /root/${PROJECT}"
+	MAKE_COMMAND+=" && export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64"
+	MAKE_COMMAND+=" && export ANDROID_HOME=/opt/android-sdk-${ANDROID_SDK_VERSION}"
+	MAKE_COMMAND+=" && export ANDROID_NDK_HOME=/opt/android-ndk-${ANDROID_NDK_VERSION}"
+	MAKE_COMMAND+=" && . /opt/emsdk-portable/emsdk_env.sh"
+	MAKE_COMMAND+=" && make ${@:$((1 + 1))}"
+	docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c "${MAKE_COMMAND}"
+	echo -------- make exit --------
+	echo -------- get start --------
+	# 最後にファイル転送
+	SYNC_TARGET_01=src_client/platform_web/bin
+	SYNC_TARGET_02=src_client/platform_android/build/outputs/apk
+	mkdir -p ./${SYNC_TARGET_01}
+	mkdir -p ./${SYNC_TARGET_02}
+	rsync --blocking-io -e 'docker exec -i' -rltDv ${DOCKER_CONTAINER_NAME_01}:/root/${PROJECT}/${SYNC_TARGET_01}/ ./${SYNC_TARGET_01}/
+	rsync --blocking-io -e 'docker exec -i' -rltDv ${DOCKER_CONTAINER_NAME_01}:/root/${PROJECT}/${SYNC_TARGET_02}/ ./${SYNC_TARGET_02}/
+	echo -------- get exit --------
 	# スクリプトを抜ける
 	exit
 }
@@ -90,12 +100,12 @@ for ARG in "${@}" ; do
 			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'cd /opt && tar -zxvf '${ANDROID_SDK_FILE}
 			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'mv /opt/android-sdk-linux /opt/android-sdk-'${ANDROID_SDK_VERSION}
 			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c '/opt/android-sdk-'${ANDROID_SDK_VERSION}'/tools/android list sdk --all --extended'
-			EXPECT_COMMAND_01='set timeout -1 ; spawn /opt/android-sdk-'${ANDROID_SDK_VERSION}'/tools/android update sdk --no-ui --all --filter'
-			EXPECT_COMMAND_02='; expect "Do you accept the license" { send "y\n" ; exp_continue } Downloading { exp_continue } Installing { exp_continue }'
-			docker exec -it ${DOCKER_CONTAINER_NAME_01} expect -c "${EXPECT_COMMAND_01} android-23 ${EXPECT_COMMAND_02}"
-			docker exec -it ${DOCKER_CONTAINER_NAME_01} expect -c "${EXPECT_COMMAND_01} build-tools-23.0.2 ${EXPECT_COMMAND_02}"
-			docker exec -it ${DOCKER_CONTAINER_NAME_01} expect -c "${EXPECT_COMMAND_01} extra-google-m2repository ${EXPECT_COMMAND_02}"
-			docker exec -it ${DOCKER_CONTAINER_NAME_01} expect -c "${EXPECT_COMMAND_01} extra-android-m2repository ${EXPECT_COMMAND_02}"
+			ANDROID_EXPECT_COMMAND_01='set timeout -1 ; spawn /opt/android-sdk-'${ANDROID_SDK_VERSION}'/tools/android update sdk --no-ui --all --filter'
+			ANDROID_EXPECT_COMMAND_02='; expect "Do you accept the license" { send "y\n" ; exp_continue } Downloading { exp_continue } Installing { exp_continue }'
+			docker exec -it ${DOCKER_CONTAINER_NAME_01} expect -c "${ANDROID_EXPECT_COMMAND_01} android-23 ${ANDROID_EXPECT_COMMAND_02}"
+			docker exec -it ${DOCKER_CONTAINER_NAME_01} expect -c "${ANDROID_EXPECT_COMMAND_01} build-tools-23.0.2 ${ANDROID_EXPECT_COMMAND_02}"
+			docker exec -it ${DOCKER_CONTAINER_NAME_01} expect -c "${ANDROID_EXPECT_COMMAND_01} extra-google-m2repository ${ANDROID_EXPECT_COMMAND_02}"
+			docker exec -it ${DOCKER_CONTAINER_NAME_01} expect -c "${ANDROID_EXPECT_COMMAND_01} extra-android-m2repository ${ANDROID_EXPECT_COMMAND_02}"
 			ANDROID_NDK_FILE="android-ndk-${ANDROID_NDK_VERSION}-linux-x86_64.bin"
 			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'cd /opt && wget https://dl-ssl.google.com/android/ndk/'${ANDROID_NDK_FILE}
 			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'cd /opt && chmod +x '${ANDROID_NDK_FILE}
