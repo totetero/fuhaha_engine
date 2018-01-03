@@ -39,7 +39,6 @@
 		9C6B65A21FDED7B200D09AFE /* engineLayout02ViewPartsMaskRect.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C6B65541FDED7B100D09AFE /* engineLayout02ViewPartsMaskRect.c */; };
 		9C6B65A31FDED7B200D09AFE /* engineLayout02ViewPartsRect.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C6B65551FDED7B100D09AFE /* engineLayout02ViewPartsRect.c */; };
 		9C6B65A41FDED7B200D09AFE /* engineLayout02ViewPartsScroller.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C6B65561FDED7B100D09AFE /* engineLayout02ViewPartsScroller.c */; };
-		9C6B65A51FDED7B200D09AFE /* engineLayout02ViewPartsText.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C6B65571FDED7B100D09AFE /* engineLayout02ViewPartsText.c */; };
 		9C6B65A61FDED7B200D09AFE /* engineLayout02ViewUtilChildren.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C6B65581FDED7B100D09AFE /* engineLayout02ViewUtilChildren.c */; };
 		9C6B65A71FDED7B200D09AFE /* engineLayout02ViewUtilInteract.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C6B65591FDED7B100D09AFE /* engineLayout02ViewUtilInteract.c */; };
 		9C6B65A81FDED7B200D09AFE /* engineLayout02ViewUtilPosition.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C6B655A1FDED7B100D09AFE /* engineLayout02ViewUtilPosition.c */; };
@@ -56,7 +55,6 @@
 		9C6B65B31FDED7B200D09AFE /* pluginTextureMemory.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C6B65711FDED7B100D09AFE /* pluginTextureMemory.c */; };
 		9C6B65B41FDED7B200D09AFE /* pluginUtilCallback.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C6B65731FDED7B100D09AFE /* pluginUtilCallback.c */; };
 		9C6B65B51FDED7B200D09AFE /* pluginUtilMemory.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C6B65741FDED7B100D09AFE /* pluginUtilMemory.c */; };
-		9C6B65B61FDED7B200D09AFE /* pluginUtilUrl.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C6B65751FDED7B100D09AFE /* pluginUtilUrl.c */; };
 		9C6B65B71FDED7B200D09AFE /* FuhahaEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6B65781FDED7B100D09AFE /* FuhahaEvent.swift */; };
 		9C6B65B81FDED7B200D09AFE /* FuhahaGLViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6B65791FDED7B100D09AFE /* FuhahaGLViewController.swift */; };
 		9C6B65B91FDED7B200D09AFE /* iosPluginData.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6B657A1FDED7B100D09AFE /* iosPluginData.m */; };
@@ -78,6 +76,10 @@
 		9C6B65D81FDED7BA00D09AFE /* pluginEnpty.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C6B65CD1FDED7BA00D09AFE /* pluginEnpty.c */; };
 		9C6B65D91FDED7BA00D09AFE /* iosPluginEnpty.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6B65D11FDED7BA00D09AFE /* iosPluginEnpty.m */; };
 		9C6B65DA1FDED7BA00D09AFE /* IosPluginEnpty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6B65D21FDED7BA00D09AFE /* IosPluginEnpty.swift */; };
+		9C8676EA1FFD192C009688BE /* engineLayout02ViewPartsFontNumber.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C8676E71FFD192C009688BE /* engineLayout02ViewPartsFontNumber.c */; };
+		9C8676EB1FFD192C009688BE /* engineLayout02ViewPartsImageNumber.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C8676E81FFD192C009688BE /* engineLayout02ViewPartsImageNumber.c */; };
+		9C8676EC1FFD192C009688BE /* engineLayout02ViewPartsFontText.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C8676E91FFD192C009688BE /* engineLayout02ViewPartsFontText.c */; };
+		9C8676EE1FFD198A009688BE /* pluginUtilUrl.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C8676ED1FFD198A009688BE /* pluginUtilUrl.c */; };
 		9C8D023D1C99CCEB00F2CFFB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C8D023C1C99CCEB00F2CFFB /* AppDelegate.swift */; };
 		9C8D023F1C99CCEB00F2CFFB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C8D023E1C99CCEB00F2CFFB /* ViewController.swift */; };
 		9C8D02421C99CCEB00F2CFFB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C8D02401C99CCEB00F2CFFB /* Main.storyboard */; };
@@ -135,7 +137,6 @@
 		9C6B65541FDED7B100D09AFE /* engineLayout02ViewPartsMaskRect.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = engineLayout02ViewPartsMaskRect.c; sourceTree = "<group>"; };
 		9C6B65551FDED7B100D09AFE /* engineLayout02ViewPartsRect.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = engineLayout02ViewPartsRect.c; sourceTree = "<group>"; };
 		9C6B65561FDED7B100D09AFE /* engineLayout02ViewPartsScroller.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = engineLayout02ViewPartsScroller.c; sourceTree = "<group>"; };
-		9C6B65571FDED7B100D09AFE /* engineLayout02ViewPartsText.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = engineLayout02ViewPartsText.c; sourceTree = "<group>"; };
 		9C6B65581FDED7B100D09AFE /* engineLayout02ViewUtilChildren.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = engineLayout02ViewUtilChildren.c; sourceTree = "<group>"; };
 		9C6B65591FDED7B100D09AFE /* engineLayout02ViewUtilInteract.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = engineLayout02ViewUtilInteract.c; sourceTree = "<group>"; };
 		9C6B655A1FDED7B100D09AFE /* engineLayout02ViewUtilPosition.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = engineLayout02ViewUtilPosition.c; sourceTree = "<group>"; };
@@ -162,7 +163,6 @@
 		9C6B65721FDED7B100D09AFE /* pluginUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pluginUtil.h; sourceTree = "<group>"; };
 		9C6B65731FDED7B100D09AFE /* pluginUtilCallback.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pluginUtilCallback.c; sourceTree = "<group>"; };
 		9C6B65741FDED7B100D09AFE /* pluginUtilMemory.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pluginUtilMemory.c; sourceTree = "<group>"; };
-		9C6B65751FDED7B100D09AFE /* pluginUtilUrl.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pluginUtilUrl.c; sourceTree = "<group>"; };
 		9C6B65771FDED7B100D09AFE /* fuhaha_engine_bridgingHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fuhaha_engine_bridgingHeader.h; sourceTree = "<group>"; };
 		9C6B65781FDED7B100D09AFE /* FuhahaEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FuhahaEvent.swift; sourceTree = "<group>"; };
 		9C6B65791FDED7B100D09AFE /* FuhahaGLViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FuhahaGLViewController.swift; sourceTree = "<group>"; };
@@ -190,6 +190,10 @@
 		9C6B65D01FDED7BA00D09AFE /* fuhaha_main_bridgingHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fuhaha_main_bridgingHeader.h; sourceTree = "<group>"; };
 		9C6B65D11FDED7BA00D09AFE /* iosPluginEnpty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iosPluginEnpty.m; sourceTree = "<group>"; };
 		9C6B65D21FDED7BA00D09AFE /* IosPluginEnpty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IosPluginEnpty.swift; sourceTree = "<group>"; };
+		9C8676E71FFD192C009688BE /* engineLayout02ViewPartsFontNumber.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = engineLayout02ViewPartsFontNumber.c; sourceTree = "<group>"; };
+		9C8676E81FFD192C009688BE /* engineLayout02ViewPartsImageNumber.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = engineLayout02ViewPartsImageNumber.c; sourceTree = "<group>"; };
+		9C8676E91FFD192C009688BE /* engineLayout02ViewPartsFontText.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = engineLayout02ViewPartsFontText.c; sourceTree = "<group>"; };
+		9C8676ED1FFD198A009688BE /* pluginUtilUrl.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pluginUtilUrl.c; sourceTree = "<group>"; };
 		9C8D02391C99CCEB00F2CFFB /* fuhaha.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = fuhaha.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C8D023C1C99CCEB00F2CFFB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9C8D023E1C99CCEB00F2CFFB /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -322,6 +326,9 @@
 		9C6B654C1FDED7B100D09AFE /* engineLayout02 */ = {
 			isa = PBXGroup;
 			children = (
+				9C8676E71FFD192C009688BE /* engineLayout02ViewPartsFontNumber.c */,
+				9C8676E91FFD192C009688BE /* engineLayout02ViewPartsFontText.c */,
+				9C8676E81FFD192C009688BE /* engineLayout02ViewPartsImageNumber.c */,
 				9C6B654D1FDED7B100D09AFE /* engineLayout02.h */,
 				9C6B654E1FDED7B100D09AFE /* engineLayout02View.c */,
 				9C6B654F1FDED7B100D09AFE /* engineLayout02View.h */,
@@ -332,7 +339,6 @@
 				9C6B65541FDED7B100D09AFE /* engineLayout02ViewPartsMaskRect.c */,
 				9C6B65551FDED7B100D09AFE /* engineLayout02ViewPartsRect.c */,
 				9C6B65561FDED7B100D09AFE /* engineLayout02ViewPartsScroller.c */,
-				9C6B65571FDED7B100D09AFE /* engineLayout02ViewPartsText.c */,
 				9C6B65581FDED7B100D09AFE /* engineLayout02ViewUtilChildren.c */,
 				9C6B65591FDED7B100D09AFE /* engineLayout02ViewUtilInteract.c */,
 				9C6B655A1FDED7B100D09AFE /* engineLayout02ViewUtilPosition.c */,
@@ -376,7 +382,6 @@
 				9C6B65721FDED7B100D09AFE /* pluginUtil.h */,
 				9C6B65731FDED7B100D09AFE /* pluginUtilCallback.c */,
 				9C6B65741FDED7B100D09AFE /* pluginUtilMemory.c */,
-				9C6B65751FDED7B100D09AFE /* pluginUtilUrl.c */,
 			);
 			path = plugin;
 			sourceTree = "<group>";
@@ -433,6 +438,7 @@
 			children = (
 				9C6B65CD1FDED7BA00D09AFE /* pluginEnpty.c */,
 				9C6B65CE1FDED7BA00D09AFE /* pluginEnpty.h */,
+				9C8676ED1FFD198A009688BE /* pluginUtilUrl.c */,
 			);
 			path = plugin;
 			sourceTree = "<group>";
@@ -587,11 +593,11 @@
 				9C6B659B1FDED7B200D09AFE /* engineLayout01PartsButtonPicker.c in Sources */,
 				9C6B658F1FDED7B200D09AFE /* engineGraphicMain.c in Sources */,
 				9C6B658D1FDED7B200D09AFE /* engineGraphicBuffer.c in Sources */,
-				9C6B65A51FDED7B200D09AFE /* engineLayout02ViewPartsText.c in Sources */,
 				9C6B659A1FDED7B200D09AFE /* engineLayout01PartsButtonBox.c in Sources */,
 				9C6B65891FDED7B200D09AFE /* engineCtrlTouch.c in Sources */,
 				9C6B65B91FDED7B200D09AFE /* iosPluginData.m in Sources */,
 				9C6B65DA1FDED7BA00D09AFE /* IosPluginEnpty.swift in Sources */,
+				9C8676EE1FFD198A009688BE /* pluginUtilUrl.c in Sources */,
 				9C6B65A11FDED7B200D09AFE /* engineLayout02ViewPartsImageText.c in Sources */,
 				9C6B65BE1FDED7B200D09AFE /* IosPluginSound.swift in Sources */,
 				9C6B65B81FDED7B200D09AFE /* FuhahaGLViewController.swift in Sources */,
@@ -611,20 +617,22 @@
 				9C6B65BD1FDED7B200D09AFE /* iosPluginSound.m in Sources */,
 				9C6B659D1FDED7B200D09AFE /* engineLayout01TransManager.c in Sources */,
 				9C6B65D31FDED7BA00D09AFE /* gameMain.c in Sources */,
-				9C6B65B61FDED7B200D09AFE /* pluginUtilUrl.c in Sources */,
 				9C6B65901FDED7B200D09AFE /* engineGraphicObject.c in Sources */,
 				9C6B65981FDED7B200D09AFE /* engineLayout01ImageText.c in Sources */,
 				9C6B65991FDED7B200D09AFE /* engineLayout01PartsButton.c in Sources */,
 				9C6B65A41FDED7B200D09AFE /* engineLayout02ViewPartsScroller.c in Sources */,
+				9C8676EC1FFD192C009688BE /* engineLayout02ViewPartsFontText.c in Sources */,
 				9C6B65AF1FDED7B200D09AFE /* gameEvent.c in Sources */,
 				9C6B65A91FDED7B200D09AFE /* engineMathFunction.c in Sources */,
 				9C6B659C1FDED7B200D09AFE /* engineLayout01Trans.c in Sources */,
+				9C8676EA1FFD192C009688BE /* engineLayout02ViewPartsFontNumber.c in Sources */,
 				9C6B65921FDED7B200D09AFE /* engineGraphicStencil.c in Sources */,
 				9C6B65B11FDED7B200D09AFE /* pluginTextureCallback.c in Sources */,
 				9C6B65961FDED7B200D09AFE /* engineLayout01ImageNumber.c in Sources */,
 				9C6B65C21FDED7B200D09AFE /* IosPluginUtil.swift in Sources */,
 				9C6B65A71FDED7B200D09AFE /* engineLayout02ViewUtilInteract.c in Sources */,
 				9C6B658B1FDED7B200D09AFE /* engineDataJson.c in Sources */,
+				9C8676EB1FFD192C009688BE /* engineLayout02ViewPartsImageNumber.c in Sources */,
 				9C6B65871FDED7B200D09AFE /* engineCartridgePage.c in Sources */,
 				9C6B65AE1FDED7B200D09AFE /* engineUtilSystem.c in Sources */,
 				9C6B659F1FDED7B200D09AFE /* engineLayout02ViewPartsButtonBox.c in Sources */,
