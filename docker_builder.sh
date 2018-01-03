@@ -1,21 +1,26 @@
 #!/bin/bash
 
 [ ${#} -eq 0 ] && sh ${0} help && exit
-[ ${#} -eq 1 ] && [ ${1} = "first" ] && sh ${0} create start install put && exit
+[ ${#} -eq 1 ] && [ ${1} = "first" ] && sh ${0} create start install install_node install_emscripten install_android_sdk_ndk put && exit
 [ ${#} -eq 1 ] && [ ${1} = "last" ] && sh ${0} stop clear && exit
 
 DOCKER_CONTAINER_NAME_01=docker-fuhaha-builder
 DOCKER_LINUX=ubuntu:16.04
+EMSCRIPTEN_VERSION=sdk-1.37.27-64bit
+ANDROID_SDK_VERSION=r24.4.1
+ANDROID_NDK_VERSION=r10e
 PROJECT=${PWD##*/}
 
-# makeコマンド
+# makeコマンド このコマンドだけはオプションをつけることができる
 [ ${#} -ge 1 ] && [ ${1} = "make" ] && {
 	# 最初にファイル転送
 	sh ${0} put
 	# makeコマンド作成
-	COMMAND=":"
-	COMMAND+=" && . ~/emsdk-portable/emsdk_env.sh"
-	COMMAND+=" && cd /root/${PROJECT}"
+	COMMAND="cd /root/${PROJECT}"
+	COMMAND+=" && export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64"
+	COMMAND+=" && export ANDROID_HOME=/opt/android-sdk-${ANDROID_SDK_VERSION}"
+	COMMAND+=" && export ANDROID_NDK_HOME=/opt/android-ndk-${ANDROID_NDK_VERSION}"
+	COMMAND+=" && . /opt/emsdk-portable/emsdk_env.sh"
 	COMMAND+=" && ${@}"
 	# makeコマンド実行
 	docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c "${COMMAND}"
@@ -48,48 +53,69 @@ for ARG in "${@}" ; do
 			;;
 		install)
 			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'apt-get update'
-			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'DEBIAN_FRONTEND=noninteractive apt-get install -y wget'
 			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'DEBIAN_FRONTEND=noninteractive apt-get install -y rsync'
-			# install node
+			;;
+		install_node)
+			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'DEBIAN_FRONTEND=noninteractive apt-get install -y wget'
 			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs'
 			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'DEBIAN_FRONTEND=noninteractive apt-get install -y npm'
 			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'npm cache clean'
 			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'npm install n -g'
 			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'n v9.3.0'
 			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'ln -s /usr/local/bin/node /usr/bin/node'
-			# install emscripten
+			;;
+		install_emscripten)
+			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'DEBIAN_FRONTEND=noninteractive apt-get install -y wget'
 			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential'
 			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'DEBIAN_FRONTEND=noninteractive apt-get install -y cmake'
+			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'DEBIAN_FRONTEND=noninteractive apt-get install -y python'
 			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'DEBIAN_FRONTEND=noninteractive apt-get install -y python2.7'
 			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs'
 			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'DEBIAN_FRONTEND=noninteractive apt-get install -y default-jre'
 			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'DEBIAN_FRONTEND=noninteractive apt-get install -y git-core'
-			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'cd /root/ && wget https://s3.amazonaws.com/mozilla-games/emscripten/releases/emsdk-portable.tar.gz'
-			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'cd /root/ && tar -zxvf emsdk-portable.tar.gz'
-			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'cd /root/emsdk-portable && ./emsdk update'
-			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'cd /root/emsdk-portable && ./emsdk install sdk-1.37.27-64bit'
-			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'cd /root/emsdk-portable && ./emsdk activate sdk-1.37.27-64bit'
+			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'cd /opt && wget https://s3.amazonaws.com/mozilla-games/emscripten/releases/emsdk-portable.tar.gz'
+			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'cd /opt && tar -zxvf emsdk-portable.tar.gz'
+			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'cd /opt/emsdk-portable && ./emsdk update'
+			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'cd /opt/emsdk-portable && ./emsdk install '${EMSCRIPTEN_VERSION}
+			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'cd /opt/emsdk-portable && ./emsdk activate '${EMSCRIPTEN_VERSION}
+			;;
+		install_android_sdk_ndk)
+			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'DEBIAN_FRONTEND=noninteractive apt-get install -y wget'
+			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'DEBIAN_FRONTEND=noninteractive apt-get install -y expect'
+			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'DEBIAN_FRONTEND=noninteractive apt-get install -y openjdk-8-jdk'
+			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'DEBIAN_FRONTEND=noninteractive apt-get install -y lib32stdc++6'
+			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'DEBIAN_FRONTEND=noninteractive apt-get install -y lib32z1'
+			ANDROID_SDK_FILE="android-sdk_${ANDROID_SDK_VERSION}-linux.tgz"
+			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'cd /opt && wget https://dl-ssl.google.com/android/'${ANDROID_SDK_FILE}
+			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'cd /opt && tar -zxvf '${ANDROID_SDK_FILE}
+			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'mv /opt/android-sdk-linux /opt/android-sdk-'${ANDROID_SDK_VERSION}
+			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c '/opt/android-sdk-'${ANDROID_SDK_VERSION}'/tools/android list sdk --all --extended'
+			EXPECT_COMMAND_01='set timeout -1 ; spawn /opt/android-sdk-'${ANDROID_SDK_VERSION}'/tools/android update sdk --no-ui --all --filter'
+			EXPECT_COMMAND_02='; expect "Do you accept the license" { send "y\n" ; exp_continue } Downloading { exp_continue } Installing { exp_continue }'
+			docker exec -it ${DOCKER_CONTAINER_NAME_01} expect -c "${EXPECT_COMMAND_01} android-23 ${EXPECT_COMMAND_02}"
+			docker exec -it ${DOCKER_CONTAINER_NAME_01} expect -c "${EXPECT_COMMAND_01} build-tools-23.0.2 ${EXPECT_COMMAND_02}"
+			docker exec -it ${DOCKER_CONTAINER_NAME_01} expect -c "${EXPECT_COMMAND_01} extra-google-m2repository ${EXPECT_COMMAND_02}"
+			docker exec -it ${DOCKER_CONTAINER_NAME_01} expect -c "${EXPECT_COMMAND_01} extra-android-m2repository ${EXPECT_COMMAND_02}"
+			ANDROID_NDK_FILE="android-ndk-${ANDROID_NDK_VERSION}-linux-x86_64.bin"
+			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'cd /opt && wget https://dl-ssl.google.com/android/ndk/'${ANDROID_NDK_FILE}
+			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'cd /opt && chmod +x '${ANDROID_NDK_FILE}
+			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'cd /opt && ./'${ANDROID_NDK_FILE}
 			;;
 		sync_put|put)
-			rsync --blocking-io -e 'docker exec -i' -rltDv ./ ${DOCKER_CONTAINER_NAME_01}:/root/${PROJECT}/ --exclude='.git'
+			RSYNC_SRC=./
+			RSYNC_DST=${DOCKER_CONTAINER_NAME_01}:/root/${PROJECT}/
+			RSYNC_COMMAND="rsync --blocking-io -e 'docker exec -i' --exclude='.git' -rltDv"
+			eval ${RSYNC_COMMAND} ${RSYNC_SRC} ${RSYNC_DST}
 			;;
 		sync_get|get)
-			rsync --blocking-io -e 'docker exec -i' -rltDv ${DOCKER_CONTAINER_NAME_01}:/root/${PROJECT}/ ./ --exclude='.git'
-			;;
-		web_debug)
-			COMMAND="cd /root/${PROJECT} && . ~/emsdk-portable/emsdk_env.sh && make copy && make -C src_client/platform_web debug"
-			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c "${COMMAND}"
-			;;
-		web_release)
-			COMMAND="cd /root/${PROJECT} && . ~/emsdk-portable/emsdk_env.sh && make copy && make -C src_client/platform_web release"
-			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c "${COMMAND}"
-			;;
-		web_clean)
-			COMMAND="cd /root/${PROJECT} && make -C src_client/platform_web clean"
-			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c "${COMMAND}"
+			RSYNC_SRC=${DOCKER_CONTAINER_NAME_01}:/root/${PROJECT}/
+			RSYNC_DST=./
+			RSYNC_COMMAND="rsync --blocking-io -e 'docker exec -i' --exclude='.git' -rltDv"
+			eval ${RSYNC_COMMAND} ${RSYNC_SRC} ${RSYNC_DST}
 			;;
 		serve)
-			COMMAND="cd /root/${PROJECT} && node src_server/node/main.js"
+			COMMAND="cd /root/${PROJECT}"
+			COMMAND+=" && node src_server/node/main.js"
 			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c "${COMMAND}"
 			;;
 		browse)
@@ -99,7 +125,7 @@ for ARG in "${@}" ; do
 			open http://${DOCKER_HOSTIP}:${DOCKER_HOSTPORT}
 			;;
 		help)
-			echo create or status or start or install or put or get or web_debug or make or web_release or web_clean or serve or browse or bash or stop or clear
+			echo create or status or start or install or put or get or make or serve or browse or bash or stop or clear
 			;;
 		*)
 			echo nothing to do
