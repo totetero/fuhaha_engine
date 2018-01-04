@@ -35,7 +35,7 @@ web-clean:
 # --------------------------------
 
 android: copy android-debug
-	adb install -r src_client/platform_android/build/outputs/apk/android-all-debug.apk
+	adb install -r src_client/platform_android/build/outputs/apk/platform_android-all-debug.apk
 	adb logcat
 
 android-isIns:
@@ -46,7 +46,7 @@ android-debug:
 
 android-release: copy
 	cd src_client/platform_android; ./gradlew assembleRelease
-	ls src_client/platform_android/build/outputs/apk/android-all-release.apk
+	ls src_client/platform_android/build/outputs/apk/platform_android-all-release.apk
 
 android-clean:
 	cd src_client/platform_android; ./gradlew clean
