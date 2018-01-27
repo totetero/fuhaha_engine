@@ -123,6 +123,10 @@ for ARG in "${@}" ; do
 			RSYNC_COMMAND="rsync --blocking-io -e 'docker exec -i' --exclude='.git' --filter=':- .gitignore' -rltDv"
 			eval ${RSYNC_COMMAND} ${RSYNC_SRC} ${RSYNC_DST}
 			;;
+		restore)
+			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'rm -rf /root/'${PROJECT}/src_client/fuhahaEngine
+			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'rm -rf /root/'${PROJECT}/src_client/main
+			;;
 		serve)
 			COMMAND="cd /root/${PROJECT}"
 			COMMAND+=" && node src_server/node/main.js"
@@ -135,7 +139,7 @@ for ARG in "${@}" ; do
 			open http://${DOCKER_HOSTIP}:${DOCKER_HOSTPORT}
 			;;
 		help)
-			echo create or status or start or install or put or get or make or serve or browse or bash or stop or clear
+			echo create or status or start or install or put or get or restore or make or serve or browse or bash or stop or clear
 			;;
 		*)
 			echo nothing to do
