@@ -23,6 +23,9 @@ struct engineLayout02ViewUtilFamily{
 	bool isInvisible;
 };
 
+// 表示要素構造体子要素 全ての要素の親となる要素を取得
+struct engineLayout02View *engineLayout02ViewUtilFamilyRootGet();
+
 // 表示要素構造体子要素 初期化
 void engineLayout02ViewUtilFamilyInit(struct engineLayout02View *this);
 // 表示要素構造体子要素 子要素追加
