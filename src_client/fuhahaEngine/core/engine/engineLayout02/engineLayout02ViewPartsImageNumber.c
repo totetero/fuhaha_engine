@@ -33,6 +33,7 @@ struct engineLayout02ViewPartsImageNumberImplement{
 // 初期化
 static void init(struct engineLayout02ViewPartsImageNumberImplement *this){
 	// レイアウト初期化
+	engineLayout02ViewUtilFamilyInit((struct engineLayout02View*)this);
 	engineLayout02ViewUtilPositionInit((struct engineLayout02View*)this);
 
 	// デフォルトパラメータ設定
@@ -181,7 +182,7 @@ static void dispose(struct engineLayout02ViewPartsImageNumberImplement *this){
 	engineGraphicObjectIBODispose(this->egoIdFace);
 	engineGraphicTextureDispose(this->egoIdTexTest);
 	engineLayout02ViewUtilPositionDispose((struct engineLayout02View*)this);
-	engineLayout02ViewDetouch((struct engineLayout02View*)this);
+	engineLayout02ViewUtilFamilyDispose((struct engineLayout02View*)this);
 	engineUtilMemoryInfoFree("engineLayout02ViewPartsImageNumber", this);
 }
 

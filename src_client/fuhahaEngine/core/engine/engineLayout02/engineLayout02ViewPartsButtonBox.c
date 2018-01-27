@@ -18,6 +18,7 @@ struct engineLayout02ViewPartsButtonBoxImplement{
 // 初期化
 static void init(struct engineLayout02ViewPartsButtonBoxImplement *this){
 	// レイアウト初期化
+	engineLayout02ViewUtilFamilyInit((struct engineLayout02View*)this);
 	engineLayout02ViewUtilPositionInit((struct engineLayout02View*)this);
 	this->super.super.interact.setting.isTouchable = true;
 
@@ -55,12 +56,12 @@ static void init(struct engineLayout02ViewPartsButtonBoxImplement *this){
 	engineLayout02ViewUtilPositionSetLtRtTpBm((struct engineLayout02View*)this->super.frameActibve, 0, 0, 0, 0);
 	engineLayout02ViewUtilPositionSetLtRtTpBm((struct engineLayout02View*)this->super.frameInactive, 0, 0, 0, 0);
 	engineLayout02ViewUtilPositionSetLtRtTpBm(this->super.viewInner, 0, 0, 0, 0);
-	engineLayout02ViewUtilChildrenAdd((struct engineLayout02View*)this, (struct engineLayout02View*)this->super.frameNormal);
-	engineLayout02ViewUtilChildrenAdd((struct engineLayout02View*)this, (struct engineLayout02View*)this->super.frameSelect);
-	engineLayout02ViewUtilChildrenAdd((struct engineLayout02View*)this, (struct engineLayout02View*)this->super.frameActibve);
-	engineLayout02ViewUtilChildrenAdd((struct engineLayout02View*)this, (struct engineLayout02View*)this->super.frameInactive);
-	engineLayout02ViewUtilChildrenAdd((struct engineLayout02View*)this, (struct engineLayout02View*)this->super.viewInner);
-	this->super.viewInner->children.zIndex = 1;
+	engineLayout02ViewUtilFamilyAdd((struct engineLayout02View*)this, (struct engineLayout02View*)this->super.frameNormal);
+	engineLayout02ViewUtilFamilyAdd((struct engineLayout02View*)this, (struct engineLayout02View*)this->super.frameSelect);
+	engineLayout02ViewUtilFamilyAdd((struct engineLayout02View*)this, (struct engineLayout02View*)this->super.frameActibve);
+	engineLayout02ViewUtilFamilyAdd((struct engineLayout02View*)this, (struct engineLayout02View*)this->super.frameInactive);
+	engineLayout02ViewUtilFamilyAdd((struct engineLayout02View*)this, (struct engineLayout02View*)this->super.viewInner);
+	this->super.viewInner->family.zIndex = 1;
 }
 
 // ----------------------------------------------------------------
@@ -76,28 +77,28 @@ static bool touch(struct engineLayout02ViewPartsButtonBoxImplement *this, int to
 // 計算
 static void calc(struct engineLayout02ViewPartsButtonBoxImplement *this){
 	// ボタンの見た目を状態に合わせて変える
-	this->super.frameNormal->super.children.isInvisible = true;
-	this->super.frameSelect->super.children.isInvisible = true;
-	this->super.frameActibve->super.children.isInvisible = true;
-	this->super.frameInactive->super.children.isInvisible = true;
+	this->super.frameNormal->super.family.isInvisible = true;
+	this->super.frameSelect->super.family.isInvisible = true;
+	this->super.frameActibve->super.family.isInvisible = true;
+	this->super.frameInactive->super.family.isInvisible = true;
 	if(this->super.super.interact.status.isHover){
 		// 押下状態
-		this->super.frameActibve->super.children.isInvisible = false;
+		this->super.frameActibve->super.family.isInvisible = false;
 		engineLayout02ViewUtilPositionSetPaddingTop(this->super.viewInner, 2);
 		engineLayout02ViewUtilPositionSetPaddingBottom(this->super.viewInner, 0);
 	}else if(this->super.isSelect){
 		// 選択状態
-		this->super.frameSelect->super.children.isInvisible = false;
+		this->super.frameSelect->super.family.isInvisible = false;
 		engineLayout02ViewUtilPositionSetPaddingTop(this->super.viewInner, 0);
 		engineLayout02ViewUtilPositionSetPaddingBottom(this->super.viewInner, 2);
 	}else if(this->super.isInactiveDraw){
 		// 非活性状態
-		this->super.frameInactive->super.children.isInvisible = false;
+		this->super.frameInactive->super.family.isInvisible = false;
 		engineLayout02ViewUtilPositionSetPaddingTop(this->super.viewInner, 0);
 		engineLayout02ViewUtilPositionSetPaddingBottom(this->super.viewInner, 2);
 	}else{
 		// 通常状態
-		this->super.frameNormal->super.children.isInvisible = false;
+		this->super.frameNormal->super.family.isInvisible = false;
 		engineLayout02ViewUtilPositionSetPaddingTop(this->super.viewInner, 0);
 		engineLayout02ViewUtilPositionSetPaddingBottom(this->super.viewInner, 2);
 	}
@@ -129,7 +130,7 @@ static void dispose(struct engineLayout02ViewPartsButtonBoxImplement *this){
 
 	// 自要素破棄
 	engineLayout02ViewUtilPositionDispose((struct engineLayout02View*)this);
-	engineLayout02ViewDetouch((struct engineLayout02View*)this);
+	engineLayout02ViewUtilFamilyDispose((struct engineLayout02View*)this);
 	engineUtilMemoryInfoFree("engineLayout02ViewPartsButtonBox", this);
 }
 
@@ -154,7 +155,7 @@ struct engineLayout02ViewPartsButtonBox *engineLayout02ViewPartsButtonBoxCreateT
 	struct engineLayout02ViewPartsButtonBox *this = engineLayout02ViewPartsButtonBoxCreate();
 	struct engineLayout02ViewPartsFontText *viewText = engineLayout02ViewPartsFontTextCreateDefault(text);
 	engineLayout02ViewUtilPositionSetLtRtTpBm((struct engineLayout02View*)viewText, 0, 0, 0, 0);
-	engineLayout02ViewUtilChildrenAdd((struct engineLayout02View*)this->viewInner, (struct engineLayout02View*)viewText);
+	engineLayout02ViewUtilFamilyAdd((struct engineLayout02View*)this->viewInner, (struct engineLayout02View*)viewText);
 	return this;
 }
 

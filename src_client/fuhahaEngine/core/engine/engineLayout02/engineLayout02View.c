@@ -9,6 +9,7 @@
 // 初期化
 static void init(struct engineLayout02View *this){
 	// レイアウト初期化
+	engineLayout02ViewUtilFamilyInit((struct engineLayout02View*)this);
 	engineLayout02ViewUtilPositionInit((struct engineLayout02View*)this);
 }
 
@@ -45,7 +46,7 @@ static void dispose(struct engineLayout02View *this){
 
 	// 自要素破棄
 	engineLayout02ViewUtilPositionDispose((struct engineLayout02View*)this);
-	engineLayout02ViewDetouch((struct engineLayout02View*)this);
+	engineLayout02ViewUtilFamilyDispose((struct engineLayout02View*)this);
 	engineUtilMemoryInfoFree("engineLayout02View", this);
 }
 

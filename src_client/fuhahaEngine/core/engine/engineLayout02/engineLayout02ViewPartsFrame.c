@@ -30,6 +30,7 @@ struct engineLayout02ViewPartsFrameImplement{
 // 初期化
 static void init(struct engineLayout02ViewPartsFrameImplement *this){
 	// レイアウト初期化
+	engineLayout02ViewUtilFamilyInit((struct engineLayout02View*)this);
 	engineLayout02ViewUtilPositionInit((struct engineLayout02View*)this);
 
 	// 画像読み込み
@@ -262,7 +263,7 @@ static void dispose(struct engineLayout02ViewPartsFrameImplement *this){
 	engineGraphicObjectIBODispose(this->egoIdFace);
 	engineGraphicTextureDispose(this->egoIdTexTest);
 	engineLayout02ViewUtilPositionDispose((struct engineLayout02View*)this);
-	engineLayout02ViewDetouch((struct engineLayout02View*)this);
+	engineLayout02ViewUtilFamilyDispose((struct engineLayout02View*)this);
 	engineUtilMemoryInfoFree("engineLayout02ViewPartsFrame", this);
 }
 

@@ -29,6 +29,7 @@ struct engineLayout02ViewPartsRectImplement{
 // 初期化
 static void init(struct engineLayout02ViewPartsRectImplement *this){
 	// レイアウト初期化
+	engineLayout02ViewUtilFamilyInit((struct engineLayout02View*)this);
 	engineLayout02ViewUtilPositionInit((struct engineLayout02View*)this);
 
 	// デフォルトパラメータ設定
@@ -160,7 +161,7 @@ static void dispose(struct engineLayout02ViewPartsRectImplement *this){
 	engineGraphicObjectIBODispose(this->egoIdFace);
 	engineGraphicTextureDispose(this->egoIdTexTest);
 	engineLayout02ViewUtilPositionDispose((struct engineLayout02View*)this);
-	engineLayout02ViewDetouch((struct engineLayout02View*)this);
+	engineLayout02ViewUtilFamilyDispose((struct engineLayout02View*)this);
 	engineUtilMemoryInfoFree("engineLayout02ViewPartsRect", this);
 }
 

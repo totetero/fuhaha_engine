@@ -39,6 +39,7 @@ struct engineLayout02ViewPartsImageTextImplement{
 // 初期化
 static void init(struct engineLayout02ViewPartsImageTextImplement *this){
 	// レイアウト初期化
+	engineLayout02ViewUtilFamilyInit((struct engineLayout02View*)this);
 	engineLayout02ViewUtilPositionInit((struct engineLayout02View*)this);
 
 	// デフォルトパラメータ設定
@@ -247,7 +248,7 @@ static void dispose(struct engineLayout02ViewPartsImageTextImplement *this){
 	engineGraphicTextureDispose(this->egoIdTexTest);
 	if(this->textInfo.buff != NULL){engineUtilMemoryInfoFree("engineLayout02ViewPartsImageText textBuff", this->textInfo.buff);}
 	engineLayout02ViewUtilPositionDispose((struct engineLayout02View*)this);
-	engineLayout02ViewDetouch((struct engineLayout02View*)this);
+	engineLayout02ViewUtilFamilyDispose((struct engineLayout02View*)this);
 	engineUtilMemoryInfoFree("engineLayout02ViewPartsImageText", this);
 }
 

@@ -79,6 +79,7 @@ struct engineLayout02ViewPartsFontTextImplement{
 // 初期化
 static void init(struct engineLayout02ViewPartsFontTextImplement *this){
 	// レイアウト初期化
+	engineLayout02ViewUtilFamilyInit((struct engineLayout02View*)this);
 	engineLayout02ViewUtilPositionInit((struct engineLayout02View*)this);
 
 	// デフォルトパラメータ設定
@@ -421,7 +422,7 @@ static void dispose(struct engineLayout02ViewPartsFontTextImplement *this){
 	engineGraphicTextureDispose(this->egoIdTexTest);
 	if(this->textInfo.buff != NULL){engineUtilMemoryInfoFree("engineLayout02ViewPartsFontText textBuff", this->textInfo.buff);}
 	engineLayout02ViewUtilPositionDispose((struct engineLayout02View*)this);
-	engineLayout02ViewDetouch((struct engineLayout02View*)this);
+	engineLayout02ViewUtilFamilyDispose((struct engineLayout02View*)this);
 	engineUtilMemoryInfoFree("engineLayout02ViewPartsFontText", this);
 }
 

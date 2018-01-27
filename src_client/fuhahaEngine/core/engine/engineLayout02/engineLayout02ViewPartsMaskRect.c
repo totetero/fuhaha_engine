@@ -31,6 +31,7 @@ struct engineLayout02ViewPartsMaskRectImplement{
 // 初期化
 static void init(struct engineLayout02ViewPartsMaskRectImplement *this){
 	// レイアウト初期化
+	engineLayout02ViewUtilFamilyInit((struct engineLayout02View*)this);
 	engineLayout02ViewUtilPositionInit((struct engineLayout02View*)this);
 	this->generationCount++;
 }
@@ -152,7 +153,7 @@ static void dispose(struct engineLayout02ViewPartsMaskRectImplement *this){
 	engineGraphicObjectIBODispose(this->egoIdFace);
 	engineGraphicTextureDispose(this->egoIdTexTest);
 	engineLayout02ViewUtilPositionDispose((struct engineLayout02View*)this);
-	engineLayout02ViewDetouch((struct engineLayout02View*)this);
+	engineLayout02ViewUtilFamilyDispose((struct engineLayout02View*)this);
 	engineUtilMemoryInfoFree("engineLayout02ViewPartsMaskRect", this);
 }
 

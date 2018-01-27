@@ -12,7 +12,7 @@ struct engineLayout02View;
 // ----------------------------------------------------------------
 
 // 表示要素構造体子要素
-struct engineLayout02ViewUtilChildren{
+struct engineLayout02ViewUtilFamily{
 	struct engineLayout02View *parent;
 	struct engineLayout02View *prev;
 	struct engineLayout02View *next;
@@ -23,10 +23,14 @@ struct engineLayout02ViewUtilChildren{
 	bool isInvisible;
 };
 
+// 表示要素構造体子要素 初期化
+void engineLayout02ViewUtilFamilyInit(struct engineLayout02View *this);
 // 表示要素構造体子要素 子要素追加
-void engineLayout02ViewUtilChildrenAdd(struct engineLayout02View *this, struct engineLayout02View *child);
+void engineLayout02ViewUtilFamilyAdd(struct engineLayout02View *this, struct engineLayout02View *child);
 // 表示要素構造体子要素 子要素除外
-void engineLayout02ViewUtilChildrenRemove(struct engineLayout02View *this, struct engineLayout02View *child, bool isDispose);
+void engineLayout02ViewUtilFamilyRemove(struct engineLayout02View *this, struct engineLayout02View *child, bool isDispose);
+// 表示要素構造体子要素 破棄
+void engineLayout02ViewUtilFamilyDispose(struct engineLayout02View *this);
 
 // 表示要素構造体子要素 タッチ処理
 bool engineLayout02ViewUtilChildrenTouch(struct engineLayout02View *this, int touchIndex, double x, double y, bool dn, bool mv, bool isCancel);
@@ -186,7 +190,7 @@ void engineLayout02ViewUtilInteractTouchRoot(struct engineLayout02View *this, bo
 
 // 表示要素構造体
 struct engineLayout02View{
-	struct engineLayout02ViewUtilChildren children;
+	struct engineLayout02ViewUtilFamily family;
 	struct engineLayout02ViewUtilPosition position;
 	struct engineLayout02ViewUtilInteract interact;
 
@@ -210,7 +214,6 @@ struct engineLayout02View *engineLayout02ViewCreate();
 #define engineLayout02ViewDraw(this, mat, color) (this)->draw(this, mat, color)
 #define engineLayout02ViewPause(this) (this)->pause(this)
 #define engineLayout02ViewDispose(this) (this)->dispose(this)
-#define engineLayout02ViewDetouch(this) engineLayout02ViewUtilChildrenRemove((this)->children.parent, this, false)
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

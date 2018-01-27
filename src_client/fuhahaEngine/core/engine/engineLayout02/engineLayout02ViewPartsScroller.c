@@ -19,15 +19,16 @@ struct engineLayout02ViewPartsScrollerImplement{
 // 初期化
 static void init(struct engineLayout02ViewPartsScrollerImplement *this){
 	// レイアウト初期化
+	engineLayout02ViewUtilFamilyInit((struct engineLayout02View*)this);
 	engineLayout02ViewUtilPositionInit((struct engineLayout02View*)this);
 	this->super.super.interact.setting.isTouchable = true;
 
 	this->super.viewInner = engineLayout02ViewCreate();
 	this->super.viewBarX = engineLayout02ViewCreate();
 	this->super.viewBarY = engineLayout02ViewCreate();
-	engineLayout02ViewUtilChildrenAdd((struct engineLayout02View*)this, (struct engineLayout02View*)this->super.viewInner);
-	engineLayout02ViewUtilChildrenAdd((struct engineLayout02View*)this, (struct engineLayout02View*)this->super.viewBarX);
-	engineLayout02ViewUtilChildrenAdd((struct engineLayout02View*)this, (struct engineLayout02View*)this->super.viewBarY);
+	engineLayout02ViewUtilFamilyAdd((struct engineLayout02View*)this, (struct engineLayout02View*)this->super.viewInner);
+	engineLayout02ViewUtilFamilyAdd((struct engineLayout02View*)this, (struct engineLayout02View*)this->super.viewBarX);
+	engineLayout02ViewUtilFamilyAdd((struct engineLayout02View*)this, (struct engineLayout02View*)this->super.viewBarY);
 }
 
 // ----------------------------------------------------------------
@@ -147,7 +148,7 @@ static void dispose(struct engineLayout02ViewPartsScrollerImplement *this){
 
 	// 自要素破棄
 	engineLayout02ViewUtilPositionDispose((struct engineLayout02View*)this);
-	engineLayout02ViewDetouch((struct engineLayout02View*)this);
+	engineLayout02ViewUtilFamilyDispose((struct engineLayout02View*)this);
 	engineUtilMemoryInfoFree("engineLayout02ViewPartsScroller", this);
 }
 

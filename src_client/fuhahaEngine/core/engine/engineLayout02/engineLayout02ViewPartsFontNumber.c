@@ -47,6 +47,7 @@ struct engineLayout02ViewPartsFontNumberImplement{
 // 初期化
 static void init(struct engineLayout02ViewPartsFontNumberImplement *this){
 	// レイアウト初期化
+	engineLayout02ViewUtilFamilyInit((struct engineLayout02View*)this);
 	engineLayout02ViewUtilPositionInit((struct engineLayout02View*)this);
 	this->textInfo.generationCount++;
 
@@ -278,7 +279,7 @@ static void dispose(struct engineLayout02ViewPartsFontNumberImplement *this){
 	engineGraphicObjectIBODispose(this->egoIdFace);
 	engineGraphicTextureDispose(this->egoIdTexTest);
 	engineLayout02ViewUtilPositionDispose((struct engineLayout02View*)this);
-	engineLayout02ViewDetouch((struct engineLayout02View*)this);
+	engineLayout02ViewUtilFamilyDispose((struct engineLayout02View*)this);
 	engineUtilMemoryInfoFree("engineLayout02ViewPartsFontNumber", this);
 }
 

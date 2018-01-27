@@ -280,17 +280,17 @@ static void calcLayout(struct engineLayout02View *this){
 	double currentY = parentY;
 	double currentW = parentW;
 	double currentH = parentH;
-	if(this->children.parent != NULL){
-		calcLayout(this->children.parent);
-		parentMatrix = this->children.parent->position.layout.transform.isActive ? &this->children.parent->position.layout.transform.matrix : NULL;
-		currentX = parentX = this->children.parent->position.layout.x;
-		currentY = parentY = this->children.parent->position.layout.y;
-		currentW = parentW = this->children.parent->position.layout.w;
-		currentH = parentH = this->children.parent->position.layout.h;
-		double paddingLt = (this->children.parent->position.style.paddingLeft.isActive ? this->children.parent->position.style.paddingLeft.value : 0);
-		double paddingRt = (this->children.parent->position.style.paddingRight.isActive ? this->children.parent->position.style.paddingRight.value : 0);
-		double paddingTp = (this->children.parent->position.style.paddingTop.isActive ? this->children.parent->position.style.paddingTop.value : 0);
-		double paddingBm = (this->children.parent->position.style.paddingBottom.isActive ? this->children.parent->position.style.paddingBottom.value : 0);
+	if(this->family.parent != NULL){
+		calcLayout(this->family.parent);
+		parentMatrix = this->family.parent->position.layout.transform.isActive ? &this->family.parent->position.layout.transform.matrix : NULL;
+		currentX = parentX = this->family.parent->position.layout.x;
+		currentY = parentY = this->family.parent->position.layout.y;
+		currentW = parentW = this->family.parent->position.layout.w;
+		currentH = parentH = this->family.parent->position.layout.h;
+		double paddingLt = (this->family.parent->position.style.paddingLeft.isActive ? this->family.parent->position.style.paddingLeft.value : 0);
+		double paddingRt = (this->family.parent->position.style.paddingRight.isActive ? this->family.parent->position.style.paddingRight.value : 0);
+		double paddingTp = (this->family.parent->position.style.paddingTop.isActive ? this->family.parent->position.style.paddingTop.value : 0);
+		double paddingBm = (this->family.parent->position.style.paddingBottom.isActive ? this->family.parent->position.style.paddingBottom.value : 0);
 		currentX += paddingLt;
 		currentY += paddingTp;
 		currentW -= paddingLt + paddingRt;
