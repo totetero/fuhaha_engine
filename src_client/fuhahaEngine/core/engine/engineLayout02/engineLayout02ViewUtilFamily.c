@@ -6,6 +6,7 @@
 // ----------------------------------------------------------------
 
 static struct{
+	bool isViewRootInit;
 	struct engineLayout02View viewRoot;
 } localGlobal = {0};
 
@@ -14,7 +15,11 @@ static struct{
 // ----------------------------------------------------------------
 
 // 表示要素構造体子要素 全ての要素の親となる要素を取得
-struct engineLayout02View *engineLayout02ViewUtilFamilyRootGet(){
+static struct engineLayout02View *viewRootGet(){
+	if(!localGlobal.isViewRootInit){
+		localGlobal.isViewRootInit = true;
+		engineLayout02ViewUtilPositionSetLtRtTpBm(&localGlobal.viewRoot, 0, 0, 0, 0);
+	}
 	return &localGlobal.viewRoot;
 }
 
@@ -54,7 +59,7 @@ static void dummyUnset(struct engineLayout02View *this, struct engineLayout02Vie
 static void familyAdd(struct engineLayout02View *this, struct engineLayout02View *child){
 	if(this == NULL){return;}
 	if(child->family.parent == this){return;}
-	if(child == engineLayout02ViewUtilFamilyRootGet()){return;}
+	if(child == viewRootGet()){return;}
 
 	struct engineLayout02View dummy;
 	dummySet(this, &dummy);
@@ -96,7 +101,7 @@ static void familyRemove(struct engineLayout02View *this, struct engineLayout02V
 // 表示要素構造体子要素 初期化
 void engineLayout02ViewUtilFamilyInit(struct engineLayout02View *this){
 	// ルートに貼り付ける
-	familyAdd(engineLayout02ViewUtilFamilyRootGet(), this);
+	familyAdd(viewRootGet(), this);
 }
 
 // 表示要素構造体子要素 子要素追加
@@ -116,7 +121,7 @@ void engineLayout02ViewUtilFamilyRemove(struct engineLayout02View *this, struct 
 		child->dispose(child);
 	}else{
 		// ルートに張り替える
-		familyAdd(engineLayout02ViewUtilFamilyRootGet(), child);
+		familyAdd(viewRootGet(), child);
 	}
 }
 
@@ -165,7 +170,7 @@ static void sortChildren(struct engineLayout02View *this){
 
 // 表示要素構造体子要素 タッチ処理
 bool engineLayout02ViewUtilChildrenTouch(struct engineLayout02View *this, int touchIndex, double x, double y, bool dn, bool mv, bool isCancel){
-	if(this == engineLayout02ViewUtilFamilyRootGet()){return false;}
+	if(this == viewRootGet()){return false;}
 	bool isActive = false;
 	// 子要素のタッチ処理 表示手前から先に処理する
 	struct engineLayout02View *temp = this->family.childrenTail;
@@ -179,7 +184,7 @@ bool engineLayout02ViewUtilChildrenTouch(struct engineLayout02View *this, int to
 
 // 表示要素構造体子要素 計算
 void engineLayout02ViewUtilChildrenCalc(struct engineLayout02View *this){
-	if(this == engineLayout02ViewUtilFamilyRootGet()){return;}
+	if(this == viewRootGet()){return;}
 	// 子要素の並べ替え
 	sortChildren(this);
 	// 子要素の計算
@@ -192,7 +197,7 @@ void engineLayout02ViewUtilChildrenCalc(struct engineLayout02View *this){
 
 // 表示要素構造体子要素 描画
 void engineLayout02ViewUtilChildrenDraw(struct engineLayout02View *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
-	if(this == engineLayout02ViewUtilFamilyRootGet()){return;}
+	if(this == viewRootGet()){return;}
 	// 子要素の描画 表示奥から先に処理する
 	struct engineLayout02View *temp = this->family.childrenHead;
 	while(temp != NULL){
@@ -203,7 +208,7 @@ void engineLayout02ViewUtilChildrenDraw(struct engineLayout02View *this, struct 
 
 // 表示要素構造体子要素 一時停止
 void engineLayout02ViewUtilChildrenPause(struct engineLayout02View *this){
-	if(this == engineLayout02ViewUtilFamilyRootGet()){return;}
+	if(this == viewRootGet()){return;}
 	// 子要素の一時停止
 	struct engineLayout02View *temp = this->family.childrenHead;
 	while(temp != NULL){
@@ -214,7 +219,7 @@ void engineLayout02ViewUtilChildrenPause(struct engineLayout02View *this){
 
 // 表示要素構造体子要素 破棄
 void engineLayout02ViewUtilChildrenDispose(struct engineLayout02View *this){
-	if(this == engineLayout02ViewUtilFamilyRootGet()){return;}
+	if(this == viewRootGet()){return;}
 	// 子要素の破棄
 	struct engineLayout02View *temp = this->family.childrenHead;
 	while(temp != NULL){

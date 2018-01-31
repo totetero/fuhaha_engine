@@ -280,7 +280,7 @@ static void calcLayout(struct engineLayout02View *this){
 	double currentY = parentY;
 	double currentW = parentW;
 	double currentH = parentH;
-	if(this->family.parent != NULL && this->family.parent != engineLayout02ViewUtilFamilyRootGet()){
+	if(this->family.parent != NULL){
 		calcLayout(this->family.parent);
 		parentMatrix = this->family.parent->position.layout.transform.isActive ? &this->family.parent->position.layout.transform.matrix : NULL;
 		currentX = parentX = this->family.parent->position.layout.x;
