@@ -6,6 +6,7 @@ PLUGSRCDIR = ../main/web
 MAINSRCDIR = ../main/core
 
 OUTDIR = obj
+BINDIR = bin
 JSSRCS = $(shell find $(PLATSRCDIR) $(PLUGSRCDIR) -name "*.js")
 CSRCS = $(PLATSRCDIR)/main.c $(shell find $(CORESRCDIR) $(MAINSRCDIR) -name "*.c")
 OBJS = $(addprefix $(OUTDIR)/,$(notdir $(CSRCS:.c=.o)))
@@ -36,16 +37,19 @@ default: debug
 debug: build
 
 release: EMCC += -O3
+release: EMCC += -s WASM=1
 release: clean build
 
 build: $(TARGET)
-	mkdir -p bin
-	rsync -av $(TARGET) game.html frame.html bin/
-	test ! -f $(TARGET).mem || rsync -av $(TARGET).mem bin/
+	mkdir -p $(BINDIR)
+	rsync -av $(TARGET) game.html frame.html $(BINDIR)
+	test ! -f $(TARGET).mem || rsync -av $(TARGET).mem $(BINDIR)
+	test ! -f $(TARGET:.js=.wasm) || rsync -av $(TARGET:.js=.wasm) $(BINDIR)
 
 clean:
 	-rm $(TARGET) $(DEPEND) $(OBJS)
 	test ! -f $(TARGET).mem || rm $(TARGET).mem
+	test ! -f $(TARGET:.js=.wasm) || rm $(TARGET:.js=.wasm)
 
 # --------------------------------
 
