@@ -455,7 +455,7 @@ struct engineLayout02ViewPartsFontText *engineLayout02ViewPartsFontTextCreateDef
 void engineLayout02ViewPartsFontTextSet(struct engineLayout02ViewPartsFontText *that, char *text){
 	struct engineLayout02ViewPartsFontTextImplement *this = (struct engineLayout02ViewPartsFontTextImplement*)that;
 	// 文字列領域作成
-	int textLength = (text != NULL) ? (strlen(text) + 1) : 0;
+	int textLength = (text != NULL) ? ((int)strlen(text) + 1) : 0;
 	if(this->textInfo.length < textLength){
 		if(this->textInfo.buff != NULL){engineUtilMemoryInfoFree("engineLayout02ViewPartsFontText textBuff", this->textInfo.buff);}
 		this->textInfo.buff = (char*)engineUtilMemoryInfoMalloc("engineLayout02ViewPartsFontText textBuff", textLength * sizeof(char));

@@ -297,7 +297,7 @@ struct engineLayout02ViewPartsImageText *engineLayout02ViewPartsImageTextCreateD
 void engineLayout02ViewPartsImageTextSet(struct engineLayout02ViewPartsImageText *that, char *text){
 	struct engineLayout02ViewPartsImageTextImplement *this = (struct engineLayout02ViewPartsImageTextImplement*)that;
 	// 文字列領域作成
-	int textLength = (text != NULL) ? (strlen(text) + 1) : 0;
+	int textLength = (text != NULL) ? ((int)strlen(text) + 1) : 0;
 	if(this->textInfo.length < textLength){
 		if(this->textInfo.buff != NULL){engineUtilMemoryInfoFree("engineLayout02ViewPartsImageText textBuff", this->textInfo.buff);}
 		this->textInfo.buff = (char*)engineUtilMemoryInfoMalloc("engineLayout02ViewPartsImageText textBuff", textLength * sizeof(char));
