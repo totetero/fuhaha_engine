@@ -105,11 +105,11 @@ docker開発環境を立ち上げ、下記のシェルスクリプトコマン�
 
 ```bash
 cd ${FUHAHAROOT}
-sh docker_builder.sh make and
+sh docker_builder.sh make copy-and and-debug
 ```
 
 ビルドが成功すれば`${FUHAHAROOT}/src_client/platform_android/build/outputs/apk/android-all-debug.apk`が生成されます。
-同時にadbなどを用いてandroid実機にインストールを試みます。
+adbなどを用いてandroid実機にインストールして確認してください。
 
 ### ios版のビルド
 
