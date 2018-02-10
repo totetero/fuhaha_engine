@@ -45,7 +45,7 @@ module.exports.showFile = function(req, res, filePath){
 	libFs.readFile(filePath, "binary", function(err, file){
 		if(err){fuhahaUtil.showErr500(res, err); return;}
 
-		var prefix = libPath.extname(req.url)
+		var prefix = libPath.extname(filePath)
 		var contentType = "text/plain";
 		if(prefix === ".js"){contentType = "text/javascript";}
 		if(prefix === ".css"){contentType = "text/css";}
