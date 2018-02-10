@@ -31,11 +31,10 @@ module.exports.server = function(req, res){
 		var saveData = req.bodyJson.data;
 		libFs.writeFile(savePath, saveData, function(err){
 			if(err){fuhahaUtil.showErr500(res, err); return;}
-
+			console.log("save_text", savePath, "success");
 			res.write(JSON.stringify({"success": true}));
 			res.end();
 		});
-
 	}else if(req.url == rootPath + "/save_image"){
 		// 書式確認
 		if(!fuhahaUtil.checkType("Object", req.bodyJson)){fuhahaUtil.showErr500(res, "validateError json"); return;}
@@ -46,7 +45,7 @@ module.exports.server = function(req, res){
 		var saveData = req.bodyJson.data.replace(/^data:image\/png;base64,/, "");
 		libFs.writeFile(savePath, saveData, "base64", function(err){
 			if(err){fuhahaUtil.showErr500(res, err); return;}
-
+			console.log("save_image", savePath, "success");
 			res.write(JSON.stringify({"success": true}));
 			res.end();
 		});
