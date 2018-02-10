@@ -8,6 +8,7 @@
 
 src_client/platform_web/obj/game.js
 src_client/platform_web/obj/game.js.mem
+src_client/platform_web/obj/game.wasm
 src_client/platform_web/obj/MakeDepends.mk
 src_client/platform_web/obj/*.o
 src_client/platform_web/bin
