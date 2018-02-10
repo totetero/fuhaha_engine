@@ -45,8 +45,8 @@ NULL安全対応
 
 #### docker開発環境の準備と開始
 
-dockerはシェルスクリプトにより管理されます。  
-下記のシェルスクリプトコマンドを実行して開発環境を準備します。  
+dockerはシェルスクリプトにより管理されます。
+下記のシェルスクリプトコマンドを実行して開発環境を準備します。
 時間がかかります。
 
 ```bash
@@ -70,7 +70,7 @@ cd ${FUHAHAROOT}
 sh docker_builder.sh stop
 ```
 
-下記のシェルスクリプトコマンドを実行すれば開発環境を取り除いて綺麗な状態にすることができます。  
+下記のシェルスクリプトコマンドを実行すれば開発環境を取り除いて綺麗な状態にすることができます。
 
 ```bash
 cd ${FUHAHAROOT}
@@ -93,18 +93,11 @@ docker開発環境を立ち上げ、下記のシェルスクリプトコマン�
 
 ```bash
 cd ${FUHAHAROOT}
-sh docker_builder.sh make copy web-debug
+sh docker_builder.sh make web
 ```
 
 ビルドが成功すれば`${FUHAHAROOT}/src_client/platform_web/bin`以下に必要なファイルがまとまります。
-動作確認をするには、下記のシェルスクリプトコマンドを実行します。
-
-```bash
-cd ${FUHAHAROOT}
-sh docker_builder.sh make web-node
-```
-
-するとdocker上で`node.js`が立ち上がり http://127.0.0.1:8080/game.html でアクセスできます。
+同時にdocker上で`node.js`が立ち上がり http://127.0.0.1:8080/game.html でアクセスできます。
 
 ### android版のビルド
 
@@ -112,11 +105,11 @@ docker開発環境を立ち上げ、下記のシェルスクリプトコマン�
 
 ```bash
 cd ${FUHAHAROOT}
-sh docker_builder.sh make copy android-debug
+sh docker_builder.sh make and
 ```
 
 ビルドが成功すれば`${FUHAHAROOT}/src_client/platform_android/build/outputs/apk/android-all-debug.apk`が生成されます。
-adbなどを用いてandroid実機にインストールして確認してください。
+同時にadbなどを用いてandroid実機にインストールを試みます。
 
 ### ios版のビルド
 
@@ -124,7 +117,7 @@ adbなどを用いてandroid実機にインストールして確認してくだ�
 
 ```bash
 cd ${FUHAHAROOT}
-make copy
+make copy-ios
 ```
 
 XCodeで`${FUHAHAROOT}/src_client/platform_ios/fuhaha.xcodeproj`を開きます。
