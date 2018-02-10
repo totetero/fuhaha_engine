@@ -14,7 +14,8 @@ var fuhahaFileServer = module.exports;
 
 // ディレクトリ中身表示
 module.exports.showIndex = function(req, res, directoryFiles, isRoot){
-	res.writeHead(200, fuhahaUtil.header);
+	var contentType = "text/html";
+	res.writeHead(200, Object.assign({}, fuhahaUtil.header, {"Content-Type": contentType,}));
 	res.write("<!DOCTYPE html><html><head>");
 	res.write("</head><body>");
 
@@ -44,7 +45,17 @@ module.exports.showFile = function(req, res, filePath){
 	libFs.readFile(filePath, "binary", function(err, file){
 		if(err){fuhahaUtil.showErr500(res, err); return;}
 
-		res.writeHead(200, fuhahaUtil.header);
+		var prefix = libPath.extname(req.url)
+		var contentType = "text/plain";
+		if(prefix === ".js"){contentType = "text/javascript";}
+		if(prefix === ".css"){contentType = "text/css";}
+		if(prefix === ".html"){contentType = "text/html";}
+		if(prefix === ".png"){contentType = "image/png";}
+		if(prefix === ".m4a"){contentType = "audio/aac";}
+		if(prefix === ".ogg"){contentType = "audio/ogg";}
+		if(prefix === ".json"){contentType = "application/json";}
+		if(prefix === ".wasm"){contentType = "application/wasm";}
+		res.writeHead(200, Object.assign({}, fuhahaUtil.header, {"Content-Type": contentType,}));
 		res.write(file, "binary");
 
 		 // 遅延処理
