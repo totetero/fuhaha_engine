@@ -190,7 +190,7 @@ static void draw(struct pageCartridgeTest2 *this){
 	engineMathMat4Ortho(&this->stat->matOrtho, -global.screen.offset.x, global.screen.w + global.screen.offset.x, global.screen.h + global.screen.offset.y, -global.screen.offset.y, -1, 1);
 
 	// 2D描画準備
-	engineGraphicEngineSetDrawMode(ENGINEGRAPHICENGINEMODEDRAW_2D);
+	engineGraphicEngineSetDrawMode(ENGINEGRAPHICENGINEMODEDRAW_2D_ALPHA_NORMAL);
 
 	// トランス設定
 	engineLayout01TransSetRotate(&this->transBox, 0.0, 0.0, ENGINEMATH_DEG2RAD * this->step);

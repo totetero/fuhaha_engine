@@ -87,7 +87,7 @@ static void draw(struct pageCartridgeTest1 *this){
 	engineMathMat4Translate(&tempMat1, 0.0, 0.0, -3.0);
 	engineMathMat4RotateX(&tempMat1, ENGINEMATH_DEG2RAD * this->step);
 
-	engineGraphicEngineSetDrawMode(ENGINEGRAPHICENGINEMODEDRAW_2D);
+	engineGraphicEngineSetDrawMode(ENGINEGRAPHICENGINEMODEDRAW_2D_ALPHA_NORMAL);
 	engineGraphicEngineBindTexture(this->egoIdTexTest);
 	engineGraphicEngineBindVertVBO(this->egoIdVert);
 	engineGraphicEngineBindTexcVBO(this->egoIdTexc);

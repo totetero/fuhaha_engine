@@ -153,7 +153,7 @@ static void draw(struct popupCartridgeTest2Sample *this){
 	createBuffer(this);
 
 	// 2D描画準備
-	engineGraphicEngineSetDrawMode(ENGINEGRAPHICENGINEMODEDRAW_2D);
+	engineGraphicEngineSetDrawMode(ENGINEGRAPHICENGINEMODEDRAW_2D_ALPHA_NORMAL);
 
 	// トランス設定
 	engineLayout01TransSetScale(&this->transWindow, this->super.openSize, this->super.openSize, 1.0);

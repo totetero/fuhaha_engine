@@ -105,7 +105,7 @@ static void draw(struct pageCartridgeTest3 *this){
 	tempColor1.b = 1.0;
 	tempColor1.a = 1.0;
 
-	engineGraphicEngineSetDrawMode(ENGINEGRAPHICENGINEMODEDRAW_2D);
+	engineGraphicEngineSetDrawMode(ENGINEGRAPHICENGINEMODEDRAW_2D_ALPHA_NORMAL);
 	engineGraphicStencilStackMaskRead();
 
 	// ルート描画処理
