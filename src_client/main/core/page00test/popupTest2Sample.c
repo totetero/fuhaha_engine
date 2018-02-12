@@ -11,17 +11,17 @@ struct popupCartridgeTest2Sample{
 	struct engineCartridgePopupManager popupManager;
 	struct pageTest2Status *stat;
 
-	struct engineLayout01TransManager transManager;
-	struct engineLayout01Trans transRoot;
-	struct engineLayout01Trans transBack;
-	struct engineLayout01Trans transWindow;
-	struct engineLayout01ImageRect imgBack;
-	struct engineLayout01ImageFrame imgFrame;
-	struct engineLayout01ImageText imgTextTitle;
-	struct engineLayout01Font fontTest;
-	struct engineLayout01ButtonBox btnBoxOk;
-	struct engineLayout01ButtonBox btnBoxClose;
-	struct engineLayout01Button btnOuter;
+	struct engineLayoutOld01TransManager transManager;
+	struct engineLayoutOld01Trans transRoot;
+	struct engineLayoutOld01Trans transBack;
+	struct engineLayoutOld01Trans transWindow;
+	struct engineLayoutOld01ImageRect imgBack;
+	struct engineLayoutOld01ImageFrame imgFrame;
+	struct engineLayoutOld01ImageText imgTextTitle;
+	struct engineLayoutOld01Font fontTest;
+	struct engineLayoutOld01ButtonBox btnBoxOk;
+	struct engineLayoutOld01ButtonBox btnBoxClose;
+	struct engineLayoutOld01Button btnOuter;
 
 	struct popupCartridgeTest2SampleBufferCompare{
 		int sw;
@@ -39,16 +39,16 @@ struct popupCartridgeTest2Sample{
 // 初期化
 static void init(struct popupCartridgeTest2Sample *this){
 	engineCartridgePopupManagerInit(&this->popupManager);
-	engineLayout01TransInit(&this->transRoot);
-	engineLayout01TransInit(&this->transBack);
-	engineLayout01TransInit(&this->transWindow);
-	engineLayout01ImageRectInit(&this->imgBack);
-	engineLayout01ImageFrameInit(&this->imgFrame);
-	engineLayout01ImageTextInit(&this->imgTextTitle);
-	engineLayout01FontInit(&this->fontTest);
-	engineLayout01ButtonBoxInit(&this->btnBoxOk);
-	engineLayout01ButtonBoxInit(&this->btnBoxClose);
-	engineLayout01ButtonInit(&this->btnOuter);
+	engineLayoutOld01TransInit(&this->transRoot);
+	engineLayoutOld01TransInit(&this->transBack);
+	engineLayoutOld01TransInit(&this->transWindow);
+	engineLayoutOld01ImageRectInit(&this->imgBack);
+	engineLayoutOld01ImageFrameInit(&this->imgFrame);
+	engineLayoutOld01ImageTextInit(&this->imgTextTitle);
+	engineLayoutOld01FontInit(&this->fontTest);
+	engineLayoutOld01ButtonBoxInit(&this->btnBoxOk);
+	engineLayoutOld01ButtonBoxInit(&this->btnBoxClose);
+	engineLayoutOld01ButtonInit(&this->btnOuter);
 	this->btnOuter.inner = false;
 }
 
@@ -87,9 +87,9 @@ static void calc(struct popupCartridgeTest2Sample *this){
 	if(engineCartridgePopupManagerCalc(&this->popupManager)){return;}
 
 	// タッチ処理
-	engineLayout01ButtonBoxCalc(&this->btnBoxOk);
-	engineLayout01ButtonBoxCalc(&this->btnBoxClose);
-	engineLayout01ButtonCalc(&this->btnOuter);
+	engineLayoutOld01ButtonBoxCalc(&this->btnBoxOk);
+	engineLayoutOld01ButtonBoxCalc(&this->btnBoxClose);
+	engineLayoutOld01ButtonCalc(&this->btnOuter);
 
 	// ボタン処理
 	if(calcButton(this)){return;}
@@ -110,37 +110,37 @@ static void createBuffer(struct popupCartridgeTest2Sample *this){
 		engineGraphicBufferBegin();
 
 		// トランスマネージャーリセット
-		engineLayout01TransManagerReset(&this->transManager);
-		engineLayout01TransSetBuffer(&this->transRoot, &this->stat->egoIdTexSystem, &this->egoIdVert, NULL, &this->egoIdTexc, &this->egoIdFace);
+		engineLayoutOld01TransManagerReset(&this->transManager);
+		engineLayoutOld01TransSetBuffer(&this->transRoot, &this->stat->egoIdTexSystem, &this->egoIdVert, NULL, &this->egoIdTexc, &this->egoIdFace);
 		// トランス作成
 		double ww = 150;
 		double wh = 100;
 		double wx = ww * -0.5;
 		double wy = wh * -0.5;
-		engineLayout01ImageRectCreateArrayWhite(&this->imgBack, 0, 0, global.screen.w, global.screen.h);
-		engineLayout01ImageFrameCreateArray(&this->imgFrame, wx, wy, ww, wh);
-		engineLayout01ImageTextCreateArray(&this->imgTextTitle, wx + ww * 0.5, wy + 10 + 15 * 0.5, "タイトル");
-		engineLayout01FontSet(&this->fontTest, PLUGINTEXTUREFONTSETID_DEFAULT, "あい");
-		engineLayout01ButtonBoxCreateArray(&this->btnBoxOk, "ボタン1");
-		engineLayout01ButtonBoxCreateArray(&this->btnBoxClose, "ボタン2");
-		engineLayout01ButtonBoxSetPosition(&this->btnBoxOk, wx + ww * 0.5 - 60 - 5, wy + wh - 40, 60, 30);
-		engineLayout01ButtonBoxSetPosition(&this->btnBoxClose, wx + ww * 0.5 + 5, wy + wh - 40, 60, 30);
-		engineLayout01ButtonSetPosition(&this->btnOuter, (global.screen.w - ww) * 0.5, (global.screen.h - wh) * 0.5, ww, wh);
+		engineLayoutOld01ImageRectCreateArrayWhite(&this->imgBack, 0, 0, global.screen.w, global.screen.h);
+		engineLayoutOld01ImageFrameCreateArray(&this->imgFrame, wx, wy, ww, wh);
+		engineLayoutOld01ImageTextCreateArray(&this->imgTextTitle, wx + ww * 0.5, wy + 10 + 15 * 0.5, "タイトル");
+		engineLayoutOld01FontSet(&this->fontTest, PLUGINTEXTUREFONTSETID_DEFAULT, "あい");
+		engineLayoutOld01ButtonBoxCreateArray(&this->btnBoxOk, "ボタン1");
+		engineLayoutOld01ButtonBoxCreateArray(&this->btnBoxClose, "ボタン2");
+		engineLayoutOld01ButtonBoxSetPosition(&this->btnBoxOk, wx + ww * 0.5 - 60 - 5, wy + wh - 40, 60, 30);
+		engineLayoutOld01ButtonBoxSetPosition(&this->btnBoxClose, wx + ww * 0.5 + 5, wy + wh - 40, 60, 30);
+		engineLayoutOld01ButtonSetPosition(&this->btnOuter, (global.screen.w - ww) * 0.5, (global.screen.h - wh) * 0.5, ww, wh);
 		// トランス設定
-		engineLayout01TransSetTranslate(&this->transWindow, global.screen.w * 0.5, global.screen.h * 0.5, 0);
-		engineLayout01TransSetColorRgba(&this->imgBack.trans, 0.0, 0.0, 0.0, 1.0);
-		engineLayout01TransSetColorRgba(&this->imgTextTitle.trans, 0.0, 0.0, 0.0, 1.0);
-		engineLayout01TransSetColorRgba(&this->fontTest.trans, 1.0, 1.0, 1.0, 1.0);
+		engineLayoutOld01TransSetTranslate(&this->transWindow, global.screen.w * 0.5, global.screen.h * 0.5, 0);
+		engineLayoutOld01TransSetColorRgba(&this->imgBack.trans, 0.0, 0.0, 0.0, 1.0);
+		engineLayoutOld01TransSetColorRgba(&this->imgTextTitle.trans, 0.0, 0.0, 0.0, 1.0);
+		engineLayoutOld01TransSetColorRgba(&this->fontTest.trans, 1.0, 1.0, 1.0, 1.0);
 		// トランスマネージャー登録
-		engineLayout01TransManagerPush(&this->transManager, &this->transRoot);
-		engineLayout01TransManagerPushProperty(&this->transManager, &this->transBack, &this->transRoot, 0);
-		engineLayout01TransManagerPushProperty(&this->transManager, &this->transWindow, &this->transRoot, 0);
-		engineLayout01TransManagerPushProperty(&this->transManager, &this->imgBack.trans, &this->transBack, 0);
-		engineLayout01TransManagerPushProperty(&this->transManager, &this->imgFrame.trans, &this->transWindow, 1);
-		engineLayout01TransManagerPushProperty(&this->transManager, &this->imgTextTitle.trans, &this->transWindow, 2);
-		engineLayout01TransManagerPushProperty(&this->transManager, &this->fontTest.trans, &this->transWindow, 2);
-		engineLayout01TransManagerPushProperty(&this->transManager, &this->btnBoxOk.trans, &this->transWindow, 2);
-		engineLayout01TransManagerPushProperty(&this->transManager, &this->btnBoxClose.trans, &this->transWindow, 2);
+		engineLayoutOld01TransManagerPush(&this->transManager, &this->transRoot);
+		engineLayoutOld01TransManagerPushProperty(&this->transManager, &this->transBack, &this->transRoot, 0);
+		engineLayoutOld01TransManagerPushProperty(&this->transManager, &this->transWindow, &this->transRoot, 0);
+		engineLayoutOld01TransManagerPushProperty(&this->transManager, &this->imgBack.trans, &this->transBack, 0);
+		engineLayoutOld01TransManagerPushProperty(&this->transManager, &this->imgFrame.trans, &this->transWindow, 1);
+		engineLayoutOld01TransManagerPushProperty(&this->transManager, &this->imgTextTitle.trans, &this->transWindow, 2);
+		engineLayoutOld01TransManagerPushProperty(&this->transManager, &this->fontTest.trans, &this->transWindow, 2);
+		engineLayoutOld01TransManagerPushProperty(&this->transManager, &this->btnBoxOk.trans, &this->transWindow, 2);
+		engineLayoutOld01TransManagerPushProperty(&this->transManager, &this->btnBoxClose.trans, &this->transWindow, 2);
 
 		// バッファ作成完了
 		engineGraphicBufferEnd(&this->egoIdVert, NULL, NULL, &this->egoIdTexc, &this->egoIdFace);
@@ -156,14 +156,14 @@ static void draw(struct popupCartridgeTest2Sample *this){
 	engineGraphicEngineSetDrawMode(ENGINEGRAPHICENGINEMODEDRAW_2D_ALPHA_NORMAL);
 
 	// トランス設定
-	engineLayout01TransSetScale(&this->transWindow, this->super.openSize, this->super.openSize, 1.0);
-	engineLayout01TransSetColorRgba(&this->transWindow, 1.0, 1.0, 1.0, this->super.openAlpha);
-	engineLayout01TransSetColorRgba(&this->transBack, 1.0, 1.0, 1.0, this->super.backAlpha);
+	engineLayoutOld01TransSetScale(&this->transWindow, this->super.openSize, this->super.openSize, 1.0);
+	engineLayoutOld01TransSetColorRgba(&this->transWindow, 1.0, 1.0, 1.0, this->super.openAlpha);
+	engineLayoutOld01TransSetColorRgba(&this->transBack, 1.0, 1.0, 1.0, this->super.backAlpha);
 
 	// トランス描画
 	struct engineMathVector4 tempCol1;
 	engineMathVec4Set(&tempCol1, 1.0, 1.0, 1.0, 1.0);
-	engineLayout01TransManagerDraw(&this->transManager, &this->stat->matOrtho, &tempCol1);
+	engineLayoutOld01TransManagerDraw(&this->transManager, &this->stat->matOrtho, &tempCol1);
 
 	// ポップアップ描画
 	engineCartridgePopupManagerDraw(&this->popupManager);
@@ -179,7 +179,7 @@ static void pause(struct popupCartridgeTest2Sample *this){
 // 破棄
 static void dispose(struct popupCartridgeTest2Sample *this){
 	engineCartridgePopupManagerDispose(&this->popupManager);
-	engineLayout01TransManagerDispose(&this->transManager);
+	engineLayoutOld01TransManagerDispose(&this->transManager);
 	engineGraphicObjectVBODispose(this->egoIdVert);
 	engineGraphicObjectVBODispose(this->egoIdTexc);
 	engineGraphicObjectIBODispose(this->egoIdFace);

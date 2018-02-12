@@ -11,15 +11,15 @@ struct pageCartridgeTest2{
 	struct engineCartridgePopupManager popupManager;
 	struct pageTest2Status *stat;
 
-	struct engineLayout01TransManager transManager;
-	struct engineLayout01Trans transRoot;
-	struct engineLayout01Trans transBox;
-	struct engineLayout01ImageRect imgRectTest;
-	struct engineLayout01ImageFrame imgFrameTest;
-	struct engineLayout01ImageText imgTextTest;
-	struct engineLayout01ImageNumber imgNumberTest;
-	struct engineLayout01ButtonBox btnBoxTest;
-	struct engineLayout01ButtonPicker btnPickerTest;
+	struct engineLayoutOld01TransManager transManager;
+	struct engineLayoutOld01Trans transRoot;
+	struct engineLayoutOld01Trans transBox;
+	struct engineLayoutOld01ImageRect imgRectTest;
+	struct engineLayoutOld01ImageFrame imgFrameTest;
+	struct engineLayoutOld01ImageText imgTextTest;
+	struct engineLayoutOld01ImageNumber imgNumberTest;
+	struct engineLayoutOld01ButtonBox btnBoxTest;
+	struct engineLayoutOld01ButtonPicker btnPickerTest;
 
 	struct pageCartridgeTest2BufferCompare{
 		int sw;
@@ -37,14 +37,14 @@ struct pageCartridgeTest2{
 // 初期化
 static void init(struct pageCartridgeTest2 *this){
 	engineCartridgePopupManagerInit(&this->popupManager);
-	engineLayout01TransInit(&this->transRoot);
-	engineLayout01TransInit(&this->transBox);
-	engineLayout01ImageRectInit(&this->imgRectTest);
-	engineLayout01ImageFrameInit(&this->imgFrameTest);
-	engineLayout01ImageTextInit(&this->imgTextTest);
-	engineLayout01ImageNumberInit(&this->imgNumberTest);
-	engineLayout01ButtonBoxInit(&this->btnBoxTest);
-	engineLayout01ButtonPickerInit(&this->btnPickerTest, 0);
+	engineLayoutOld01TransInit(&this->transRoot);
+	engineLayoutOld01TransInit(&this->transBox);
+	engineLayoutOld01ImageRectInit(&this->imgRectTest);
+	engineLayoutOld01ImageFrameInit(&this->imgFrameTest);
+	engineLayoutOld01ImageTextInit(&this->imgTextTest);
+	engineLayoutOld01ImageNumberInit(&this->imgNumberTest);
+	engineLayoutOld01ButtonBoxInit(&this->btnBoxTest);
+	engineLayoutOld01ButtonPickerInit(&this->btnPickerTest, 0);
 
 	// 画像読み込み
 	this->stat->egoIdTexSystem = engineGraphicTextureCreateLocal("img/system.png", ENGINEGRAPHICTEXTURETYPE_LINEAR);
@@ -119,8 +119,8 @@ static void calc(struct pageCartridgeTest2 *this){
 	if(engineCartridgePopupManagerCalc(&this->popupManager)){return;}
 
 	// タッチ処理
-	engineLayout01ButtonBoxCalc(&this->btnBoxTest);
-	engineLayout01ButtonPickerCalc(&this->btnPickerTest);
+	engineLayoutOld01ButtonBoxCalc(&this->btnBoxTest);
+	engineLayoutOld01ButtonPickerCalc(&this->btnPickerTest);
 	calcTouch(this);
 
 	// ボタン処理
@@ -144,35 +144,35 @@ static void createBuffer(struct pageCartridgeTest2 *this){
 		engineGraphicBufferBegin();
 
 		// トランスマネージャーリセット
-		engineLayout01TransManagerReset(&this->transManager);
-		engineLayout01TransSetBuffer(&this->transRoot, &this->stat->egoIdTexSystem, &this->egoIdVert, NULL, &this->egoIdTexc, &this->egoIdFace);
+		engineLayoutOld01TransManagerReset(&this->transManager);
+		engineLayoutOld01TransSetBuffer(&this->transRoot, &this->stat->egoIdTexSystem, &this->egoIdVert, NULL, &this->egoIdTexc, &this->egoIdFace);
 		// トランス作成
 		double ww = 80;
 		double wh = 80;
 		double wx = ww * -0.5;
 		double wy = wh * -0.5;
 		char *textList[] = {"あいう", "エオカ", "abc"};
-		engineLayout01ImageRectCreateArray(&this->imgRectTest, TEXSIZ_SYSTEM_WH, 0, 0, 320, 180, TEXPOS_SYSTEM_FONTABCD_XYWH);
-		engineLayout01ImageFrameCreateArray(&this->imgFrameTest, wx, wy, ww, wh);
-		engineLayout01ImageTextCreateArray(&this->imgTextTest, wx + ww * 0.5, wy + wh * 0.5 - 10, "ボックス\nみょん");
-		engineLayout01ImageNumberCreateArray(&this->imgNumberTest, wx + ww * 0.5, wy + wh * 0.5 + 20, 100);
-		engineLayout01ButtonBoxCreateArray(&this->btnBoxTest, "ポップアップ");
-		engineLayout01ButtonBoxSetPosition(&this->btnBoxTest, (global.screen.w - 120) * 0.5, global.screen.h - 40, 120, 30);
-		engineLayout01ButtonPickerCreateArray(&this->btnPickerTest, textList, 3);
-		engineLayout01ButtonPickerSetPosition(&this->btnPickerTest, 10, 10, 100);
+		engineLayoutOld01ImageRectCreateArray(&this->imgRectTest, TEXSIZ_SYSTEM_WH, 0, 0, 320, 180, TEXPOS_SYSTEM_FONTABCD_XYWH);
+		engineLayoutOld01ImageFrameCreateArray(&this->imgFrameTest, wx, wy, ww, wh);
+		engineLayoutOld01ImageTextCreateArray(&this->imgTextTest, wx + ww * 0.5, wy + wh * 0.5 - 10, "ボックス\nみょん");
+		engineLayoutOld01ImageNumberCreateArray(&this->imgNumberTest, wx + ww * 0.5, wy + wh * 0.5 + 20, 100);
+		engineLayoutOld01ButtonBoxCreateArray(&this->btnBoxTest, "ポップアップ");
+		engineLayoutOld01ButtonBoxSetPosition(&this->btnBoxTest, (global.screen.w - 120) * 0.5, global.screen.h - 40, 120, 30);
+		engineLayoutOld01ButtonPickerCreateArray(&this->btnPickerTest, textList, 3);
+		engineLayoutOld01ButtonPickerSetPosition(&this->btnPickerTest, 10, 10, 100);
 		// トランス設定
-		engineLayout01TransSetTranslate(&this->transBox, global.screen.w * 0.5, 80, 0);
-		engineLayout01TransSetColorRgba(&this->imgTextTest.trans, 0.0, 0.0, 0.0, 1.0);
-		engineLayout01TransSetColorRgba(&this->imgNumberTest.trans, 0.0, 0.0, 0.0, 1.0);
+		engineLayoutOld01TransSetTranslate(&this->transBox, global.screen.w * 0.5, 80, 0);
+		engineLayoutOld01TransSetColorRgba(&this->imgTextTest.trans, 0.0, 0.0, 0.0, 1.0);
+		engineLayoutOld01TransSetColorRgba(&this->imgNumberTest.trans, 0.0, 0.0, 0.0, 1.0);
 		// トランスマネージャー登録
-		engineLayout01TransManagerPush(&this->transManager, &this->transRoot);
-		engineLayout01TransManagerPushProperty(&this->transManager, &this->transBox, &this->transRoot, 0);
-		engineLayout01TransManagerPushProperty(&this->transManager, &this->imgRectTest.trans, &this->transRoot, 0);
-		engineLayout01TransManagerPushProperty(&this->transManager, &this->imgFrameTest.trans, &this->transBox, 0);
-		engineLayout01TransManagerPushProperty(&this->transManager, &this->imgTextTest.trans, &this->transBox, 0);
-		engineLayout01TransManagerPushProperty(&this->transManager, &this->imgNumberTest.trans, &this->transBox, 0);
-		engineLayout01TransManagerPushProperty(&this->transManager, &this->btnBoxTest.trans, &this->transRoot, 0);
-		engineLayout01TransManagerPushProperty(&this->transManager, &this->btnPickerTest.trans, &this->transRoot, 0);
+		engineLayoutOld01TransManagerPush(&this->transManager, &this->transRoot);
+		engineLayoutOld01TransManagerPushProperty(&this->transManager, &this->transBox, &this->transRoot, 0);
+		engineLayoutOld01TransManagerPushProperty(&this->transManager, &this->imgRectTest.trans, &this->transRoot, 0);
+		engineLayoutOld01TransManagerPushProperty(&this->transManager, &this->imgFrameTest.trans, &this->transBox, 0);
+		engineLayoutOld01TransManagerPushProperty(&this->transManager, &this->imgTextTest.trans, &this->transBox, 0);
+		engineLayoutOld01TransManagerPushProperty(&this->transManager, &this->imgNumberTest.trans, &this->transBox, 0);
+		engineLayoutOld01TransManagerPushProperty(&this->transManager, &this->btnBoxTest.trans, &this->transRoot, 0);
+		engineLayoutOld01TransManagerPushProperty(&this->transManager, &this->btnPickerTest.trans, &this->transRoot, 0);
 
 		// バッファ作成完了
 		engineGraphicBufferEnd(&this->egoIdVert, NULL, NULL, &this->egoIdTexc, &this->egoIdFace);
@@ -193,12 +193,12 @@ static void draw(struct pageCartridgeTest2 *this){
 	engineGraphicEngineSetDrawMode(ENGINEGRAPHICENGINEMODEDRAW_2D_ALPHA_NORMAL);
 
 	// トランス設定
-	engineLayout01TransSetRotate(&this->transBox, 0.0, 0.0, ENGINEMATH_DEG2RAD * this->step);
+	engineLayoutOld01TransSetRotate(&this->transBox, 0.0, 0.0, ENGINEMATH_DEG2RAD * this->step);
 
 	// トランス描画
 	struct engineMathVector4 tempCol1;
 	engineMathVec4Set(&tempCol1, 1.0, 1.0, 1.0, 1.0);
-	engineLayout01TransManagerDraw(&this->transManager, &this->stat->matOrtho, &tempCol1);
+	engineLayoutOld01TransManagerDraw(&this->transManager, &this->stat->matOrtho, &tempCol1);
 
 	// ポップアップ描画
 	engineCartridgePopupManagerDraw(&this->popupManager);
@@ -216,7 +216,7 @@ static void pause(struct pageCartridgeTest2 *this){
 // 破棄
 static void dispose(struct pageCartridgeTest2 *this){
 	engineCartridgePopupManagerDispose(&this->popupManager);
-	engineLayout01TransManagerDispose(&this->transManager);
+	engineLayoutOld01TransManagerDispose(&this->transManager);
 	engineGraphicObjectVBODispose(this->egoIdVert);
 	engineGraphicObjectVBODispose(this->egoIdTexc);
 	engineGraphicObjectIBODispose(this->egoIdFace);
