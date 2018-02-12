@@ -15,6 +15,7 @@
 #include "./engine/engineData/engineData.h"
 #include "./engine/engineCtrl/engineCtrl.h"
 #include "./engine/engineGraphic/engineGraphic.h"
+#include "./engine/enginePrimitive/enginePrimitive.h"
 #include "./engine/engineCartridge/engineCartridge.h"
 #include "./engine/engineLayout01/engineLayout01.h"
 #include "./engine/engineLayout02/engineLayout02.h"
