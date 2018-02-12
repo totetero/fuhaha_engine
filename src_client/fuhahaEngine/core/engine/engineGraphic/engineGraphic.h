@@ -158,6 +158,8 @@ void engineGraphicEngineBindTexture(engineGraphicTextureId egtId);
 void engineGraphicEngineBindTextureGlId(GLuint glId, enum engineGraphicTextureType type);
 // グラフィックエンジン命令 VBO登録 頂点座標
 void engineGraphicEngineBindVertVBO(engineGraphicObjectVBOId egoId);
+// グラフィックエンジン命令 VBO登録 法線方向
+void engineGraphicEngineBindNormVBO(engineGraphicObjectVBOId egoId);
 // グラフィックエンジン命令 VBO登録 カラーrgb
 void engineGraphicEngineBindClorVBO(engineGraphicObjectVBOId egoId);
 // グラフィックエンジン命令 VBO登録 テクスチャ座標
@@ -206,10 +208,12 @@ void engineGraphicStencilStackMaskWriteDecrement();
 // バッファ作成開始
 void engineGraphicBufferBegin(void);
 // バッファ作成完了
-void engineGraphicBufferEnd(engineGraphicObjectVBOId *egoIdVert, engineGraphicObjectVBOId *egoIdClor, engineGraphicObjectVBOId *egoIdTexc, engineGraphicObjectIBOId *egoIdFace);
+void engineGraphicBufferEnd(engineGraphicObjectVBOId *egoIdVert, engineGraphicObjectVBOId *egoIdNorm, engineGraphicObjectVBOId *egoIdClor, engineGraphicObjectVBOId *egoIdTexc, engineGraphicObjectIBOId *egoIdFace);
 
 // 頂点座標配列に要素追加
 void engineGraphicBufferPushVert(double x, double y, double z);
+// 法線方向配列に要素追加
+void engineGraphicBufferPushNorm(double x, double y, double z);
 // 色彩配列に要素追加
 void engineGraphicBufferPushClor(double r, double g, double b);
 // テクスチャ座標配列に要素追加

@@ -8,14 +8,17 @@
 
 static struct{
 	GLfloat *buffVert;
+	GLfloat *buffNorm;
 	GLfloat *buffClor;
 	GLfloat *buffTexc;
 	GLushort *buffFace;
 	int buffVertIndex;
+	int buffNormIndex;
 	int buffClorIndex;
 	int buffTexcIndex;
 	int buffFaceIndex;
 	int buffVertLength;
+	int buffNormLength;
 	int buffClorLength;
 	int buffTexcLength;
 	int buffFaceLength;
@@ -28,14 +31,16 @@ static struct{
 // バッファ作成開始
 void engineGraphicBufferBegin(void){
 	localGlobal.buffVertIndex = 0;
+	localGlobal.buffNormIndex = 0;
 	localGlobal.buffClorIndex = 0;
 	localGlobal.buffTexcIndex = 0;
 	localGlobal.buffFaceIndex = 0;
 }
 
 // バッファ作成完了
-void engineGraphicBufferEnd(engineGraphicObjectVBOId *egoIdVert, engineGraphicObjectVBOId *egoIdClor, engineGraphicObjectVBOId *egoIdTexc, engineGraphicObjectIBOId *egoIdFace){
+void engineGraphicBufferEnd(engineGraphicObjectVBOId *egoIdVert, engineGraphicObjectVBOId *egoIdNorm, engineGraphicObjectVBOId *egoIdClor, engineGraphicObjectVBOId *egoIdTexc, engineGraphicObjectIBOId *egoIdFace){
 	if(egoIdVert != NULL){engineGraphicObjectVBODispose(*egoIdVert); *egoIdVert = engineGraphicObjectVBOCreate(localGlobal.buffVertIndex, localGlobal.buffVert);}
+	if(egoIdNorm != NULL){engineGraphicObjectVBODispose(*egoIdNorm); *egoIdNorm = engineGraphicObjectVBOCreate(localGlobal.buffNormIndex, localGlobal.buffNorm);}
 	if(egoIdClor != NULL){engineGraphicObjectVBODispose(*egoIdClor); *egoIdClor = engineGraphicObjectVBOCreate(localGlobal.buffClorIndex, localGlobal.buffClor);}
 	if(egoIdTexc != NULL){engineGraphicObjectVBODispose(*egoIdTexc); *egoIdTexc = engineGraphicObjectVBOCreate(localGlobal.buffTexcIndex, localGlobal.buffTexc);}
 	if(egoIdFace != NULL){engineGraphicObjectIBODispose(*egoIdFace); *egoIdFace = engineGraphicObjectIBOCreate(localGlobal.buffFaceIndex, localGlobal.buffFace);}
@@ -58,6 +63,23 @@ void engineGraphicBufferPushVert(double x, double y, double z){
 	*(localGlobal.buffVert + localGlobal.buffVertIndex++) = (GLfloat)x;
 	*(localGlobal.buffVert + localGlobal.buffVertIndex++) = (GLfloat)y;
 	*(localGlobal.buffVert + localGlobal.buffVertIndex++) = (GLfloat)z;
+}
+
+// 法線方向配列に要素追加
+void engineGraphicBufferPushNorm(double x, double y, double z){
+	if(localGlobal.buffNormLength < localGlobal.buffNormIndex + 3){
+		int length = localGlobal.buffNormLength + 300;
+		GLfloat *array = (GLfloat*)engineUtilMemoryInfoMalloc("(permanent) engineGraphicBuffer norm", length * sizeof(GLfloat));
+		if(localGlobal.buffNormLength > 0){
+			memcpy(array, localGlobal.buffNorm, localGlobal.buffNormLength * sizeof(GLfloat));
+			engineUtilMemoryInfoFree("(permanent) engineGraphicBuffer norm", localGlobal.buffNorm);
+		}
+		localGlobal.buffNormLength = length;
+		localGlobal.buffNorm = array;
+	}
+	*(localGlobal.buffNorm + localGlobal.buffNormIndex++) = (GLfloat)x;
+	*(localGlobal.buffNorm + localGlobal.buffNormIndex++) = (GLfloat)y;
+	*(localGlobal.buffNorm + localGlobal.buffNormIndex++) = (GLfloat)z;
 }
 
 // 色彩配列に要素追加
@@ -151,14 +173,17 @@ int engineGraphicBufferFaceIndexGet(void){
 // バッファ片付け
 void engineGraphicBufferClean(void){
 	engineUtilMemoryInfoFree("(permanent) engineGraphicBuffer vert", localGlobal.buffVert);
+	engineUtilMemoryInfoFree("(permanent) engineGraphicBuffer norm", localGlobal.buffNorm);
 	engineUtilMemoryInfoFree("(permanent) engineGraphicBuffer clor", localGlobal.buffClor);
 	engineUtilMemoryInfoFree("(permanent) engineGraphicBuffer texc", localGlobal.buffTexc);
 	engineUtilMemoryInfoFree("(permanent) engineGraphicBuffer face", localGlobal.buffFace);
 	localGlobal.buffVert = NULL;
+	localGlobal.buffNorm = NULL;
 	localGlobal.buffClor = NULL;
 	localGlobal.buffTexc = NULL;
 	localGlobal.buffFace = NULL;
 	localGlobal.buffVertLength = 0;
+	localGlobal.buffNormLength = 0;
 	localGlobal.buffClorLength = 0;
 	localGlobal.buffTexcLength = 0;
 	localGlobal.buffFaceLength = 0;

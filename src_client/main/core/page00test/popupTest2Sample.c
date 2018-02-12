@@ -143,7 +143,7 @@ static void createBuffer(struct popupCartridgeTest2Sample *this){
 		engineLayout01TransManagerPushProperty(&this->transManager, &this->btnBoxClose.trans, &this->transWindow, 2);
 
 		// バッファ作成完了
-		engineGraphicBufferEnd(&this->egoIdVert, NULL, &this->egoIdTexc, &this->egoIdFace);
+		engineGraphicBufferEnd(&this->egoIdVert, NULL, NULL, &this->egoIdTexc, &this->egoIdFace);
 	}
 }
 

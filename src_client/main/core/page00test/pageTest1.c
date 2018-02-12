@@ -71,7 +71,7 @@ static void createBuffer(struct pageCartridgeTest1 *this){
 		this->faceNum = faceNum;
 
 		// バッファ作成完了
-		engineGraphicBufferEnd(&this->egoIdVert, NULL, &this->egoIdTexc, &this->egoIdFace);
+		engineGraphicBufferEnd(&this->egoIdVert, NULL, NULL, &this->egoIdTexc, &this->egoIdFace);
 	}
 }
 

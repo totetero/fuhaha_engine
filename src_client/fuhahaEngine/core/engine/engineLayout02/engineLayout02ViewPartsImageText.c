@@ -189,7 +189,7 @@ static void createBuffer(struct engineLayout02ViewPartsImageTextImplement *this)
 		createBufferArrayText(this);
 
 		// バッファ作成完了
-		engineGraphicBufferEnd(&this->egoIdVert, NULL, &this->egoIdTexc, &this->egoIdFace);
+		engineGraphicBufferEnd(&this->egoIdVert, NULL, NULL, &this->egoIdTexc, &this->egoIdFace);
 	}
 }
 

@@ -11,6 +11,7 @@
 struct engineGraphicEngineShader{
 	GLint program;
 	GLint attr_pos;
+	GLint attr_nrm;
 	GLint attr_col;
 	GLint attr_uvc;
 	GLint unif_mat;
@@ -34,6 +35,7 @@ static struct{
 		enum engineGraphicTextureType texType;
 		struct engineMathVector4 color;
 		engineGraphicObjectVBOId vertVBO;
+		engineGraphicObjectVBOId normVBO;
 		engineGraphicObjectVBOId clorVBO;
 		engineGraphicObjectVBOId texcVBO;
 		engineGraphicObjectIBOId faceIBO;
@@ -55,6 +57,7 @@ static void engineGraphicEngineShaderCreate(struct engineGraphicEngineShader *sh
 	glAttachShader(shader->program, fshader);
 	glLinkProgram(shader->program);
 	shader->attr_pos = glGetAttribLocation(shader->program, "vs_attr_pos");
+	shader->attr_nrm = glGetAttribLocation(shader->program, "vs_attr_nrm");
 	shader->attr_col = glGetAttribLocation(shader->program, "vs_attr_col");
 	shader->attr_uvc = glGetAttribLocation(shader->program, "vs_attr_uvc");
 	shader->unif_mat = glGetUniformLocation(shader->program, "vs_unif_mat");
@@ -109,6 +112,7 @@ void engineGraphicEngineClearDepth(void){
 // 重複動作阻止のためのVBO状態記録をリセット
 void engineGraphicEngineMemoryResetVBO(void){
 	localGlobal.memory.vertVBO = 0;
+	localGlobal.memory.normVBO = 0;
 	localGlobal.memory.clorVBO = 0;
 	localGlobal.memory.texcVBO = 0;
 }
@@ -143,10 +147,12 @@ void engineGraphicEngineSetDrawMode(enum engineGraphicEngineModeDraw mode){
 	}
 	if(localGlobal.memory.shader != oldShader){
 		if(oldShader != NULL && oldShader->attr_pos >= 0){glDisableVertexAttribArray(oldShader->attr_pos);}
+		if(oldShader != NULL && oldShader->attr_nrm >= 0){glDisableVertexAttribArray(oldShader->attr_nrm);}
 		if(oldShader != NULL && oldShader->attr_col >= 0){glDisableVertexAttribArray(oldShader->attr_col);}
 		if(oldShader != NULL && oldShader->attr_uvc >= 0){glDisableVertexAttribArray(oldShader->attr_uvc);}
 		glUseProgram(localGlobal.memory.shader->program);
 		if(localGlobal.memory.shader->attr_pos >= 0){glEnableVertexAttribArray(localGlobal.memory.shader->attr_pos);}
+		if(localGlobal.memory.shader->attr_nrm >= 0){glEnableVertexAttribArray(localGlobal.memory.shader->attr_nrm);}
 		if(localGlobal.memory.shader->attr_col >= 0){glEnableVertexAttribArray(localGlobal.memory.shader->attr_col);}
 		if(localGlobal.memory.shader->attr_uvc >= 0){glEnableVertexAttribArray(localGlobal.memory.shader->attr_uvc);}
 		engineMathVec4Set(&localGlobal.memory.color, 0, 0, 0, -1);
@@ -276,6 +282,17 @@ void engineGraphicEngineBindVertVBO(engineGraphicObjectVBOId egoId){
 	if(!engineGraphicObjectVBOGetGLId(egoId, &glId)){return;}
 	glBindBuffer(GL_ARRAY_BUFFER, glId);
 	glVertexAttribPointer(localGlobal.memory.shader->attr_pos, 3, GL_FLOAT, GL_FALSE, 0, 0);
+}
+
+// グラフィックエンジン命令 VBO登録 法線方向
+void engineGraphicEngineBindNormVBO(engineGraphicObjectVBOId egoId){
+	if(localGlobal.memory.normVBO == egoId){return;}
+	localGlobal.memory.normVBO = egoId;
+
+	GLuint glId;
+	if(!engineGraphicObjectVBOGetGLId(egoId, &glId)){return;}
+	glBindBuffer(GL_ARRAY_BUFFER, glId);
+	glVertexAttribPointer(localGlobal.memory.shader->attr_nrm, 3, GL_FLOAT, GL_FALSE, 0, 0);
 }
 
 // グラフィックエンジン命令 VBO登録 カラーrgb

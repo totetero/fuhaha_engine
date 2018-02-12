@@ -175,7 +175,7 @@ static void createBuffer(struct pageCartridgeTest2 *this){
 		engineLayout01TransManagerPushProperty(&this->transManager, &this->btnPickerTest.trans, &this->transRoot, 0);
 
 		// バッファ作成完了
-		engineGraphicBufferEnd(&this->egoIdVert, NULL, &this->egoIdTexc, &this->egoIdFace);
+		engineGraphicBufferEnd(&this->egoIdVert, NULL, NULL, &this->egoIdTexc, &this->egoIdFace);
 	}
 }
 
