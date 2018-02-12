@@ -134,6 +134,7 @@ void engineGraphicEngineSetDrawMode(enum engineGraphicEngineModeDraw mode){
 	struct engineGraphicEngineShader *oldShader = localGlobal.memory.shader;
 	switch(mode){
 		case ENGINEGRAPHICENGINEMODEDRAW_3D:              localGlobal.memory.shader = &localGlobal.shader.textureAlphaMask; break;
+		case ENGINEGRAPHICENGINEMODEDRAW_3D_ALPHA_NORMAL: localGlobal.memory.shader = &localGlobal.shader.texture; break;
 		case ENGINEGRAPHICENGINEMODEDRAW_3D_ALPHA_ADD:    localGlobal.memory.shader = &localGlobal.shader.texture; break;
 		case ENGINEGRAPHICENGINEMODEDRAW_2D_ALPHA_NORMAL: localGlobal.memory.shader = &localGlobal.shader.texture; break;
 		case ENGINEGRAPHICENGINEMODEDRAW_2D_ALPHA_ADD:    localGlobal.memory.shader = &localGlobal.shader.texture; break;
@@ -160,6 +161,13 @@ void engineGraphicEngineSetDrawMode(enum engineGraphicEngineModeDraw mode){
 			localGlobal.memory.modeDepthTest = true;
 			glEnable(GL_CULL_FACE);
 			glBlendFuncSeparate(GL_ONE, GL_ZERO, GL_ZERO, GL_ONE); // アルファ無視のアルファマスク
+			break;
+		case ENGINEGRAPHICENGINEMODEDRAW_3D_ALPHA_NORMAL:
+			// 3D描画アルファ合成モード (VertBuf TexcBuf)
+			localGlobal.memory.modeDepthMask = false;
+			localGlobal.memory.modeDepthTest = true;
+			glEnable(GL_CULL_FACE);
+			glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ZERO, GL_ONE); // 半透明アルファ合成
 			break;
 		case ENGINEGRAPHICENGINEMODEDRAW_3D_ALPHA_ADD:
 			// 3D描画アルファ合成モード (VertBuf TexcBuf)
