@@ -158,14 +158,14 @@ void engineGraphicEngineSetDrawMode(enum engineGraphicEngineModeDraw mode){
 			// 3D描画モード (VertBuf TexcBuf)
 			localGlobal.memory.modeDepthMask = true;
 			localGlobal.memory.modeDepthTest = true;
-			glDisable(GL_CULL_FACE);
+			glEnable(GL_CULL_FACE);
 			glBlendFuncSeparate(GL_ONE, GL_ZERO, GL_ZERO, GL_ONE); // アルファ無視のアルファマスク
 			break;
 		case ENGINEGRAPHICENGINEMODEDRAW_3D_ALPHA_ADD:
 			// 3D描画アルファ合成モード (VertBuf TexcBuf)
 			localGlobal.memory.modeDepthMask = false;
 			localGlobal.memory.modeDepthTest = true;
-			glDisable(GL_CULL_FACE);
+			glEnable(GL_CULL_FACE);
 			glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE, GL_ZERO, GL_ONE); // 加算合成
 			break;
 		case ENGINEGRAPHICENGINEMODEDRAW_2D_ALPHA_NORMAL:
