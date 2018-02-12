@@ -115,14 +115,14 @@ void engineGraphicTextureReload(void);
 // ----------------------------------------------------------------
 // -------- シェーダー
 
-extern char *externGlobal_vsh1_src;
-extern char *externGlobal_fsh1_src;
-extern char *externGlobal_vsh2_src;
-extern char *externGlobal_fsh2_src;
-extern char *externGlobal_vsh3_src;
-extern char *externGlobal_fsh3_src;
-extern char *externGlobal_vsh4_src;
-extern char *externGlobal_fsh4_src;
+extern char *externGlobal_shader_texture_vert_src;
+extern char *externGlobal_shader_texture_frag_src;
+extern char *externGlobal_shader_textureAlphaMask_vert_src;
+extern char *externGlobal_shader_textureAlphaMask_frag_src;
+extern char *externGlobal_shader_textureColorBlendAlphaMask_vert_src;
+extern char *externGlobal_shader_textureColorBlendAlphaMask_frag_src;
+extern char *externGlobal_shader_colorBlend_vert_src;
+extern char *externGlobal_shader_colorBlend_frag_src;
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

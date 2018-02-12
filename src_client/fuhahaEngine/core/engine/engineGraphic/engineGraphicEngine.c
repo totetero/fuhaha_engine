@@ -20,10 +20,10 @@ struct engineGraphicEngineShader{
 static struct{
 	// グラフィックエンジンシェーダー
 	struct{
-		struct engineGraphicEngineShader reserve1;
-		struct engineGraphicEngineShader reserve2;
-		struct engineGraphicEngineShader reserve3;
-		struct engineGraphicEngineShader reserve4;
+		struct engineGraphicEngineShader texture;
+		struct engineGraphicEngineShader textureAlphaMask;
+		struct engineGraphicEngineShader textureColorBlendAlphaMask;
+		struct engineGraphicEngineShader colorBlend;
 	} shader;
 	// 重複動作阻止のための状態記録
 	struct{
@@ -63,10 +63,10 @@ static void engineGraphicEngineShaderCreate(struct engineGraphicEngineShader *sh
 
 // 初期化
 void engineGraphicEngineInit(void){
-	engineGraphicEngineShaderCreate(&localGlobal.shader.reserve1, externGlobal_vsh1_src, externGlobal_fsh1_src);
-	engineGraphicEngineShaderCreate(&localGlobal.shader.reserve2, externGlobal_vsh2_src, externGlobal_fsh2_src);
-	engineGraphicEngineShaderCreate(&localGlobal.shader.reserve3, externGlobal_vsh3_src, externGlobal_fsh3_src);
-	engineGraphicEngineShaderCreate(&localGlobal.shader.reserve4, externGlobal_vsh4_src, externGlobal_fsh4_src);
+	engineGraphicEngineShaderCreate(&localGlobal.shader.texture, externGlobal_shader_texture_vert_src, externGlobal_shader_texture_frag_src);
+	engineGraphicEngineShaderCreate(&localGlobal.shader.textureAlphaMask, externGlobal_shader_textureAlphaMask_vert_src, externGlobal_shader_textureAlphaMask_frag_src);
+	engineGraphicEngineShaderCreate(&localGlobal.shader.textureColorBlendAlphaMask, externGlobal_shader_textureColorBlendAlphaMask_vert_src, externGlobal_shader_textureColorBlendAlphaMask_frag_src);
+	engineGraphicEngineShaderCreate(&localGlobal.shader.colorBlend, externGlobal_shader_colorBlend_vert_src, externGlobal_shader_colorBlend_frag_src);
 
 	localGlobal.memory.shader = NULL;
 	localGlobal.memory.modeDraw = -1;
@@ -86,10 +86,10 @@ void engineGraphicEngineInit(void){
 
 // 解放
 void engineGraphicEngineExit(void){
-	glDeleteProgram(localGlobal.shader.reserve1.program);
-	glDeleteProgram(localGlobal.shader.reserve2.program);
-	glDeleteProgram(localGlobal.shader.reserve3.program);
-	glDeleteProgram(localGlobal.shader.reserve4.program);
+	glDeleteProgram(localGlobal.shader.texture.program);
+	glDeleteProgram(localGlobal.shader.textureAlphaMask.program);
+	glDeleteProgram(localGlobal.shader.textureColorBlendAlphaMask.program);
+	glDeleteProgram(localGlobal.shader.colorBlend.program);
 }
 
 // ----------------------------------------------------------------
@@ -133,11 +133,11 @@ void engineGraphicEngineSetDrawMode(enum engineGraphicEngineModeDraw mode){
 	// シェーダー差し替え
 	struct engineGraphicEngineShader *oldShader = localGlobal.memory.shader;
 	switch(mode){
-		case ENGINEGRAPHICENGINEMODEDRAW_NORMAL:    localGlobal.memory.shader = &localGlobal.shader.reserve1; break;
-		case ENGINEGRAPHICENGINEMODEDRAW_2D:        localGlobal.memory.shader = &localGlobal.shader.reserve2; break;
-		case ENGINEGRAPHICENGINEMODEDRAW_ALPHA_ADD: localGlobal.memory.shader = &localGlobal.shader.reserve2; break;
-		case ENGINEGRAPHICENGINEMODEDRAW_HKNW:      localGlobal.memory.shader = &localGlobal.shader.reserve3; break;
-		case ENGINEGRAPHICENGINEMODEDRAW_SPHERE:    localGlobal.memory.shader = &localGlobal.shader.reserve4; break;
+		case ENGINEGRAPHICENGINEMODEDRAW_NORMAL:    localGlobal.memory.shader = &localGlobal.shader.textureAlphaMask; break;
+		case ENGINEGRAPHICENGINEMODEDRAW_2D:        localGlobal.memory.shader = &localGlobal.shader.texture; break;
+		case ENGINEGRAPHICENGINEMODEDRAW_ALPHA_ADD: localGlobal.memory.shader = &localGlobal.shader.texture; break;
+		case ENGINEGRAPHICENGINEMODEDRAW_HKNW:      localGlobal.memory.shader = &localGlobal.shader.textureColorBlendAlphaMask; break;
+		case ENGINEGRAPHICENGINEMODEDRAW_SPHERE:    localGlobal.memory.shader = &localGlobal.shader.colorBlend; break;
 	}
 	if(localGlobal.memory.shader != oldShader){
 		if(oldShader != NULL && oldShader->attr_pos >= 0){glDisableVertexAttribArray(oldShader->attr_pos);}
