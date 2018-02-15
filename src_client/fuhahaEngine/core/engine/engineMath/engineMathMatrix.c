@@ -295,6 +295,13 @@ void engineMathMat4Invert(struct engineMathMatrix44 *mat){
 // ----------------------------------------------------------------
 
 // ベクトル値設定
+void engineMathVec3Set(struct engineMathVector3 *vec, double x, double y, double z){
+	vec->x = (GLfloat)x;
+	vec->y = (GLfloat)y;
+	vec->z = (GLfloat)z;
+}
+
+// ベクトル値設定
 void engineMathVec4Set(struct engineMathVector4 *vec, double x, double y, double z, double w){
 	vec->x = (GLfloat)x;
 	vec->y = (GLfloat)y;

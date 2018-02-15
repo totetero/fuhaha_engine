@@ -95,6 +95,7 @@ void engineMathMat4RotateZ(struct engineMathMatrix44 *mat, double rad);
 void engineMathMat4Invert(struct engineMathMatrix44 *mat);
 
 // ベクトル値設定
+void engineMathVec3Set(struct engineMathVector3 *vec, double x, double y, double z);
 void engineMathVec4Set(struct engineMathVector4 *vec, double x, double y, double z, double w);
 // ベクトル行列積
 void engineMathVec3MultiplyMat4(struct engineMathVector3 *dst, struct engineMathVector3 *src, struct engineMathMatrix44 *mat);
