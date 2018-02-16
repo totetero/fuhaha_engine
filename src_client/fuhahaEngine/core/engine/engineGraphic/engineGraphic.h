@@ -17,6 +17,7 @@ enum engineGraphicEngineModeDraw{
 	ENGINEGRAPHICENGINEMODEDRAW_3D_ALPHA_ADD,
 	ENGINEGRAPHICENGINEMODEDRAW_2D_ALPHA_NORMAL,
 	ENGINEGRAPHICENGINEMODEDRAW_2D_ALPHA_ADD,
+	ENGINEGRAPHICENGINEMODEDRAW_PHONG,
 	ENGINEGRAPHICENGINEMODEDRAW_HKNW,
 	ENGINEGRAPHICENGINEMODEDRAW_SPHERE,
 };
@@ -125,6 +126,8 @@ extern char *externGlobal_shader_textureColorBlendAlphaMask_vert_src;
 extern char *externGlobal_shader_textureColorBlendAlphaMask_frag_src;
 extern char *externGlobal_shader_colorBlend_vert_src;
 extern char *externGlobal_shader_colorBlend_frag_src;
+extern char *externGlobal_shader_phong_vert_src;
+extern char *externGlobal_shader_phong_frag_src;
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

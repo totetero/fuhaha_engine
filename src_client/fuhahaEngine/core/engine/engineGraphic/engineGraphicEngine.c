@@ -14,7 +14,8 @@ struct engineGraphicEngineShader{
 	GLint attr_nrm;
 	GLint attr_col;
 	GLint attr_uvc;
-	GLint unif_mat;
+	GLint unif_mat_pos;
+	GLint unif_mat_nrm;
 	GLint unif_col;
 };
 
@@ -25,6 +26,7 @@ static struct{
 		struct engineGraphicEngineShader textureAlphaMask;
 		struct engineGraphicEngineShader textureColorBlendAlphaMask;
 		struct engineGraphicEngineShader colorBlend;
+		struct engineGraphicEngineShader phong;
 	} shader;
 	// 重複動作阻止のための状態記録
 	struct{
@@ -60,7 +62,8 @@ static void engineGraphicEngineShaderCreate(struct engineGraphicEngineShader *sh
 	shader->attr_nrm = glGetAttribLocation(shader->program, "vs_attr_nrm");
 	shader->attr_col = glGetAttribLocation(shader->program, "vs_attr_col");
 	shader->attr_uvc = glGetAttribLocation(shader->program, "vs_attr_uvc");
-	shader->unif_mat = glGetUniformLocation(shader->program, "vs_unif_mat");
+	shader->unif_mat_pos = glGetUniformLocation(shader->program, "vs_unif_mat_pos");
+	shader->unif_mat_nrm = glGetUniformLocation(shader->program, "vs_unif_mat_nrm");
 	shader->unif_col = glGetUniformLocation(shader->program, "fs_unif_col");
 }
 
@@ -70,6 +73,7 @@ void engineGraphicEngineInit(void){
 	engineGraphicEngineShaderCreate(&localGlobal.shader.textureAlphaMask, externGlobal_shader_textureAlphaMask_vert_src, externGlobal_shader_textureAlphaMask_frag_src);
 	engineGraphicEngineShaderCreate(&localGlobal.shader.textureColorBlendAlphaMask, externGlobal_shader_textureColorBlendAlphaMask_vert_src, externGlobal_shader_textureColorBlendAlphaMask_frag_src);
 	engineGraphicEngineShaderCreate(&localGlobal.shader.colorBlend, externGlobal_shader_colorBlend_vert_src, externGlobal_shader_colorBlend_frag_src);
+	engineGraphicEngineShaderCreate(&localGlobal.shader.phong, externGlobal_shader_phong_vert_src, externGlobal_shader_phong_frag_src);
 
 	localGlobal.memory.shader = NULL;
 	localGlobal.memory.modeDraw = -1;
@@ -142,6 +146,7 @@ void engineGraphicEngineSetDrawMode(enum engineGraphicEngineModeDraw mode){
 		case ENGINEGRAPHICENGINEMODEDRAW_3D_ALPHA_ADD:    localGlobal.memory.shader = &localGlobal.shader.texture; break;
 		case ENGINEGRAPHICENGINEMODEDRAW_2D_ALPHA_NORMAL: localGlobal.memory.shader = &localGlobal.shader.texture; break;
 		case ENGINEGRAPHICENGINEMODEDRAW_2D_ALPHA_ADD:    localGlobal.memory.shader = &localGlobal.shader.texture; break;
+		case ENGINEGRAPHICENGINEMODEDRAW_PHONG:           localGlobal.memory.shader = &localGlobal.shader.phong; break;
 		case ENGINEGRAPHICENGINEMODEDRAW_HKNW:            localGlobal.memory.shader = &localGlobal.shader.textureColorBlendAlphaMask; break;
 		case ENGINEGRAPHICENGINEMODEDRAW_SPHERE:          localGlobal.memory.shader = &localGlobal.shader.colorBlend; break;
 	}
@@ -195,6 +200,13 @@ void engineGraphicEngineSetDrawMode(enum engineGraphicEngineModeDraw mode){
 			localGlobal.memory.modeDepthTest = false;
 			glDisable(GL_CULL_FACE);
 			glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE, GL_ZERO, GL_ONE); // 加算合成
+			break;
+		case ENGINEGRAPHICENGINEMODEDRAW_PHONG:
+			// 3D描画フォンシェーダーモード (VertBuf NormBuf TexcBuf)
+			localGlobal.memory.modeDepthMask = true;
+			localGlobal.memory.modeDepthTest = true;
+			glEnable(GL_CULL_FACE);
+			glBlendFuncSeparate(GL_ONE, GL_ZERO, GL_ZERO, GL_ONE); // アルファ無視のアルファマスク
 			break;
 		case ENGINEGRAPHICENGINEMODEDRAW_HKNW:
 			// ハコニワ地形モード (VertBuf Clor3Buf TexcBuf)
@@ -331,7 +343,20 @@ void engineGraphicEngineBindFaceIBO(engineGraphicObjectIBOId egoId){
 
 // グラフィックエンジン命令 行列の設定
 void engineGraphicEngineSetMatrix(struct engineMathMatrix44 *matrix){
-	glUniformMatrix4fv(localGlobal.memory.shader->unif_mat, 1, GL_FALSE, matrix->m);
+	glUniformMatrix4fv(localGlobal.memory.shader->unif_mat_pos, 1, GL_FALSE, matrix->m);
+	if(localGlobal.memory.shader->unif_mat_nrm >= 0){
+		struct engineMathMatrix33 normalMatrix;
+		normalMatrix.m00 = matrix->m00;
+		normalMatrix.m01 = matrix->m01;
+		normalMatrix.m02 = matrix->m02;
+		normalMatrix.m10 = matrix->m10;
+		normalMatrix.m11 = matrix->m11;
+		normalMatrix.m12 = matrix->m12;
+		normalMatrix.m20 = matrix->m20;
+		normalMatrix.m21 = matrix->m21;
+		normalMatrix.m22 = matrix->m22;
+		glUniformMatrix3fv(localGlobal.memory.shader->unif_mat_nrm, 1, GL_FALSE, normalMatrix.m);
+	}
 }
 
 // グラフィックエンジン命令 色の設定

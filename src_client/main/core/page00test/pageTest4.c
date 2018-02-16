@@ -15,6 +15,7 @@ struct pageCartridgeTest4{
 		int sh;
 	} bufferCompare;
 	engineGraphicObjectVBOId egoIdVert;
+	engineGraphicObjectVBOId egoIdNorm;
 	engineGraphicObjectVBOId egoIdTexc;
 	engineGraphicObjectIBOId egoIdFace;
 	engineGraphicTextureId egoIdTexSystem;
@@ -59,7 +60,7 @@ static void createBuffer(struct pageCartridgeTest4 *this){
 		enginePrimitiveSphereCreateArray(&this->primitiveSphere);
 
 		// バッファ作成完了
-		engineGraphicBufferEnd(&this->egoIdVert, NULL, NULL, &this->egoIdTexc, &this->egoIdFace);
+		engineGraphicBufferEnd(&this->egoIdVert, &this->egoIdNorm, NULL, &this->egoIdTexc, &this->egoIdFace);
 	}
 }
 
@@ -94,8 +95,9 @@ static void draw(struct pageCartridgeTest4 *this){
 	engineMathMat4Ortho(&tempMat1, -global.screen.offset.x, global.screen.w + global.screen.offset.x, global.screen.h + global.screen.offset.y, -global.screen.offset.y, -1, 1);
 
 	// モードとバッファ設定
-	engineGraphicEngineSetDrawMode(ENGINEGRAPHICENGINEMODEDRAW_2D_ALPHA_NORMAL);
+	engineGraphicEngineSetDrawMode(ENGINEGRAPHICENGINEMODEDRAW_PHONG);
 	engineGraphicEngineBindVertVBO(this->egoIdVert);
+	engineGraphicEngineBindNormVBO(this->egoIdNorm);
 	engineGraphicEngineBindTexcVBO(this->egoIdTexc);
 	engineGraphicEngineBindFaceIBO(this->egoIdFace);
 	engineGraphicEngineBindTexture(this->egoIdTexSystem);
@@ -119,6 +121,7 @@ static void pause(struct pageCartridgeTest4 *this){
 // 破棄
 static void dispose(struct pageCartridgeTest4 *this){
 	engineGraphicObjectVBODispose(this->egoIdVert);
+	engineGraphicObjectVBODispose(this->egoIdNorm);
 	engineGraphicObjectVBODispose(this->egoIdTexc);
 	engineGraphicObjectIBODispose(this->egoIdFace);
 	engineGraphicTextureDispose(this->egoIdTexSystem);
