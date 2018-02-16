@@ -22,11 +22,8 @@ char *externGlobal_shader_textureAlphaMask_frag_src =
 	"varying vec2 texCoord;"
 	"void main(){"
 		"vec4 fragColor = texture2D(texture, texCoord) * fs_unif_col;"
-		"if(fragColor.a > 0.8){"
-			"gl_FragColor = fragColor;"
-		"}else{"
-			"discard;"
-		"}"
+		"if(fragColor.a < 0.8){discard;}"
+		"gl_FragColor = fragColor;"
 	"}";
 
 // ----------------------------------------------------------------
