@@ -86,13 +86,13 @@ static void draw(struct pageCartridgeTest4 *this){
 	double lookUpX = 0.0;
 	double lookUpY = 1.0;
 	double lookUpZ = 0.0;
+	struct engineMathMatrix44 matrixProjection3D;
+	struct engineMathMatrix44 matrixProjection2D;
+	struct engineMathMatrix44 matrixModelViewWorld;
 	struct engineMathMatrix44 tempMat1;
-	struct engineMathMatrix44 tempMat2;
-	struct engineMathMatrix44 tempMat3;
-	engineMathMat4Perspective(&tempMat1, ENGINEMATH_DEG2RAD * 30, (double)global.window.w / global.window.h, 1.0, 1000.0);
-	engineMathMat4LookAt(&tempMat2, lookEyeX, lookEyeY, lookEyeZ, lookAtX, lookAtY, lookAtZ, lookUpX, lookUpY, lookUpZ);
-	engineMathMat4Multiply(&tempMat2, &tempMat1, &tempMat2);
-	engineMathMat4Ortho(&tempMat1, -global.screen.offset.x, global.screen.w + global.screen.offset.x, global.screen.h + global.screen.offset.y, -global.screen.offset.y, -1, 1);
+	engineMathMat4Perspective(&matrixProjection3D, ENGINEMATH_DEG2RAD * 30, (double)global.window.w / global.window.h, 1.0, 1000.0);
+	engineMathMat4Ortho(&matrixProjection2D, -global.screen.offset.x, global.screen.w + global.screen.offset.x, global.screen.h + global.screen.offset.y, -global.screen.offset.y, -1, 1);
+	engineMathMat4LookAt(&matrixModelViewWorld, lookEyeX, lookEyeY, lookEyeZ, lookAtX, lookAtY, lookAtZ, lookUpX, lookUpY, lookUpZ);
 
 	// モードとバッファ設定
 	engineGraphicEngineSetDrawMode(ENGINEGRAPHICENGINEMODEDRAW_PHONG);
@@ -103,9 +103,9 @@ static void draw(struct pageCartridgeTest4 *this){
 	engineGraphicEngineBindTexture(this->egoIdTexSystem);
 
 	// 球描画
-	engineMathMat4Copy(&tempMat3, &tempMat2);
-	engineMathMat4Translate(&tempMat3, 0, 0, 1);
-	engineGraphicEngineSetMatrix(&tempMat3);
+	engineMathMat4Copy(&tempMat1, &matrixModelViewWorld);
+	engineMathMat4Translate(&tempMat1, 0, 0, 1);
+	engineGraphicEngineSetMatrixNorm(&matrixProjection3D, &tempMat1);
 	engineGraphicEngineSetColorRgba(1.0, 1.0, 1.0, 1.0);
 	enginePrimitiveSphereDraw(&this->primitiveSphere);
 

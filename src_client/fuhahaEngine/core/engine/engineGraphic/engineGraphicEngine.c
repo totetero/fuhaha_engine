@@ -344,19 +344,20 @@ void engineGraphicEngineBindFaceIBO(engineGraphicObjectIBOId egoId){
 // グラフィックエンジン命令 行列の設定
 void engineGraphicEngineSetMatrix(struct engineMathMatrix44 *matrix){
 	glUniformMatrix4fv(localGlobal.memory.shader->unif_mat_pos, 1, GL_FALSE, matrix->m);
-	if(localGlobal.memory.shader->unif_mat_nrm >= 0){
-		struct engineMathMatrix33 normalMatrix;
-		normalMatrix.m00 = matrix->m00;
-		normalMatrix.m01 = matrix->m01;
-		normalMatrix.m02 = matrix->m02;
-		normalMatrix.m10 = matrix->m10;
-		normalMatrix.m11 = matrix->m11;
-		normalMatrix.m12 = matrix->m12;
-		normalMatrix.m20 = matrix->m20;
-		normalMatrix.m21 = matrix->m21;
-		normalMatrix.m22 = matrix->m22;
-		glUniformMatrix3fv(localGlobal.memory.shader->unif_mat_nrm, 1, GL_FALSE, normalMatrix.m);
-	}
+}
+
+// グラフィックエンジン命令 行列の設定
+void engineGraphicEngineSetMatrixNorm(struct engineMathMatrix44 *matrixProjection, struct engineMathMatrix44 *matrixModelView){
+	// モデルビュー行列と投影行列を掛け合わせた行列
+	struct engineMathMatrix44 matrixModelViewProjection;
+	engineMathMat4Multiply(&matrixModelViewProjection, matrixProjection, matrixModelView);
+	glUniformMatrix4fv(localGlobal.memory.shader->unif_mat_pos, 1, GL_FALSE, matrixModelViewProjection.m);
+	// 逆転置行列
+	struct engineMathMatrix33 matrixNormal;
+	engineMathMat3Copy4(&matrixNormal, matrixModelView);
+	engineMathMat3Invert(&matrixNormal);
+	engineMathMat3Transpose(&matrixNormal);
+	glUniformMatrix3fv(localGlobal.memory.shader->unif_mat_nrm, 1, GL_FALSE, matrixNormal.m);
 }
 
 // グラフィックエンジン命令 色の設定

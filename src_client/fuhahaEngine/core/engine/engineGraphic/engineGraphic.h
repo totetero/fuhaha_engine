@@ -172,6 +172,7 @@ void engineGraphicEngineBindFaceIBO(engineGraphicObjectIBOId egoId);
 
 // グラフィックエンジン命令 行列の設定
 void engineGraphicEngineSetMatrix(struct engineMathMatrix44 *matrix);
+void engineGraphicEngineSetMatrixNorm(struct engineMathMatrix44 *matrixProjection, struct engineMathMatrix44 *matrixModelView);
 // グラフィックエンジン命令 色の設定
 void engineGraphicEngineSetColorRgba(double r, double g, double b, double a);
 void engineGraphicEngineSetColorVec(struct engineMathVector4 *color);
