@@ -94,6 +94,18 @@ void engineMathMat4RotateZ(struct engineMathMatrix44 *mat, double rad);
 // 逆行列
 void engineMathMat4Invert(struct engineMathMatrix44 *mat);
 
+// 行列複製
+void engineMathMat3Copy(struct engineMathMatrix33 *dst, struct engineMathMatrix33 *src);
+void engineMathMat3Copy4(struct engineMathMatrix33 *dst, struct engineMathMatrix44 *src);
+// 単位行列
+void engineMathMat3Identity(struct engineMathMatrix33 *mat);
+// 行列の掛け合わせ
+void engineMathMat3Multiply(struct engineMathMatrix33 *mat, struct engineMathMatrix33 *m0, struct engineMathMatrix33 *m1);
+// 逆行列
+void engineMathMat3Invert(struct engineMathMatrix33 *mat);
+// 転置行列
+void engineMathMat3Transpose(struct engineMathMatrix33 *mat);
+
 // ベクトル値設定
 void engineMathVec3Set(struct engineMathVector3 *vec, double x, double y, double z);
 void engineMathVec4Set(struct engineMathVector4 *vec, double x, double y, double z, double w);

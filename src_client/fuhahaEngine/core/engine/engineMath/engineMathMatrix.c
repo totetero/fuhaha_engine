@@ -143,22 +143,22 @@ void engineMathMat4Multiply(struct engineMathMatrix44 *mat, struct engineMathMat
 	struct engineMathMatrix44 b;
 	if(mat == m0){engineMathMat4Copy(&a, m0); m0 = &a;}
 	if(mat == m1){engineMathMat4Copy(&b, m1); m1 = &b;}
-    mat->m00 = m1->m00 * m0->m00 + m1->m01 * m0->m10 + m1->m02 * m0->m20 + m1->m03 * m0->m30;
-    mat->m01 = m1->m00 * m0->m01 + m1->m01 * m0->m11 + m1->m02 * m0->m21 + m1->m03 * m0->m31;
-    mat->m02 = m1->m00 * m0->m02 + m1->m01 * m0->m12 + m1->m02 * m0->m22 + m1->m03 * m0->m32;
-    mat->m03 = m1->m00 * m0->m03 + m1->m01 * m0->m13 + m1->m02 * m0->m23 + m1->m03 * m0->m33;
-    mat->m10 = m1->m10 * m0->m00 + m1->m11 * m0->m10 + m1->m12 * m0->m20 + m1->m13 * m0->m30;
-    mat->m11 = m1->m10 * m0->m01 + m1->m11 * m0->m11 + m1->m12 * m0->m21 + m1->m13 * m0->m31;
-    mat->m12 = m1->m10 * m0->m02 + m1->m11 * m0->m12 + m1->m12 * m0->m22 + m1->m13 * m0->m32;
-    mat->m13 = m1->m10 * m0->m03 + m1->m11 * m0->m13 + m1->m12 * m0->m23 + m1->m13 * m0->m33;
-    mat->m20 = m1->m20 * m0->m00 + m1->m21 * m0->m10 + m1->m22 * m0->m20 + m1->m23 * m0->m30;
-    mat->m21 = m1->m20 * m0->m01 + m1->m21 * m0->m11 + m1->m22 * m0->m21 + m1->m23 * m0->m31;
-    mat->m22 = m1->m20 * m0->m02 + m1->m21 * m0->m12 + m1->m22 * m0->m22 + m1->m23 * m0->m32;
-    mat->m23 = m1->m20 * m0->m03 + m1->m21 * m0->m13 + m1->m22 * m0->m23 + m1->m23 * m0->m33;
-    mat->m30 = m1->m30 * m0->m00 + m1->m31 * m0->m10 + m1->m32 * m0->m20 + m1->m33 * m0->m30;
-    mat->m31 = m1->m30 * m0->m01 + m1->m31 * m0->m11 + m1->m32 * m0->m21 + m1->m33 * m0->m31;
-    mat->m32 = m1->m30 * m0->m02 + m1->m31 * m0->m12 + m1->m32 * m0->m22 + m1->m33 * m0->m32;
-    mat->m33 = m1->m30 * m0->m03 + m1->m31 * m0->m13 + m1->m32 * m0->m23 + m1->m33 * m0->m33;
+	mat->m00 = m1->m00 * m0->m00 + m1->m01 * m0->m10 + m1->m02 * m0->m20 + m1->m03 * m0->m30;
+	mat->m01 = m1->m00 * m0->m01 + m1->m01 * m0->m11 + m1->m02 * m0->m21 + m1->m03 * m0->m31;
+	mat->m02 = m1->m00 * m0->m02 + m1->m01 * m0->m12 + m1->m02 * m0->m22 + m1->m03 * m0->m32;
+	mat->m03 = m1->m00 * m0->m03 + m1->m01 * m0->m13 + m1->m02 * m0->m23 + m1->m03 * m0->m33;
+	mat->m10 = m1->m10 * m0->m00 + m1->m11 * m0->m10 + m1->m12 * m0->m20 + m1->m13 * m0->m30;
+	mat->m11 = m1->m10 * m0->m01 + m1->m11 * m0->m11 + m1->m12 * m0->m21 + m1->m13 * m0->m31;
+	mat->m12 = m1->m10 * m0->m02 + m1->m11 * m0->m12 + m1->m12 * m0->m22 + m1->m13 * m0->m32;
+	mat->m13 = m1->m10 * m0->m03 + m1->m11 * m0->m13 + m1->m12 * m0->m23 + m1->m13 * m0->m33;
+	mat->m20 = m1->m20 * m0->m00 + m1->m21 * m0->m10 + m1->m22 * m0->m20 + m1->m23 * m0->m30;
+	mat->m21 = m1->m20 * m0->m01 + m1->m21 * m0->m11 + m1->m22 * m0->m21 + m1->m23 * m0->m31;
+	mat->m22 = m1->m20 * m0->m02 + m1->m21 * m0->m12 + m1->m22 * m0->m22 + m1->m23 * m0->m32;
+	mat->m23 = m1->m20 * m0->m03 + m1->m21 * m0->m13 + m1->m22 * m0->m23 + m1->m23 * m0->m33;
+	mat->m30 = m1->m30 * m0->m00 + m1->m31 * m0->m10 + m1->m32 * m0->m20 + m1->m33 * m0->m30;
+	mat->m31 = m1->m30 * m0->m01 + m1->m31 * m0->m11 + m1->m32 * m0->m21 + m1->m33 * m0->m31;
+	mat->m32 = m1->m30 * m0->m02 + m1->m31 * m0->m12 + m1->m32 * m0->m22 + m1->m33 * m0->m32;
+	mat->m33 = m1->m30 * m0->m03 + m1->m31 * m0->m13 + m1->m32 * m0->m23 + m1->m33 * m0->m33;
 }
 
 // 平行移動
@@ -288,6 +288,92 @@ void engineMathMat4Invert(struct engineMathMatrix44 *mat){
 	mat->m31 = (GLfloat)((a.m00 * b09 - a.m01 * b07 + a.m02 * b06) * idet);
 	mat->m32 = (GLfloat)((a.m31 * b01 - a.m30 * b03 - a.m32 * b00) * idet);
 	mat->m33 = (GLfloat)((a.m20 * b03 - a.m21 * b01 + a.m22 * b00) * idet);
+}
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+
+// 行列複製
+void engineMathMat3Copy(struct engineMathMatrix33 *dst, struct engineMathMatrix33 *src){
+	memcpy(dst, src, sizeof(struct engineMathMatrix33));
+}
+
+// 行列複製
+void engineMathMat3Copy4(struct engineMathMatrix33 *dst, struct engineMathMatrix44 *src){
+	dst->m00 = src->m00;
+	dst->m01 = src->m01;
+	dst->m02 = src->m02;
+	dst->m10 = src->m10;
+	dst->m11 = src->m11;
+	dst->m12 = src->m12;
+	dst->m20 = src->m20;
+	dst->m21 = src->m21;
+	dst->m22 = src->m22;
+}
+
+// ----------------------------------------------------------------
+
+// 単位行列
+void engineMathMat3Identity(struct engineMathMatrix33 *mat){
+	mat->m00 = 1.0; mat->m01 = 0.0; mat->m02 = 0.0;
+	mat->m10 = 0.0; mat->m11 = 1.0; mat->m12 = 0.0;
+	mat->m20 = 0.0; mat->m21 = 0.0; mat->m22 = 1.0;
+}
+
+// ----------------------------------------------------------------
+
+// 行列の掛け合わせ
+void engineMathMat3Multiply(struct engineMathMatrix33 *mat, struct engineMathMatrix33 *m0, struct engineMathMatrix33 *m1){
+	struct engineMathMatrix33 a;
+	struct engineMathMatrix33 b;
+	if(mat == m0){engineMathMat3Copy(&a, m0); m0 = &a;}
+	if(mat == m1){engineMathMat3Copy(&b, m1); m1 = &b;}
+	mat->m00 = m1->m00 * m0->m00 + m1->m01 * m0->m10 + m1->m02 * m0->m20;
+	mat->m01 = m1->m00 * m0->m01 + m1->m01 * m0->m11 + m1->m02 * m0->m21;
+	mat->m02 = m1->m00 * m0->m02 + m1->m01 * m0->m12 + m1->m02 * m0->m22;
+	mat->m10 = m1->m10 * m0->m00 + m1->m11 * m0->m10 + m1->m12 * m0->m20;
+	mat->m11 = m1->m10 * m0->m01 + m1->m11 * m0->m11 + m1->m12 * m0->m21;
+	mat->m12 = m1->m10 * m0->m02 + m1->m11 * m0->m12 + m1->m12 * m0->m22;
+	mat->m20 = m1->m20 * m0->m00 + m1->m21 * m0->m10 + m1->m22 * m0->m20;
+	mat->m21 = m1->m20 * m0->m01 + m1->m21 * m0->m11 + m1->m22 * m0->m21;
+	mat->m22 = m1->m20 * m0->m02 + m1->m21 * m0->m12 + m1->m22 * m0->m22;
+}
+
+// ----------------------------------------------------------------
+
+// 逆行列
+void engineMathMat3Invert(struct engineMathMatrix33 *mat){
+	struct engineMathMatrix33 a;
+	engineMathMat3Copy(&a, mat);
+	double b01 = a.m22 * a.m11 - a.m12 * a.m21;
+	double b11 = a.m12 * a.m20 - a.m22 * a.m10;
+	double b21 = a.m21 * a.m10 - a.m11 * a.m20;
+	double det = a.m00 * b01 + a.m01 * b11 + a.m02 * b21;
+	if(engineMathAbs(det) < DBL_EPSILON){return;}
+	double idet = 1 / det;
+	mat->m00 = b01 * idet;
+	mat->m01 = (a.m02 * a.m21 - a.m22 * a.m01) * idet;
+	mat->m02 = (a.m12 * a.m01 - a.m02 * a.m11) * idet;
+	mat->m10 = b11 * idet;
+	mat->m11 = (a.m22 * a.m00 - a.m02 * a.m20) * idet;
+	mat->m12 = (a.m02 * a.m10 - a.m12 * a.m00) * idet;
+	mat->m20 = b21 * idet;
+	mat->m21 = (a.m01 * a.m20 - a.m21 * a.m00) * idet;
+	mat->m22 = (a.m11 * a.m00 - a.m01 * a.m10) * idet;
+}
+
+// 転置行列
+void engineMathMat3Transpose(struct engineMathMatrix33 *mat){
+	double m01 = mat->m01;
+	double m02 = mat->m02;
+	double m12 = mat->m12;
+	mat->m01 = mat->m10;
+	mat->m02 = mat->m20;
+	mat->m12 = mat->m21;
+	mat->m10 = m01;
+	mat->m20 = m02;
+	mat->m21 = m12;
 }
 
 // ----------------------------------------------------------------
