@@ -8,9 +8,9 @@
 // ----------------------------------------------------------------
 
 // 基本図形球構造体 初期化
-void enginePrimitiveSphereInit(struct enginePrimitiveSphere *this){
+void enginePrimitiveSphereInit(struct enginePrimitiveSphere *this, double r){
 	this->quality = 8;
-	this->sphere.r = 0.5;
+	this->sphere.r = r;
 	this->texture.imgw = TEXSIZ_SYSTEM_W;
 	this->texture.imgh = TEXSIZ_SYSTEM_H;
 	this->texture.tu = (int)engineMathRound(TEXPOS_SYSTEM_BOXWHITE_X + TEXPOS_SYSTEM_BOXWHITE_W * 0.25);

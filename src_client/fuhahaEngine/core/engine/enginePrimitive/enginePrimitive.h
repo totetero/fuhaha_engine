@@ -14,7 +14,7 @@ struct enginePrimitiveSphere{
 };
 
 // 基本図形球構造体 初期化
-void enginePrimitiveSphereInit(struct enginePrimitiveSphere *this);
+void enginePrimitiveSphereInit(struct enginePrimitiveSphere *this, double r);
 // 配列に基本図形球構造体の描画情報を追加
 void enginePrimitiveSphereCreateArray(struct enginePrimitiveSphere *this);
 // 基本図形球構造体 描画
