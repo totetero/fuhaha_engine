@@ -9,6 +9,7 @@ struct pageCartridgeTest4{
 	struct engineCartridgePage super;
 
 	struct enginePrimitiveSphere primitiveSphere;
+	struct enginePrimitiveWater primitiveWater;
 
 	struct pageCartridgeTest4BufferCompare{
 		int sw;
@@ -30,7 +31,8 @@ static void init(struct pageCartridgeTest4 *this){
 	// 画像読み込み
 	this->egoIdTexSystem = engineGraphicTextureCreateLocal("img/system.png", ENGINEGRAPHICTEXTURETYPE_LINEAR);
 	// 基本図形初期化
-	enginePrimitiveSphereInit(&this->primitiveSphere);
+	enginePrimitiveSphereInit(&this->primitiveSphere, 1.0);
+	enginePrimitiveWaterInit(&this->primitiveWater, 1.2, 0.0, 0.4, 1.0);
 
 	this->step = 0;
 }
@@ -58,6 +60,7 @@ static void createBuffer(struct pageCartridgeTest4 *this){
 
 		// 基本図形作成
 		enginePrimitiveSphereCreateArray(&this->primitiveSphere);
+		enginePrimitiveWaterCreateArray(&this->primitiveWater);
 
 		// バッファ作成完了
 		engineGraphicBufferEnd(&this->egoIdVert, &this->egoIdNorm, NULL, &this->egoIdTexc, &this->egoIdFace);
@@ -72,7 +75,7 @@ static void draw(struct pageCartridgeTest4 *this){
 	createBuffer(this);
 
 	// 行列作成
-	double distance = 10;
+	double distance = 20;
 	double lookAtX = 0;
 	double lookAtY = 0;
 	double lookAtZ = 0;
@@ -101,13 +104,19 @@ static void draw(struct pageCartridgeTest4 *this){
 	engineGraphicEngineBindTexcVBO(this->egoIdTexc);
 	engineGraphicEngineBindFaceIBO(this->egoIdFace);
 	engineGraphicEngineBindTexture(this->egoIdTexSystem);
+	engineGraphicEngineSetColorRgba(1.0, 1.0, 1.0, 1.0);
 
 	// 球描画
 	engineMathMat4Copy(&tempMat1, &matrixModelViewWorld);
 	engineMathMat4Translate(&tempMat1, 0, 0, 1);
 	engineGraphicEngineSetMatrixNorm(&matrixProjection3D, &tempMat1);
-	engineGraphicEngineSetColorRgba(1.0, 1.0, 1.0, 1.0);
 	enginePrimitiveSphereDraw(&this->primitiveSphere);
+
+	// 水滴描画
+	engineMathMat4Copy(&tempMat1, &matrixModelViewWorld);
+	engineMathMat4Translate(&tempMat1, 0, 1, 1);
+	engineGraphicEngineSetMatrixNorm(&matrixProjection3D, &tempMat1);
+	enginePrimitiveWaterDraw(&this->primitiveWater);
 
 	engineGraphicEngineFlush();
 }
