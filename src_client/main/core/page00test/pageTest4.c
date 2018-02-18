@@ -9,6 +9,7 @@ struct pageCartridgeTest4{
 	struct engineCartridgePage super;
 
 	struct enginePrimitiveSphere primitiveSphere;
+	struct enginePrimitiveTorus primitiveTorus;
 	struct enginePrimitiveWater primitiveWater;
 
 	struct pageCartridgeTest4BufferCompare{
@@ -32,6 +33,7 @@ static void init(struct pageCartridgeTest4 *this){
 	this->egoIdTexSystem = engineGraphicTextureCreateLocal("img/system.png", ENGINEGRAPHICTEXTURETYPE_LINEAR);
 	// 基本図形初期化
 	enginePrimitiveSphereInit(&this->primitiveSphere, 1.0);
+	enginePrimitiveTorusInit(&this->primitiveTorus, 3.0, 1.0);
 	enginePrimitiveWaterInit(&this->primitiveWater, 1.2, 0.0, 0.4, 1.0);
 
 	this->step = 0;
@@ -60,6 +62,7 @@ static void createBuffer(struct pageCartridgeTest4 *this){
 
 		// 基本図形作成
 		enginePrimitiveSphereCreateArray(&this->primitiveSphere);
+		enginePrimitiveTorusCreateArray(&this->primitiveTorus);
 		enginePrimitiveWaterCreateArray(&this->primitiveWater);
 
 		// バッファ作成完了
@@ -111,6 +114,12 @@ static void draw(struct pageCartridgeTest4 *this){
 	engineMathMat4Translate(&tempMat1, 0, 0, 1);
 	engineGraphicEngineSetMatrixNorm(&matrixProjection3D, &tempMat1);
 	enginePrimitiveSphereDraw(&this->primitiveSphere);
+
+	// トーラス描画
+	engineMathMat4Copy(&tempMat1, &matrixModelViewWorld);
+	engineMathMat4Translate(&tempMat1, 0, 0, 1);
+	engineGraphicEngineSetMatrixNorm(&matrixProjection3D, &tempMat1);
+	enginePrimitiveTorusDraw(&this->primitiveTorus);
 
 	// 水滴描画
 	engineMathMat4Copy(&tempMat1, &matrixModelViewWorld);

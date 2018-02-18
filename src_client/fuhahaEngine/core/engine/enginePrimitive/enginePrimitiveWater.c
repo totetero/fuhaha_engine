@@ -24,8 +24,6 @@ void enginePrimitiveWaterInit(struct enginePrimitiveWater *this, double y0, doub
 
 // 配列に基本図形水滴構造体の描画情報を追加
 void enginePrimitiveWaterCreateArray(struct enginePrimitiveWater *this){
-	if(this == NULL){return;}
-
 	int vertIndex = engineGraphicBufferVretIndexGet();
 	int faceIndex = engineGraphicBufferFaceIndexGet();
 	int faceNum = 0;
