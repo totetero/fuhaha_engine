@@ -164,68 +164,56 @@ void engineGraphicEngineSetDrawMode(enum engineGraphicEngineModeDraw mode){
 		engineGraphicEngineMemoryResetVBO();
 	}
 
-	// oprnGL設定
+	// oprnGL設定 深度バッファ
 	switch(mode){
 		case ENGINEGRAPHICENGINEMODEDRAW_3D:
-			// 3D描画モード (VertBuf TexcBuf)
+		case ENGINEGRAPHICENGINEMODEDRAW_PHONG:
+		case ENGINEGRAPHICENGINEMODEDRAW_HKNW:
+		case ENGINEGRAPHICENGINEMODEDRAW_SPHERE:
+			// 3次元通常描画
 			localGlobal.memory.modeDepthMask = true;
 			localGlobal.memory.modeDepthTest = true;
 			glEnable(GL_CULL_FACE);
-			glBlendFuncSeparate(GL_ONE, GL_ZERO, GL_ZERO, GL_ONE); // アルファ無視のアルファマスク
 			break;
 		case ENGINEGRAPHICENGINEMODEDRAW_3D_ALPHA_NORMAL:
-			// 3D描画アルファ合成モード (VertBuf TexcBuf)
-			localGlobal.memory.modeDepthMask = false;
-			localGlobal.memory.modeDepthTest = true;
-			glEnable(GL_CULL_FACE);
-			glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ZERO, GL_ONE); // 半透明アルファ合成
-			break;
 		case ENGINEGRAPHICENGINEMODEDRAW_3D_ALPHA_ADD:
-			// 3D描画アルファ合成モード (VertBuf TexcBuf)
+			// 3次元エフェクト描画
 			localGlobal.memory.modeDepthMask = false;
 			localGlobal.memory.modeDepthTest = true;
 			glEnable(GL_CULL_FACE);
-			glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE, GL_ZERO, GL_ONE); // 加算合成
 			break;
 		case ENGINEGRAPHICENGINEMODEDRAW_2D_ALPHA_NORMAL:
-			// 2D描画アルファ合成モード (VertBuf TexcBuf)
-			localGlobal.memory.modeDepthMask = false;
-			localGlobal.memory.modeDepthTest = false;
-			glDisable(GL_CULL_FACE);
-			glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ZERO, GL_ONE); // 半透明アルファ合成
-			break;
 		case ENGINEGRAPHICENGINEMODEDRAW_2D_ALPHA_ADD:
-			// 2D描画アルファ合成モード (VertBuf TexcBuf)
+			// 2次元通常描画
 			localGlobal.memory.modeDepthMask = false;
 			localGlobal.memory.modeDepthTest = false;
 			glDisable(GL_CULL_FACE);
-			glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE, GL_ZERO, GL_ONE); // 加算合成
-			break;
-		case ENGINEGRAPHICENGINEMODEDRAW_PHONG:
-			// 3D描画フォンシェーダーモード (VertBuf NormBuf TexcBuf)
-			localGlobal.memory.modeDepthMask = true;
-			localGlobal.memory.modeDepthTest = true;
-			glEnable(GL_CULL_FACE);
-			glBlendFuncSeparate(GL_ONE, GL_ZERO, GL_ZERO, GL_ONE); // アルファ無視のアルファマスク
-			break;
-		case ENGINEGRAPHICENGINEMODEDRAW_HKNW:
-			// ハコニワ地形モード (VertBuf Clor3Buf TexcBuf)
-			localGlobal.memory.modeDepthMask = true;
-			localGlobal.memory.modeDepthTest = true;
-			glEnable(GL_CULL_FACE);
-			glBlendFuncSeparate(GL_ONE, GL_ZERO, GL_ZERO, GL_ONE); // アルファ無視のアルファマスク
-			break;
-		case ENGINEGRAPHICENGINEMODEDRAW_SPHERE:
-			// スフィア地形モード (VertBuf Clor3Buf)
-			localGlobal.memory.modeDepthMask = true;
-			localGlobal.memory.modeDepthTest = true;
-			glEnable(GL_CULL_FACE);
-			glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ZERO, GL_ONE); // 半透明アルファ合成
 			break;
 	}
 	// 深度設定
 	if(localGlobal.memory.modeDepthMask){glDepthMask(GL_TRUE);}else{glDepthMask(GL_FALSE);}
 	if(localGlobal.memory.modeDepthTest){glEnable(GL_DEPTH_TEST);}else{glDisable(GL_DEPTH_TEST);}
+
+	// oprnGL設定 アルファブレンド
+	switch(mode){
+		case ENGINEGRAPHICENGINEMODEDRAW_3D:
+		case ENGINEGRAPHICENGINEMODEDRAW_PHONG:
+		case ENGINEGRAPHICENGINEMODEDRAW_HKNW:
+			// アルファブレンド無視
+			glBlendFuncSeparate(GL_ONE, GL_ZERO, GL_ZERO, GL_ONE);
+			break;
+		case ENGINEGRAPHICENGINEMODEDRAW_3D_ALPHA_NORMAL:
+		case ENGINEGRAPHICENGINEMODEDRAW_2D_ALPHA_NORMAL:
+		case ENGINEGRAPHICENGINEMODEDRAW_SPHERE:
+			// 半透明アルファ合成
+			glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ZERO, GL_ONE);
+			break;
+		case ENGINEGRAPHICENGINEMODEDRAW_3D_ALPHA_ADD:
+		case ENGINEGRAPHICENGINEMODEDRAW_2D_ALPHA_ADD:
+			// 加算合成
+			glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE, GL_ZERO, GL_ONE);
+			break;
+	}
 }
 
 // グラフィックエンジン命令 深度バッファを一時的に無効化
