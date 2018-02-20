@@ -17,6 +17,7 @@ enum engineGraphicEngineModeDraw{
 	ENGINEGRAPHICENGINEMODEDRAW_3D_ALPHA_ADD,
 	ENGINEGRAPHICENGINEMODEDRAW_2D_ALPHA_NORMAL,
 	ENGINEGRAPHICENGINEMODEDRAW_2D_ALPHA_ADD,
+	ENGINEGRAPHICENGINEMODEDRAW_2D_FILTER_COLOR_ALPHA_NORMAL,
 	ENGINEGRAPHICENGINEMODEDRAW_PHONG,
 	ENGINEGRAPHICENGINEMODEDRAW_HKNW,
 	ENGINEGRAPHICENGINEMODEDRAW_SPHERE,
@@ -122,6 +123,8 @@ extern char *externGlobal_shader_texture_vert_src;
 extern char *externGlobal_shader_texture_frag_src;
 extern char *externGlobal_shader_textureAlphaMask_vert_src;
 extern char *externGlobal_shader_textureAlphaMask_frag_src;
+extern char *externGlobal_shader_textureFilterColor_vert_src;
+extern char *externGlobal_shader_textureFilterColor_frag_src;
 extern char *externGlobal_shader_textureColorBlendAlphaMask_vert_src;
 extern char *externGlobal_shader_textureColorBlendAlphaMask_frag_src;
 extern char *externGlobal_shader_colorBlend_vert_src;
@@ -176,6 +179,10 @@ void engineGraphicEngineSetMatrixNorm(struct engineMathMatrix44 *matrixProjectio
 // グラフィックエンジン命令 色の設定
 void engineGraphicEngineSetColorRgba(double r, double g, double b, double a);
 void engineGraphicEngineSetColorVec(struct engineMathVector4 *color);
+// グラフィックエンジン命令 カラーフィルタの設定
+void engineGraphicEngineSetFilterColorAlpha(double a);
+void engineGraphicEngineSetFilterColorMatrix(struct engineMathMatrix44 *matrix);
+void engineGraphicEngineSetFilterColorVector(struct engineMathVector4 *vector);
 
 // グラフィックエンジン命令 頂点インデックスを元に描画
 void engineGraphicEngineDrawIndex(int offset, int count);

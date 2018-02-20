@@ -17,6 +17,9 @@ struct engineGraphicEngineShader{
 	GLint unif_mat_pos;
 	GLint unif_mat_nrm;
 	GLint unif_col;
+	GLint unif_fil_col_alp;
+	GLint unif_fil_col_mat;
+	GLint unif_fil_col_vec;
 };
 
 static struct{
@@ -24,6 +27,7 @@ static struct{
 	struct{
 		struct engineGraphicEngineShader texture;
 		struct engineGraphicEngineShader textureAlphaMask;
+		struct engineGraphicEngineShader textureFilterColor;
 		struct engineGraphicEngineShader textureColorBlendAlphaMask;
 		struct engineGraphicEngineShader colorBlend;
 		struct engineGraphicEngineShader phong;
@@ -65,12 +69,16 @@ static void engineGraphicEngineShaderCreate(struct engineGraphicEngineShader *sh
 	shader->unif_mat_pos = glGetUniformLocation(shader->program, "vs_unif_mat_pos");
 	shader->unif_mat_nrm = glGetUniformLocation(shader->program, "vs_unif_mat_nrm");
 	shader->unif_col = glGetUniformLocation(shader->program, "fs_unif_col");
+	shader->unif_fil_col_alp = glGetUniformLocation(shader->program, "fs_unif_fil_col_alp");
+	shader->unif_fil_col_mat = glGetUniformLocation(shader->program, "fs_unif_fil_col_mat");
+	shader->unif_fil_col_vec = glGetUniformLocation(shader->program, "fs_unif_fil_col_vec");
 }
 
 // 初期化
 void engineGraphicEngineInit(void){
 	engineGraphicEngineShaderCreate(&localGlobal.shader.texture, externGlobal_shader_texture_vert_src, externGlobal_shader_texture_frag_src);
 	engineGraphicEngineShaderCreate(&localGlobal.shader.textureAlphaMask, externGlobal_shader_textureAlphaMask_vert_src, externGlobal_shader_textureAlphaMask_frag_src);
+	engineGraphicEngineShaderCreate(&localGlobal.shader.textureFilterColor, externGlobal_shader_textureFilterColor_vert_src, externGlobal_shader_textureFilterColor_frag_src);
 	engineGraphicEngineShaderCreate(&localGlobal.shader.textureColorBlendAlphaMask, externGlobal_shader_textureColorBlendAlphaMask_vert_src, externGlobal_shader_textureColorBlendAlphaMask_frag_src);
 	engineGraphicEngineShaderCreate(&localGlobal.shader.colorBlend, externGlobal_shader_colorBlend_vert_src, externGlobal_shader_colorBlend_frag_src);
 	engineGraphicEngineShaderCreate(&localGlobal.shader.phong, externGlobal_shader_phong_vert_src, externGlobal_shader_phong_frag_src);
@@ -141,14 +149,15 @@ void engineGraphicEngineSetDrawMode(enum engineGraphicEngineModeDraw mode){
 	// シェーダー差し替え
 	struct engineGraphicEngineShader *oldShader = localGlobal.memory.shader;
 	switch(mode){
-		case ENGINEGRAPHICENGINEMODEDRAW_3D:              localGlobal.memory.shader = &localGlobal.shader.textureAlphaMask; break;
-		case ENGINEGRAPHICENGINEMODEDRAW_3D_ALPHA_NORMAL: localGlobal.memory.shader = &localGlobal.shader.texture; break;
-		case ENGINEGRAPHICENGINEMODEDRAW_3D_ALPHA_ADD:    localGlobal.memory.shader = &localGlobal.shader.texture; break;
-		case ENGINEGRAPHICENGINEMODEDRAW_2D_ALPHA_NORMAL: localGlobal.memory.shader = &localGlobal.shader.texture; break;
-		case ENGINEGRAPHICENGINEMODEDRAW_2D_ALPHA_ADD:    localGlobal.memory.shader = &localGlobal.shader.texture; break;
-		case ENGINEGRAPHICENGINEMODEDRAW_PHONG:           localGlobal.memory.shader = &localGlobal.shader.phong; break;
-		case ENGINEGRAPHICENGINEMODEDRAW_HKNW:            localGlobal.memory.shader = &localGlobal.shader.textureColorBlendAlphaMask; break;
-		case ENGINEGRAPHICENGINEMODEDRAW_SPHERE:          localGlobal.memory.shader = &localGlobal.shader.colorBlend; break;
+		case ENGINEGRAPHICENGINEMODEDRAW_3D:                           localGlobal.memory.shader = &localGlobal.shader.textureAlphaMask; break;
+		case ENGINEGRAPHICENGINEMODEDRAW_3D_ALPHA_NORMAL:              localGlobal.memory.shader = &localGlobal.shader.texture; break;
+		case ENGINEGRAPHICENGINEMODEDRAW_3D_ALPHA_ADD:                 localGlobal.memory.shader = &localGlobal.shader.texture; break;
+		case ENGINEGRAPHICENGINEMODEDRAW_2D_ALPHA_NORMAL:              localGlobal.memory.shader = &localGlobal.shader.texture; break;
+		case ENGINEGRAPHICENGINEMODEDRAW_2D_ALPHA_ADD:                 localGlobal.memory.shader = &localGlobal.shader.texture; break;
+		case ENGINEGRAPHICENGINEMODEDRAW_2D_FILTER_COLOR_ALPHA_NORMAL: localGlobal.memory.shader = &localGlobal.shader.textureFilterColor; break;
+		case ENGINEGRAPHICENGINEMODEDRAW_PHONG:                        localGlobal.memory.shader = &localGlobal.shader.phong; break;
+		case ENGINEGRAPHICENGINEMODEDRAW_HKNW:                         localGlobal.memory.shader = &localGlobal.shader.textureColorBlendAlphaMask; break;
+		case ENGINEGRAPHICENGINEMODEDRAW_SPHERE:                       localGlobal.memory.shader = &localGlobal.shader.colorBlend; break;
 	}
 	if(localGlobal.memory.shader != oldShader){
 		if(oldShader != NULL && oldShader->attr_pos >= 0){glDisableVertexAttribArray(oldShader->attr_pos);}
@@ -184,6 +193,7 @@ void engineGraphicEngineSetDrawMode(enum engineGraphicEngineModeDraw mode){
 			break;
 		case ENGINEGRAPHICENGINEMODEDRAW_2D_ALPHA_NORMAL:
 		case ENGINEGRAPHICENGINEMODEDRAW_2D_ALPHA_ADD:
+		case ENGINEGRAPHICENGINEMODEDRAW_2D_FILTER_COLOR_ALPHA_NORMAL:
 			// 2次元通常描画
 			localGlobal.memory.modeDepthMask = false;
 			localGlobal.memory.modeDepthTest = false;
@@ -204,6 +214,7 @@ void engineGraphicEngineSetDrawMode(enum engineGraphicEngineModeDraw mode){
 			break;
 		case ENGINEGRAPHICENGINEMODEDRAW_3D_ALPHA_NORMAL:
 		case ENGINEGRAPHICENGINEMODEDRAW_2D_ALPHA_NORMAL:
+		case ENGINEGRAPHICENGINEMODEDRAW_2D_FILTER_COLOR_ALPHA_NORMAL:
 		case ENGINEGRAPHICENGINEMODEDRAW_SPHERE:
 			// 半透明アルファ合成
 			glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ZERO, GL_ONE);
@@ -360,6 +371,11 @@ void engineGraphicEngineSetColorVec(struct engineMathVector4 *color){
 		glUniform4fv(localGlobal.memory.shader->unif_col, 1, color->v);
 	}
 }
+
+// グラフィックエンジン命令 カラーフィルタの設定
+void engineGraphicEngineSetFilterColorAlpha(double a){glUniform1f(localGlobal.memory.shader->unif_fil_col_alp, a);}
+void engineGraphicEngineSetFilterColorMatrix(struct engineMathMatrix44 *matrix){glUniformMatrix4fv(localGlobal.memory.shader->unif_fil_col_mat, 1, GL_FALSE, matrix->m);}
+void engineGraphicEngineSetFilterColorVector(struct engineMathVector4 *vector){glUniform4fv(localGlobal.memory.shader->unif_fil_col_vec, 1, vector->v);}
 
 // ----------------------------------------------------------------
 
