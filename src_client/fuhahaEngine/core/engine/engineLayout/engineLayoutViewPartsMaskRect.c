@@ -107,20 +107,22 @@ static void draw(struct engineLayoutViewPartsMaskRectImplement *this, struct eng
 	// 描画準備
 	createBuffer(this);
 
+	// 行列作成
+	double w = engineLayoutViewUtilPositionGetW((struct engineLayoutView*)this);
+	double h = engineLayoutViewUtilPositionGetH((struct engineLayoutView*)this);
+	struct engineMathMatrix44 tempMat1;
+	engineLayoutViewUtilPositionTransformCalcMatrix((struct engineLayoutView*)this, &tempMat1, mat);
+	engineMathMat4Scale(&tempMat1, w, h, 1.0);
+
 	// バッファ登録
 	engineGraphicEngineBindTexture(this->egoIdTexTest);
 	engineGraphicEngineBindVertVBO(this->egoIdVert);
 	engineGraphicEngineBindTexcVBO(this->egoIdTexc);
 	engineGraphicEngineBindFaceIBO(this->egoIdFace);
 	// 行列登録
-	double w = engineLayoutViewUtilPositionGetW((struct engineLayoutView*)this);
-	double h = engineLayoutViewUtilPositionGetH((struct engineLayoutView*)this);
-	struct engineMathMatrix44 tempMat1;
-	engineLayoutViewUtilPositionTransformCalcMatrix((struct engineLayoutView*)this, &tempMat1, mat);
-	engineMathMat4Scale(&tempMat1, w, h, 1.0);
 	engineGraphicEngineSetMatrix(&tempMat1);
 
-	// ステンシル描画
+	// ステンシル描画 マスクをかける
 	engineGraphicStencilStackMaskWriteIncrement();
 	engineGraphicEngineDrawIndex(this->faceIndex * 3, this->faceNum * 3);
 	engineGraphicStencilStackMaskRead();
@@ -128,7 +130,15 @@ static void draw(struct engineLayoutViewPartsMaskRectImplement *this, struct eng
 	// 子要素描画
 	engineLayoutViewUtilChildrenDraw((struct engineLayoutView*)this, mat, color);
 
-	// ステンシル描画
+	// バッファ登録
+	engineGraphicEngineBindTexture(this->egoIdTexTest);
+	engineGraphicEngineBindVertVBO(this->egoIdVert);
+	engineGraphicEngineBindTexcVBO(this->egoIdTexc);
+	engineGraphicEngineBindFaceIBO(this->egoIdFace);
+	// 行列登録
+	engineGraphicEngineSetMatrix(&tempMat1);
+
+	// ステンシル描画 マスクをはずす
 	engineGraphicStencilStackMaskWriteDecrement();
 	engineGraphicEngineDrawIndex(this->faceIndex * 3, this->faceNum * 3);
 	engineGraphicStencilStackMaskRead();
