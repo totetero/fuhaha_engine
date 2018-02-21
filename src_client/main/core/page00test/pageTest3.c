@@ -18,12 +18,18 @@ struct pageCartridgeTest3{
 static void init(struct pageCartridgeTest3 *this){
 	// ルート作成
 	this->viewRoot = engineLayoutViewCreate();
-	engineLayoutViewUtilPositionSetLtRtTpBm(this->viewRoot, 0, 0, 0, 0);
+	engineLayoutViewUtilPositionSetLtRtTpBm((struct engineLayoutView*)this->viewRoot, 0, 0, 0, 0);
+
+	// フィルタ作成
+	struct engineLayoutViewPartsFilterColor *viewTestFilter = engineLayoutViewPartsFilterColorCreate();
+	engineLayoutViewUtilPositionSetLtRtTpBm((struct engineLayoutView*)viewTestFilter, 0, 0, 0, 0);
+	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)this->viewRoot, (struct engineLayoutView*)viewTestFilter);
+	//engineLayoutViewPartsFilterColorCreateSetNegative2(viewTestFilter);
 
 	// フレーム作成
 	struct engineLayoutViewPartsFrame *viewTestFrame = engineLayoutViewPartsFrameCreate();
 	engineLayoutViewUtilPositionSetLtRtTpBm((struct engineLayoutView*)viewTestFrame, 10, 10, 10, 10);
-	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)this->viewRoot, (struct engineLayoutView*)viewTestFrame);
+	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)viewTestFilter, (struct engineLayoutView*)viewTestFrame);
 
 	// ボタン作成
 	this->viewTestButton = engineLayoutViewPartsButtonBoxCreateText("テストボタン");
