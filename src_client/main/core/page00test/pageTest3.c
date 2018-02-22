@@ -8,7 +8,7 @@
 struct pageCartridgeTest3{
 	struct engineCartridgePage super;
 
-	struct engineLayoutView *viewRoot;
+	struct engineLayoutViewPartsRoot *viewRoot;
 	struct engineLayoutViewPartsButtonBox *viewTestButton;
 };
 
@@ -17,8 +17,7 @@ struct pageCartridgeTest3{
 // 初期化
 static void init(struct pageCartridgeTest3 *this){
 	// ルート作成
-	this->viewRoot = engineLayoutViewCreate();
-	engineLayoutViewUtilPositionSetLtRtTpBm((struct engineLayoutView*)this->viewRoot, 0, 0, 0, 0);
+	this->viewRoot = engineLayoutViewPartsRootCreate();
 
 	// フィルタ作成
 	struct engineLayoutViewPartsFilterColor *viewTestFilter = engineLayoutViewPartsFilterColorCreate();
@@ -80,8 +79,8 @@ static void init(struct pageCartridgeTest3 *this){
 
 // 計算
 static void calc(struct pageCartridgeTest3 *this){
-	// ルート基盤タッチ処理
-	engineLayoutViewUtilInteractTouchRoot((struct engineLayoutView*)this->viewRoot, false);
+	// ルートタッチ処理
+	engineLayoutViewPartsRootTouch(this->viewRoot, false);
 
 	// ボタン処理
 	if(((struct engineLayoutView*)this->viewTestButton)->interact.status.isTriggerUp){
@@ -91,46 +90,32 @@ static void calc(struct pageCartridgeTest3 *this){
 	}
 
 	// ルート計算処理
-	engineLayoutViewCalc((struct engineLayoutView*)this->viewRoot);
+	engineLayoutViewPartsRootCalc(this->viewRoot);
 }
 
 // ----------------------------------------------------------------
 
 // 描画
 static void draw(struct pageCartridgeTest3 *this){
-	engineLayoutViewUtilPositionModeSetDraw();
 	engineGraphicEngineClearAll();
 	engineGraphicStencilClear();
 
-	struct engineMathMatrix44 tempMat1;
-	engineMathMat4Ortho(&tempMat1, -global.screen.offset.x, global.screen.w + global.screen.offset.x, global.screen.h + global.screen.offset.y, -global.screen.offset.y, -1, 1);
-
-	struct engineMathVector4 tempColor1;
-	tempColor1.r = 1.0;
-	tempColor1.g = 1.0;
-	tempColor1.b = 1.0;
-	tempColor1.a = 1.0;
-
-	engineGraphicEngineSetDrawMode(ENGINEGRAPHICENGINEMODEDRAW_2D_ALPHA_NORMAL);
-	engineGraphicStencilStackMaskRead();
-
 	// ルート描画処理
-	engineLayoutViewDraw((struct engineLayoutView*)this->viewRoot, &tempMat1, &tempColor1);
+	engineLayoutViewPartsRootDraw(this->viewRoot);
 
 	engineGraphicEngineFlush();
-	engineLayoutViewUtilPositionModeSetCalc();
 }
 
 // ----------------------------------------------------------------
 
 // 一時停止
 static void pause(struct pageCartridgeTest3 *this){
-	engineLayoutViewPause((struct engineLayoutView*)this->viewRoot);
+	engineLayoutViewPartsRootPause(this->viewRoot);
 }
 
 // 破棄
 static void dispose(struct pageCartridgeTest3 *this){
-	engineLayoutViewDispose((struct engineLayoutView*)this->viewRoot);
+	engineLayoutViewPartsRootDispose(this->viewRoot);
 	engineUtilMemoryFree(this);
 }
 
