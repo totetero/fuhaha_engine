@@ -83,9 +83,7 @@ static void calc(struct pageCartridgeTest3 *this){
 	engineLayoutViewPartsRootTouch(this->viewRoot, false);
 
 	// ボタン処理
-	if(((struct engineLayoutView*)this->viewTestButton)->interact.status.isTriggerUp){
-		((struct engineLayoutView*)this->viewTestButton)->interact.status.isTriggerUp = false;
-		// ボタン押下時
+	if(engineLayoutViewUtilInteractIsTriggerUp((struct engineLayoutView*)this->viewTestButton)){
 		trace("press button");
 	}
 

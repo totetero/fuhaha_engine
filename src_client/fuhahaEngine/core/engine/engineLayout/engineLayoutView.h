@@ -184,6 +184,9 @@ bool engineLayoutViewUtilInteractTouch(struct engineLayoutView *this, int touchI
 // 表示要素構造体対話型 基盤タッチ処理
 void engineLayoutViewUtilInteractTouchRoot(struct engineLayoutView *this, bool isCancel);
 
+// 表示要素構造体対話型 ボタンタッチ確認
+bool engineLayoutViewUtilInteractIsTriggerUp(struct engineLayoutView *this);
+
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

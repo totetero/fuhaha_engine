@@ -84,3 +84,14 @@ void engineLayoutViewUtilInteractTouchRoot(struct engineLayoutView *this, bool i
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
+// 表示要素構造体対話型 ボタンタッチ確認
+bool engineLayoutViewUtilInteractIsTriggerUp(struct engineLayoutView *this){
+	bool isTriggerUp = this->interact.status.isTriggerUp;
+	this->interact.status.isTriggerUp = false;
+	return isTriggerUp;
+}
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+
