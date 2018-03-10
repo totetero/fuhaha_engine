@@ -4,9 +4,10 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-#include "./enginePrimitiveSphere.h"
-#include "./enginePrimitiveTorus.h"
-#include "./enginePrimitiveWater.h"
+// 3Dエンジン初期化処理
+void engineGraphicGameInit(void);
+// 3Dエンジン終了処理
+void engineGraphicGameExit(void);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

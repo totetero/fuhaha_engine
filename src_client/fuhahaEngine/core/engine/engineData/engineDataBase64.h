@@ -4,9 +4,11 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-#include "./enginePrimitiveSphere.h"
-#include "./enginePrimitiveTorus.h"
-#include "./enginePrimitiveWater.h"
+// base64形式に変換 返値文字列は揮発性バッファで解放禁止
+char *engineDataBase64encode(byte *data, size_t size);
+// base64形式から解読 返値データは揮発性バッファで解放禁止
+byte *engineDataBase64decodeChar(char *data, int *length);
+byte *engineDataBase64decode(byte *data, size_t size);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

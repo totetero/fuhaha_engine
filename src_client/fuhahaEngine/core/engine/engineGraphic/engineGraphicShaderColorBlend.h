@@ -4,9 +4,8 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-#include "./enginePrimitiveSphere.h"
-#include "./enginePrimitiveTorus.h"
-#include "./enginePrimitiveWater.h"
+extern char *externGlobal_shader_colorBlend_vert_src;
+extern char *externGlobal_shader_colorBlend_frag_src;
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

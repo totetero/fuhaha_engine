@@ -4,9 +4,13 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-#include "./enginePrimitiveSphere.h"
-#include "./enginePrimitiveTorus.h"
-#include "./enginePrimitiveWater.h"
+// 長方形マスク構造体
+struct engineLayoutViewPartsMaskRect{
+	struct engineLayoutView super;
+};
+
+// 長方形マスク構造体 作成
+struct engineLayoutViewPartsMaskRect *engineLayoutViewPartsMaskRectCreate();
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
