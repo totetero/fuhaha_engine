@@ -10,6 +10,14 @@ void engineMathMat4Copy(struct engineMathMatrix44 *dst, struct engineMathMatrix4
 	memcpy(dst, src, sizeof(struct engineMathMatrix44));
 }
 
+// 行列複製
+void engineMathMat4Copy3(struct engineMathMatrix44 *dst, struct engineMathMatrix33 *src){
+	dst->m00 = src->m00; dst->m01 = src->m01; dst->m02 = src->m02; dst->m03 = 0.0;
+	dst->m10 = src->m10; dst->m11 = src->m11; dst->m12 = src->m12; dst->m13 = 0.0;
+	dst->m20 = src->m20; dst->m21 = src->m21; dst->m22 = src->m22; dst->m23 = 0.0;
+	dst->m30 = 0.0; dst->m31 = 0.0; dst->m32 = 0.0; dst->m33 = 1.0;
+}
+
 // ----------------------------------------------------------------
 
 // 単位行列
@@ -117,21 +125,21 @@ void engineMathMat4LookAt(struct engineMathMatrix44 *mat, double eyeX, double ey
 	yx *= yri;
 	yy *= yri;
 	yz *= yri;
-	mat->m00 = xx;
-	mat->m01 = yx;
-	mat->m02 = zx;
+	mat->m00 = (GLfloat)xx;
+	mat->m01 = (GLfloat)yx;
+	mat->m02 = (GLfloat)zx;
 	mat->m03 = 0;
-	mat->m10 = xy;
-	mat->m11 = yy;
-	mat->m12 = zy;
+	mat->m10 = (GLfloat)xy;
+	mat->m11 = (GLfloat)yy;
+	mat->m12 = (GLfloat)zy;
 	mat->m13 = 0;
-	mat->m20 = xz;
-	mat->m21 = yz;
-	mat->m22 = zz;
+	mat->m20 = (GLfloat)xz;
+	mat->m21 = (GLfloat)yz;
+	mat->m22 = (GLfloat)zz;
 	mat->m23 = 0;
-	mat->m30 = -(xx * eyeX + xy * eyeY + xz * eyeZ);
-	mat->m31 = -(yx * eyeX + yy * eyeY + yz * eyeZ);
-	mat->m32 = -(zx * eyeX + zy * eyeY + zz * eyeZ);
+	mat->m30 = -(GLfloat)(xx * eyeX + xy * eyeY + xz * eyeZ);
+	mat->m31 = -(GLfloat)(yx * eyeX + yy * eyeY + yz * eyeZ);
+	mat->m32 = -(GLfloat)(zx * eyeX + zy * eyeY + zz * eyeZ);
 	mat->m33 = 1;
 }
 
@@ -251,6 +259,37 @@ void engineMathMat4RotateZ(struct engineMathMatrix44 *mat, double rad){
 	mat->m13 = (GLfloat)(m13 * c - m03 * s);
 }
 
+// クォータニオン回転
+void engineMathMat4RotateQuat(struct engineMathMatrix44 *mat, struct engineMathQuaternion *quat){
+	struct engineMathMatrix44 temp;
+	double xx = 2 * quat->x * quat->x;
+	double xy = 2 * quat->x * quat->y;
+	double xz = 2 * quat->x * quat->z;
+	double xw = 2 * quat->x * quat->w;
+	double yy = 2 * quat->y * quat->y;
+	double yz = 2 * quat->y * quat->z;
+	double yw = 2 * quat->y * quat->w;
+	double zz = 2 * quat->z * quat->z;
+	double zw = 2 * quat->z * quat->w;
+	temp.m00 = (GLfloat)(1 - yy - zz);
+	temp.m01 = (GLfloat)(xy + zw);
+	temp.m02 = (GLfloat)(xz - yw);
+	temp.m03 = 0;
+	temp.m10 = (GLfloat)(xy - zw);
+	temp.m11 = (GLfloat)(1 - xx - zz);
+	temp.m12 = (GLfloat)(yz + xw);
+	temp.m13 = 0;
+	temp.m20 = (GLfloat)(xz + yw);
+	temp.m21 = (GLfloat)(yz - xw);
+	temp.m22 = (GLfloat)(1 - xx - yy);
+	temp.m23 = 0;
+	temp.m30 = 0;
+	temp.m31 = 0;
+	temp.m32 = 0;
+	temp.m33 = 1;
+	engineMathMat4Multiply(mat, mat, &temp);
+}
+
 // ----------------------------------------------------------------
 
 // 逆行列
@@ -301,15 +340,9 @@ void engineMathMat3Copy(struct engineMathMatrix33 *dst, struct engineMathMatrix3
 
 // 行列複製
 void engineMathMat3Copy4(struct engineMathMatrix33 *dst, struct engineMathMatrix44 *src){
-	dst->m00 = src->m00;
-	dst->m01 = src->m01;
-	dst->m02 = src->m02;
-	dst->m10 = src->m10;
-	dst->m11 = src->m11;
-	dst->m12 = src->m12;
-	dst->m20 = src->m20;
-	dst->m21 = src->m21;
-	dst->m22 = src->m22;
+	dst->m00 = src->m00; dst->m01 = src->m01; dst->m02 = src->m02;
+	dst->m10 = src->m10; dst->m11 = src->m11; dst->m12 = src->m12;
+	dst->m20 = src->m20; dst->m21 = src->m21; dst->m22 = src->m22;
 }
 
 // ----------------------------------------------------------------
@@ -352,15 +385,15 @@ void engineMathMat3Invert(struct engineMathMatrix33 *mat){
 	double det = a.m00 * b01 + a.m01 * b11 + a.m02 * b21;
 	if(engineMathAbs(det) < DBL_EPSILON){return;}
 	double idet = 1 / det;
-	mat->m00 = b01 * idet;
-	mat->m01 = (a.m02 * a.m21 - a.m22 * a.m01) * idet;
-	mat->m02 = (a.m12 * a.m01 - a.m02 * a.m11) * idet;
-	mat->m10 = b11 * idet;
-	mat->m11 = (a.m22 * a.m00 - a.m02 * a.m20) * idet;
-	mat->m12 = (a.m02 * a.m10 - a.m12 * a.m00) * idet;
-	mat->m20 = b21 * idet;
-	mat->m21 = (a.m01 * a.m20 - a.m21 * a.m00) * idet;
-	mat->m22 = (a.m11 * a.m00 - a.m01 * a.m10) * idet;
+	mat->m00 = (GLfloat)(b01 * idet);
+	mat->m01 = (GLfloat)((a.m02 * a.m21 - a.m22 * a.m01) * idet);
+	mat->m02 = (GLfloat)((a.m12 * a.m01 - a.m02 * a.m11) * idet);
+	mat->m10 = (GLfloat)(b11 * idet);
+	mat->m11 = (GLfloat)((a.m22 * a.m00 - a.m02 * a.m20) * idet);
+	mat->m12 = (GLfloat)((a.m02 * a.m10 - a.m12 * a.m00) * idet);
+	mat->m20 = (GLfloat)(b21 * idet);
+	mat->m21 = (GLfloat)((a.m01 * a.m20 - a.m21 * a.m00) * idet);
+	mat->m22 = (GLfloat)((a.m11 * a.m00 - a.m01 * a.m10) * idet);
 }
 
 // 転置行列
@@ -371,9 +404,9 @@ void engineMathMat3Transpose(struct engineMathMatrix33 *mat){
 	mat->m01 = mat->m10;
 	mat->m02 = mat->m20;
 	mat->m12 = mat->m21;
-	mat->m10 = m01;
-	mat->m20 = m02;
-	mat->m21 = m12;
+	mat->m10 = (GLfloat)m01;
+	mat->m20 = (GLfloat)m02;
+	mat->m21 = (GLfloat)m12;
 }
 
 // ----------------------------------------------------------------
@@ -395,6 +428,8 @@ void engineMathVec4Set(struct engineMathVector4 *vec, double x, double y, double
 	vec->w = (GLfloat)w;
 }
 
+// ----------------------------------------------------------------
+
 // ベクトル行列積
 void engineMathVec3MultiplyMat4(struct engineMathVector3 *dst, struct engineMathVector3 *src, struct engineMathMatrix44 *mat){
 	struct engineMathVector3 a;
@@ -407,6 +442,106 @@ void engineMathVec3MultiplyMat4(struct engineMathVector3 *dst, struct engineMath
 	dst->x = mat->m00 * src->x + mat->m10 * src->y + mat->m20 * src->z + mat->m30;
 	dst->y = mat->m01 * src->x + mat->m11 * src->y + mat->m21 * src->z + mat->m31;
 	dst->z = mat->m02 * src->x + mat->m12 * src->y + mat->m22 * src->z + mat->m32;
+}
+
+// ベクトルクォータニオン積
+void engineMathVec3MultiplyQuat(struct engineMathVector3 *dst, struct engineMathVector3 *src, struct engineMathQuaternion *quat){
+	double x = + quat->x *      0 + quat->y * src->z - quat->z * src->y + quat->w * src->x;
+	double y = - quat->x * src->z + quat->y *      0 + quat->z * src->x + quat->w * src->y;
+	double z = + quat->x * src->y - quat->y * src->x + quat->z *      0 + quat->w * src->z;
+	double w = - quat->x * src->x - quat->y * src->y - quat->z * src->z + quat->w *      0;
+	dst->x = (GLfloat)(+ x *  quat->w + y * -quat->z - z * -quat->y + w * -quat->x);
+	dst->y = (GLfloat)(- x * -quat->z + y *  quat->w + z * -quat->x + w * -quat->y);
+	dst->z = (GLfloat)(+ x * -quat->y - y * -quat->x + z *  quat->w + w * -quat->z);
+}
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+
+// クォータニオン値設定
+void engineMathQuatSet(struct engineMathQuaternion *quat, double x, double y, double z, double w){
+	quat->x = (GLfloat)x;
+	quat->y = (GLfloat)y;
+	quat->z = (GLfloat)z;
+	quat->w = (GLfloat)w;
+}
+
+// クォータニオン複製
+void engineMathQuatCopy(struct engineMathQuaternion *dst, struct engineMathQuaternion *src){
+	memcpy(dst, src, sizeof(struct engineMathQuaternion));
+}
+
+// ----------------------------------------------------------------
+
+// 単位クォータニオン設定
+void engineMathQuatIdentity(struct engineMathQuaternion *quat){
+	quat->x = 0.0;
+	quat->y = 0.0;
+	quat->z = 0.0;
+	quat->w = 1.0;
+}
+
+// 回転クォータニオン設定
+void engineMathQuatRotation(struct engineMathQuaternion *quat, struct engineMathVector3 *axis, double rad){
+	double c = engineMathCos(rad * 0.5);
+	double s = engineMathSin(rad * 0.5);
+	double dot = axis->x * axis->x + axis->y * axis->y + axis->z * axis->z;
+	if(engineMathAbs(dot) < DBL_EPSILON){
+		quat->x = 0.0;
+		quat->y = 0.0;
+		quat->z = 0.0;
+		quat->w = 1.0;
+	}else if(engineMathAbs(dot - 1.0) < DBL_EPSILON){
+		quat->x = (GLfloat)(s * axis->x);
+		quat->y = (GLfloat)(s * axis->y);
+		quat->z = (GLfloat)(s * axis->z);
+		quat->w = (GLfloat)c;
+	}else{
+		double idot = 1 / engineMathSqrt(dot);
+		quat->x = (GLfloat)(s * axis->x * idot);
+		quat->y = (GLfloat)(s * axis->y * idot);
+		quat->z = (GLfloat)(s * axis->z * idot);
+		quat->w = (GLfloat)c;
+	}
+}
+
+// ----------------------------------------------------------------
+
+// クォータニオン積
+void engineMathQuatMultiply(struct engineMathQuaternion *quat, struct engineMathQuaternion *q0, struct engineMathQuaternion *q1){
+	struct engineMathQuaternion a;
+	struct engineMathQuaternion b;
+	if(quat == q0){engineMathQuatCopy(&a, q0); q0 = &a;}
+	if(quat == q1){engineMathQuatCopy(&b, q1); q1 = &b;}
+	quat->x = + q0->x * q1->w + q0->y * q1->z - q0->z * q1->y + q0->w * q1->x;
+	quat->y = - q0->x * q1->z + q0->y * q1->w + q0->z * q1->x + q0->w * q1->y;
+	quat->z = + q0->x * q1->y - q0->y * q1->x + q0->z * q1->w + q0->w * q1->z;
+	quat->w = - q0->x * q1->x - q0->y * q1->y - q0->z * q1->z + q0->w * q1->w;
+}
+
+// ----------------------------------------------------------------
+
+// クォータニオン正規化
+void engineMathQuatNormalize(struct engineMathQuaternion *quat){
+	double dot = quat->x * quat->x + quat->y * quat->y + quat->z * quat->z + quat->w * quat->w;
+	if(engineMathAbs(dot) < DBL_EPSILON){return;}
+	double idot = 1 / engineMathSqrt(dot);
+	quat->x = (GLfloat)(quat->x * idot);
+	quat->y = (GLfloat)(quat->y * idot);
+	quat->z = (GLfloat)(quat->z * idot);
+	quat->w = (GLfloat)(quat->w * idot);
+}
+
+// 逆クォータニオン
+void engineMathQuatInvert(struct engineMathQuaternion *quat){
+	double dot = quat->x * quat->x + quat->y * quat->y + quat->z * quat->z + quat->w * quat->w;
+	if(engineMathAbs(dot) < DBL_EPSILON){return;}
+	double idot = 1 / dot;
+	quat->x = (GLfloat)(-quat->x * idot);
+	quat->y = (GLfloat)(-quat->y * idot);
+	quat->z = (GLfloat)(-quat->z * idot);
+	quat->w = (GLfloat)( quat->w * idot);
 }
 
 // ----------------------------------------------------------------
