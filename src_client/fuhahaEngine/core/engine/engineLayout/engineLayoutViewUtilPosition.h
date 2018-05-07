@@ -11,8 +11,8 @@ struct engineLayoutViewUtilPosition{
 		struct{bool isActive; double value;} right;
 		struct{bool isActive; double value;} top;
 		struct{bool isActive; double value;} bottom;
-		struct{bool isActive; double value;} width;
-		struct{bool isActive; double value;} height;
+		struct{bool isActive; double value; bool isRatio;} width;
+		struct{bool isActive; double value; bool isRatio;} height;
 		struct{bool isActive; double value;} marginLeft;
 		struct{bool isActive; double value;} marginRight;
 		struct{bool isActive; double value;} marginTop;
@@ -57,8 +57,10 @@ void engineLayoutViewUtilPositionSetLeft(struct engineLayoutView *this, double v
 void engineLayoutViewUtilPositionSetRight(struct engineLayoutView *this, double value);
 void engineLayoutViewUtilPositionSetTop(struct engineLayoutView *this, double value);
 void engineLayoutViewUtilPositionSetBottom(struct engineLayoutView *this, double value);
-void engineLayoutViewUtilPositionSetWidth(struct engineLayoutView *this, double value);
-void engineLayoutViewUtilPositionSetHeight(struct engineLayoutView *this, double value);
+void engineLayoutViewUtilPositionSetWidthValue(struct engineLayoutView *this, double value);
+void engineLayoutViewUtilPositionSetHeightValue(struct engineLayoutView *this, double value);
+void engineLayoutViewUtilPositionSetWidthRatio(struct engineLayoutView *this, double ratio);
+void engineLayoutViewUtilPositionSetHeightRatio(struct engineLayoutView *this, double ratio);
 void engineLayoutViewUtilPositionSetMarginLeft(struct engineLayoutView *this, double value);
 void engineLayoutViewUtilPositionSetMarginRight(struct engineLayoutView *this, double value);
 void engineLayoutViewUtilPositionSetMarginTop(struct engineLayoutView *this, double value);

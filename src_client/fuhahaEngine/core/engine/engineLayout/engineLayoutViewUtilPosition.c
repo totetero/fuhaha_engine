@@ -108,19 +108,39 @@ void engineLayoutViewUtilPositionSetBottom(struct engineLayoutView *this, double
 	localGlobal.generationCount++;
 }
 
-void engineLayoutViewUtilPositionSetWidth(struct engineLayoutView *this, double value){
+void engineLayoutViewUtilPositionSetWidthValue(struct engineLayoutView *this, double value){
 	if(localGlobal.isModeDraw){return;}
 	if(this->position.style.left.isActive && this->position.style.right.isActive){return;}
 	this->position.style.width.isActive = true;
 	this->position.style.width.value = value;
+	this->position.style.width.isRatio = false;
 	localGlobal.generationCount++;
 }
 
-void engineLayoutViewUtilPositionSetHeight(struct engineLayoutView *this, double value){
+void engineLayoutViewUtilPositionSetHeightValue(struct engineLayoutView *this, double value){
 	if(localGlobal.isModeDraw){return;}
 	if(this->position.style.top.isActive && this->position.style.bottom.isActive){return;}
 	this->position.style.height.isActive = true;
 	this->position.style.height.value = value;
+	this->position.style.height.isRatio = false;
+	localGlobal.generationCount++;
+}
+
+void engineLayoutViewUtilPositionSetWidthRatio(struct engineLayoutView *this, double value){
+	if(localGlobal.isModeDraw){return;}
+	if(this->position.style.left.isActive && this->position.style.right.isActive){return;}
+	this->position.style.width.isActive = true;
+	this->position.style.width.value = value;
+	this->position.style.width.isRatio = true;
+	localGlobal.generationCount++;
+}
+
+void engineLayoutViewUtilPositionSetHeightRatio(struct engineLayoutView *this, double value){
+	if(localGlobal.isModeDraw){return;}
+	if(this->position.style.top.isActive && this->position.style.bottom.isActive){return;}
+	this->position.style.height.isActive = true;
+	this->position.style.height.value = value;
+	this->position.style.height.isRatio = true;
 	localGlobal.generationCount++;
 }
 
@@ -314,7 +334,7 @@ static void calcLayout(struct engineLayoutView *this){
 	bool isWh = this->position.style.width.isActive;
 	double valLt = this->position.style.left.value;
 	double valRt = this->position.style.right.value;
-	double valWh = this->position.style.width.value;
+	double valWh = this->position.style.width.isRatio ? (currentW * this->position.style.width.value) : this->position.style.width.value;
 	if(this->position.style.centeringHorizontal.isActive){
 		this->position.layout.w = (isWh ? valWh : ((isLt && isRt) ? (valLt + valRt) : 0));
 		this->position.layout.x = currentX + currentW * 0.5 - (isLt ? valLt : (isRt ? (this->position.layout.w - isRt) : (this->position.layout.w * 0.5)));
@@ -329,7 +349,7 @@ static void calcLayout(struct engineLayoutView *this){
 	bool isHt = this->position.style.height.isActive;
 	double valTp = this->position.style.top.value;
 	double valBm = this->position.style.bottom.value;
-	double valHt = this->position.style.height.value;
+	double valHt = this->position.style.height.isRatio ? (currentH * this->position.style.height.value) : this->position.style.height.value;
 	if(this->position.style.centeringVertical.isActive){
 		this->position.layout.h = (isHt ? valHt : ((isTp && isBm) ? (valTp + valBm) : 0));
 		this->position.layout.y = currentY + currentH * 0.5 - (isTp ? valTp : (isBm ? (this->position.layout.h - isBm) : (this->position.layout.h * 0.5)));
@@ -434,8 +454,8 @@ void engineLayoutViewUtilPositionSetLtRtTpBm(struct engineLayoutView *this, doub
 void engineLayoutViewUtilPositionSetLtTpWtHt(struct engineLayoutView *this, double lt, double tp, double wt, double ht){
 	engineLayoutViewUtilPositionSetLeft(this, lt);
 	engineLayoutViewUtilPositionSetTop(this, tp);
-	engineLayoutViewUtilPositionSetWidth(this, wt);
-	engineLayoutViewUtilPositionSetHeight(this, ht);
+	engineLayoutViewUtilPositionSetWidthValue(this, wt);
+	engineLayoutViewUtilPositionSetHeightValue(this, ht);
 }
 
 void engineLayoutViewUtilPositionSetMargin(struct engineLayoutView *this, double margin){

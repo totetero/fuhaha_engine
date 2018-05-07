@@ -33,8 +33,8 @@ static void init(struct pageCartridgeTest3 *this){
 	// ボタン作成
 	this->viewTestButton = engineLayoutViewPartsButtonBoxCreateText("テストボタン");
 	engineLayoutViewUtilPositionSetBottom((struct engineLayoutView*)this->viewTestButton, 10);
-	engineLayoutViewUtilPositionSetWidth((struct engineLayoutView*)this->viewTestButton, 100);
-	engineLayoutViewUtilPositionSetHeight((struct engineLayoutView*)this->viewTestButton, 30);
+	engineLayoutViewUtilPositionSetWidthValue((struct engineLayoutView*)this->viewTestButton, 100);
+	engineLayoutViewUtilPositionSetHeightValue((struct engineLayoutView*)this->viewTestButton, 30);
 	engineLayoutViewUtilPositionSetCenteringHorizontal((struct engineLayoutView*)this->viewTestButton);
 	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)viewTestFrame, (struct engineLayoutView*)this->viewTestButton);
 
@@ -53,14 +53,14 @@ static void init(struct pageCartridgeTest3 *this){
 	engineLayoutViewUtilPositionSetLeft((struct engineLayoutView*)viewScrollBarX, 0);
 	engineLayoutViewUtilPositionSetRight((struct engineLayoutView*)viewScrollBarX, 0);
 	engineLayoutViewUtilPositionSetBottom((struct engineLayoutView*)viewScrollBarX, 0);
-	engineLayoutViewUtilPositionSetHeight((struct engineLayoutView*)viewScrollBarX, 6);
+	engineLayoutViewUtilPositionSetHeightValue((struct engineLayoutView*)viewScrollBarX, 6);
 	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)viewTestScroller->viewBarX, (struct engineLayoutView*)viewScrollBarX);
 	// 垂直軸スクロールバー作成
 	struct engineLayoutViewPartsRect *viewScrollBarY = engineLayoutViewPartsRectCreateWhite();
 	engineLayoutViewUtilPositionSetRight((struct engineLayoutView*)viewScrollBarY, 0);
 	engineLayoutViewUtilPositionSetTop((struct engineLayoutView*)viewScrollBarY, 0);
 	engineLayoutViewUtilPositionSetBottom((struct engineLayoutView*)viewScrollBarY, 0);
-	engineLayoutViewUtilPositionSetWidth((struct engineLayoutView*)viewScrollBarY, 6);
+	engineLayoutViewUtilPositionSetWidthValue((struct engineLayoutView*)viewScrollBarY, 6);
 	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)viewTestScroller->viewBarY, (struct engineLayoutView*)viewScrollBarY);
 	// スクロール要素作成
 	for(int i = 0; i < 2; i++){
@@ -68,8 +68,8 @@ static void init(struct pageCartridgeTest3 *this){
 			struct engineLayoutViewPartsButtonBox *viewScrollItem = engineLayoutViewPartsButtonBoxCreateText("あ");
 			engineLayoutViewUtilPositionSetLeft((struct engineLayoutView*)viewScrollItem, 10 + 110 * j);
 			engineLayoutViewUtilPositionSetTop((struct engineLayoutView*)viewScrollItem, 10 + 110 * i);
-			engineLayoutViewUtilPositionSetWidth((struct engineLayoutView*)viewScrollItem, 100);
-			engineLayoutViewUtilPositionSetHeight((struct engineLayoutView*)viewScrollItem, 100);
+			engineLayoutViewUtilPositionSetWidthValue((struct engineLayoutView*)viewScrollItem, 100);
+			engineLayoutViewUtilPositionSetHeightValue((struct engineLayoutView*)viewScrollItem, 100);
 			engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)viewTestScroller->viewInner, (struct engineLayoutView*)viewScrollItem);
 		}
 	}
