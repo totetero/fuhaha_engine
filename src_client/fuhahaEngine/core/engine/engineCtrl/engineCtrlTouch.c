@@ -46,7 +46,7 @@ void engineCtrlTouchCalc(void){
 				// タッチ移動の確認
 				int x = localTouch->touch.screen.x - localTouch->screen.tempx;
 				int y = localTouch->touch.screen.y - localTouch->screen.tempy;
-				localTouch->touch.mv = (x * x + y * y > 30 * 30);
+				localTouch->touch.mv = (x * x + y * y > 5 * 5);
 			}
 		}else if(globalTouch->dn.triggerInactive){
 			// 離した直後
