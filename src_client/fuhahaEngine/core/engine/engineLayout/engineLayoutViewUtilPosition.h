@@ -38,6 +38,8 @@ struct engineLayoutViewUtilPosition{
 			struct engineMathVector3 point[4];
 		} transform;
 	} layout;
+
+	bool (*isInner)(struct engineLayoutView *this, double x, double y);
 };
 
 // 表示要素構造体位置関係 計算モード設定

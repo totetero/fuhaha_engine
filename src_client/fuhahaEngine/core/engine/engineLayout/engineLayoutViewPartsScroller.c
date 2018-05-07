@@ -36,7 +36,7 @@ static void init(struct engineLayoutViewPartsScrollerImplement *this){
 // タッチ処理
 static bool touch(struct engineLayoutViewPartsScrollerImplement *this, int touchIndex, double x, double y, bool dn, bool mv, bool isCancel){
 	// タッチ開始時に親要素の範囲外ならば子要素はタッチ開始できない
-	if(dn && !mv && !engineLayoutViewUtilPositionTransformIsInner((struct engineLayoutView*)this, x, y)){isCancel = true;}
+	if(dn && !mv && !this->super.super.position.isInner((struct engineLayoutView*)this, x, y)){isCancel = true;}
 
 	// 新タッチ位置更新
 	this->temp1.x = x;

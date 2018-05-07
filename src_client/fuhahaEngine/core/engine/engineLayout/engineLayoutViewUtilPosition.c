@@ -58,6 +58,9 @@ void engineLayoutViewUtilPositionModeSetDraw(){
 
 // 表示要素構造体位置関係 初期化
 void engineLayoutViewUtilPositionInit(struct engineLayoutView *this){
+	// 内部判定関数の設定
+	this->position.isInner = engineLayoutViewUtilPositionTransformIsInner;
+
 	if(localGlobal.isModeDraw){return;}
 	localGlobal.generationCount++;
 }

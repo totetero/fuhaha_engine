@@ -11,7 +11,7 @@
 bool engineLayoutViewUtilInteractTouch(struct engineLayoutView *this, int touchIndex, double x, double y, bool dn, bool mv, bool isCancel){
 	isCancel = (isCancel || !this->interact.setting.isTouchable);
 	if(!this->interact.status.isActive){
-		if(dn && !mv && !isCancel && engineLayoutViewUtilPositionTransformIsInner(this, x, y)){
+		if(dn && !mv && !isCancel && this->position.isInner(this, x, y)){
 			// タッチ開始
 			this->interact.status.touchIndex = touchIndex;
 			this->interact.status.isActive = true;
@@ -37,7 +37,7 @@ bool engineLayoutViewUtilInteractTouch(struct engineLayoutView *this, int touchI
 			return false;
 		}else if(dn){
 			// タッチ途中
-			this->interact.status.isHover = engineLayoutViewUtilPositionTransformIsInner(this, x, y);
+			this->interact.status.isHover = this->position.isInner(this, x, y);
 			this->interact.status.currX = x;
 			this->interact.status.currY = y;
 			if(mv && !this->interact.status.isMove){
@@ -56,7 +56,7 @@ bool engineLayoutViewUtilInteractTouch(struct engineLayoutView *this, int touchI
 			this->interact.status.isHover = false;
 			this->interact.status.currX = x;
 			this->interact.status.currY = y;
-			if(engineLayoutViewUtilPositionTransformIsInner(this, x, y)){this->interact.status.isTriggerUp = true;}
+			if(this->position.isInner(this, x, y)){this->interact.status.isTriggerUp = true;}
 			return true;
 		}
 	}else{
