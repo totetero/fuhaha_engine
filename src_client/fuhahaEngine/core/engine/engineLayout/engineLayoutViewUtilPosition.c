@@ -234,7 +234,7 @@ void engineLayoutViewUtilPositionSetTransformMatrix(struct engineLayoutView *thi
 	localGlobal.generationCount++;
 }
 
-void engineLayoutViewUtilPositionSetTransformScale(struct engineLayoutView *this, double x, double y, double z){
+void engineLayoutViewUtilPositionSetTransformScale(struct engineLayoutView *this, double x, double y){
 	if(localGlobal.isModeDraw){return;}
 	if(!this->position.style.transform.isActive){
 		this->position.style.transform.isActive = true;
@@ -242,7 +242,7 @@ void engineLayoutViewUtilPositionSetTransformScale(struct engineLayoutView *this
 		this->position.style.transform.originY = 0.5;
 		engineMathMat4Identity(&this->position.style.transform.matrix);
 	}
-	engineMathMat4Scale(&this->position.style.transform.matrix, x, y, z);
+	engineMathMat4Scale(&this->position.style.transform.matrix, x, y, 1.0);
 	localGlobal.generationCount++;
 }
 

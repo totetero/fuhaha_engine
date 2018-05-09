@@ -74,7 +74,7 @@ void engineLayoutViewUtilPositionSetCenteringVertical(struct engineLayoutView *t
 void engineLayoutViewUtilPositionSetCenteringHorizontal(struct engineLayoutView *this);
 void engineLayoutViewUtilPositionSetTransformOrigin(struct engineLayoutView *this, double originX, double originY);
 void engineLayoutViewUtilPositionSetTransformMatrix(struct engineLayoutView *this, struct engineMathMatrix44 *matrix);
-void engineLayoutViewUtilPositionSetTransformScale(struct engineLayoutView *this, double x, double y, double z);
+void engineLayoutViewUtilPositionSetTransformScale(struct engineLayoutView *this, double x, double y);
 void engineLayoutViewUtilPositionSetTransformRotate(struct engineLayoutView *this, double rad);
 
 // 表示要素構造体位置関係 レイアウト解除
