@@ -28,6 +28,7 @@ struct engineLayoutViewUtilPosition{
 
 	struct engineLayoutViewLayout{
 		int generationCount;
+		int generationCountInvert;
 		double x;
 		double y;
 		double w;
@@ -35,7 +36,7 @@ struct engineLayoutViewUtilPosition{
 		struct{
 			bool isActive;
 			struct engineMathMatrix44 matrix;
-			struct engineMathVector3 point[4];
+			struct engineMathMatrix44 invert;
 		} transform;
 	} layout;
 
@@ -102,6 +103,7 @@ double engineLayoutViewUtilPositionGetW(struct engineLayoutView *this);
 double engineLayoutViewUtilPositionGetH(struct engineLayoutView *this);
 // 表示要素構造体位置関係 変形レイアウト
 void engineLayoutViewUtilPositionTransformCalcMatrix(struct engineLayoutView *this, struct engineMathMatrix44 *dstMat, struct engineMathMatrix44 *srcMat);
+void engineLayoutViewUtilPositionTransformCalcInvert(struct engineLayoutView *this, struct engineMathVector3 *position);
 bool engineLayoutViewUtilPositionTransformIsInner(struct engineLayoutView *this, double x, double y);
 
 // 表示要素構造体位置関係 設定ショートカット

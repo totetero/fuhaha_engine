@@ -376,23 +376,6 @@ static void calcLayout(struct engineLayoutView *this){
 		engineMathMat4Translate(layoutMatrix, x0 + x1, y0 + y1, 0.0);
 		if(this->position.style.transform.isActive){engineMathMat4Multiply(layoutMatrix, layoutMatrix, &this->position.style.transform.matrix);}
 		engineMathMat4Translate(layoutMatrix, -x0, -y0, 0.0);
-		// 変形座標計算
-		this->position.layout.transform.point[0].x = 0;
-		this->position.layout.transform.point[0].y = 0;
-		this->position.layout.transform.point[0].z = 0;
-		this->position.layout.transform.point[1].x = 0;
-		this->position.layout.transform.point[1].y = this->position.layout.h;
-		this->position.layout.transform.point[1].z = 0;
-		this->position.layout.transform.point[2].x = this->position.layout.w;
-		this->position.layout.transform.point[2].y = this->position.layout.h;
-		this->position.layout.transform.point[2].z = 0;
-		this->position.layout.transform.point[3].x = this->position.layout.w;
-		this->position.layout.transform.point[3].y = 0;
-		this->position.layout.transform.point[3].z = 0;
-		engineMathVec3MultiplyMat4(&this->position.layout.transform.point[0], &this->position.layout.transform.point[0], &this->position.layout.transform.matrix);
-		engineMathVec3MultiplyMat4(&this->position.layout.transform.point[1], &this->position.layout.transform.point[1], &this->position.layout.transform.matrix);
-		engineMathVec3MultiplyMat4(&this->position.layout.transform.point[2], &this->position.layout.transform.point[2], &this->position.layout.transform.matrix);
-		engineMathVec3MultiplyMat4(&this->position.layout.transform.point[3], &this->position.layout.transform.point[3], &this->position.layout.transform.matrix);
 		// 行列変形フラグ
 		this->position.layout.transform.isActive = true;
 	}else{
@@ -405,6 +388,7 @@ double engineLayoutViewUtilPositionGetY(struct engineLayoutView *this){calcLayou
 double engineLayoutViewUtilPositionGetW(struct engineLayoutView *this){calcLayout(this); return this->position.layout.w;}
 double engineLayoutViewUtilPositionGetH(struct engineLayoutView *this){calcLayout(this); return this->position.layout.h;}
 
+// スクリーン座標系の行列をローカル座標系に変換
 void engineLayoutViewUtilPositionTransformCalcMatrix(struct engineLayoutView *this, struct engineMathMatrix44 *dstMat, struct engineMathMatrix44 *srcMat){
 	calcLayout(this);
 	if(this->position.layout.transform.isActive){
@@ -417,26 +401,30 @@ void engineLayoutViewUtilPositionTransformCalcMatrix(struct engineLayoutView *th
 	}
 }
 
-bool engineLayoutViewUtilPositionTransformIsInner(struct engineLayoutView *this, double x, double y){
+// スクリーン座標系の点をローカル座標系に変換
+void engineLayoutViewUtilPositionTransformCalcInvert(struct engineLayoutView *this, struct engineMathVector3 *position){
+	calcLayout(this);
 	if(this->position.layout.transform.isActive){
-		// すべての辺に対し対象点との外積が全て同一符号なら内部
-		struct engineMathVector3 *v0 = &this->position.layout.transform.point[0];
-		struct engineMathVector3 *v1 = &this->position.layout.transform.point[1];
-		struct engineMathVector3 *v2 = &this->position.layout.transform.point[2];
-		struct engineMathVector3 *v3 = &this->position.layout.transform.point[3];
-		double crossZ01 = (x - v0->x) * (v1->y - v0->y) - (v1->x - v0->x) * (y - v0->y);
-		double crossZ12 = (x - v1->x) * (v2->y - v1->y) - (v2->x - v1->x) * (y - v1->y);
-		double crossZ23 = (x - v2->x) * (v3->y - v2->y) - (v3->x - v2->x) * (y - v2->y);
-		double crossZ30 = (x - v3->x) * (v0->y - v3->y) - (v0->x - v3->x) * (y - v3->y);
-		return (crossZ01 * crossZ12 > 0 && crossZ12 * crossZ23 > 0 && crossZ23 * crossZ30 > 0);
+		if(this->position.layout.generationCountInvert != this->position.layout.generationCount){
+			this->position.layout.generationCountInvert = this->position.layout.generationCount;
+			engineMathMat4Copy(&this->position.layout.transform.invert, &this->position.layout.transform.matrix);
+			engineMathMat4Invert(&this->position.layout.transform.invert);
+		}
+		engineMathVec3MultiplyMat4(position, position, &this->position.layout.transform.invert);
 	}else{
-		// 矩形内部判定
-		double x0 = this->position.layout.x;
-		double y0 = this->position.layout.y;
-		double x1 = x0 + this->position.layout.w;
-		double y1 = y0 + this->position.layout.h;
-		return (x0 < x && x < x1 && y0 < y && y < y1);
+		position->x -= this->position.layout.x;
+		position->y -= this->position.layout.y;
 	}
+}
+
+
+bool engineLayoutViewUtilPositionTransformIsInner(struct engineLayoutView *this, double x, double y){
+	// ローカル座標変換
+	struct engineMathVector3 tempVec1;
+	engineMathVec3Set(&tempVec1, x, y, 0);
+	engineLayoutViewUtilPositionTransformCalcInvert(this, &tempVec1);
+	// 矩形内部判定
+	return (0 < tempVec1.x && tempVec1.x < this->position.layout.w && 0 < tempVec1.y && tempVec1.y < this->position.layout.h);
 }
 
 // ----------------------------------------------------------------

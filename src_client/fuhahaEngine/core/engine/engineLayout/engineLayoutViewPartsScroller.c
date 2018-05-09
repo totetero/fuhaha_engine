@@ -10,8 +10,8 @@
 // 構造体実体
 struct engineLayoutViewPartsScrollerImplement{
 	struct engineLayoutViewPartsScroller super;
-	struct{int x; int y;} temp0;
-	struct{int x; int y;} temp1;
+	struct engineMathVector3 temp0;
+	struct engineMathVector3 temp1;
 };
 
 // ----------------------------------------------------------------
@@ -39,8 +39,8 @@ static bool touch(struct engineLayoutViewPartsScrollerImplement *this, int touch
 	if(dn && !mv && !this->super.super.position.isInner((struct engineLayoutView*)this, x, y)){isCancel = true;}
 
 	// 新タッチ位置更新
-	this->temp1.x = x;
-	this->temp1.y = y;
+	engineMathVec3Set(&this->temp1, x, y, 0);
+	engineLayoutViewUtilPositionTransformCalcInvert((struct engineLayoutView*)this, &this->temp1);
 
 	// スクロール開始したら子要素のタッチ処理をキャンセルする
 	// ただし子要素がスクロール開始したら自身はスクロール開始できない
