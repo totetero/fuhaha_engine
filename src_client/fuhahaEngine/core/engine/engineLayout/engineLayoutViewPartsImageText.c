@@ -268,7 +268,7 @@ struct engineLayoutViewPartsImageText *engineLayoutViewPartsImageTextCreate(char
 	this->super.alphabet.th = th;
 
 	struct engineLayoutView *view = (struct engineLayoutView*)this;
-	view->touch = (bool(*)(struct engineLayoutView*, int touchIndex, double x, double y, bool dn, bool mv, bool isCancel))touch;
+	view->touch = (bool(*)(struct engineLayoutView*, int, double, double, bool, bool, bool))touch;
 	view->calc = (void(*)(struct engineLayoutView*))calc;
 	view->draw = (void(*)(struct engineLayoutView*, struct engineMathMatrix44*, struct engineMathVector4*))draw;
 	view->pause = (void(*)(struct engineLayoutView*))pause;
