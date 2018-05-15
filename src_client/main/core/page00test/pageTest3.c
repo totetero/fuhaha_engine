@@ -9,6 +9,7 @@ struct pageCartridgeTest3{
 	struct engineCartridgePage super;
 
 	struct engineLayoutViewPartsRoot *viewRoot;
+	struct engineLayoutViewPartsArrowKey *viewArrowKey;
 	struct engineLayoutViewPartsButtonBox *viewTestButton;
 };
 
@@ -30,6 +31,12 @@ static void init(struct pageCartridgeTest3 *this){
 	engineLayoutViewUtilPositionSetLtRtTpBm((struct engineLayoutView*)viewTestFrame, 10, 10, 10, 10);
 	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)viewTestFilter, (struct engineLayoutView*)viewTestFrame);
 
+	// 十字キー作成
+	this->viewArrowKey = engineLayoutViewPartsArrowKeyCreate();
+	engineLayoutViewUtilPositionSetLeft((struct engineLayoutView*)this->viewArrowKey, 0);
+	engineLayoutViewUtilPositionSetBottom((struct engineLayoutView*)this->viewArrowKey, 0);
+	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)viewTestFrame, (struct engineLayoutView*)this->viewArrowKey);
+
 	// ボタン作成
 	this->viewTestButton = engineLayoutViewPartsButtonBoxCreateText("テストボタン");
 	engineLayoutViewUtilPositionSetBottom((struct engineLayoutView*)this->viewTestButton, 10);
@@ -40,7 +47,7 @@ static void init(struct pageCartridgeTest3 *this){
 
 	// スクローラマスク作成
 	struct engineLayoutViewPartsMaskRect *viewTestScrollerMask = engineLayoutViewPartsMaskRectCreate();
-	engineLayoutViewUtilPositionSetLtRtTpBm((struct engineLayoutView*)viewTestScrollerMask, 10, 10, 10, 100);
+	engineLayoutViewUtilPositionSetLtRtTpBm((struct engineLayoutView*)viewTestScrollerMask, 10, 10, 10, 144);
 	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)viewTestFrame, (struct engineLayoutView*)viewTestScrollerMask);
 	// スクローラ作成
 	struct engineLayoutViewPartsScroller *viewTestScroller = engineLayoutViewPartsScrollerCreate();
