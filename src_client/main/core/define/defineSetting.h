@@ -4,16 +4,14 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-typedef unsigned char byte;
+// 画面サイズ
+#define DEFINESETTING_SCREEN_W 320
+#define DEFINESETTING_SCREEN_H   0
+#define DEFINESETTING_SCREEN_ASPECTMIN ( 4.0 / 3.0)
+#define DEFINESETTING_SCREEN_ASPECTMAX (16.0 / 9.0)
 
-#include "./defineGlobal.h"
-
-#include "./definePluginTexture.h"
-#include "./defineEngineMath.h"
-
-#include "./texpos.h"
-
-#include "../../../main/core/define/define.h"
+// 背景色
+#define DEFINESETTING_BACKGGROUNDCOLOR 0.0, 0.0, 0.0, 1.0
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

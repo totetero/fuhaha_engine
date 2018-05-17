@@ -4,16 +4,7 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-typedef unsigned char byte;
-
-#include "./defineGlobal.h"
-
-#include "./definePluginTexture.h"
-#include "./defineEngineMath.h"
-
-#include "./texpos.h"
-
-#include "../../../main/core/define/define.h"
+#include "./defineSetting.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

@@ -1,4 +1,5 @@
 #include "./library.h"
+#include "./engine/engineMath/engineMath.h"
 #include "./game.h"
 
 // ----------------------------------------------------------------
@@ -47,15 +48,26 @@ void gameMainEventScreen(int width, int height, double pixelRatio){
 	global.window.w = width;
 	global.window.h = height;
 	glViewport(0, 0, width * pixelRatio, height * pixelRatio);
-	if(false){
+	if(DEFINESETTING_SCREEN_W > 0 && DEFINESETTING_SCREEN_H > 0){
 		// スクリーンサイズ固定 
-		global.screen.w = 320;
-		global.screen.h = 480;
-	}else if(true){
+		global.screen.w = DEFINESETTING_SCREEN_W;
+		global.screen.h = DEFINESETTING_SCREEN_H;
+	}else if(DEFINESETTING_SCREEN_W > 0){
 		// スクリーン横幅固定
-		global.screen.w = 320;
-		global.screen.h = global.screen.w * global.window.h / global.window.w;
-		if(global.screen.h < global.screen.w){global.screen.h = global.screen.w;}
+		global.screen.w = DEFINESETTING_SCREEN_W;
+		global.screen.h = DEFINESETTING_SCREEN_W * global.window.h / global.window.w;
+		int minh = engineMathFloor(DEFINESETTING_SCREEN_W * DEFINESETTING_SCREEN_ASPECTMIN);
+		int maxh = engineMathFloor(DEFINESETTING_SCREEN_W * DEFINESETTING_SCREEN_ASPECTMAX);
+		if(global.screen.h < minh){global.screen.h = minh;}
+		if(global.screen.h > maxh){global.screen.h = maxh;}
+	}else if(DEFINESETTING_SCREEN_H > 0){
+		// スクリーン縦幅固定
+		global.screen.h = DEFINESETTING_SCREEN_H;
+		global.screen.w = DEFINESETTING_SCREEN_H * global.window.w / global.window.h;
+		int minw = engineMathFloor(DEFINESETTING_SCREEN_H * DEFINESETTING_SCREEN_ASPECTMIN);
+		int maxw = engineMathFloor(DEFINESETTING_SCREEN_H * DEFINESETTING_SCREEN_ASPECTMAX);
+		if(global.screen.w < minw){global.screen.w = minw;}
+		if(global.screen.w > maxw){global.screen.w = maxw;}
 	}else{
 		// スクリーンサイズをウインドウサイズに合わせる
 		global.screen.w = width;
