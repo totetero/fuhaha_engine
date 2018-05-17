@@ -92,7 +92,7 @@ void engineGraphicEngineInit(void){
 	engineGraphicEngineMemoryResetIBO();
 	engineGraphicEngineMemoryResetTex();
 
-	glClearColor(DEFINESETTING_BACKGGROUNDCOLOR);
+	glClearColor(DEFINESETTING_BACKGROUNDCOLOR);
 	glClearDepthf(1.0f);
 	glCullFace(GL_BACK);
 	//glEnable(GL_TEXTURE_2D); // コメントを外すとブラウザでなんか警告が出る

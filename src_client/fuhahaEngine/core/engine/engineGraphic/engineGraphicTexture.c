@@ -343,7 +343,7 @@ void engineGraphicTextureReload(void){
 	while(tempTex != NULL){texDataLoad(tempTex); tempTex = tempTex->next;}
 
 	// 読み込み中に使うデフォルトテクスチャ作成
-	byte data[4] = {0xff, 0xff, 0xff, 0xff};
+	byte data[4] = {DEFINESETTING_DEFAULTTEXTURECOLOR};
 	localGlobal.defaultTexture.imgw = 1;
 	localGlobal.defaultTexture.imgh = 1;
 	glGenTextures(1, &localGlobal.defaultTexture.glId);
