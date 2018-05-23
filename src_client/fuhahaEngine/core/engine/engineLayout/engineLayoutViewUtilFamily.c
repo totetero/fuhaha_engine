@@ -176,7 +176,7 @@ bool engineLayoutViewUtilChildrenTouch(struct engineLayoutView *this, int touchI
 	struct engineLayoutView *temp = this->family.childrenTail;
 	while(temp != NULL){
 		isCancel = isCancel || isActive || temp->family.isInactive;
-		isActive = temp->touch(temp, touchIndex, x, y, dn, mv, isCancel);
+		isActive = temp->touch(temp, touchIndex, x, y, dn, mv, isCancel) || isActive;
 		temp = temp->family.prev;
 	}
 	return isActive;
