@@ -38,27 +38,33 @@ static bool touch(struct engineLayoutViewPartsScrollerImplement *this, int touch
 	// タッチ開始時に親要素の範囲外ならば子要素はタッチ開始できない
 	if(dn && !mv && !this->super.super.position.isInner((struct engineLayoutView*)this, x, y)){isCancel = true;}
 
-	// ローカル座標変換
-	struct engineMathVector3 tempVec1;
-	engineMathVec3Set(&tempVec1, x, y, 0);
-	engineLayoutViewUtilPositionTransformCalcInvert((struct engineLayoutView*)this, &tempVec1);
-	// 新タッチ位置更新
-	this->temp1.x = tempVec1.x;
-	this->temp1.y = tempVec1.y;
-
 	// スクロール開始したら子要素のタッチ処理をキャンセルする
 	// ただし子要素がスクロール開始したら自身はスクロール開始できない
 	this->super.bubbling.isChildrenMove = false;
 	bool isActive = false;
 	bool isMove = (this->super.super.interact.status.isActive && this->super.super.interact.status.isMove);
-	isActive = engineLayoutViewUtilChildrenTouch((struct engineLayoutView*)this, touchIndex, x, y, dn, mv, isCancel || isActive || isMove) || isActive;
+	bool isActiveChild = engineLayoutViewUtilChildrenTouch((struct engineLayoutView*)this, touchIndex, x, y, dn, mv, isCancel || isActive || isMove); isActive = isActiveChild || isActive;
 	bool isChildrenMove = this->super.bubbling.isChildrenMove;
-	isActive = engineLayoutViewUtilInteractTouch((struct engineLayoutView*)this, touchIndex, x, y, dn, mv, isCancel || isChildrenMove) || isActive;
+	bool isActiveLocal = engineLayoutViewUtilInteractTouch((struct engineLayoutView*)this, touchIndex, x, y, dn, mv, isCancel || isChildrenMove); isActive = isActiveLocal || isActive;
+
 	// 必要ならば親要素に子要素がスクロールしたことを伝える
 	if(this->super.bubbling.parentScroller != NULL){
 		isMove = (this->super.super.interact.status.isActive && this->super.super.interact.status.isMove);
 		if(isMove || isChildrenMove){this->super.bubbling.parentScroller->bubbling.isChildrenMove = true;}
 	}
+
+	if(isActiveLocal){
+		// ローカル座標変換
+		struct engineMathVector3 tempVec1;
+		engineMathVec3Set(&tempVec1, x, y, 0);
+		engineLayoutViewUtilPositionTransformCalcInvert((struct engineLayoutView*)this, &tempVec1);
+		// 新タッチ位置更新
+		this->temp1.x = tempVec1.x;
+		this->temp1.y = tempVec1.y;
+	}else if(this->super.super.interact.status.touchIndex == touchIndex){
+		// タッチしていない時
+	}
+
 	return isActive;
 }
 

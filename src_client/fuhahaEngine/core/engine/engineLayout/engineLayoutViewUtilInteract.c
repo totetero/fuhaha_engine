@@ -74,8 +74,13 @@ void engineLayoutViewUtilInteractTouchRoot(struct engineLayoutView *this, bool i
 	enum engineCtrlTouchId touchIdList[] = {ENGINECTRLTOUCHID_TEST1, ENGINECTRLTOUCHID_TEST2};
 	for(int i = 0; i < (int)(sizeof(touchIdList) / sizeof(*touchIdList)); i++){
 		struct engineCtrlTouch *t = engineCtrlTouchGet(touchIdList[i]);
-		if(t == NULL){continue;}
-		bool isActive = engineLayoutViewTouch(this, i, t->screen.x, t->screen.y, t->dn, t->mv, isCancel);
+		bool isNotTouch = (t == NULL);
+		double x = isNotTouch ? 0 : t->screen.x;
+		double y = isNotTouch ? 0 : t->screen.y;
+		double dn = isNotTouch ? false : t->dn;
+		double mv = isNotTouch ? false : t->mv;
+		bool isActive = engineLayoutViewTouch(this, i, x, y, dn, mv, isCancel || isNotTouch);
+		if(isNotTouch){continue;}
 		if(isActive && !t->active){
 			engineCtrlTouchOwn();
 		}else if(!t->dn){

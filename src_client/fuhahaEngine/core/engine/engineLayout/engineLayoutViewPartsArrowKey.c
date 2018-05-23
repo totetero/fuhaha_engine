@@ -103,20 +103,28 @@ static void init(struct engineLayoutViewPartsArrowKeyImplement *this){
 // タッチ処理
 static bool touch(struct engineLayoutViewPartsArrowKeyImplement *this, int touchIndex, double x, double y, bool dn, bool mv, bool isCancel){
 	bool isActive = false;
-	isActive = engineLayoutViewUtilChildrenTouch((struct engineLayoutView*)this, touchIndex, x, y, dn, mv, isCancel || isActive) || isActive;
-	isActive = engineLayoutViewUtilInteractTouch((struct engineLayoutView*)this, touchIndex, x, y, dn, mv, isCancel || isActive) || isActive;
+	bool isActiveChild = engineLayoutViewUtilChildrenTouch((struct engineLayoutView*)this, touchIndex, x, y, dn, mv, isCancel || isActive); isActive = isActiveChild || isActive;
+	bool isActiveLocal = engineLayoutViewUtilInteractTouch((struct engineLayoutView*)this, touchIndex, x, y, dn, mv, isCancel || isActive); isActive = isActiveLocal || isActive;
 
-	// ローカル座標変換
-	struct engineMathVector3 tempVec1;
-	engineMathVec3Set(&tempVec1, x, y, 0);
-	engineLayoutViewUtilPositionTransformCalcInvert((struct engineLayoutView*)this, &tempVec1);
-	// 十字キーのタッチ確認
-	double x1 = tempVec1.x - this->super.super.position.layout.w * 0.5;
-	double y1 = tempVec1.y - this->super.super.position.layout.h * 0.5;
-	this->isTouchUp = this->super.super.interact.status.isHover && (y1 < 0 && x1 < y1 * y1 * 0.18 && x1 > y1 * y1 * -0.18);
-	this->isTouchDn = this->super.super.interact.status.isHover && (y1 > 0 && x1 < y1 * y1 * 0.18 && x1 > y1 * y1 * -0.18);
-	this->isTouchRt = this->super.super.interact.status.isHover && (x1 > 0 && y1 < x1 * x1 * 0.18 && y1 > x1 * x1 * -0.18);
-	this->isTouchLt = this->super.super.interact.status.isHover && (x1 < 0 && y1 < x1 * x1 * 0.18 && y1 > x1 * x1 * -0.18);
+	if(isActiveLocal){
+		// ローカル座標変換
+		struct engineMathVector3 tempVec1;
+		engineMathVec3Set(&tempVec1, x, y, 0);
+		engineLayoutViewUtilPositionTransformCalcInvert((struct engineLayoutView*)this, &tempVec1);
+		// 十字キーのタッチ確認
+		double x1 = tempVec1.x - this->super.super.position.layout.w * 0.5;
+		double y1 = tempVec1.y - this->super.super.position.layout.h * 0.5;
+		this->isTouchUp = this->super.super.interact.status.isHover && (y1 < 0 && x1 < y1 * y1 * 0.18 && x1 > y1 * y1 * -0.18);
+		this->isTouchDn = this->super.super.interact.status.isHover && (y1 > 0 && x1 < y1 * y1 * 0.18 && x1 > y1 * y1 * -0.18);
+		this->isTouchRt = this->super.super.interact.status.isHover && (x1 > 0 && y1 < x1 * x1 * 0.18 && y1 > x1 * x1 * -0.18);
+		this->isTouchLt = this->super.super.interact.status.isHover && (x1 < 0 && y1 < x1 * x1 * 0.18 && y1 > x1 * x1 * -0.18);
+	}else if(this->super.super.interact.status.touchIndex == touchIndex){
+		// タッチしていない時
+		this->isTouchUp = false;
+		this->isTouchDn = false;
+		this->isTouchRt = false;
+		this->isTouchLt = false;
+	}
 
 	return isActive;
 }
