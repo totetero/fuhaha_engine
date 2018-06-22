@@ -14,6 +14,8 @@ static void init(struct engineLayoutView *this){
 	engineLayoutViewUtilGraphicObjectInit((struct engineLayoutView*)this);
 }
 
+// ----------------------------------------------------------------
+
 // タッチ処理
 static bool touch(struct engineLayoutView *this, int touchIndex, double x, double y, bool dn, bool mv, bool isCancel){
 	bool isActive = false;
@@ -27,6 +29,8 @@ static void calc(struct engineLayoutView *this){
 	// 子要素計算
 	engineLayoutViewUtilChildrenCalc((struct engineLayoutView*)this);
 }
+
+// ----------------------------------------------------------------
 
 // バッファ更新確認
 static bool shouldBufferCreate(struct engineLayoutView *this){
@@ -42,6 +46,8 @@ static void draw(struct engineLayoutView *this, struct engineMathMatrix44 *mat, 
 	// 子要素描画
 	engineLayoutViewUtilChildrenDraw((struct engineLayoutView*)this, mat, color);
 }
+
+// ----------------------------------------------------------------
 
 // 一時停止
 static void pause(struct engineLayoutView *this){
