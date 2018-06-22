@@ -37,6 +37,7 @@ static void init(struct engineLayoutViewPartsArrowKeyImplement *this){
 	// レイアウト初期化
 	engineLayoutViewUtilFamilyInit((struct engineLayoutView*)this);
 	engineLayoutViewUtilPositionInit((struct engineLayoutView*)this);
+	engineLayoutViewUtilGraphicObjectInit((struct engineLayoutView*)this);
 	this->super.super.position.isInner = (bool(*)(struct engineLayoutView*, double, double))isInner;
 	this->super.super.interact.setting.isTouchable = true;
 
@@ -153,6 +154,15 @@ static void calc(struct engineLayoutViewPartsArrowKeyImplement *this){
 
 // ----------------------------------------------------------------
 
+// バッファ更新確認
+static bool shouldBufferCreate(struct engineLayoutViewPartsArrowKeyImplement *this){
+	return false;
+}
+
+// バッファ作成
+static void bufferCreate(struct engineLayoutViewPartsArrowKeyImplement *this){
+}
+
 // 描画
 static void draw(struct engineLayoutViewPartsArrowKeyImplement *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
 	// 子要素描画
@@ -173,6 +183,7 @@ static void dispose(struct engineLayoutViewPartsArrowKeyImplement *this){
 	engineLayoutViewUtilChildrenDispose((struct engineLayoutView*)this);
 
 	// 自要素破棄
+	engineLayoutViewUtilGraphicObjectDispose((struct engineLayoutView*)this);
 	engineLayoutViewUtilPositionDispose((struct engineLayoutView*)this);
 	engineLayoutViewUtilFamilyDispose((struct engineLayoutView*)this);
 	engineUtilMemoryInfoFree("engineLayoutViewPartsArrowKey", this);
@@ -191,6 +202,8 @@ struct engineLayoutViewPartsArrowKey *engineLayoutViewPartsArrowKeyCreate(){
 	view->draw = (void(*)(struct engineLayoutView*, struct engineMathMatrix44*, struct engineMathVector4*))draw;
 	view->pause = (void(*)(struct engineLayoutView*))pause;
 	view->dispose = (void(*)(struct engineLayoutView*))dispose;
+	view->graphicObject.shouldBufferCreate = (bool(*)(struct engineLayoutView*))shouldBufferCreate;
+	view->graphicObject.bufferCreate = (void(*)(struct engineLayoutView*))bufferCreate;
 	return (struct engineLayoutViewPartsArrowKey*)this;
 }
 

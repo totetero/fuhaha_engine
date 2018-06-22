@@ -10,6 +10,7 @@ struct engineLayoutView;
 #include "./engineLayoutViewUtilFamily.h"
 #include "./engineLayoutViewUtilInteract.h"
 #include "./engineLayoutViewUtilPosition.h"
+#include "./engineLayoutViewUtilGraphicObject.h"
 #include "./engineLayoutView.h"
 
 // ----------------------------------------------------------------

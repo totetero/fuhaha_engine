@@ -10,12 +10,6 @@ enum engineGraphicTextureType{
 	ENGINEGRAPHICTEXTURETYPE_NEAREST,
 };
 
-
-// 3Dオブジェクト識別子
-typedef int engineGraphicObjectVBOId;
-typedef int engineGraphicObjectIBOId;
-typedef int engineGraphicTextureId;
-
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

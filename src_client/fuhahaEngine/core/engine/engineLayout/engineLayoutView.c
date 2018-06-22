@@ -11,6 +11,7 @@ static void init(struct engineLayoutView *this){
 	// レイアウト初期化
 	engineLayoutViewUtilFamilyInit((struct engineLayoutView*)this);
 	engineLayoutViewUtilPositionInit((struct engineLayoutView*)this);
+	engineLayoutViewUtilGraphicObjectInit((struct engineLayoutView*)this);
 }
 
 // タッチ処理
@@ -25,6 +26,15 @@ static bool touch(struct engineLayoutView *this, int touchIndex, double x, doubl
 static void calc(struct engineLayoutView *this){
 	// 子要素計算
 	engineLayoutViewUtilChildrenCalc((struct engineLayoutView*)this);
+}
+
+// バッファ更新確認
+static bool shouldBufferCreate(struct engineLayoutView *this){
+	return false;
+}
+
+// バッファ作成
+static void bufferCreate(struct engineLayoutView *this){
 }
 
 // 描画
@@ -45,6 +55,7 @@ static void dispose(struct engineLayoutView *this){
 	engineLayoutViewUtilChildrenDispose((struct engineLayoutView*)this);
 
 	// 自要素破棄
+	engineLayoutViewUtilGraphicObjectDispose((struct engineLayoutView*)this);
 	engineLayoutViewUtilPositionDispose((struct engineLayoutView*)this);
 	engineLayoutViewUtilFamilyDispose((struct engineLayoutView*)this);
 	engineUtilMemoryInfoFree("engineLayoutView", this);
@@ -63,6 +74,8 @@ struct engineLayoutView *engineLayoutViewCreate(){
 	view->draw = (void(*)(struct engineLayoutView*, struct engineMathMatrix44*, struct engineMathVector4*))draw;
 	view->pause = (void(*)(struct engineLayoutView*))pause;
 	view->dispose = (void(*)(struct engineLayoutView*))dispose;
+	view->graphicObject.shouldBufferCreate = (bool(*)(struct engineLayoutView*))shouldBufferCreate;
+	view->graphicObject.bufferCreate = (void(*)(struct engineLayoutView*))bufferCreate;
 	return this;
 }
 

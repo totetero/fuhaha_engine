@@ -41,6 +41,7 @@ static void init(struct engineLayoutViewPartsImageTextImplement *this){
 	// レイアウト初期化
 	engineLayoutViewUtilFamilyInit((struct engineLayoutView*)this);
 	engineLayoutViewUtilPositionInit((struct engineLayoutView*)this);
+	engineLayoutViewUtilGraphicObjectInit((struct engineLayoutView*)this);
 
 	// デフォルトパラメータ設定
 	this->super.fontStyle.scale = 0.5;
@@ -67,6 +68,15 @@ static void calc(struct engineLayoutViewPartsImageTextImplement *this){
 }
 
 // ----------------------------------------------------------------
+
+// バッファ更新確認
+static bool shouldBufferCreate(struct engineLayoutViewPartsImageTextImplement *this){
+	return false;
+}
+
+// バッファ作成
+static void bufferCreate(struct engineLayoutViewPartsImageTextImplement *this){
+}
 
 // 文字コード(utf8)を確認
 static unsigned int getUtf8Code(unsigned char *word){
@@ -247,6 +257,7 @@ static void dispose(struct engineLayoutViewPartsImageTextImplement *this){
 	engineGraphicObjectIBODispose(this->egoIdFace);
 	engineGraphicTextureDispose(this->egoIdTexTest);
 	if(this->textInfo.buff != NULL){engineUtilMemoryInfoFree("engineLayoutViewPartsImageText textBuff", this->textInfo.buff);}
+	engineLayoutViewUtilGraphicObjectDispose((struct engineLayoutView*)this);
 	engineLayoutViewUtilPositionDispose((struct engineLayoutView*)this);
 	engineLayoutViewUtilFamilyDispose((struct engineLayoutView*)this);
 	engineUtilMemoryInfoFree("engineLayoutViewPartsImageText", this);
@@ -273,6 +284,8 @@ struct engineLayoutViewPartsImageText *engineLayoutViewPartsImageTextCreate(char
 	view->draw = (void(*)(struct engineLayoutView*, struct engineMathMatrix44*, struct engineMathVector4*))draw;
 	view->pause = (void(*)(struct engineLayoutView*))pause;
 	view->dispose = (void(*)(struct engineLayoutView*))dispose;
+	view->graphicObject.shouldBufferCreate = (bool(*)(struct engineLayoutView*))shouldBufferCreate;
+	view->graphicObject.bufferCreate = (void(*)(struct engineLayoutView*))bufferCreate;
 	return (struct engineLayoutViewPartsImageText*)this;
 }
 

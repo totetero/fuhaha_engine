@@ -21,6 +21,7 @@ static void init(struct engineLayoutViewPartsScrollerImplement *this){
 	// レイアウト初期化
 	engineLayoutViewUtilFamilyInit((struct engineLayoutView*)this);
 	engineLayoutViewUtilPositionInit((struct engineLayoutView*)this);
+	engineLayoutViewUtilGraphicObjectInit((struct engineLayoutView*)this);
 	this->super.super.interact.setting.isTouchable = true;
 
 	this->super.viewInner = engineLayoutViewCreate();
@@ -137,6 +138,15 @@ static void calc(struct engineLayoutViewPartsScrollerImplement *this){
 
 // ----------------------------------------------------------------
 
+// バッファ更新確認
+static bool shouldBufferCreate(struct engineLayoutViewPartsScrollerImplement *this){
+	return false;
+}
+
+// バッファ作成
+static void bufferCreate(struct engineLayoutViewPartsScrollerImplement *this){
+}
+
 // 描画
 static void draw(struct engineLayoutViewPartsScrollerImplement *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
 	// 子要素描画
@@ -157,6 +167,7 @@ static void dispose(struct engineLayoutViewPartsScrollerImplement *this){
 	engineLayoutViewUtilChildrenDispose((struct engineLayoutView*)this);
 
 	// 自要素破棄
+	engineLayoutViewUtilGraphicObjectDispose((struct engineLayoutView*)this);
 	engineLayoutViewUtilPositionDispose((struct engineLayoutView*)this);
 	engineLayoutViewUtilFamilyDispose((struct engineLayoutView*)this);
 	engineUtilMemoryInfoFree("engineLayoutViewPartsScroller", this);
@@ -175,6 +186,8 @@ struct engineLayoutViewPartsScroller *engineLayoutViewPartsScrollerCreate(){
 	view->draw = (void(*)(struct engineLayoutView*, struct engineMathMatrix44*, struct engineMathVector4*))draw;
 	view->pause = (void(*)(struct engineLayoutView*))pause;
 	view->dispose = (void(*)(struct engineLayoutView*))dispose;
+	view->graphicObject.shouldBufferCreate = (bool(*)(struct engineLayoutView*))shouldBufferCreate;
+	view->graphicObject.bufferCreate = (void(*)(struct engineLayoutView*))bufferCreate;
 	return (struct engineLayoutViewPartsScroller*)this;
 }
 

@@ -31,6 +31,7 @@ static void init(struct engineLayoutViewPartsRectImplement *this){
 	// レイアウト初期化
 	engineLayoutViewUtilFamilyInit((struct engineLayoutView*)this);
 	engineLayoutViewUtilPositionInit((struct engineLayoutView*)this);
+	engineLayoutViewUtilGraphicObjectInit((struct engineLayoutView*)this);
 
 	// デフォルトパラメータ設定
 	this->super.color.r = 1.0;
@@ -56,6 +57,15 @@ static void calc(struct engineLayoutViewPartsRectImplement *this){
 }
 
 // ----------------------------------------------------------------
+
+// バッファ更新確認
+static bool shouldBufferCreate(struct engineLayoutViewPartsRectImplement *this){
+	return false;
+}
+
+// バッファ作成
+static void bufferCreate(struct engineLayoutViewPartsRectImplement *this){
+}
 
 // バッファ配列作成
 static void createBufferArrayRect(struct engineLayoutViewPartsRectImplement *this){
@@ -160,6 +170,7 @@ static void dispose(struct engineLayoutViewPartsRectImplement *this){
 	engineGraphicObjectVBODispose(this->egoIdTexc);
 	engineGraphicObjectIBODispose(this->egoIdFace);
 	engineGraphicTextureDispose(this->egoIdTexTest);
+	engineLayoutViewUtilGraphicObjectDispose((struct engineLayoutView*)this);
 	engineLayoutViewUtilPositionDispose((struct engineLayoutView*)this);
 	engineLayoutViewUtilFamilyDispose((struct engineLayoutView*)this);
 	engineUtilMemoryInfoFree("engineLayoutViewPartsRect", this);
@@ -186,6 +197,8 @@ struct engineLayoutViewPartsRect *engineLayoutViewPartsRectCreate(char *src, int
 	view->draw = (void(*)(struct engineLayoutView*, struct engineMathMatrix44*, struct engineMathVector4*))draw;
 	view->pause = (void(*)(struct engineLayoutView*))pause;
 	view->dispose = (void(*)(struct engineLayoutView*))dispose;
+	view->graphicObject.shouldBufferCreate = (bool(*)(struct engineLayoutView*))shouldBufferCreate;
+	view->graphicObject.bufferCreate = (void(*)(struct engineLayoutView*))bufferCreate;
 	return (struct engineLayoutViewPartsRect*)this;
 }
 

@@ -20,6 +20,7 @@ static void init(struct engineLayoutViewPartsFilterColorImplement *this){
 	// レイアウト初期化
 	engineLayoutViewUtilFamilyInit((struct engineLayoutView*)this);
 	engineLayoutViewUtilPositionInit((struct engineLayoutView*)this);
+	engineLayoutViewUtilGraphicObjectInit((struct engineLayoutView*)this);
 
 	// パラメータ初期化
 	this->super.alpha = 1.0;
@@ -44,6 +45,15 @@ static void calc(struct engineLayoutViewPartsFilterColorImplement *this){
 }
 
 // ----------------------------------------------------------------
+
+// バッファ更新確認
+static bool shouldBufferCreate(struct engineLayoutViewPartsFilterColorImplement *this){
+	return false;
+}
+
+// バッファ作成
+static void bufferCreate(struct engineLayoutViewPartsFilterColorImplement *this){
+}
 
 // 描画
 static void draw(struct engineLayoutViewPartsFilterColorImplement *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
@@ -74,6 +84,7 @@ static void dispose(struct engineLayoutViewPartsFilterColorImplement *this){
 	engineLayoutViewUtilChildrenDispose((struct engineLayoutView*)this);
 
 	// 自要素破棄
+	engineLayoutViewUtilGraphicObjectDispose((struct engineLayoutView*)this);
 	engineLayoutViewUtilPositionDispose((struct engineLayoutView*)this);
 	engineLayoutViewUtilFamilyDispose((struct engineLayoutView*)this);
 	engineUtilMemoryInfoFree("engineLayoutViewPartsFilterColor", this);
@@ -92,6 +103,8 @@ struct engineLayoutViewPartsFilterColor *engineLayoutViewPartsFilterColorCreate(
 	view->draw = (void(*)(struct engineLayoutView*, struct engineMathMatrix44*, struct engineMathVector4*))draw;
 	view->pause = (void(*)(struct engineLayoutView*))pause;
 	view->dispose = (void(*)(struct engineLayoutView*))dispose;
+	view->graphicObject.shouldBufferCreate = (bool(*)(struct engineLayoutView*))shouldBufferCreate;
+	view->graphicObject.bufferCreate = (void(*)(struct engineLayoutView*))bufferCreate;
 	return (struct engineLayoutViewPartsFilterColor*)this;
 }
 

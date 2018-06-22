@@ -9,6 +9,7 @@ struct engineLayoutView{
 	struct engineLayoutViewUtilFamily family;
 	struct engineLayoutViewUtilPosition position;
 	struct engineLayoutViewUtilInteract interact;
+	struct engineLayoutViewUtilGraphicObject graphicObject;
 
 	bool (*touch)(struct engineLayoutView *this, int touchIndex, double x, double y, bool dn, bool mv, bool isCancel);
 	void (*calc)(struct engineLayoutView *this);

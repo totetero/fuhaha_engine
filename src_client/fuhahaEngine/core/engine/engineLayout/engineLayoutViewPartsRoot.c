@@ -20,6 +20,7 @@ static void init(struct engineLayoutViewPartsRootImplement *this){
 	// レイアウト初期化
 	engineLayoutViewUtilFamilyInit((struct engineLayoutView*)this);
 	engineLayoutViewUtilPositionInit((struct engineLayoutView*)this);
+	engineLayoutViewUtilGraphicObjectInit((struct engineLayoutView*)this);
 	// レイアウト設定
 	engineLayoutViewUtilPositionSetLtRtTpBm((struct engineLayoutView*)this, 0, 0, 0, 0);
 }
@@ -42,9 +43,23 @@ static void calc(struct engineLayoutViewPartsRootImplement *this){
 
 // ----------------------------------------------------------------
 
+// バッファ更新確認
+static bool shouldBufferCreate(struct engineLayoutViewPartsRootImplement *this){
+	return false;
+}
+
+// バッファ作成
+static void bufferCreate(struct engineLayoutViewPartsRootImplement *this){
+}
+
 // 描画
 static void draw(struct engineLayoutViewPartsRootImplement *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
+	// レイアウトモード変更 描画モード
 	engineLayoutViewUtilPositionModeSetDraw();
+
+	// 描画オブジェクト作成
+	engineLayoutViewUtilGraphicObjectBufferActiveAll((struct engineLayoutView*)this);
+	engineLayoutViewUtilGraphicObjectBufferCreateAll((struct engineLayoutView*)this);
 
 	// ルートなので引数の行列を無視して正射影行列作成
 	struct engineMathMatrix44 tempMat1;
@@ -63,6 +78,7 @@ static void draw(struct engineLayoutViewPartsRootImplement *this, struct engineM
 	// 子要素描画
 	engineLayoutViewUtilChildrenDraw((struct engineLayoutView*)this, mat, color);
 
+	// レイアウトモード変更 計算モード
 	engineLayoutViewUtilPositionModeSetCalc();
 }
 
@@ -80,6 +96,7 @@ static void dispose(struct engineLayoutViewPartsRootImplement *this){
 	engineLayoutViewUtilChildrenDispose((struct engineLayoutView*)this);
 
 	// 自要素破棄
+	engineLayoutViewUtilGraphicObjectDispose((struct engineLayoutView*)this);
 	engineLayoutViewUtilPositionDispose((struct engineLayoutView*)this);
 	engineLayoutViewUtilFamilyDispose((struct engineLayoutView*)this);
 	engineUtilMemoryInfoFree("engineLayoutViewPartsRoot", this);
@@ -98,6 +115,8 @@ struct engineLayoutViewPartsRoot *engineLayoutViewPartsRootCreate(){
 	view->draw = (void(*)(struct engineLayoutView*, struct engineMathMatrix44*, struct engineMathVector4*))draw;
 	view->pause = (void(*)(struct engineLayoutView*))pause;
 	view->dispose = (void(*)(struct engineLayoutView*))dispose;
+	view->graphicObject.shouldBufferCreate = (bool(*)(struct engineLayoutView*))shouldBufferCreate;
+	view->graphicObject.bufferCreate = (void(*)(struct engineLayoutView*))bufferCreate;
 	return (struct engineLayoutViewPartsRoot*)this;
 }
 

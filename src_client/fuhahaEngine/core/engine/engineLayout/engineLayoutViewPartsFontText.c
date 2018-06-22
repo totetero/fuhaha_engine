@@ -81,6 +81,7 @@ static void init(struct engineLayoutViewPartsFontTextImplement *this){
 	// レイアウト初期化
 	engineLayoutViewUtilFamilyInit((struct engineLayoutView*)this);
 	engineLayoutViewUtilPositionInit((struct engineLayoutView*)this);
+	engineLayoutViewUtilGraphicObjectInit((struct engineLayoutView*)this);
 
 	// デフォルトパラメータ設定
 	this->super.fontStyle.size = 10;
@@ -120,6 +121,15 @@ static void calc(struct engineLayoutViewPartsFontTextImplement *this){
 }
 
 // ----------------------------------------------------------------
+
+// バッファ更新確認
+static bool shouldBufferCreate(struct engineLayoutViewPartsFontTextImplement *this){
+	return false;
+}
+
+// バッファ作成
+static void bufferCreate(struct engineLayoutViewPartsFontTextImplement *this){
+}
 
 // プラットフォーム文字列作成
 static void checkTexture(struct engineLayoutViewPartsFontTextImplement *this){
@@ -421,6 +431,7 @@ static void dispose(struct engineLayoutViewPartsFontTextImplement *this){
 	engineGraphicObjectIBODispose(this->egoIdFace);
 	engineGraphicTextureDispose(this->egoIdTexTest);
 	if(this->textInfo.buff != NULL){engineUtilMemoryInfoFree("engineLayoutViewPartsFontText textBuff", this->textInfo.buff);}
+	engineLayoutViewUtilGraphicObjectDispose((struct engineLayoutView*)this);
 	engineLayoutViewUtilPositionDispose((struct engineLayoutView*)this);
 	engineLayoutViewUtilFamilyDispose((struct engineLayoutView*)this);
 	engineUtilMemoryInfoFree("engineLayoutViewPartsFontText", this);
@@ -441,6 +452,8 @@ struct engineLayoutViewPartsFontText *engineLayoutViewPartsFontTextCreate(enum p
 	view->draw = (void(*)(struct engineLayoutView*, struct engineMathMatrix44*, struct engineMathVector4*))draw;
 	view->pause = (void(*)(struct engineLayoutView*))pause;
 	view->dispose = (void(*)(struct engineLayoutView*))dispose;
+	view->graphicObject.shouldBufferCreate = (bool(*)(struct engineLayoutView*))shouldBufferCreate;
+	view->graphicObject.bufferCreate = (void(*)(struct engineLayoutView*))bufferCreate;
 	return (struct engineLayoutViewPartsFontText*)this;
 }
 
