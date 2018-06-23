@@ -24,15 +24,4 @@ struct engineLayoutView *engineLayoutViewCreate();
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
-// ユーティリティマクロ
-
-#define engineLayoutViewTouch(this, touchId, x, y, dn, mv, isCancel) (this)->touch(this, touchId, x, y, dn, mv, isCancel)
-#define engineLayoutViewCalc(this) (this)->calc(this)
-#define engineLayoutViewDraw(this, mat, color) (this)->draw(this, mat, color)
-#define engineLayoutViewPause(this) (this)->pause(this)
-#define engineLayoutViewDispose(this) (this)->dispose(this)
-
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
 

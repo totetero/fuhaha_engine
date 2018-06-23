@@ -124,10 +124,10 @@ struct engineLayoutViewPartsRoot *engineLayoutViewPartsRootCreate(){
 
 // ルート構造体 運用
 void engineLayoutViewPartsRootTouch(struct engineLayoutViewPartsRoot *this, bool isCancel){engineLayoutViewUtilInteractTouchRoot((struct engineLayoutView*)this, isCancel);}
-void engineLayoutViewPartsRootCalc(struct engineLayoutViewPartsRoot *this){engineLayoutViewCalc((struct engineLayoutView*)this);}
-void engineLayoutViewPartsRootDraw(struct engineLayoutViewPartsRoot *this){engineLayoutViewDraw((struct engineLayoutView*)this, NULL, NULL);}
-void engineLayoutViewPartsRootPause(struct engineLayoutViewPartsRoot *this){engineLayoutViewPause((struct engineLayoutView*)this);}
-void engineLayoutViewPartsRootDispose(struct engineLayoutViewPartsRoot *this){engineLayoutViewDispose((struct engineLayoutView*)this);}
+void engineLayoutViewPartsRootCalc(struct engineLayoutViewPartsRoot *this){this->super.calc((struct engineLayoutView*)this);}
+void engineLayoutViewPartsRootDraw(struct engineLayoutViewPartsRoot *this){this->super.draw((struct engineLayoutView*)this, NULL, NULL);}
+void engineLayoutViewPartsRootPause(struct engineLayoutViewPartsRoot *this){this->super.pause((struct engineLayoutView*)this);}
+void engineLayoutViewPartsRootDispose(struct engineLayoutViewPartsRoot *this){this->super.dispose((struct engineLayoutView*)this);}
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

@@ -79,7 +79,7 @@ void engineLayoutViewUtilInteractTouchRoot(struct engineLayoutView *this, bool i
 		double y = isNotTouch ? 0 : t->screen.y;
 		double dn = isNotTouch ? false : t->dn;
 		double mv = isNotTouch ? false : t->mv;
-		bool isActive = engineLayoutViewTouch(this, i, x, y, dn, mv, isCancel || isNotTouch);
+		bool isActive = this->touch(this, i, x, y, dn, mv, isCancel || isNotTouch);
 		if(isNotTouch){continue;}
 		if(isActive && !t->active){
 			engineCtrlTouchOwn();
