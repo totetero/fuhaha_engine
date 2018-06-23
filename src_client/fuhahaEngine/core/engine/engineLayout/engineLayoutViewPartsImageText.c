@@ -22,9 +22,6 @@ struct engineLayoutViewPartsImageTextImplement{
 			int yalign;
 		} fontStyle;
 	} bufferCompare;
-	engineGraphicObjectVBOId egoIdVert;
-	engineGraphicObjectVBOId egoIdTexc;
-	engineGraphicObjectIBOId egoIdFace;
 	engineGraphicTextureId egoIdTexTest;
 
 	int generationCount;
@@ -71,11 +68,26 @@ static void calc(struct engineLayoutViewPartsImageTextImplement *this){
 
 // バッファ更新確認
 static bool shouldBufferCreate(struct engineLayoutViewPartsImageTextImplement *this){
-	return false;
-}
-
-// バッファ作成
-static void bufferCreate(struct engineLayoutViewPartsImageTextImplement *this){
+	struct engineLayoutViewPartsImageTextBufferCompare bufferCompare;
+	bufferCompare.generationCount = this->generationCount;
+	bufferCompare.alphabet.imgw = this->super.alphabet.imgw;
+	bufferCompare.alphabet.imgh = this->super.alphabet.imgh;
+	bufferCompare.alphabet.tu = this->super.alphabet.tu;
+	bufferCompare.alphabet.tv = this->super.alphabet.tv;
+	bufferCompare.alphabet.tw = this->super.alphabet.tw;
+	bufferCompare.alphabet.th = this->super.alphabet.th;
+	bufferCompare.hiragana.tu = this->super.hiragana.tu;
+	bufferCompare.hiragana.tv = this->super.hiragana.tv;
+	bufferCompare.katakana.tu = this->super.katakana.tu;
+	bufferCompare.katakana.tv = this->super.katakana.tv;
+	bufferCompare.fontStyle.xalign = this->super.fontStyle.xalign;
+	bufferCompare.fontStyle.yalign = this->super.fontStyle.yalign;
+	if(memcmp(&this->bufferCompare, &bufferCompare, sizeof(struct engineLayoutViewPartsImageTextBufferCompare))){
+		memcpy(&this->bufferCompare, &bufferCompare, sizeof(struct engineLayoutViewPartsImageTextBufferCompare));
+		return true;
+	}else{
+		return false;
+	}
 }
 
 // 文字コード(utf8)を確認
@@ -110,8 +122,8 @@ static int getRowNum(char *text){
 	return rownum;
 }
 
-// バッファ配列作成
-static void createBufferArrayText(struct engineLayoutViewPartsImageTextImplement *this){
+// バッファ作成
+static void bufferCreate(struct engineLayoutViewPartsImageTextImplement *this){
 	// バッファポインタ取得
 	int vertIndex = engineGraphicBufferVretIndexGet();
 	int faceIndex = engineGraphicBufferFaceIndexGet();
@@ -172,47 +184,13 @@ static void createBufferArrayText(struct engineLayoutViewPartsImageTextImplement
 	this->faceNum = tetraNum * 2;
 }
 
-// バッファ作成
-static void createBuffer(struct engineLayoutViewPartsImageTextImplement *this){
-	struct engineLayoutViewPartsImageTextBufferCompare bufferCompare;
-	bufferCompare.generationCount = this->generationCount;
-	bufferCompare.alphabet.imgw = this->super.alphabet.imgw;
-	bufferCompare.alphabet.imgh = this->super.alphabet.imgh;
-	bufferCompare.alphabet.tu = this->super.alphabet.tu;
-	bufferCompare.alphabet.tv = this->super.alphabet.tv;
-	bufferCompare.alphabet.tw = this->super.alphabet.tw;
-	bufferCompare.alphabet.th = this->super.alphabet.th;
-	bufferCompare.hiragana.tu = this->super.hiragana.tu;
-	bufferCompare.hiragana.tv = this->super.hiragana.tv;
-	bufferCompare.katakana.tu = this->super.katakana.tu;
-	bufferCompare.katakana.tv = this->super.katakana.tv;
-	bufferCompare.fontStyle.xalign = this->super.fontStyle.xalign;
-	bufferCompare.fontStyle.yalign = this->super.fontStyle.yalign;
-
-	if(memcmp(&this->bufferCompare, &bufferCompare, sizeof(struct engineLayoutViewPartsImageTextBufferCompare))){
-		memcpy(&this->bufferCompare, &bufferCompare, sizeof(struct engineLayoutViewPartsImageTextBufferCompare));
-
-		// バッファ作成開始
-		engineGraphicBufferBegin();
-
-		// バッファ配列作成
-		createBufferArrayText(this);
-
-		// バッファ作成完了
-		engineGraphicBufferEnd(&this->egoIdVert, NULL, NULL, &this->egoIdTexc, &this->egoIdFace);
-	}
-}
-
 // 描画
 static void draw(struct engineLayoutViewPartsImageTextImplement *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
-	// 描画準備
-	createBuffer(this);
-
 	// バッファ登録
 	engineGraphicEngineBindTexture(this->egoIdTexTest);
-	engineGraphicEngineBindVertVBO(this->egoIdVert);
-	engineGraphicEngineBindTexcVBO(this->egoIdTexc);
-	engineGraphicEngineBindFaceIBO(this->egoIdFace);
+	engineGraphicEngineBindVertVBO(this->super.super.graphicObject.egoIdVert);
+	engineGraphicEngineBindTexcVBO(this->super.super.graphicObject.egoIdTexc);
+	engineGraphicEngineBindFaceIBO(this->super.super.graphicObject.egoIdFace);
 	// 行列登録
 	double w = engineLayoutViewUtilPositionGetW((struct engineLayoutView*)this);
 	double h = engineLayoutViewUtilPositionGetH((struct engineLayoutView*)this);
@@ -252,9 +230,6 @@ static void dispose(struct engineLayoutViewPartsImageTextImplement *this){
 	engineLayoutViewUtilChildrenDispose((struct engineLayoutView*)this);
 
 	// 自要素破棄
-	engineGraphicObjectVBODispose(this->egoIdVert);
-	engineGraphicObjectVBODispose(this->egoIdTexc);
-	engineGraphicObjectIBODispose(this->egoIdFace);
 	engineGraphicTextureDispose(this->egoIdTexTest);
 	if(this->textInfo.buff != NULL){engineUtilMemoryInfoFree("engineLayoutViewPartsImageText textBuff", this->textInfo.buff);}
 	engineLayoutViewUtilGraphicObjectDispose((struct engineLayoutView*)this);

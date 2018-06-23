@@ -15,9 +15,6 @@ struct engineLayoutViewPartsRectImplement{
 	struct engineLayoutViewPartsRectBufferCompare{
 		struct{int imgw; int imgh; int tu; int tv; int tw; int th;} texture;
 	} bufferCompare;
-	engineGraphicObjectVBOId egoIdVert;
-	engineGraphicObjectVBOId egoIdTexc;
-	engineGraphicObjectIBOId egoIdFace;
 	engineGraphicTextureId egoIdTexTest;
 
 	int faceIndex;
@@ -60,15 +57,23 @@ static void calc(struct engineLayoutViewPartsRectImplement *this){
 
 // バッファ更新確認
 static bool shouldBufferCreate(struct engineLayoutViewPartsRectImplement *this){
-	return false;
+	struct engineLayoutViewPartsRectBufferCompare bufferCompare;
+	bufferCompare.texture.imgw = this->super.texture.imgw;
+	bufferCompare.texture.imgh = this->super.texture.imgh;
+	bufferCompare.texture.tu = this->super.texture.tu;
+	bufferCompare.texture.tv = this->super.texture.tv;
+	bufferCompare.texture.tw = this->super.texture.tw;
+	bufferCompare.texture.th = this->super.texture.th;
+	if(memcmp(&this->bufferCompare, &bufferCompare, sizeof(struct engineLayoutViewPartsRectBufferCompare))){
+		memcpy(&this->bufferCompare, &bufferCompare, sizeof(struct engineLayoutViewPartsRectBufferCompare));
+		return true;
+	}else{
+		return false;
+	}
 }
 
 // バッファ作成
 static void bufferCreate(struct engineLayoutViewPartsRectImplement *this){
-}
-
-// バッファ配列作成
-static void createBufferArrayRect(struct engineLayoutViewPartsRectImplement *this){
 	// バッファポインタ取得
 	int vertIndex = engineGraphicBufferVretIndexGet();
 	int faceIndex = engineGraphicBufferFaceIndexGet();
@@ -96,40 +101,13 @@ static void createBufferArrayRect(struct engineLayoutViewPartsRectImplement *thi
 	this->faceNum = tetraNum * 2;
 }
 
-// バッファ作成
-static void createBuffer(struct engineLayoutViewPartsRectImplement *this){
-	struct engineLayoutViewPartsRectBufferCompare bufferCompare;
-	bufferCompare.texture.imgw = this->super.texture.imgw;
-	bufferCompare.texture.imgh = this->super.texture.imgh;
-	bufferCompare.texture.tu = this->super.texture.tu;
-	bufferCompare.texture.tv = this->super.texture.tv;
-	bufferCompare.texture.tw = this->super.texture.tw;
-	bufferCompare.texture.th = this->super.texture.th;
-
-	if(memcmp(&this->bufferCompare, &bufferCompare, sizeof(struct engineLayoutViewPartsRectBufferCompare))){
-		memcpy(&this->bufferCompare, &bufferCompare, sizeof(struct engineLayoutViewPartsRectBufferCompare));
-
-		// バッファ作成開始
-		engineGraphicBufferBegin();
-
-		// バッファ配列作成
-		createBufferArrayRect(this);
-
-		// バッファ作成完了
-		engineGraphicBufferEnd(&this->egoIdVert, NULL, NULL, &this->egoIdTexc, &this->egoIdFace);
-	}
-}
-
 // 描画
 static void draw(struct engineLayoutViewPartsRectImplement *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
-	// 描画準備
-	createBuffer(this);
-
 	// バッファ登録
 	engineGraphicEngineBindTexture(this->egoIdTexTest);
-	engineGraphicEngineBindVertVBO(this->egoIdVert);
-	engineGraphicEngineBindTexcVBO(this->egoIdTexc);
-	engineGraphicEngineBindFaceIBO(this->egoIdFace);
+	engineGraphicEngineBindVertVBO(this->super.super.graphicObject.egoIdVert);
+	engineGraphicEngineBindTexcVBO(this->super.super.graphicObject.egoIdTexc);
+	engineGraphicEngineBindFaceIBO(this->super.super.graphicObject.egoIdFace);
 	// 行列登録
 	double w = engineLayoutViewUtilPositionGetW((struct engineLayoutView*)this);
 	double h = engineLayoutViewUtilPositionGetH((struct engineLayoutView*)this);
@@ -166,9 +144,6 @@ static void dispose(struct engineLayoutViewPartsRectImplement *this){
 	engineLayoutViewUtilChildrenDispose((struct engineLayoutView*)this);
 
 	// 自要素破棄
-	engineGraphicObjectVBODispose(this->egoIdVert);
-	engineGraphicObjectVBODispose(this->egoIdTexc);
-	engineGraphicObjectIBODispose(this->egoIdFace);
 	engineGraphicTextureDispose(this->egoIdTexTest);
 	engineLayoutViewUtilGraphicObjectDispose((struct engineLayoutView*)this);
 	engineLayoutViewUtilPositionDispose((struct engineLayoutView*)this);

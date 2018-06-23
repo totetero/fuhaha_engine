@@ -16,9 +16,6 @@ struct engineLayoutViewPartsFontNumberImplement{
 	struct engineLayoutViewPartsFontNumberBufferCompare{
 		int generationCount;
 	} bufferCompare;
-	engineGraphicObjectVBOId egoIdVert;
-	engineGraphicObjectVBOId egoIdTexc;
-	engineGraphicObjectIBOId egoIdFace;
 	engineGraphicTextureId egoIdTexTest;
 
 	int generationCount;
@@ -87,15 +84,6 @@ static void calc(struct engineLayoutViewPartsFontNumberImplement *this){
 
 // ----------------------------------------------------------------
 
-// バッファ更新確認
-static bool shouldBufferCreate(struct engineLayoutViewPartsFontNumberImplement *this){
-	return false;
-}
-
-// バッファ作成
-static void bufferCreate(struct engineLayoutViewPartsFontNumberImplement *this){
-}
-
 // プラットフォーム文字列作成
 static void checkTexture(struct engineLayoutViewPartsFontNumberImplement *this){
 	// プラットフォーム文字列作成 開始確認
@@ -129,6 +117,19 @@ static void checkTexture(struct engineLayoutViewPartsFontNumberImplement *this){
 	}
 }
 
+// バッファ更新確認
+static bool shouldBufferCreate(struct engineLayoutViewPartsFontNumberImplement *this){
+	checkTexture(this);
+	struct engineLayoutViewPartsFontNumberBufferCompare bufferCompare;
+	bufferCompare.generationCount = this->generationCount;
+	if(memcmp(&this->bufferCompare, &bufferCompare, sizeof(struct engineLayoutViewPartsFontNumberBufferCompare))){
+		memcpy(&this->bufferCompare, &bufferCompare, sizeof(struct engineLayoutViewPartsFontNumberBufferCompare));
+		return true;
+	}else{
+		return false;
+	}
+}
+
 // バッファ配列作成
 static void createBufferArrayText(struct engineLayoutViewPartsFontNumberImplement *this, struct pluginTextureFontCode *codeList){
 	// バッファポインタ取得
@@ -157,27 +158,14 @@ static void createBufferArrayText(struct engineLayoutViewPartsFontNumberImplemen
 }
 
 // バッファ作成
-static void createBuffer(struct engineLayoutViewPartsFontNumberImplement *this){
-	struct engineLayoutViewPartsFontNumberBufferCompare bufferCompare;
-	bufferCompare.generationCount = this->generationCount;
-
-	if(memcmp(&this->bufferCompare, &bufferCompare, sizeof(struct engineLayoutViewPartsFontNumberBufferCompare))){
-		memcpy(&this->bufferCompare, &bufferCompare, sizeof(struct engineLayoutViewPartsFontNumberBufferCompare));
-
-		// バッファ作成開始
-		engineGraphicBufferBegin();
-
-		// バッファ配列作成
-		if(this->egoIdTexTest > 0 && this->fontInfo.codeListIndex >= 0){
-			struct pluginTextureFontCode *codeList = corePluginTextureFontCodeListGet(this->fontInfo.codeListIndex);
-			createBufferArrayText(this, codeList);
-		}else{
-			this->faceIndex = 0;
-			this->faceNum = 0;
-		}
-
-		// バッファ作成完了
-		engineGraphicBufferEnd(&this->egoIdVert, NULL, NULL, &this->egoIdTexc, &this->egoIdFace);
+static void bufferCreate(struct engineLayoutViewPartsFontNumberImplement *this){
+	// バッファ配列作成
+	if(this->egoIdTexTest > 0 && this->fontInfo.codeListIndex >= 0){
+		struct pluginTextureFontCode *codeList = corePluginTextureFontCodeListGet(this->fontInfo.codeListIndex);
+		createBufferArrayText(this, codeList);
+	}else{
+		this->faceIndex = 0;
+		this->faceNum = 0;
 	}
 }
 
@@ -204,18 +192,14 @@ static void drawText(struct engineLayoutViewPartsFontNumberImplement *this, stru
 
 // 描画
 static void draw(struct engineLayoutViewPartsFontNumberImplement *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
-	// 描画準備
-	checkTexture(this);
-	createBuffer(this);
-
 	if(this->egoIdTexTest > 0 && this->fontInfo.codeListIndex >= 0){
 		// 情報取得
 		struct pluginTextureFontCode *codeList = corePluginTextureFontCodeListGet(this->fontInfo.codeListIndex);
 
 		// バッファ登録
-		engineGraphicEngineBindVertVBO(this->egoIdVert);
-		engineGraphicEngineBindTexcVBO(this->egoIdTexc);
-		engineGraphicEngineBindFaceIBO(this->egoIdFace);
+		engineGraphicEngineBindVertVBO(this->super.super.graphicObject.egoIdVert);
+		engineGraphicEngineBindTexcVBO(this->super.super.graphicObject.egoIdTexc);
+		engineGraphicEngineBindFaceIBO(this->super.super.graphicObject.egoIdFace);
 		// 行列登録準備
 		double w = engineLayoutViewUtilPositionGetW((struct engineLayoutView*)this);
 		double h = engineLayoutViewUtilPositionGetH((struct engineLayoutView*)this);
@@ -284,9 +268,6 @@ static void dispose(struct engineLayoutViewPartsFontNumberImplement *this){
 	engineLayoutViewUtilChildrenDispose((struct engineLayoutView*)this);
 
 	// 自要素破棄
-	engineGraphicObjectVBODispose(this->egoIdVert);
-	engineGraphicObjectVBODispose(this->egoIdTexc);
-	engineGraphicObjectIBODispose(this->egoIdFace);
 	engineGraphicTextureDispose(this->egoIdTexTest);
 	engineLayoutViewUtilGraphicObjectDispose((struct engineLayoutView*)this);
 	engineLayoutViewUtilPositionDispose((struct engineLayoutView*)this);

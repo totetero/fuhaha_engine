@@ -19,9 +19,6 @@ struct engineLayoutViewPartsImageNumberImplement{
 			int yalign;
 		} fontStyle;
 	} bufferCompare;
-	engineGraphicObjectVBOId egoIdVert;
-	engineGraphicObjectVBOId egoIdTexc;
-	engineGraphicObjectIBOId egoIdFace;
 	engineGraphicTextureId egoIdTexTest;
 
 	int faceIndex;
@@ -65,15 +62,25 @@ static void calc(struct engineLayoutViewPartsImageNumberImplement *this){
 
 // バッファ更新確認
 static bool shouldBufferCreate(struct engineLayoutViewPartsImageNumberImplement *this){
-	return false;
+	struct engineLayoutViewPartsImageNumberBufferCompare bufferCompare;
+	bufferCompare.number.imgw = this->super.number.imgw;
+	bufferCompare.number.imgh = this->super.number.imgh;
+	bufferCompare.number.tu = this->super.number.tu;
+	bufferCompare.number.tv = this->super.number.tv;
+	bufferCompare.number.tw = this->super.number.tw;
+	bufferCompare.number.th = this->super.number.th;
+	bufferCompare.fontStyle.xalign = this->super.fontStyle.xalign;
+	bufferCompare.fontStyle.yalign = this->super.fontStyle.yalign;
+	if(memcmp(&this->bufferCompare, &bufferCompare, sizeof(struct engineLayoutViewPartsImageNumberBufferCompare))){
+		memcpy(&this->bufferCompare, &bufferCompare, sizeof(struct engineLayoutViewPartsImageNumberBufferCompare));
+		return true;
+	}else{
+		return false;
+	}
 }
 
 // バッファ作成
 static void bufferCreate(struct engineLayoutViewPartsImageNumberImplement *this){
-}
-
-// バッファ配列作成
-static void createBufferArrayText(struct engineLayoutViewPartsImageNumberImplement *this){
 	// バッファポインタ取得
 	int vertIndex = engineGraphicBufferVretIndexGet();
 	int faceIndex = engineGraphicBufferFaceIndexGet();
@@ -100,42 +107,13 @@ static void createBufferArrayText(struct engineLayoutViewPartsImageNumberImpleme
 	this->faceNum = tetraNum * 2;
 }
 
-// バッファ作成
-static void createBuffer(struct engineLayoutViewPartsImageNumberImplement *this){
-	struct engineLayoutViewPartsImageNumberBufferCompare bufferCompare;
-	bufferCompare.number.imgw = this->super.number.imgw;
-	bufferCompare.number.imgh = this->super.number.imgh;
-	bufferCompare.number.tu = this->super.number.tu;
-	bufferCompare.number.tv = this->super.number.tv;
-	bufferCompare.number.tw = this->super.number.tw;
-	bufferCompare.number.th = this->super.number.th;
-	bufferCompare.fontStyle.xalign = this->super.fontStyle.xalign;
-	bufferCompare.fontStyle.yalign = this->super.fontStyle.yalign;
-
-	if(memcmp(&this->bufferCompare, &bufferCompare, sizeof(struct engineLayoutViewPartsImageNumberBufferCompare))){
-		memcpy(&this->bufferCompare, &bufferCompare, sizeof(struct engineLayoutViewPartsImageNumberBufferCompare));
-
-		// バッファ作成開始
-		engineGraphicBufferBegin();
-
-		// バッファ配列作成
-		createBufferArrayText(this);
-
-		// バッファ作成完了
-		engineGraphicBufferEnd(&this->egoIdVert, NULL, NULL, &this->egoIdTexc, &this->egoIdFace);
-	}
-}
-
 // 描画
 static void draw(struct engineLayoutViewPartsImageNumberImplement *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
-	// 描画準備
-	createBuffer(this);
-
 	// バッファ登録
 	engineGraphicEngineBindTexture(this->egoIdTexTest);
-	engineGraphicEngineBindVertVBO(this->egoIdVert);
-	engineGraphicEngineBindTexcVBO(this->egoIdTexc);
-	engineGraphicEngineBindFaceIBO(this->egoIdFace);
+	engineGraphicEngineBindVertVBO(this->super.super.graphicObject.egoIdVert);
+	engineGraphicEngineBindTexcVBO(this->super.super.graphicObject.egoIdTexc);
+	engineGraphicEngineBindFaceIBO(this->super.super.graphicObject.egoIdFace);
 	// 行列登録
 	double w = engineLayoutViewUtilPositionGetW((struct engineLayoutView*)this);
 	double h = engineLayoutViewUtilPositionGetH((struct engineLayoutView*)this);
@@ -187,9 +165,6 @@ static void dispose(struct engineLayoutViewPartsImageNumberImplement *this){
 	engineLayoutViewUtilChildrenDispose((struct engineLayoutView*)this);
 
 	// 自要素破棄
-	engineGraphicObjectVBODispose(this->egoIdVert);
-	engineGraphicObjectVBODispose(this->egoIdTexc);
-	engineGraphicObjectIBODispose(this->egoIdFace);
 	engineGraphicTextureDispose(this->egoIdTexTest);
 	engineLayoutViewUtilGraphicObjectDispose((struct engineLayoutView*)this);
 	engineLayoutViewUtilPositionDispose((struct engineLayoutView*)this);

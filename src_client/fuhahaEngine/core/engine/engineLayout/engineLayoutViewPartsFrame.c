@@ -16,9 +16,6 @@ struct engineLayoutViewPartsFrameImplement{
 		struct{int imgw; int imgh; int tu; int tv; int tw; int th;} texture;
 		struct{int bt; int bb; int br; int bl;} border;
 	} bufferCompare;
-	engineGraphicObjectVBOId egoIdVert;
-	engineGraphicObjectVBOId egoIdTexc;
-	engineGraphicObjectIBOId egoIdFace;
 	engineGraphicTextureId egoIdTexTest;
 
 	int faceIndex;
@@ -71,15 +68,27 @@ static void calc(struct engineLayoutViewPartsFrameImplement *this){
 
 // バッファ更新確認
 static bool shouldBufferCreate(struct engineLayoutViewPartsFrameImplement *this){
-	return false;
+	struct engineLayoutViewPartsFrameBufferCompare bufferCompare;
+	bufferCompare.texture.imgw = this->super.texture.imgw;
+	bufferCompare.texture.imgh = this->super.texture.imgh;
+	bufferCompare.texture.tu = this->super.texture.tu;
+	bufferCompare.texture.tv = this->super.texture.tv;
+	bufferCompare.texture.tw = this->super.texture.tw;
+	bufferCompare.texture.th = this->super.texture.th;
+	bufferCompare.border.bt = this->super.border.bt;
+	bufferCompare.border.bb = this->super.border.bb;
+	bufferCompare.border.br = this->super.border.br;
+	bufferCompare.border.bl = this->super.border.bl;
+	if(memcmp(&this->bufferCompare, &bufferCompare, sizeof(struct engineLayoutViewPartsFrameBufferCompare))){
+		memcpy(&this->bufferCompare, &bufferCompare, sizeof(struct engineLayoutViewPartsFrameBufferCompare));
+		return true;
+	}else{
+		return false;
+	}
 }
 
 // バッファ作成
 static void bufferCreate(struct engineLayoutViewPartsFrameImplement *this){
-}
-
-// バッファ配列作成
-static void createBufferArrayRect(struct engineLayoutViewPartsFrameImplement *this){
 	// バッファポインタ取得
 	int vertIndex = engineGraphicBufferVretIndexGet();
 	int faceIndex = engineGraphicBufferFaceIndexGet();
@@ -126,44 +135,13 @@ static void createBufferArrayRect(struct engineLayoutViewPartsFrameImplement *th
 	this->faceNum = tetraNum * 2;
 }
 
-// バッファ作成
-static void createBuffer(struct engineLayoutViewPartsFrameImplement *this){
-	struct engineLayoutViewPartsFrameBufferCompare bufferCompare;
-	bufferCompare.texture.imgw = this->super.texture.imgw;
-	bufferCompare.texture.imgh = this->super.texture.imgh;
-	bufferCompare.texture.tu = this->super.texture.tu;
-	bufferCompare.texture.tv = this->super.texture.tv;
-	bufferCompare.texture.tw = this->super.texture.tw;
-	bufferCompare.texture.th = this->super.texture.th;
-	bufferCompare.border.bt = this->super.border.bt;
-	bufferCompare.border.bb = this->super.border.bb;
-	bufferCompare.border.br = this->super.border.br;
-	bufferCompare.border.bl = this->super.border.bl;
-
-	if(memcmp(&this->bufferCompare, &bufferCompare, sizeof(struct engineLayoutViewPartsFrameBufferCompare))){
-		memcpy(&this->bufferCompare, &bufferCompare, sizeof(struct engineLayoutViewPartsFrameBufferCompare));
-
-		// バッファ作成開始
-		engineGraphicBufferBegin();
-
-		// バッファ配列作成
-		createBufferArrayRect(this);
-
-		// バッファ作成完了
-		engineGraphicBufferEnd(&this->egoIdVert, NULL, NULL, &this->egoIdTexc, &this->egoIdFace);
-	}
-}
-
 // 描画
 static void draw(struct engineLayoutViewPartsFrameImplement *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
-	// 描画準備
-	createBuffer(this);
-
 	// バッファ登録
 	engineGraphicEngineBindTexture(this->egoIdTexTest);
-	engineGraphicEngineBindVertVBO(this->egoIdVert);
-	engineGraphicEngineBindTexcVBO(this->egoIdTexc);
-	engineGraphicEngineBindFaceIBO(this->egoIdFace);
+	engineGraphicEngineBindVertVBO(this->super.super.graphicObject.egoIdVert);
+	engineGraphicEngineBindTexcVBO(this->super.super.graphicObject.egoIdTexc);
+	engineGraphicEngineBindFaceIBO(this->super.super.graphicObject.egoIdFace);
 	// 行列登録
 	double w = engineLayoutViewUtilPositionGetW((struct engineLayoutView*)this);
 	double h = engineLayoutViewUtilPositionGetH((struct engineLayoutView*)this);
@@ -268,9 +246,6 @@ static void dispose(struct engineLayoutViewPartsFrameImplement *this){
 	engineLayoutViewUtilChildrenDispose((struct engineLayoutView*)this);
 
 	// 自要素破棄
-	engineGraphicObjectVBODispose(this->egoIdVert);
-	engineGraphicObjectVBODispose(this->egoIdTexc);
-	engineGraphicObjectIBODispose(this->egoIdFace);
 	engineGraphicTextureDispose(this->egoIdTexTest);
 	engineLayoutViewUtilGraphicObjectDispose((struct engineLayoutView*)this);
 	engineLayoutViewUtilPositionDispose((struct engineLayoutView*)this);
