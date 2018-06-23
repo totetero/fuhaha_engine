@@ -72,6 +72,10 @@ static void init(struct engineLayoutViewPartsArrowKeyImplement *this){
 	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)this, (struct engineLayoutView*)viewDn);
 	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)this, (struct engineLayoutView*)viewRt);
 	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)this, (struct engineLayoutView*)viewLt);
+	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)this, (struct engineLayoutView*)viewUp);
+	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)this, (struct engineLayoutView*)viewDn);
+	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)this, (struct engineLayoutView*)viewRt);
+	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)this, (struct engineLayoutView*)viewLt);
 	this->super.buttonUpNormal = engineLayoutViewPartsRectCreate("img/system.png", TEXSIZ_SYSTEM_WH, TEXPOS_SYSTEM_BUTTONCTRLUPNORMAL_XYWH);
 	this->super.buttonDnNormal = engineLayoutViewPartsRectCreate("img/system.png", TEXSIZ_SYSTEM_WH, TEXPOS_SYSTEM_BUTTONCTRLDNNORMAL_XYWH);
 	this->super.buttonRtNormal = engineLayoutViewPartsRectCreate("img/system.png", TEXSIZ_SYSTEM_WH, TEXPOS_SYSTEM_BUTTONCTRLRTNORMAL_XYWH);
@@ -96,6 +100,14 @@ static void init(struct engineLayoutViewPartsArrowKeyImplement *this){
 	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)viewDn, (struct engineLayoutView*)this->super.buttonDnActibve);
 	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)viewRt, (struct engineLayoutView*)this->super.buttonRtActibve);
 	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)viewLt, (struct engineLayoutView*)this->super.buttonLtActibve);
+	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)viewUp, (struct engineLayoutView*)this->super.buttonUpNormal);
+	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)viewDn, (struct engineLayoutView*)this->super.buttonDnNormal);
+	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)viewRt, (struct engineLayoutView*)this->super.buttonRtNormal);
+	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)viewLt, (struct engineLayoutView*)this->super.buttonLtNormal);
+	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)viewUp, (struct engineLayoutView*)this->super.buttonUpActibve);
+	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)viewDn, (struct engineLayoutView*)this->super.buttonDnActibve);
+	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)viewRt, (struct engineLayoutView*)this->super.buttonRtActibve);
+	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)viewLt, (struct engineLayoutView*)this->super.buttonLtActibve);
 }
 
 // ----------------------------------------------------------------
