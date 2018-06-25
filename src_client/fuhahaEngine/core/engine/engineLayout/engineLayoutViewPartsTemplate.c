@@ -7,14 +7,14 @@
 // ----------------------------------------------------------------
 
 // 構造体実体
-struct engineLayoutViewImplement{
-	struct engineLayoutView super;
+struct engineLayoutViewPartsTemplateImplement{
+	struct engineLayoutViewPartsTemplate super;
 };
 
 // ----------------------------------------------------------------
 
 // 初期化
-static void init(struct engineLayoutViewImplement *this){
+static void init(struct engineLayoutViewPartsTemplateImplement *this){
 	// レイアウト初期化
 	engineLayoutViewUtilFamilyInit((struct engineLayoutView*)this);
 	engineLayoutViewUtilPositionInit((struct engineLayoutView*)this);
@@ -24,7 +24,7 @@ static void init(struct engineLayoutViewImplement *this){
 // ----------------------------------------------------------------
 
 // タッチ処理
-static bool touch(struct engineLayoutViewImplement *this, int touchIndex, double x, double y, bool dn, bool mv, bool isCancel){
+static bool touch(struct engineLayoutViewPartsTemplateImplement *this, int touchIndex, double x, double y, bool dn, bool mv, bool isCancel){
 	bool isActive = false;
 	bool isActiveChild = engineLayoutViewUtilChildrenTouch((struct engineLayoutView*)this, touchIndex, x, y, dn, mv, isCancel || isActive); isActive = isActiveChild || isActive;
 	bool isActiveLocal = engineLayoutViewUtilInteractTouch((struct engineLayoutView*)this, touchIndex, x, y, dn, mv, isCancel || isActive); isActive = isActiveLocal || isActive;
@@ -32,7 +32,7 @@ static bool touch(struct engineLayoutViewImplement *this, int touchIndex, double
 }
 
 // 計算
-static void calc(struct engineLayoutViewImplement *this){
+static void calc(struct engineLayoutViewPartsTemplateImplement *this){
 	// 子要素計算
 	engineLayoutViewUtilChildrenCalc((struct engineLayoutView*)this);
 }
@@ -40,16 +40,16 @@ static void calc(struct engineLayoutViewImplement *this){
 // ----------------------------------------------------------------
 
 // バッファ更新確認
-static bool shouldBufferCreate(struct engineLayoutViewImplement *this){
+static bool shouldBufferCreate(struct engineLayoutViewPartsTemplateImplement *this){
 	return false;
 }
 
 // バッファ作成
-static void bufferCreate(struct engineLayoutViewImplement *this){
+static void bufferCreate(struct engineLayoutViewPartsTemplateImplement *this){
 }
 
 // 描画
-static void draw(struct engineLayoutViewImplement *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
+static void draw(struct engineLayoutViewPartsTemplateImplement *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
 	// 子要素描画
 	engineLayoutViewUtilChildrenDraw((struct engineLayoutView*)this, mat, color);
 }
@@ -57,13 +57,13 @@ static void draw(struct engineLayoutViewImplement *this, struct engineMathMatrix
 // ----------------------------------------------------------------
 
 // 一時停止
-static void pause(struct engineLayoutViewImplement *this){
+static void pause(struct engineLayoutViewPartsTemplateImplement *this){
 	// 子要素一時停止
 	engineLayoutViewUtilChildrenPause((struct engineLayoutView*)this);
 }
 
 // 破棄
-static void dispose(struct engineLayoutViewImplement *this){
+static void dispose(struct engineLayoutViewPartsTemplateImplement *this){
 	// 子要素破棄
 	engineLayoutViewUtilChildrenDispose((struct engineLayoutView*)this);
 
@@ -71,14 +71,14 @@ static void dispose(struct engineLayoutViewImplement *this){
 	engineLayoutViewUtilGraphicObjectDispose((struct engineLayoutView*)this);
 	engineLayoutViewUtilPositionDispose((struct engineLayoutView*)this);
 	engineLayoutViewUtilFamilyDispose((struct engineLayoutView*)this);
-	engineUtilMemoryInfoFree("engineLayoutView", this);
+	engineUtilMemoryInfoFree("engineLayoutViewPartsTemplateImplement", this);
 }
 
 // ----------------------------------------------------------------
 
 // 表示要素構造体 作成
-struct engineLayoutView *engineLayoutViewCreate(){
-	struct engineLayoutViewImplement *this = (struct engineLayoutViewImplement*)engineUtilMemoryInfoCalloc("engineLayoutView", 1, sizeof(struct engineLayoutViewImplement));
+struct engineLayoutViewPartsTemplate *engineLayoutViewPartsTemplateCreate(){
+	struct engineLayoutViewPartsTemplateImplement *this = (struct engineLayoutViewPartsTemplateImplement*)engineUtilMemoryInfoCalloc("engineLayoutViewPartsTemplate", 1, sizeof(struct engineLayoutViewPartsTemplateImplement));
 	init(this);
 
 	struct engineLayoutView *view = (struct engineLayoutView*)this;
@@ -89,7 +89,7 @@ struct engineLayoutView *engineLayoutViewCreate(){
 	view->dispose = (void(*)(struct engineLayoutView*))dispose;
 	view->graphicObject.shouldBufferCreate = (bool(*)(struct engineLayoutView*))shouldBufferCreate;
 	view->graphicObject.bufferCreate = (void(*)(struct engineLayoutView*))bufferCreate;
-	return (struct engineLayoutView*)this;
+	return (struct engineLayoutViewPartsTemplate*)this;
 }
 
 // ----------------------------------------------------------------

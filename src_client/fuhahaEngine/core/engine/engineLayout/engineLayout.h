@@ -17,8 +17,8 @@ struct engineLayoutView;
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-#include "./engineLayoutViewPartsButtonBox.h"
 #include "./engineLayoutViewPartsArrowKey.h"
+#include "./engineLayoutViewPartsButtonBox.h"
 #include "./engineLayoutViewPartsFilterColor.h"
 #include "./engineLayoutViewPartsFontNumber.h"
 #include "./engineLayoutViewPartsFontText.h"
@@ -29,6 +29,7 @@ struct engineLayoutView;
 #include "./engineLayoutViewPartsRect.h"
 #include "./engineLayoutViewPartsRoot.h"
 #include "./engineLayoutViewPartsScroller.h"
+#include "./engineLayoutViewPartsTemplate.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
