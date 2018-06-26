@@ -71,7 +71,7 @@ static void dispose(struct engineLayoutViewPartsTemplateImplement *this){
 	engineLayoutViewUtilGraphicObjectDispose((struct engineLayoutView*)this);
 	engineLayoutViewUtilPositionDispose((struct engineLayoutView*)this);
 	engineLayoutViewUtilFamilyDispose((struct engineLayoutView*)this);
-	engineUtilMemoryInfoFree("engineLayoutViewPartsTemplateImplement", this);
+	engineUtilMemoryInfoFree("engineLayoutViewPartsTemplate", this);
 }
 
 // ----------------------------------------------------------------
