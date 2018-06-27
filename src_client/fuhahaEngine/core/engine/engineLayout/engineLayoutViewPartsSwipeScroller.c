@@ -8,16 +8,15 @@
 // ----------------------------------------------------------------
 
 // 構造体実体
-struct engineLayoutViewPartsScrollerImplement{
-	struct engineLayoutViewPartsScroller super;
-	struct{int x; int y;} temp0;
-	struct{int x; int y;} temp1;
+struct engineLayoutViewPartsSwipeScrollerImplement{
+	struct engineLayoutViewPartsSwipeScroller super;
+	struct{int x; int y;} temp;
 };
 
 // ----------------------------------------------------------------
 
 // 初期化
-static void init(struct engineLayoutViewPartsScrollerImplement *this){
+static void init(struct engineLayoutViewPartsSwipeScrollerImplement *this){
 	// レイアウト初期化
 	engineLayoutViewUtilFamilyInit((struct engineLayoutView*)this);
 	engineLayoutViewUtilPositionInit((struct engineLayoutView*)this);
@@ -38,48 +37,18 @@ static void init(struct engineLayoutViewPartsScrollerImplement *this){
 // ----------------------------------------------------------------
 
 // タッチ処理
-static bool touch(struct engineLayoutViewPartsScrollerImplement *this, int touchIndex, double x, double y, bool dn, bool mv, bool isCancel){
-	// タッチ開始時に親要素の範囲外ならば子要素はタッチ開始できない
-	if(dn && !mv && !this->super.super.position.isInner((struct engineLayoutView*)this, x, y)){isCancel = true;}
-
-	// スクロール開始したら子要素のタッチ処理をキャンセルする
-	// ただし子要素がスクロール開始したら自身はスクロール開始できない
-	this->super.bubbling.isChildrenMove = false;
-	bool isActive = false;
-	bool isMove = (this->super.super.interact.status.isActive && this->super.super.interact.status.isMove);
-	bool isActiveChild = engineLayoutViewUtilChildrenTouch((struct engineLayoutView*)this, touchIndex, x, y, dn, mv, isCancel || isActive || isMove); isActive = isActiveChild || isActive;
-	bool isChildrenMove = this->super.bubbling.isChildrenMove;
-	bool isActiveLocal = engineLayoutViewUtilInteractTouch((struct engineLayoutView*)this, touchIndex, x, y, dn, mv, isCancel || isChildrenMove); isActive = isActiveLocal || isActive;
-
-	// 必要ならば親要素に子要素がスクロールしたことを伝える
-	if(this->super.bubbling.parentScroller != NULL){
-		isMove = (this->super.super.interact.status.isActive && this->super.super.interact.status.isMove);
-		if(isMove || isChildrenMove){this->super.bubbling.parentScroller->bubbling.isChildrenMove = true;}
-	}
-
-	if(isActiveLocal){
-		// ローカル座標変換
-		struct engineMathVector3 tempVec1;
-		engineMathVec3Set(&tempVec1, x, y, 0);
-		engineLayoutViewUtilPositionTransformCalcInvert((struct engineLayoutView*)this, &tempVec1);
-		// 新タッチ位置更新
-		this->temp1.x = tempVec1.x;
-		this->temp1.y = tempVec1.y;
-	}else if(this->super.super.interact.status.touchIndex == touchIndex){
-		// タッチしていない時
-	}
-
-	return isActive;
+static bool touch(struct engineLayoutViewPartsSwipeScrollerImplement *this, int touchIndex, double x, double y, bool dn, bool mv, bool isCancel){
+	return engineLayoutSwipeTouch(&this->super.swipe, (struct engineLayoutView*)this, touchIndex, x, y, dn, mv, isCancel);
 }
 
 // 計算
-static void calc(struct engineLayoutViewPartsScrollerImplement *this){
+static void calc(struct engineLayoutViewPartsSwipeScrollerImplement *this){
 	if(this->super.super.interact.status.isActive && this->super.super.interact.status.isMove){
 		// スクロール中
-		this->super.velocity.x = this->temp1.x - this->temp0.x + this->super.velocity.x * 0.3;
-		this->super.velocity.y = this->temp1.y - this->temp0.y + this->super.velocity.y * 0.3;
-		this->super.position.x += this->temp1.x - this->temp0.x;
-		this->super.position.y += this->temp1.y - this->temp0.y;
+		this->super.velocity.x = this->super.swipe.x - this->temp.x + this->super.velocity.x * 0.3;
+		this->super.velocity.y = this->super.swipe.y - this->temp.y + this->super.velocity.y * 0.3;
+		this->super.position.x += this->super.swipe.x - this->temp.x;
+		this->super.position.y += this->super.swipe.y - this->temp.y;
 	}else if(engineMathAbs(this->super.velocity.x) > 0.01 || engineMathAbs(this->super.velocity.y) > 0.01){
 		// 速度が生きてる
 		this->super.velocity.x *= 0.8;
@@ -89,8 +58,8 @@ static void calc(struct engineLayoutViewPartsScrollerImplement *this){
 	}
 
 	// 旧タッチ位置更新
-	this->temp0.x = this->temp1.x;
-	this->temp0.y = this->temp1.y;
+	this->temp.x = this->super.swipe.x;
+	this->temp.y = this->super.swipe.y;
 
 	// 位置大きさ取得
 	double innerW = this->super.inner.w;
@@ -142,16 +111,16 @@ static void calc(struct engineLayoutViewPartsScrollerImplement *this){
 // ----------------------------------------------------------------
 
 // バッファ更新確認
-static bool shouldBufferCreate(struct engineLayoutViewPartsScrollerImplement *this){
+static bool shouldBufferCreate(struct engineLayoutViewPartsSwipeScrollerImplement *this){
 	return false;
 }
 
 // バッファ作成
-static void bufferCreate(struct engineLayoutViewPartsScrollerImplement *this){
+static void bufferCreate(struct engineLayoutViewPartsSwipeScrollerImplement *this){
 }
 
 // 描画
-static void draw(struct engineLayoutViewPartsScrollerImplement *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
+static void draw(struct engineLayoutViewPartsSwipeScrollerImplement *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
 	// 子要素描画
 	engineLayoutViewUtilChildrenDraw((struct engineLayoutView*)this, mat, color);
 }
@@ -159,13 +128,13 @@ static void draw(struct engineLayoutViewPartsScrollerImplement *this, struct eng
 // ----------------------------------------------------------------
 
 // 一時停止
-static void pause(struct engineLayoutViewPartsScrollerImplement *this){
+static void pause(struct engineLayoutViewPartsSwipeScrollerImplement *this){
 	// 子要素一時停止
 	engineLayoutViewUtilChildrenPause((struct engineLayoutView*)this);
 }
 
 // 破棄
-static void dispose(struct engineLayoutViewPartsScrollerImplement *this){
+static void dispose(struct engineLayoutViewPartsSwipeScrollerImplement *this){
 	// 子要素破棄
 	engineLayoutViewUtilChildrenDispose((struct engineLayoutView*)this);
 
@@ -173,14 +142,14 @@ static void dispose(struct engineLayoutViewPartsScrollerImplement *this){
 	engineLayoutViewUtilGraphicObjectDispose((struct engineLayoutView*)this);
 	engineLayoutViewUtilPositionDispose((struct engineLayoutView*)this);
 	engineLayoutViewUtilFamilyDispose((struct engineLayoutView*)this);
-	engineUtilMemoryInfoFree("engineLayoutViewPartsScroller", this);
+	engineUtilMemoryInfoFree("engineLayoutViewPartsSwipeScroller", this);
 }
 
 // ----------------------------------------------------------------
 
 // スクローラ構造体 作成
-struct engineLayoutViewPartsScroller *engineLayoutViewPartsScrollerCreate(){
-	struct engineLayoutViewPartsScrollerImplement *this = (struct engineLayoutViewPartsScrollerImplement*)engineUtilMemoryInfoCalloc("engineLayoutViewPartsScroller", 1, sizeof(struct engineLayoutViewPartsScrollerImplement));
+struct engineLayoutViewPartsSwipeScroller *engineLayoutViewPartsSwipeScrollerCreate(){
+	struct engineLayoutViewPartsSwipeScrollerImplement *this = (struct engineLayoutViewPartsSwipeScrollerImplement*)engineUtilMemoryInfoCalloc("engineLayoutViewPartsSwipeScroller", 1, sizeof(struct engineLayoutViewPartsSwipeScrollerImplement));
 	init(this);
 
 	struct engineLayoutView *view = (struct engineLayoutView*)this;
@@ -191,7 +160,7 @@ struct engineLayoutViewPartsScroller *engineLayoutViewPartsScrollerCreate(){
 	view->dispose = (void(*)(struct engineLayoutView*))dispose;
 	view->graphicObject.shouldBufferCreate = (bool(*)(struct engineLayoutView*))shouldBufferCreate;
 	view->graphicObject.bufferCreate = (void(*)(struct engineLayoutView*))bufferCreate;
-	return (struct engineLayoutViewPartsScroller*)this;
+	return (struct engineLayoutViewPartsSwipeScroller*)this;
 }
 
 // ----------------------------------------------------------------

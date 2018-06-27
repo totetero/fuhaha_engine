@@ -17,6 +17,12 @@ struct engineLayoutView;
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
+#include "./engineLayoutSwipe.h"
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+
 #include "./engineLayoutViewPartsArrowKey.h"
 #include "./engineLayoutViewPartsButtonBox.h"
 #include "./engineLayoutViewPartsFilterColor.h"
@@ -28,7 +34,7 @@ struct engineLayoutView;
 #include "./engineLayoutViewPartsMaskRect.h"
 #include "./engineLayoutViewPartsRect.h"
 #include "./engineLayoutViewPartsRoot.h"
-#include "./engineLayoutViewPartsScroller.h"
+#include "./engineLayoutViewPartsSwipeScroller.h"
 #include "./engineLayoutViewPartsTemplate.h"
 
 // ----------------------------------------------------------------

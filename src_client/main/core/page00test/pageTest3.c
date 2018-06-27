@@ -55,7 +55,7 @@ static void init(struct pageCartridgeTest3 *this){
 	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)viewTestFrame, (struct engineLayoutView*)viewTestScrollerMask);
 	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)viewTestFrame, (struct engineLayoutView*)viewTestScrollerMask);
 	// スクローラ作成
-	struct engineLayoutViewPartsScroller *viewTestScroller = engineLayoutViewPartsScrollerCreate();
+	struct engineLayoutViewPartsSwipeScroller *viewTestScroller = engineLayoutViewPartsSwipeScrollerCreate();
 	engineLayoutViewUtilPositionSetLtRtTpBm((struct engineLayoutView*)viewTestScroller, 0, 0, 0, 0);
 	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)viewTestScrollerMask, (struct engineLayoutView*)viewTestScroller);
 	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)viewTestScrollerMask, (struct engineLayoutView*)viewTestScroller);
