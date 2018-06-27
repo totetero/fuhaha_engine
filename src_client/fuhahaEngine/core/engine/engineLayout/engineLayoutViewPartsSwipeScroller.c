@@ -51,8 +51,8 @@ static void calc(struct engineLayoutViewPartsSwipeScrollerImplement *this){
 		this->super.position.y += this->super.swipe.y - this->temp.y;
 	}else if(engineMathAbs(this->super.velocity.x) > 0.01 || engineMathAbs(this->super.velocity.y) > 0.01){
 		// 速度が生きてる
-		this->super.velocity.x *= 0.8;
-		this->super.velocity.y *= 0.8;
+		this->super.velocity.x *= this->super.super.interact.status.isActive ? 0.5 : 0.9;
+		this->super.velocity.y *= this->super.super.interact.status.isActive ? 0.5 : 0.9;
 		this->super.position.x += this->super.velocity.x;
 		this->super.position.y += this->super.velocity.y;
 	}
