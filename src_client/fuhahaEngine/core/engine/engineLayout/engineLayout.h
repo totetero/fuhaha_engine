@@ -34,6 +34,7 @@ struct engineLayoutView;
 #include "./engineLayoutViewPartsMaskRect.h"
 #include "./engineLayoutViewPartsRect.h"
 #include "./engineLayoutViewPartsRoot.h"
+#include "./engineLayoutViewPartsSwipePager.h"
 #include "./engineLayoutViewPartsSwipeScroller.h"
 #include "./engineLayoutViewPartsTemplate.h"
 

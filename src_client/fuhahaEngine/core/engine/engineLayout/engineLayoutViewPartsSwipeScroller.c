@@ -10,7 +10,7 @@
 // 構造体実体
 struct engineLayoutViewPartsSwipeScrollerImplement{
 	struct engineLayoutViewPartsSwipeScroller super;
-	struct{int x; int y;} temp;
+	struct{int x; int y;} posTemp;
 };
 
 // ----------------------------------------------------------------
@@ -23,6 +23,7 @@ static void init(struct engineLayoutViewPartsSwipeScrollerImplement *this){
 	engineLayoutViewUtilGraphicObjectInit((struct engineLayoutView*)this);
 	this->super.super.interact.setting.isTouchable = true;
 
+	// スクロール要素作成
 	this->super.viewInner = engineLayoutViewCreate();
 	this->super.viewBarX = engineLayoutViewCreate();
 	this->super.viewBarY = engineLayoutViewCreate();
@@ -45,10 +46,10 @@ static bool touch(struct engineLayoutViewPartsSwipeScrollerImplement *this, int 
 static void calc(struct engineLayoutViewPartsSwipeScrollerImplement *this){
 	if(this->super.super.interact.status.isActive && this->super.super.interact.status.isMove){
 		// スクロール中
-		this->super.velocity.x = this->super.swipe.x - this->temp.x + this->super.velocity.x * 0.3;
-		this->super.velocity.y = this->super.swipe.y - this->temp.y + this->super.velocity.y * 0.3;
-		this->super.position.x += this->super.swipe.x - this->temp.x;
-		this->super.position.y += this->super.swipe.y - this->temp.y;
+		this->super.velocity.x = this->super.swipe.x - this->posTemp.x + this->super.velocity.x * 0.3;
+		this->super.velocity.y = this->super.swipe.y - this->posTemp.y + this->super.velocity.y * 0.3;
+		this->super.position.x += this->super.swipe.x - this->posTemp.x;
+		this->super.position.y += this->super.swipe.y - this->posTemp.y;
 	}else if(engineMathAbs(this->super.velocity.x) > 0.01 || engineMathAbs(this->super.velocity.y) > 0.01){
 		// 速度が生きてる
 		this->super.velocity.x *= this->super.super.interact.status.isActive ? 0.5 : 0.9;
@@ -58,8 +59,8 @@ static void calc(struct engineLayoutViewPartsSwipeScrollerImplement *this){
 	}
 
 	// 旧タッチ位置更新
-	this->temp.x = this->super.swipe.x;
-	this->temp.y = this->super.swipe.y;
+	this->posTemp.x = this->super.swipe.x;
+	this->posTemp.y = this->super.swipe.y;
 
 	// 位置大きさ取得
 	double innerW = this->super.inner.w;
