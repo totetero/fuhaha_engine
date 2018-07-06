@@ -110,6 +110,16 @@ static void init(struct engineLayoutViewPartsArrowKeyImplement *this){
 	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)viewDn, (struct engineLayoutView*)this->super.buttonDnActibve);
 	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)viewRt, (struct engineLayoutView*)this->super.buttonRtActibve);
 	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)viewLt, (struct engineLayoutView*)this->super.buttonLtActibve);
+
+	// パラメータ初期化
+	this->super.buttonUpNormal->super.family.isInvisible = true;
+	this->super.buttonDnNormal->super.family.isInvisible = true;
+	this->super.buttonRtNormal->super.family.isInvisible = true;
+	this->super.buttonLtNormal->super.family.isInvisible = true;
+	this->super.buttonUpActibve->super.family.isInvisible = false;
+	this->super.buttonDnActibve->super.family.isInvisible = false;
+	this->super.buttonRtActibve->super.family.isInvisible = false;
+	this->super.buttonLtActibve->super.family.isInvisible = false;
 }
 
 // ----------------------------------------------------------------
