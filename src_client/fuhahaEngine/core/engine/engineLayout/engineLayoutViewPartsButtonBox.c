@@ -23,6 +23,7 @@ static void init(struct engineLayoutViewPartsButtonBoxImplement *this){
 	engineLayoutViewUtilGraphicObjectInit((struct engineLayoutView*)this);
 	this->super.super.interact.setting.isTouchable = true;
 
+	// パーツ作成
 	this->super.frameNormal = engineLayoutViewPartsFrameCreate();
 	this->super.frameSelect = engineLayoutViewPartsFrameCreate();
 	this->super.frameActibve = engineLayoutViewPartsFrameCreate();

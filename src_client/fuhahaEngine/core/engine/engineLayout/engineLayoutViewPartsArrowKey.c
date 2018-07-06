@@ -41,9 +41,11 @@ static void init(struct engineLayoutViewPartsArrowKeyImplement *this){
 	this->super.super.position.isInner = (bool(*)(struct engineLayoutView*, double, double))isInner;
 	this->super.super.interact.setting.isTouchable = true;
 
+	// サイズ設定
 	engineLayoutViewUtilPositionSetWidthValue((struct engineLayoutView*)this, 144);
 	engineLayoutViewUtilPositionSetHeightValue((struct engineLayoutView*)this, 144);
 
+	// パーツ作成
 	struct engineLayoutView *viewUp = engineLayoutViewCreate();
 	struct engineLayoutView *viewDn = engineLayoutViewCreate();
 	struct engineLayoutView *viewRt = engineLayoutViewCreate();
