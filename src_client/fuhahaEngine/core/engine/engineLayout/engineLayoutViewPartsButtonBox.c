@@ -53,11 +53,6 @@ static void init(struct engineLayoutViewPartsButtonBoxImplement *this){
 	this->super.frameActibve->border.bb = 24;
 	this->super.frameInactive->border.bt = 24;
 	this->super.frameInactive->border.bb = 24;
-	engineLayoutViewUtilPositionSetLtRtTpBm((struct engineLayoutView*)this->super.frameNormal, 0, 0, 0, 0);
-	engineLayoutViewUtilPositionSetLtRtTpBm((struct engineLayoutView*)this->super.frameSelect, 0, 0, 0, 0);
-	engineLayoutViewUtilPositionSetLtRtTpBm((struct engineLayoutView*)this->super.frameActibve, 0, 0, 0, 0);
-	engineLayoutViewUtilPositionSetLtRtTpBm((struct engineLayoutView*)this->super.frameInactive, 0, 0, 0, 0);
-	engineLayoutViewUtilPositionSetLtRtTpBm(this->super.viewInner, 0, 0, 0, 0);
 	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)this, (struct engineLayoutView*)this->super.frameNormal);
 	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)this, (struct engineLayoutView*)this->super.frameSelect);
 	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)this, (struct engineLayoutView*)this->super.frameActibve);
@@ -181,7 +176,6 @@ struct engineLayoutViewPartsButtonBox *engineLayoutViewPartsButtonBoxCreate(){
 struct engineLayoutViewPartsButtonBox *engineLayoutViewPartsButtonBoxCreateText(char *text){
 	struct engineLayoutViewPartsButtonBox *this = engineLayoutViewPartsButtonBoxCreate();
 	struct engineLayoutViewPartsFontText *viewText = engineLayoutViewPartsFontTextCreateDefault(text);
-	engineLayoutViewUtilPositionSetLtRtTpBm((struct engineLayoutView*)viewText, 0, 0, 0, 0);
 	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)this->viewInner, (struct engineLayoutView*)viewText);
 	return this;
 }

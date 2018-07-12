@@ -21,8 +21,8 @@ struct engineLayoutViewUtilPosition{
 		struct{bool isActive; double value;} paddingRight;
 		struct{bool isActive; double value;} paddingTop;
 		struct{bool isActive; double value;} paddingBottom;
-		struct{bool isActive;} centeringHorizontal;
-		struct{bool isActive;} centeringVertical;
+		struct{bool isActive; double min; double max; int align;} clampHorizontal;
+		struct{bool isActive; double min; double max; int align;} clampVertical;
 		struct{bool isActive; double originX; double originY; struct engineMathMatrix44 matrix;} transform;
 	} style;
 
@@ -70,8 +70,8 @@ void engineLayoutViewUtilPositionSetPaddingLeft(struct engineLayoutView *this, d
 void engineLayoutViewUtilPositionSetPaddingRight(struct engineLayoutView *this, double value);
 void engineLayoutViewUtilPositionSetPaddingTop(struct engineLayoutView *this, double value);
 void engineLayoutViewUtilPositionSetPaddingBottom(struct engineLayoutView *this, double value);
-void engineLayoutViewUtilPositionSetCenteringVertical(struct engineLayoutView *this);
-void engineLayoutViewUtilPositionSetCenteringHorizontal(struct engineLayoutView *this);
+void engineLayoutViewUtilPositionSetClampHorizontal(struct engineLayoutView *this, double min, double max, int align);
+void engineLayoutViewUtilPositionSetClampVertical(struct engineLayoutView *this, double min, double max, int align);
 void engineLayoutViewUtilPositionSetTransformOrigin(struct engineLayoutView *this, double originX, double originY);
 void engineLayoutViewUtilPositionSetTransformMatrix(struct engineLayoutView *this, struct engineMathMatrix44 *matrix);
 void engineLayoutViewUtilPositionSetTransformScale(struct engineLayoutView *this, double x, double y);
@@ -92,8 +92,8 @@ void engineLayoutViewUtilPositionUnsetPaddingLeft(struct engineLayoutView *this)
 void engineLayoutViewUtilPositionUnsetPaddingRight(struct engineLayoutView *this);
 void engineLayoutViewUtilPositionUnsetPaddingTop(struct engineLayoutView *this);
 void engineLayoutViewUtilPositionUnsetPaddingBottom(struct engineLayoutView *this);
-void engineLayoutViewUtilPositionUnsetCenteringVertical(struct engineLayoutView *this);
-void engineLayoutViewUtilPositionUnsetCenteringHorizontal(struct engineLayoutView *this);
+void engineLayoutViewUtilPositionUnsetClampHorizontal(struct engineLayoutView *this);
+void engineLayoutViewUtilPositionUnsetClampVertical(struct engineLayoutView *this);
 void engineLayoutViewUtilPositionUnsetTransform(struct engineLayoutView *this);
 
 // 表示要素構造体位置関係 レイアウト取得

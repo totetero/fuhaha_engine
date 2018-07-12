@@ -62,10 +62,6 @@ static void init(struct engineLayoutViewPartsArrowKeyImplement *this){
 	engineLayoutViewUtilPositionSetHeightValue((struct engineLayoutView*)viewDn, 46 + 4);
 	engineLayoutViewUtilPositionSetHeightValue((struct engineLayoutView*)viewRt, 34 + 4);
 	engineLayoutViewUtilPositionSetHeightValue((struct engineLayoutView*)viewLt, 34 + 4);
-	engineLayoutViewUtilPositionSetCenteringHorizontal((struct engineLayoutView*)viewUp);
-	engineLayoutViewUtilPositionSetCenteringHorizontal((struct engineLayoutView*)viewDn);
-	engineLayoutViewUtilPositionSetCenteringVertical((struct engineLayoutView*)viewRt);
-	engineLayoutViewUtilPositionSetCenteringVertical((struct engineLayoutView*)viewLt);
 	engineLayoutViewUtilPositionSetPaddingBottom((struct engineLayoutView*)viewUp, 2);
 	engineLayoutViewUtilPositionSetPaddingBottom((struct engineLayoutView*)viewDn, 2);
 	engineLayoutViewUtilPositionSetPaddingBottom((struct engineLayoutView*)viewRt, 2);
@@ -86,14 +82,6 @@ static void init(struct engineLayoutViewPartsArrowKeyImplement *this){
 	this->super.buttonDnActibve = engineLayoutViewPartsRectCreate("img/system.png", TEXSIZ_SYSTEM_WH, TEXPOS_SYSTEM_BUTTONCTRLDNACTIVE_XYWH);
 	this->super.buttonRtActibve = engineLayoutViewPartsRectCreate("img/system.png", TEXSIZ_SYSTEM_WH, TEXPOS_SYSTEM_BUTTONCTRLRTACTIVE_XYWH);
 	this->super.buttonLtActibve = engineLayoutViewPartsRectCreate("img/system.png", TEXSIZ_SYSTEM_WH, TEXPOS_SYSTEM_BUTTONCTRLLTACTIVE_XYWH);
-	engineLayoutViewUtilPositionSetLtRtTpBm((struct engineLayoutView*)this->super.buttonUpNormal, 0, 0, 0, 0);
-	engineLayoutViewUtilPositionSetLtRtTpBm((struct engineLayoutView*)this->super.buttonDnNormal, 0, 0, 0, 0);
-	engineLayoutViewUtilPositionSetLtRtTpBm((struct engineLayoutView*)this->super.buttonRtNormal, 0, 0, 0, 0);
-	engineLayoutViewUtilPositionSetLtRtTpBm((struct engineLayoutView*)this->super.buttonLtNormal, 0, 0, 0, 0);
-	engineLayoutViewUtilPositionSetLtRtTpBm((struct engineLayoutView*)this->super.buttonUpActibve, 0, 0, 0, 0);
-	engineLayoutViewUtilPositionSetLtRtTpBm((struct engineLayoutView*)this->super.buttonDnActibve, 0, 0, 0, 0);
-	engineLayoutViewUtilPositionSetLtRtTpBm((struct engineLayoutView*)this->super.buttonRtActibve, 0, 0, 0, 0);
-	engineLayoutViewUtilPositionSetLtRtTpBm((struct engineLayoutView*)this->super.buttonLtActibve, 0, 0, 0, 0);
 	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)viewUp, (struct engineLayoutView*)this->super.buttonUpNormal);
 	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)viewDn, (struct engineLayoutView*)this->super.buttonDnNormal);
 	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)viewRt, (struct engineLayoutView*)this->super.buttonRtNormal);

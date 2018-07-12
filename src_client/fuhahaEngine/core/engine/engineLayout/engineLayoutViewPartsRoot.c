@@ -21,9 +21,6 @@ static void init(struct engineLayoutViewPartsRootImplement *this){
 	engineLayoutViewUtilFamilyInit((struct engineLayoutView*)this);
 	engineLayoutViewUtilPositionInit((struct engineLayoutView*)this);
 	engineLayoutViewUtilGraphicObjectInit((struct engineLayoutView*)this);
-
-	// レイアウト設定
-	engineLayoutViewUtilPositionSetLtRtTpBm((struct engineLayoutView*)this, 0, 0, 0, 0);
 }
 
 // ----------------------------------------------------------------

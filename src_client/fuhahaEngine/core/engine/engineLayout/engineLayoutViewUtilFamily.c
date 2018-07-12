@@ -6,7 +6,6 @@
 // ----------------------------------------------------------------
 
 static struct{
-	bool isViewRootInit;
 	struct engineLayoutView viewRoot;
 } localGlobal = {0};
 
@@ -16,10 +15,6 @@ static struct{
 
 // 表示要素構造体子要素 全ての要素の親となる要素を取得
 static struct engineLayoutView *viewRootGet(){
-	if(!localGlobal.isViewRootInit){
-		localGlobal.isViewRootInit = true;
-		engineLayoutViewUtilPositionSetLtRtTpBm(&localGlobal.viewRoot, 0, 0, 0, 0);
-	}
 	return &localGlobal.viewRoot;
 }
 

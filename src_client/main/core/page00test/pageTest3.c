@@ -22,7 +22,6 @@ static void init(struct pageCartridgeTest3 *this){
 
 	// フィルタ作成
 	struct engineLayoutViewPartsFilterColor *viewTestFilter = engineLayoutViewPartsFilterColorCreate();
-	engineLayoutViewUtilPositionSetLtRtTpBm((struct engineLayoutView*)viewTestFilter, 0, 0, 0, 0);
 	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)this->viewRoot, (struct engineLayoutView*)viewTestFilter);
 	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)this->viewRoot, (struct engineLayoutView*)viewTestFilter);
 	//engineLayoutViewPartsFilterColorCreateSetNegative2(viewTestFilter);
@@ -45,7 +44,6 @@ static void init(struct pageCartridgeTest3 *this){
 	engineLayoutViewUtilPositionSetBottom((struct engineLayoutView*)this->viewTestButton, 10);
 	engineLayoutViewUtilPositionSetWidthValue((struct engineLayoutView*)this->viewTestButton, 100);
 	engineLayoutViewUtilPositionSetHeightValue((struct engineLayoutView*)this->viewTestButton, 30);
-	engineLayoutViewUtilPositionSetCenteringHorizontal((struct engineLayoutView*)this->viewTestButton);
 	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)viewTestFrame, (struct engineLayoutView*)this->viewTestButton);
 	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)viewTestFrame, (struct engineLayoutView*)this->viewTestButton);
 
@@ -56,7 +54,6 @@ static void init(struct pageCartridgeTest3 *this){
 	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)viewTestFrame, (struct engineLayoutView*)viewTestScrollerMask);
 	// スクローラ作成
 	struct engineLayoutViewPartsSwipeScroller *viewTestScroller = engineLayoutViewPartsSwipeScrollerCreate();
-	engineLayoutViewUtilPositionSetLtRtTpBm((struct engineLayoutView*)viewTestScroller, 0, 0, 0, 0);
 	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)viewTestScrollerMask, (struct engineLayoutView*)viewTestScroller);
 	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)viewTestScrollerMask, (struct engineLayoutView*)viewTestScroller);
 	viewTestScroller->inner.w = 1000;

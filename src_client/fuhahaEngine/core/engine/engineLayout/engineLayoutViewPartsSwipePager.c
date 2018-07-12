@@ -28,7 +28,6 @@ static void init(struct engineLayoutViewPartsSwipePagerImplement *this){
 
 	// スクロール要素作成
 	this->super.viewInner = engineLayoutViewCreate();
-	engineLayoutViewUtilPositionSetLtRtTpBm((struct engineLayoutView*)this->super.viewInner, 0, 0, 0, 0);
 	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)this, (struct engineLayoutView*)this->super.viewInner);
 	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)this, (struct engineLayoutView*)this->super.viewInner);
 }

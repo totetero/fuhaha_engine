@@ -200,15 +200,21 @@ void engineLayoutViewUtilPositionSetPaddingBottom(struct engineLayoutView *this,
 	localGlobal.generationCount++;
 }
 
-void engineLayoutViewUtilPositionSetCenteringHorizontal(struct engineLayoutView *this){
+void engineLayoutViewUtilPositionSetClampHorizontal(struct engineLayoutView *this, double min, double max, int align){
 	if(localGlobal.isModeDraw){return;}
-	this->position.style.centeringHorizontal.isActive = true;
+	this->position.style.clampHorizontal.isActive = true;
+	this->position.style.clampHorizontal.min = min;
+	this->position.style.clampHorizontal.max = max;
+	this->position.style.clampHorizontal.align = align;
 	localGlobal.generationCount++;
 }
 
-void engineLayoutViewUtilPositionSetCenteringVertical(struct engineLayoutView *this){
+void engineLayoutViewUtilPositionSetClampVertical(struct engineLayoutView *this, double min, double max, int align){
 	if(localGlobal.isModeDraw){return;}
-	this->position.style.centeringVertical.isActive = true;
+	this->position.style.clampVertical.isActive = true;
+	this->position.style.clampVertical.min = min;
+	this->position.style.clampVertical.max = max;
+	this->position.style.clampVertical.align = align;
 	localGlobal.generationCount++;
 }
 
@@ -277,8 +283,8 @@ void engineLayoutViewUtilPositionUnsetPaddingLeft(struct engineLayoutView *this)
 void engineLayoutViewUtilPositionUnsetPaddingRight(struct engineLayoutView *this){if(localGlobal.isModeDraw){return;} this->position.style.paddingRight.isActive = false; localGlobal.generationCount++;}
 void engineLayoutViewUtilPositionUnsetPaddingTop(struct engineLayoutView *this){if(localGlobal.isModeDraw){return;} this->position.style.paddingTop.isActive = false; localGlobal.generationCount++;}
 void engineLayoutViewUtilPositionUnsetPaddingBottom(struct engineLayoutView *this){if(localGlobal.isModeDraw){return;} this->position.style.paddingBottom.isActive = false; localGlobal.generationCount++;}
-void engineLayoutViewUtilPositionUnsetCenteringHorizontal(struct engineLayoutView *this){if(localGlobal.isModeDraw){return;} this->position.style.centeringHorizontal.isActive = false; localGlobal.generationCount++;}
-void engineLayoutViewUtilPositionUnsetCenteringVertical(struct engineLayoutView *this){if(localGlobal.isModeDraw){return;} this->position.style.centeringVertical.isActive = false; localGlobal.generationCount++;}
+void engineLayoutViewUtilPositionUnsetClampHorizontal(struct engineLayoutView *this){if(localGlobal.isModeDraw){return;} this->position.style.clampHorizontal.isActive = false; localGlobal.generationCount++;}
+void engineLayoutViewUtilPositionUnsetClampVertical(struct engineLayoutView *this){if(localGlobal.isModeDraw){return;} this->position.style.clampVertical.isActive = false; localGlobal.generationCount++;}
 void engineLayoutViewUtilPositionUnsetTransform(struct engineLayoutView *this){if(localGlobal.isModeDraw){return;} this->position.style.transform.isActive = false; localGlobal.generationCount++;}
 
 // ----------------------------------------------------------------
@@ -329,33 +335,101 @@ static void calcLayout(struct engineLayoutView *this){
 	currentH -= marginTp + marginBm;
 
 	// 自要素レイアウト計算 水平軸
+	// isLt isRt isWh
+	//   x    x    x 親サイズに合わせる
+	//   x    x    o 中央揃え サイズ固定
+	//   x    o    x 右揃え サイズ0
+	//   x    o    o 右揃え サイズ固定
+	//   o    x    x 左揃え サイズ0
+	//   o    x    o 左揃え サイズ固定
+	//   o    o    x 左右固定 サイズクリッピング
+	//   o    o    o 左右固定 サイズクリッピング 幅無視
 	bool isLt = this->position.style.left.isActive;
 	bool isRt = this->position.style.right.isActive;
 	bool isWh = this->position.style.width.isActive;
 	double valLt = this->position.style.left.value;
 	double valRt = this->position.style.right.value;
 	double valWh = this->position.style.width.isRatio ? (currentW * this->position.style.width.value) : this->position.style.width.value;
-	if(this->position.style.centeringHorizontal.isActive){
-		this->position.layout.w = (isWh ? valWh : ((isLt && isRt) ? (valLt + valRt) : 0));
-		this->position.layout.x = currentX + currentW * 0.5 - (isLt ? valLt : (isRt ? (this->position.layout.w - isRt) : (this->position.layout.w * 0.5)));
+	if(isLt && isRt && this->position.style.clampHorizontal.isActive){
+		// 左右固定 サイズクリッピング
+		double fixW = currentW - valLt - valRt;
+		double fixX = currentX + valLt;
+		double min = this->position.style.clampHorizontal.min;
+		double max = this->position.style.clampHorizontal.max;
+		int align = this->position.style.clampHorizontal.align;
+		this->position.layout.w = fixW;
+		if(min > 0 && this->position.layout.w < min){this->position.layout.w = min;}
+		if(max > 0 && max > min && this->position.layout.w > max){this->position.layout.w = max;}
+		this->position.layout.x = fixX + (fixW - this->position.layout.w) * ((align > 0) ? 0.0 : (align == 0) ? 0.5 : 1.0);
+	}else if(isLt && isRt){
+		// 左右固定
+		this->position.layout.w = currentW - valLt - valRt;
+		this->position.layout.x = currentX + valLt;
+	}else if(isLt){
+		// 左揃え
+		this->position.layout.w = isWh ? valWh : 0;
+		this->position.layout.x = currentX + valLt;
+	}else if(isRt){
+		// 右揃え
+		this->position.layout.w = isWh ? valWh : 0;
+		this->position.layout.x = currentX + currentW - valRt - this->position.layout.w;
+	}else if(isWh){
+		// 中央揃え
+		this->position.layout.w = valWh;
+		this->position.layout.x = currentX + (currentW - this->position.layout.w) * 0.5;
 	}else{
-		this->position.layout.w = (isWh ? valWh : ((isLt && isRt && currentW > valLt + valRt) ? (currentW - valLt - valRt) : 0));
-		this->position.layout.x = currentX + (isLt ? valLt : (isRt ? (currentW - valRt - this->position.layout.w) : 0));
+		// 親サイズに合わせる
+		this->position.layout.w = currentW;
+		this->position.layout.x = currentX;
 	}
 
 	// 自要素レイアウト計算 垂直軸
+	// isTp isBm isHt
+	//   x    x    x 親サイズに合わせる
+	//   x    x    o 中央揃え サイズ固定
+	//   x    o    x 下揃え サイズ0
+	//   x    o    o 下揃え サイズ固定
+	//   o    x    x 上揃え サイズ0
+	//   o    x    o 上揃え サイズ固定
+	//   o    o    x 上下固定 サイズクリッピング
+	//   o    o    o 上下固定 サイズクリッピング 高さ無視
 	bool isTp = this->position.style.top.isActive;
 	bool isBm = this->position.style.bottom.isActive;
 	bool isHt = this->position.style.height.isActive;
 	double valTp = this->position.style.top.value;
 	double valBm = this->position.style.bottom.value;
 	double valHt = this->position.style.height.isRatio ? (currentH * this->position.style.height.value) : this->position.style.height.value;
-	if(this->position.style.centeringVertical.isActive){
-		this->position.layout.h = (isHt ? valHt : ((isTp && isBm) ? (valTp + valBm) : 0));
-		this->position.layout.y = currentY + currentH * 0.5 - (isTp ? valTp : (isBm ? (this->position.layout.h - isBm) : (this->position.layout.h * 0.5)));
+	if(isTp && isBm && this->position.style.clampVertical.isActive){
+		// 左右固定 サイズクリッピング
+		double fixH = currentH - valTp - valBm;
+		double fixY = currentY + valTp;
+		double min = this->position.style.clampVertical.min;
+		double max = this->position.style.clampVertical.max;
+		int align = this->position.style.clampVertical.align;
+		this->position.layout.h = fixH;
+		if(min > 0 && this->position.layout.h < min){this->position.layout.h = min;}
+		if(max > 0 && max > min && this->position.layout.h > max){this->position.layout.h = max;}
+		this->position.layout.y = fixY + (fixH - this->position.layout.h) * ((align > 0) ? 0.0 : (align == 0) ? 0.5 : 1.0);
+	}else if(isTp && isBm){
+		// 左右固定
+		this->position.layout.h = currentH - valTp - valBm;
+		this->position.layout.y = currentY + valTp;
+	}else if(isTp){
+		// 左揃え
+		this->position.layout.h = isHt ? valHt : 0;
+		this->position.layout.y = currentY + valTp;
+	}else if(isBm){
+		// 右揃え
+		this->position.layout.h = isHt ? valHt : 0;
+		this->position.layout.y = currentY + currentH - valBm - this->position.layout.h;
+	}else if(isHt){
+		// 中央揃え
+		this->position.layout.h = valHt;
+		this->position.layout.y = currentY + (currentH - this->position.layout.h) * 0.5;
 	}else{
-		this->position.layout.h = (isHt ? valHt : ((isTp && isBm && currentH > valTp + valBm) ? (currentH - valTp - valBm) : 0));
-		this->position.layout.y = currentY + (isTp ? valTp : (isBm ? (currentH - valBm - this->position.layout.h) : 0));
+		// 親サイズに合わせる
+		this->position.layout.h = currentH;
+		this->position.layout.y = currentY;
 	}
 
 	// 行列変形計算
