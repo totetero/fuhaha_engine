@@ -48,6 +48,9 @@ void engineLayoutViewUtilPositionModeSetCalc();
 // 表示要素構造体位置関係 描画モード設定
 void engineLayoutViewUtilPositionModeSetDraw();
 
+// レイアウトを明示的に計算
+void engineLayoutViewUtilPositionCalcLayoutAll(struct engineLayoutView *this);
+
 // 表示要素構造体位置関係 初期化
 void engineLayoutViewUtilPositionInit(struct engineLayoutView *this);
 // 表示要素構造体位置関係 破棄

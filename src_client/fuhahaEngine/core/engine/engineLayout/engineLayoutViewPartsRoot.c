@@ -55,6 +55,9 @@ static void draw(struct engineLayoutViewPartsRootImplement *this, struct engineM
 	// レイアウトモード変更 描画モード
 	engineLayoutViewUtilPositionModeSetDraw();
 
+	// レイアウト計算
+	engineLayoutViewUtilPositionCalcLayoutAll((struct engineLayoutView*)this);
+
 	// 描画オブジェクト作成
 	engineLayoutViewUtilGraphicObjectBufferActiveAll((struct engineLayoutView*)this);
 	engineLayoutViewUtilGraphicObjectBufferCreateAll((struct engineLayoutView*)this);
