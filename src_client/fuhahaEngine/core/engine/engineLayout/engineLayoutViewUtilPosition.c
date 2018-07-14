@@ -8,6 +8,7 @@
 // ----------------------------------------------------------------
 
 static struct{
+	bool isInit;
 	bool isModeDraw;
 	struct{
 		int x;
@@ -17,6 +18,17 @@ static struct{
 	} screen;
 	int generationCount;
 } localGlobal = {0};
+
+static void localGlobalInit(){
+	if(localGlobal.isInit){return;}
+	localGlobal.isInit = true;
+
+	// 画面サイズ初期設定
+	localGlobal.screen.x = 0;
+	localGlobal.screen.y = 0;
+	localGlobal.screen.w = global.screen.w;
+	localGlobal.screen.h = global.screen.h;
+}
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -240,6 +252,8 @@ void engineLayoutViewUtilPositionCalcLayoutAll(struct engineLayoutView *this){
 
 // 表示要素構造体位置関係 初期化
 void engineLayoutViewUtilPositionInit(struct engineLayoutView *this){
+	localGlobalInit();
+
 	// 内部判定関数の設定
 	this->position.isInner = engineLayoutViewUtilPositionTransformIsInner;
 
