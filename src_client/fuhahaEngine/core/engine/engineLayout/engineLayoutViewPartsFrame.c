@@ -26,10 +26,7 @@ struct engineLayoutViewPartsFrameImplement{
 
 // 初期化
 static void init(struct engineLayoutViewPartsFrameImplement *this){
-	// レイアウト初期化
-	engineLayoutViewUtilFamilyInit((struct engineLayoutView*)this);
-	engineLayoutViewUtilPositionInit((struct engineLayoutView*)this);
-	engineLayoutViewUtilGraphicObjectInit((struct engineLayoutView*)this);
+	engineLayoutViewUtilInit((struct engineLayoutView*)this);
 
 	// 画像読み込み
 	this->egoIdTexTest = engineGraphicTextureCreateLocal("img/system.png", ENGINEGRAPHICTEXTURETYPE_LINEAR);
@@ -247,9 +244,7 @@ static void dispose(struct engineLayoutViewPartsFrameImplement *this){
 
 	// 自要素破棄
 	engineGraphicTextureDispose(this->egoIdTexTest);
-	engineLayoutViewUtilGraphicObjectDispose((struct engineLayoutView*)this);
-	engineLayoutViewUtilPositionDispose((struct engineLayoutView*)this);
-	engineLayoutViewUtilFamilyDispose((struct engineLayoutView*)this);
+	engineLayoutViewUtilDispose((struct engineLayoutView*)this);
 	engineUtilMemoryInfoFree("engineLayoutViewPartsFrame", this);
 }
 

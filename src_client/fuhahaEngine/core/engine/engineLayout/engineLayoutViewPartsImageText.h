@@ -15,7 +15,6 @@ struct engineLayoutViewPartsImageText{
 		int xalign;
 		int yalign;
 	} fontStyle;
-	struct engineMathVector4 color;
 };
 
 // 画像文字列描画構造体 作成

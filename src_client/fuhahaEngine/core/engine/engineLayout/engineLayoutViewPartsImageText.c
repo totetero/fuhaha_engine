@@ -35,17 +35,10 @@ struct engineLayoutViewPartsImageTextImplement{
 
 // 初期化
 static void init(struct engineLayoutViewPartsImageTextImplement *this){
-	// レイアウト初期化
-	engineLayoutViewUtilFamilyInit((struct engineLayoutView*)this);
-	engineLayoutViewUtilPositionInit((struct engineLayoutView*)this);
-	engineLayoutViewUtilGraphicObjectInit((struct engineLayoutView*)this);
+	engineLayoutViewUtilInit((struct engineLayoutView*)this);
 
 	// デフォルトパラメータ設定
 	this->super.fontStyle.scale = 0.5;
-	this->super.color.r = 1.0;
-	this->super.color.g = 1.0;
-	this->super.color.b = 1.0;
-	this->super.color.a = 1.0;
 }
 
 // ----------------------------------------------------------------
@@ -202,12 +195,7 @@ static void draw(struct engineLayoutViewPartsImageTextImplement *this, struct en
 	engineMathMat4Scale(&tempMat1, this->super.fontStyle.scale, this->super.fontStyle.scale, 1.0);
 	engineGraphicEngineSetMatrix(&tempMat1);
 	// 色登録
-	struct engineMathVector4 tempColor1;
-	tempColor1.r = this->super.color.r * color->r;
-	tempColor1.g = this->super.color.g * color->g;
-	tempColor1.b = this->super.color.b * color->b;
-	tempColor1.a = this->super.color.a * color->a;
-	engineGraphicEngineSetColorVec(&tempColor1);
+	engineGraphicEngineSetColorVec(color);
 
 	// 描画
 	engineGraphicEngineDrawIndex(this->faceIndex * 3, this->faceNum * 3);
@@ -232,9 +220,7 @@ static void dispose(struct engineLayoutViewPartsImageTextImplement *this){
 	// 自要素破棄
 	engineGraphicTextureDispose(this->egoIdTexTest);
 	if(this->textInfo.buff != NULL){engineUtilMemoryInfoFree("engineLayoutViewPartsImageText textBuff", this->textInfo.buff);}
-	engineLayoutViewUtilGraphicObjectDispose((struct engineLayoutView*)this);
-	engineLayoutViewUtilPositionDispose((struct engineLayoutView*)this);
-	engineLayoutViewUtilFamilyDispose((struct engineLayoutView*)this);
+	engineLayoutViewUtilDispose((struct engineLayoutView*)this);
 	engineUtilMemoryInfoFree("engineLayoutViewPartsImageText", this);
 }
 

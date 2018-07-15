@@ -17,10 +17,7 @@ struct engineLayoutViewPartsFilterColorImplement{
 
 // 初期化
 static void init(struct engineLayoutViewPartsFilterColorImplement *this){
-	// レイアウト初期化
-	engineLayoutViewUtilFamilyInit((struct engineLayoutView*)this);
-	engineLayoutViewUtilPositionInit((struct engineLayoutView*)this);
-	engineLayoutViewUtilGraphicObjectInit((struct engineLayoutView*)this);
+	engineLayoutViewUtilInit((struct engineLayoutView*)this);
 
 	// パラメータ初期化
 	this->super.alpha = 1.0;
@@ -84,9 +81,7 @@ static void dispose(struct engineLayoutViewPartsFilterColorImplement *this){
 	engineLayoutViewUtilChildrenDispose((struct engineLayoutView*)this);
 
 	// 自要素破棄
-	engineLayoutViewUtilGraphicObjectDispose((struct engineLayoutView*)this);
-	engineLayoutViewUtilPositionDispose((struct engineLayoutView*)this);
-	engineLayoutViewUtilFamilyDispose((struct engineLayoutView*)this);
+	engineLayoutViewUtilDispose((struct engineLayoutView*)this);
 	engineUtilMemoryInfoFree("engineLayoutViewPartsFilterColor", this);
 }
 

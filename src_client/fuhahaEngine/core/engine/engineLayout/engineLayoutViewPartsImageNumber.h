@@ -13,7 +13,6 @@ struct engineLayoutViewPartsImageNumber{
 		int xalign;
 		int yalign;
 	} fontStyle;
-	struct engineMathVector4 color;
 	int value;
 };
 

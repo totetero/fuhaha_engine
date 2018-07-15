@@ -15,9 +15,9 @@ struct engineLayoutViewPartsFontText{
 		int maxHeight;
 		int xalign;
 		int yalign;
+		struct engineMathVector4 color;
 		struct{double size; int quality; struct engineMathVector4 color;} outline;
 	} fontStyle;
-	struct engineMathVector4 color;
 };
 
 // フォント文字列描画構造体 作成

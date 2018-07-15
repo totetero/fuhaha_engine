@@ -11,9 +11,9 @@ struct engineLayoutViewPartsFontNumber{
 		double size;
 		int xalign;
 		int yalign;
+		struct engineMathVector4 color;
 		struct{double size; int quality; struct engineMathVector4 color;} outline;
 	} fontStyle;
-	struct engineMathVector4 color;
 	int value;
 };
 

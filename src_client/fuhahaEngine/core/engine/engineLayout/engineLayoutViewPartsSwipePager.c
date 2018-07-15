@@ -18,10 +18,8 @@ struct engineLayoutViewPartsSwipePagerImplement{
 
 // 初期化
 static void init(struct engineLayoutViewPartsSwipePagerImplement *this){
-	// レイアウト初期化
-	engineLayoutViewUtilFamilyInit((struct engineLayoutView*)this);
-	engineLayoutViewUtilPositionInit((struct engineLayoutView*)this);
-	engineLayoutViewUtilGraphicObjectInit((struct engineLayoutView*)this);
+	engineLayoutViewUtilInit((struct engineLayoutView*)this);
+
 	this->super.super.interact.setting.isTouchable = true;
 	this->super.super.interact.setting.isMoveableX = true;
 	this->super.super.interact.setting.isMoveableY = false;
@@ -153,9 +151,7 @@ static void dispose(struct engineLayoutViewPartsSwipePagerImplement *this){
 	engineLayoutViewUtilChildrenDispose((struct engineLayoutView*)this);
 
 	// 自要素破棄
-	engineLayoutViewUtilGraphicObjectDispose((struct engineLayoutView*)this);
-	engineLayoutViewUtilPositionDispose((struct engineLayoutView*)this);
-	engineLayoutViewUtilFamilyDispose((struct engineLayoutView*)this);
+	engineLayoutViewUtilDispose((struct engineLayoutView*)this);
 	engineUtilMemoryInfoFree("engineLayoutViewPartsSwipePager", this);
 }
 

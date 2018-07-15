@@ -34,10 +34,8 @@ static bool isInner(struct engineLayoutViewPartsArrowKeyImplement *this, double 
 
 // 初期化
 static void init(struct engineLayoutViewPartsArrowKeyImplement *this){
-	// レイアウト初期化
-	engineLayoutViewUtilFamilyInit((struct engineLayoutView*)this);
-	engineLayoutViewUtilPositionInit((struct engineLayoutView*)this);
-	engineLayoutViewUtilGraphicObjectInit((struct engineLayoutView*)this);
+	engineLayoutViewUtilInit((struct engineLayoutView*)this);
+
 	this->super.super.position.isInner = (bool(*)(struct engineLayoutView*, double, double))isInner;
 	this->super.super.interact.setting.isTouchable = true;
 
@@ -195,9 +193,7 @@ static void dispose(struct engineLayoutViewPartsArrowKeyImplement *this){
 	engineLayoutViewUtilChildrenDispose((struct engineLayoutView*)this);
 
 	// 自要素破棄
-	engineLayoutViewUtilGraphicObjectDispose((struct engineLayoutView*)this);
-	engineLayoutViewUtilPositionDispose((struct engineLayoutView*)this);
-	engineLayoutViewUtilFamilyDispose((struct engineLayoutView*)this);
+	engineLayoutViewUtilDispose((struct engineLayoutView*)this);
 	engineUtilMemoryInfoFree("engineLayoutViewPartsArrowKey", this);
 }
 

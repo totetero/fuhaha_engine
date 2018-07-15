@@ -43,10 +43,8 @@ struct engineLayoutViewPartsFontNumberImplement{
 
 // 初期化
 static void init(struct engineLayoutViewPartsFontNumberImplement *this){
-	// レイアウト初期化
-	engineLayoutViewUtilFamilyInit((struct engineLayoutView*)this);
-	engineLayoutViewUtilPositionInit((struct engineLayoutView*)this);
-	engineLayoutViewUtilGraphicObjectInit((struct engineLayoutView*)this);
+	engineLayoutViewUtilInit((struct engineLayoutView*)this);
+
 	this->textInfo.generationCount++;
 
 	// デフォルトパラメータ設定
@@ -59,10 +57,10 @@ static void init(struct engineLayoutViewPartsFontNumberImplement *this){
 	this->super.fontStyle.outline.color.g = 0.0;
 	this->super.fontStyle.outline.color.b = 0.0;
 	this->super.fontStyle.outline.color.a = 1.0;
-	this->super.color.r = 1.0;
-	this->super.color.g = 1.0;
-	this->super.color.b = 1.0;
-	this->super.color.a = 1.0;
+	this->super.fontStyle.color.r = 1.0;
+	this->super.fontStyle.color.g = 1.0;
+	this->super.fontStyle.color.b = 1.0;
+	this->super.fontStyle.color.a = 1.0;
 	this->fontInfo.codeListIndex = -1;
 }
 
@@ -241,10 +239,10 @@ static void draw(struct engineLayoutViewPartsFontNumberImplement *this, struct e
 		}
 
 		// 色変更
-		tempColor1.r = this->super.color.r * color->r;
-		tempColor1.g = this->super.color.g * color->g;
-		tempColor1.b = this->super.color.b * color->b;
-		tempColor1.a = this->super.color.a * color->a;
+		tempColor1.r = this->super.fontStyle.color.r * color->r;
+		tempColor1.g = this->super.fontStyle.color.g * color->g;
+		tempColor1.b = this->super.fontStyle.color.b * color->b;
+		tempColor1.a = this->super.fontStyle.color.a * color->a;
 		engineGraphicEngineSetColorVec(&tempColor1);
 		// 文字列描画
 		drawText(this, codeList, &tempMat1, textWidth);
@@ -269,9 +267,7 @@ static void dispose(struct engineLayoutViewPartsFontNumberImplement *this){
 
 	// 自要素破棄
 	engineGraphicTextureDispose(this->egoIdTexTest);
-	engineLayoutViewUtilGraphicObjectDispose((struct engineLayoutView*)this);
-	engineLayoutViewUtilPositionDispose((struct engineLayoutView*)this);
-	engineLayoutViewUtilFamilyDispose((struct engineLayoutView*)this);
+	engineLayoutViewUtilDispose((struct engineLayoutView*)this);
 	engineUtilMemoryInfoFree("engineLayoutViewPartsFontNumber", this);
 }
 

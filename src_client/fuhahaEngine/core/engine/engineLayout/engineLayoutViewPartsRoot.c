@@ -17,10 +17,7 @@ struct engineLayoutViewPartsRootImplement{
 
 // 初期化
 static void init(struct engineLayoutViewPartsRootImplement *this){
-	// レイアウト初期化
-	engineLayoutViewUtilFamilyInit((struct engineLayoutView*)this);
-	engineLayoutViewUtilPositionInit((struct engineLayoutView*)this);
-	engineLayoutViewUtilGraphicObjectInit((struct engineLayoutView*)this);
+	engineLayoutViewUtilInit((struct engineLayoutView*)this);
 }
 
 // ----------------------------------------------------------------
@@ -67,10 +64,8 @@ static void draw(struct engineLayoutViewPartsRootImplement *this, struct engineM
 	engineMathMat4Ortho(&tempMat1, -global.screen.offset.x, global.screen.w + global.screen.offset.x, global.screen.h + global.screen.offset.y, -global.screen.offset.y, -1, 1);
 	mat = &tempMat1;
 
-	// ルートなので引数の色を無視して白色作成
-	struct engineMathVector4 tempColor1;
-	engineMathVec4Set(&tempColor1, 1.0, 1.0, 1.0, 1.0);
-	color = &tempColor1;
+	// ルートなので引数の色を無視して自身の色使用
+	color = &this->super.super.color;
 
 	// 描画モード設定
 	engineGraphicEngineSetDrawMode(ENGINEGRAPHICENGINEMODEDRAW_2D_ALPHA_NORMAL);
@@ -97,9 +92,7 @@ static void dispose(struct engineLayoutViewPartsRootImplement *this){
 	engineLayoutViewUtilChildrenDispose((struct engineLayoutView*)this);
 
 	// 自要素破棄
-	engineLayoutViewUtilGraphicObjectDispose((struct engineLayoutView*)this);
-	engineLayoutViewUtilPositionDispose((struct engineLayoutView*)this);
-	engineLayoutViewUtilFamilyDispose((struct engineLayoutView*)this);
+	engineLayoutViewUtilDispose((struct engineLayoutView*)this);
 	engineUtilMemoryInfoFree("engineLayoutViewPartsRoot", this);
 }
 

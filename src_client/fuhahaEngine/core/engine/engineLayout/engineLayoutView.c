@@ -6,6 +6,28 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
+// 表示要素構造体 ユーティリティの初期化
+void engineLayoutViewUtilInit(struct engineLayoutView *this){
+	engineLayoutViewUtilFamilyInit((struct engineLayoutView*)this);
+	engineLayoutViewUtilPositionInit((struct engineLayoutView*)this);
+	engineLayoutViewUtilGraphicObjectInit((struct engineLayoutView*)this);
+	this->color.r = 1.0;
+	this->color.g = 1.0;
+	this->color.b = 1.0;
+	this->color.a = 1.0;
+}
+
+// 表示要素構造体 ユーティリティの破棄
+void engineLayoutViewUtilDispose(struct engineLayoutView *this){
+	engineLayoutViewUtilGraphicObjectDispose((struct engineLayoutView*)this);
+	engineLayoutViewUtilPositionDispose((struct engineLayoutView*)this);
+	engineLayoutViewUtilFamilyDispose((struct engineLayoutView*)this);
+}
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+
 // 構造体実体
 struct engineLayoutViewImplement{
 	struct engineLayoutView super;
@@ -15,10 +37,7 @@ struct engineLayoutViewImplement{
 
 // 初期化
 static void init(struct engineLayoutViewImplement *this){
-	// レイアウト初期化
-	engineLayoutViewUtilFamilyInit((struct engineLayoutView*)this);
-	engineLayoutViewUtilPositionInit((struct engineLayoutView*)this);
-	engineLayoutViewUtilGraphicObjectInit((struct engineLayoutView*)this);
+	engineLayoutViewUtilInit((struct engineLayoutView*)this);
 }
 
 // ----------------------------------------------------------------
@@ -68,9 +87,7 @@ static void dispose(struct engineLayoutViewImplement *this){
 	engineLayoutViewUtilChildrenDispose((struct engineLayoutView*)this);
 
 	// 自要素破棄
-	engineLayoutViewUtilGraphicObjectDispose((struct engineLayoutView*)this);
-	engineLayoutViewUtilPositionDispose((struct engineLayoutView*)this);
-	engineLayoutViewUtilFamilyDispose((struct engineLayoutView*)this);
+	engineLayoutViewUtilDispose((struct engineLayoutView*)this);
 	engineUtilMemoryInfoFree("engineLayoutView", this);
 }
 

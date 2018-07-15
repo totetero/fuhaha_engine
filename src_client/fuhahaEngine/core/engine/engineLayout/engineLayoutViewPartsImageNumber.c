@@ -29,17 +29,10 @@ struct engineLayoutViewPartsImageNumberImplement{
 
 // 初期化
 static void init(struct engineLayoutViewPartsImageNumberImplement *this){
-	// レイアウト初期化
-	engineLayoutViewUtilFamilyInit((struct engineLayoutView*)this);
-	engineLayoutViewUtilPositionInit((struct engineLayoutView*)this);
-	engineLayoutViewUtilGraphicObjectInit((struct engineLayoutView*)this);
+	engineLayoutViewUtilInit((struct engineLayoutView*)this);
 
 	// デフォルトパラメータ設定
 	this->super.fontStyle.scale = 0.5;
-	this->super.color.r = 1.0;
-	this->super.color.g = 1.0;
-	this->super.color.b = 1.0;
-	this->super.color.a = 1.0;
 }
 
 // ----------------------------------------------------------------
@@ -124,12 +117,7 @@ static void draw(struct engineLayoutViewPartsImageNumberImplement *this, struct 
 	engineMathMat4Translate(&tempMat1, x0, y0, 0);
 	engineMathMat4Scale(&tempMat1, this->super.fontStyle.scale, this->super.fontStyle.scale, 1.0);
 	// 色登録
-	struct engineMathVector4 tempColor1;
-	tempColor1.r = this->super.color.r * color->r;
-	tempColor1.g = this->super.color.g * color->g;
-	tempColor1.b = this->super.color.b * color->b;
-	tempColor1.a = this->super.color.a * color->a;
-	engineGraphicEngineSetColorVec(&tempColor1);
+	engineGraphicEngineSetColorVec(color);
 
 	// 桁数確認
 	int length = 0;
@@ -166,9 +154,7 @@ static void dispose(struct engineLayoutViewPartsImageNumberImplement *this){
 
 	// 自要素破棄
 	engineGraphicTextureDispose(this->egoIdTexTest);
-	engineLayoutViewUtilGraphicObjectDispose((struct engineLayoutView*)this);
-	engineLayoutViewUtilPositionDispose((struct engineLayoutView*)this);
-	engineLayoutViewUtilFamilyDispose((struct engineLayoutView*)this);
+	engineLayoutViewUtilDispose((struct engineLayoutView*)this);
 	engineUtilMemoryInfoFree("engineLayoutViewPartsImageNumber", this);
 }
 

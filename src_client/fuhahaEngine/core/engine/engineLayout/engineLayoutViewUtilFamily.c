@@ -196,7 +196,14 @@ void engineLayoutViewUtilChildrenDraw(struct engineLayoutView *this, struct engi
 	// 子要素の描画 表示奥から先に処理する
 	struct engineLayoutView *temp = this->family.childrenHead;
 	while(temp != NULL){
-		if(!temp->family.isInvisible){temp->draw(temp, mat, color);}
+		if(!temp->family.isInvisible){
+			struct engineMathVector4 tempColor1;
+			tempColor1.r = temp->color.r * color->r;
+			tempColor1.g = temp->color.g * color->g;
+			tempColor1.b = temp->color.b * color->b;
+			tempColor1.a = temp->color.a * color->a;
+			temp->draw(temp, mat, &tempColor1);
+		}
 		temp = temp->family.next;
 	}
 }

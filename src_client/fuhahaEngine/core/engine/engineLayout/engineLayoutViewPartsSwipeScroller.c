@@ -17,10 +17,8 @@ struct engineLayoutViewPartsSwipeScrollerImplement{
 
 // 初期化
 static void init(struct engineLayoutViewPartsSwipeScrollerImplement *this){
-	// レイアウト初期化
-	engineLayoutViewUtilFamilyInit((struct engineLayoutView*)this);
-	engineLayoutViewUtilPositionInit((struct engineLayoutView*)this);
-	engineLayoutViewUtilGraphicObjectInit((struct engineLayoutView*)this);
+	engineLayoutViewUtilInit((struct engineLayoutView*)this);
+
 	this->super.super.interact.setting.isTouchable = true;
 
 	// スクロール要素作成
@@ -140,9 +138,7 @@ static void dispose(struct engineLayoutViewPartsSwipeScrollerImplement *this){
 	engineLayoutViewUtilChildrenDispose((struct engineLayoutView*)this);
 
 	// 自要素破棄
-	engineLayoutViewUtilGraphicObjectDispose((struct engineLayoutView*)this);
-	engineLayoutViewUtilPositionDispose((struct engineLayoutView*)this);
-	engineLayoutViewUtilFamilyDispose((struct engineLayoutView*)this);
+	engineLayoutViewUtilDispose((struct engineLayoutView*)this);
 	engineUtilMemoryInfoFree("engineLayoutViewPartsSwipeScroller", this);
 }
 
