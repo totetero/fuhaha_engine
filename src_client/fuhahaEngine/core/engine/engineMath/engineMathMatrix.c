@@ -428,6 +428,16 @@ void engineMathVec4Set(struct engineMathVector4 *vec, double x, double y, double
 	vec->w = (GLfloat)w;
 }
 
+// ベクトル複製
+void engineMathVec3Copy(struct engineMathVector3 *dst, struct engineMathVector3 *src){
+	memcpy(dst, src, sizeof(struct engineMathVector3));
+}
+
+// ベクトル複製
+void engineMathVec4Copy(struct engineMathVector4 *dst, struct engineMathVector4 *src){
+	memcpy(dst, src, sizeof(struct engineMathVector4));
+}
+
 // ----------------------------------------------------------------
 
 // ベクトル行列積

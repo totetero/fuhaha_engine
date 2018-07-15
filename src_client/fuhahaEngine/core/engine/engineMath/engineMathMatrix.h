@@ -48,6 +48,9 @@ void engineMathMat3Transpose(struct engineMathMatrix33 *mat);
 // ベクトル値設定
 void engineMathVec3Set(struct engineMathVector3 *vec, double x, double y, double z);
 void engineMathVec4Set(struct engineMathVector4 *vec, double x, double y, double z, double w);
+// ベクトル複製
+void engineMathVec3Copy(struct engineMathVector3 *dst, struct engineMathVector3 *src);
+void engineMathVec4Copy(struct engineMathVector4 *dst, struct engineMathVector4 *src);
 // ベクトル行列積
 void engineMathVec3MultiplyMat4(struct engineMathVector3 *dst, struct engineMathVector3 *src, struct engineMathMatrix44 *mat);
 // ベクトルクォータニオン積
