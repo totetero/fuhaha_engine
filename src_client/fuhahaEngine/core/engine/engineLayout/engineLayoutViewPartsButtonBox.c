@@ -19,6 +19,7 @@ struct engineLayoutViewPartsButtonBoxImplement{
 static void init(struct engineLayoutViewPartsButtonBoxImplement *this){
 	engineLayoutViewUtilInit((struct engineLayoutView*)this);
 
+	// タッチ設定
 	this->super.super.interact.setting.isTouchable = true;
 
 	// パーツ作成

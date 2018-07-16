@@ -19,6 +19,7 @@ struct engineLayoutViewPartsSwipeScrollerImplement{
 static void init(struct engineLayoutViewPartsSwipeScrollerImplement *this){
 	engineLayoutViewUtilInit((struct engineLayoutView*)this);
 
+	// タッチ設定
 	this->super.super.interact.setting.isTouchable = true;
 
 	// スクロール要素作成

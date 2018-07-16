@@ -19,6 +19,7 @@ struct engineLayoutViewPartsArrowKeyImplement{
 
 // ----------------------------------------------------------------
 
+// タッチ判定
 static bool isInner(struct engineLayoutViewPartsArrowKeyImplement *this, double x, double y){
 	// ローカル座標変換
 	struct engineMathVector3 tempVec1;
@@ -36,6 +37,7 @@ static bool isInner(struct engineLayoutViewPartsArrowKeyImplement *this, double 
 static void init(struct engineLayoutViewPartsArrowKeyImplement *this){
 	engineLayoutViewUtilInit((struct engineLayoutView*)this);
 
+	// タッチ設定
 	this->super.super.position.isInner = (bool(*)(struct engineLayoutView*, double, double))isInner;
 	this->super.super.interact.setting.isTouchable = true;
 

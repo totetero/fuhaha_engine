@@ -20,6 +20,7 @@ struct engineLayoutViewPartsSwipePagerImplement{
 static void init(struct engineLayoutViewPartsSwipePagerImplement *this){
 	engineLayoutViewUtilInit((struct engineLayoutView*)this);
 
+	// タッチ設定
 	this->super.super.interact.setting.isTouchable = true;
 	this->super.super.interact.setting.isMoveableX = true;
 	this->super.super.interact.setting.isMoveableY = false;
