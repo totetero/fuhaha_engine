@@ -10,6 +10,7 @@
 // 構造体実体
 struct engineLayoutViewPartsSwipePagerImplement{
 	struct engineLayoutViewPartsSwipePager super;
+	struct{double w;} screenTemp;
 	struct{int x;} posTemp;
 	bool isSwipe;
 };
@@ -54,6 +55,14 @@ static void calc(struct engineLayoutViewPartsSwipePagerImplement *this){
 	double innerW = this->super.count * outerW;
 
 	if(outerW > 0){
+		// 画面サイズ変更時の位置調整
+		if(engineMathAbs(this->screenTemp.w - outerW) >= DBL_EPSILON){
+			this->screenTemp.w = outerW;
+			this->super.velocity.x = 0;
+			this->super.position.x = -this->super.index * outerW;
+			this->isSwipe = false;
+		}
+
 		if(this->super.super.interact.status.isActive && this->super.super.interact.status.isMove){
 			// スワイプ中
 			this->super.velocity.x = this->super.swipe.x - this->posTemp.x + this->super.velocity.x * 0.3;
