@@ -111,6 +111,8 @@ bool engineLayoutViewUtilPositionTransformIsInner(struct engineLayoutView *this,
 
 // 表示要素構造体位置関係 設定ショートカット
 void engineLayoutViewUtilPositionSetLtRtTpBm(struct engineLayoutView *this, double lt, double rt, double tp, double bm);
+void engineLayoutViewUtilPositionSetLtRtTpHt(struct engineLayoutView *this, double lt, double rt, double tp, double ht);
+void engineLayoutViewUtilPositionSetLtTpBmWt(struct engineLayoutView *this, double lt, double tp, double bm, double wt);
 void engineLayoutViewUtilPositionSetLtTpWtHt(struct engineLayoutView *this, double lt, double tp, double wt, double ht);
 void engineLayoutViewUtilPositionSetMargin(struct engineLayoutView *this, double margin);
 void engineLayoutViewUtilPositionSetMarginHorizontal(struct engineLayoutView *this, double margin);

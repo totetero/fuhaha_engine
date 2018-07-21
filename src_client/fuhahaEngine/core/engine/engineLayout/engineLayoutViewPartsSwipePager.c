@@ -51,7 +51,6 @@ static void calc(struct engineLayoutViewPartsSwipePagerImplement *this){
 
 	// 大きさ取得
 	double outerW = engineLayoutViewUtilPositionGetW((struct engineLayoutView*)this);
-	double outerH = engineLayoutViewUtilPositionGetH((struct engineLayoutView*)this);
 	double innerW = this->super.count * outerW;
 
 	if(outerW > 0){
@@ -112,7 +111,7 @@ static void calc(struct engineLayoutViewPartsSwipePagerImplement *this){
 			temp2->family.isInvisible = (posLeft + outerW <= 0 || outerW <= posLeft);
 
 			// 位置設定
-			engineLayoutViewUtilPositionSetLtTpWtHt((struct engineLayoutView*)temp2, posLeft, 0, outerW, outerH);
+			engineLayoutViewUtilPositionSetLtTpBmWt((struct engineLayoutView*)temp2, posLeft, 0, 0, outerW);
 			posLeft += outerW;
 
 			temp2 = temp2->family.next;

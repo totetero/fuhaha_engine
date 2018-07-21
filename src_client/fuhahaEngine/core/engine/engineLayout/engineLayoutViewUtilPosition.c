@@ -544,6 +544,20 @@ void engineLayoutViewUtilPositionSetLtRtTpBm(struct engineLayoutView *this, doub
 	engineLayoutViewUtilPositionSetBottom(this, bm);
 }
 
+void engineLayoutViewUtilPositionSetLtRtTpHt(struct engineLayoutView *this, double lt, double rt, double tp, double ht){
+	engineLayoutViewUtilPositionSetLeft(this, lt);
+	engineLayoutViewUtilPositionSetRight(this, rt);
+	engineLayoutViewUtilPositionSetTop(this, tp);
+	engineLayoutViewUtilPositionSetHeightValue(this, ht);
+}
+
+void engineLayoutViewUtilPositionSetLtTpBmWt(struct engineLayoutView *this, double lt, double tp, double bm, double wt){
+	engineLayoutViewUtilPositionSetLeft(this, lt);
+	engineLayoutViewUtilPositionSetTop(this, tp);
+	engineLayoutViewUtilPositionSetBottom(this, bm);
+	engineLayoutViewUtilPositionSetWidthValue(this, wt);
+}
+
 void engineLayoutViewUtilPositionSetLtTpWtHt(struct engineLayoutView *this, double lt, double tp, double wt, double ht){
 	engineLayoutViewUtilPositionSetLeft(this, lt);
 	engineLayoutViewUtilPositionSetTop(this, tp);
