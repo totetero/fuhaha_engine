@@ -94,16 +94,12 @@ static void calc(struct engineLayoutViewPartsSwipePagerImplement *this){
 			}
 
 			// 位置調整
-			double posX = -this->super.index * outerW;
-			double diff = posX - this->super.position.x;
-			if(engineMathAbs(diff) > 0.01){
-				this->super.position.x += diff * 0.1;
-			}else{
-				this->super.position.x = posX;
-			}
+			double posX0 = this->super.position.x;
+			double posX1 = -this->super.index * outerW;
+			this->super.position.x = (engineMathAbs(posX1 - posX0) > 0.01) ? (posX0 + (posX1 - posX0) * 0.1) : posX1;
 		}
 
-		// 位置設定
+		// スクロール要素の位置設定
 		double posMin = -innerW * 0.5;
 		double posMax = innerW * 0.5;
 		double posLeft = this->super.position.x;
