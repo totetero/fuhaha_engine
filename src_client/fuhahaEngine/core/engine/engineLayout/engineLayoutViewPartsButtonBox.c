@@ -64,7 +64,7 @@ static void init(struct engineLayoutViewPartsButtonBoxImplement *this){
 	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)this, (struct engineLayoutView*)this->super.viewInner);
 	this->super.viewInner->family.zIndex = 1;
 
-	// パラメータ初期化
+	// 動的パラメータ初期化
 	this->super.frameNormal->super.family.isInvisible = false;
 	this->super.frameSelect->super.family.isInvisible = true;
 	this->super.frameActibve->super.family.isInvisible = true;

@@ -19,7 +19,7 @@ struct engineLayoutViewPartsFilterColorImplement{
 static void init(struct engineLayoutViewPartsFilterColorImplement *this){
 	engineLayoutViewUtilInit((struct engineLayoutView*)this);
 
-	// パラメータ初期化
+	// デフォルトパラメータ設定
 	this->super.alpha = 1.0;
 	engineMathMat4Identity(&this->super.matrix);
 	engineMathVec4Set(&this->super.vector, 0, 0, 0, 0);
