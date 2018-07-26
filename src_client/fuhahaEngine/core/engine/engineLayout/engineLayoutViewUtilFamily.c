@@ -178,14 +178,14 @@ bool engineLayoutViewUtilChildrenTouch(struct engineLayoutView *this, int touchI
 }
 
 // 表示要素構造体子要素 計算
-void engineLayoutViewUtilChildrenCalc(struct engineLayoutView *this){
+void engineLayoutViewUtilChildrenCalc(struct engineLayoutView *this, bool isCancel){
 	if(this == viewRootGet()){return;}
 	// 子要素の並べ替え
 	sortChildren(this);
 	// 子要素の計算
 	struct engineLayoutView *temp = this->family.childrenHead;
 	while(temp != NULL){
-		if(!temp->family.isInactive){temp->calc(temp);}
+		if(!temp->family.isInactive){temp->calc(temp, isCancel);}
 		temp = temp->family.next;
 	}
 }

@@ -143,7 +143,7 @@ static bool touch(struct engineLayoutViewPartsArrowKeyImplement *this, int touch
 }
 
 // 計算
-static void calc(struct engineLayoutViewPartsArrowKeyImplement *this){
+static void calc(struct engineLayoutViewPartsArrowKeyImplement *this, bool isCancel){
 	// 十字キーの押下確認
 	this->super.isUp = (global.key.up.isActive || this->isTouchUp);
 	this->super.isDn = (global.key.dn.isActive || this->isTouchDn);
@@ -161,7 +161,7 @@ static void calc(struct engineLayoutViewPartsArrowKeyImplement *this){
 	this->super.buttonLtActibve->super.family.isInvisible = !this->super.isLt;
 
 	// 子要素計算
-	engineLayoutViewUtilChildrenCalc((struct engineLayoutView*)this);
+	engineLayoutViewUtilChildrenCalc((struct engineLayoutView*)this, isCancel);
 }
 
 // ----------------------------------------------------------------
@@ -208,7 +208,7 @@ struct engineLayoutViewPartsArrowKey *engineLayoutViewPartsArrowKeyCreate(){
 
 	struct engineLayoutView *view = (struct engineLayoutView*)this;
 	view->touch = (bool(*)(struct engineLayoutView*, int, double, double, bool, bool, bool))touch;
-	view->calc = (void(*)(struct engineLayoutView*))calc;
+	view->calc = (void(*)(struct engineLayoutView*, bool))calc;
 	view->draw = (void(*)(struct engineLayoutView*, struct engineMathMatrix44*, struct engineMathVector4*))draw;
 	view->pause = (void(*)(struct engineLayoutView*))pause;
 	view->dispose = (void(*)(struct engineLayoutView*))dispose;

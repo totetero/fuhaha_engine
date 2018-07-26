@@ -42,7 +42,7 @@ static bool touch(struct engineLayoutViewPartsSwipeScrollerImplement *this, int 
 }
 
 // 計算
-static void calc(struct engineLayoutViewPartsSwipeScrollerImplement *this){
+static void calc(struct engineLayoutViewPartsSwipeScrollerImplement *this, bool isCancel){
 	// 大きさ取得
 	double innerW = this->super.inner.w;
 	double innerH = this->super.inner.h;
@@ -123,7 +123,7 @@ static void calc(struct engineLayoutViewPartsSwipeScrollerImplement *this){
 	this->posTemp.y = this->super.swipe.y;
 
 	// 子要素計算
-	engineLayoutViewUtilChildrenCalc((struct engineLayoutView*)this);
+	engineLayoutViewUtilChildrenCalc((struct engineLayoutView*)this, isCancel);
 }
 
 // ----------------------------------------------------------------
@@ -170,7 +170,7 @@ struct engineLayoutViewPartsSwipeScroller *engineLayoutViewPartsSwipeScrollerCre
 
 	struct engineLayoutView *view = (struct engineLayoutView*)this;
 	view->touch = (bool(*)(struct engineLayoutView*, int, double, double, bool, bool, bool))touch;
-	view->calc = (void(*)(struct engineLayoutView*))calc;
+	view->calc = (void(*)(struct engineLayoutView*, bool))calc;
 	view->draw = (void(*)(struct engineLayoutView*, struct engineMathMatrix44*, struct engineMathVector4*))draw;
 	view->pause = (void(*)(struct engineLayoutView*))pause;
 	view->dispose = (void(*)(struct engineLayoutView*))dispose;

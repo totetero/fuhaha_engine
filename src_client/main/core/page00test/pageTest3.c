@@ -101,7 +101,7 @@ static void calc(struct pageCartridgeTest3 *this){
 	}
 
 	// ルート計算処理
-	engineLayoutViewPartsRootCalc(this->viewRoot);
+	engineLayoutViewPartsRootCalc(this->viewRoot, false);
 }
 
 // ----------------------------------------------------------------

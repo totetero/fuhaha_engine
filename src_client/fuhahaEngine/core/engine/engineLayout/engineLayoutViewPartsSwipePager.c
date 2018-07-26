@@ -40,7 +40,7 @@ static bool touch(struct engineLayoutViewPartsSwipePagerImplement *this, int tou
 }
 
 // 計算
-static void calc(struct engineLayoutViewPartsSwipePagerImplement *this){
+static void calc(struct engineLayoutViewPartsSwipePagerImplement *this, bool isCancel){
 	// ページ数を数える
 	this->super.count = 0;
 	struct engineLayoutView *temp1 = this->super.viewInner->family.childrenHead;
@@ -122,7 +122,7 @@ static void calc(struct engineLayoutViewPartsSwipePagerImplement *this){
 	this->posTemp.x = this->super.swipe.x;
 
 	// 子要素計算
-	engineLayoutViewUtilChildrenCalc((struct engineLayoutView*)this);
+	engineLayoutViewUtilChildrenCalc((struct engineLayoutView*)this, isCancel);
 }
 
 // ----------------------------------------------------------------
@@ -169,7 +169,7 @@ struct engineLayoutViewPartsSwipePager *engineLayoutViewPartsSwipePagerCreate(){
 
 	struct engineLayoutView *view = (struct engineLayoutView*)this;
 	view->touch = (bool(*)(struct engineLayoutView*, int, double, double, bool, bool, bool))touch;
-	view->calc = (void(*)(struct engineLayoutView*))calc;
+	view->calc = (void(*)(struct engineLayoutView*, bool))calc;
 	view->draw = (void(*)(struct engineLayoutView*, struct engineMathMatrix44*, struct engineMathVector4*))draw;
 	view->pause = (void(*)(struct engineLayoutView*))pause;
 	view->dispose = (void(*)(struct engineLayoutView*))dispose;

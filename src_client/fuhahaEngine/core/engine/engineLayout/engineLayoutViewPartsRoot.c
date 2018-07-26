@@ -31,9 +31,9 @@ static bool touch(struct engineLayoutViewPartsRootImplement *this, int touchInde
 }
 
 // 計算
-static void calc(struct engineLayoutViewPartsRootImplement *this){
+static void calc(struct engineLayoutViewPartsRootImplement *this, bool isCancel){
 	// 子要素計算
-	engineLayoutViewUtilChildrenCalc((struct engineLayoutView*)this);
+	engineLayoutViewUtilChildrenCalc((struct engineLayoutView*)this, isCancel);
 }
 
 // ----------------------------------------------------------------
@@ -105,7 +105,7 @@ struct engineLayoutViewPartsRoot *engineLayoutViewPartsRootCreate(){
 
 	struct engineLayoutView *view = (struct engineLayoutView*)this;
 	view->touch = (bool(*)(struct engineLayoutView*, int, double, double, bool, bool, bool))touch;
-	view->calc = (void(*)(struct engineLayoutView*))calc;
+	view->calc = (void(*)(struct engineLayoutView*, bool))calc;
 	view->draw = (void(*)(struct engineLayoutView*, struct engineMathMatrix44*, struct engineMathVector4*))draw;
 	view->pause = (void(*)(struct engineLayoutView*))pause;
 	view->dispose = (void(*)(struct engineLayoutView*))dispose;
@@ -118,7 +118,7 @@ struct engineLayoutViewPartsRoot *engineLayoutViewPartsRootCreate(){
 
 // ルート構造体 運用
 void engineLayoutViewPartsRootTouch(struct engineLayoutViewPartsRoot *this, bool isCancel){engineLayoutViewUtilInteractTouchRoot((struct engineLayoutView*)this, isCancel);}
-void engineLayoutViewPartsRootCalc(struct engineLayoutViewPartsRoot *this){this->super.calc((struct engineLayoutView*)this);}
+void engineLayoutViewPartsRootCalc(struct engineLayoutViewPartsRoot *this, bool isCancel){this->super.calc((struct engineLayoutView*)this, isCancel);}
 void engineLayoutViewPartsRootDraw(struct engineLayoutViewPartsRoot *this){this->super.draw((struct engineLayoutView*)this, NULL, NULL);}
 void engineLayoutViewPartsRootPause(struct engineLayoutViewPartsRoot *this){this->super.pause((struct engineLayoutView*)this);}
 void engineLayoutViewPartsRootDispose(struct engineLayoutViewPartsRoot *this){this->super.dispose((struct engineLayoutView*)this);}

@@ -52,9 +52,9 @@ static bool touch(struct engineLayoutViewPartsImageTextImplement *this, int touc
 }
 
 // 計算
-static void calc(struct engineLayoutViewPartsImageTextImplement *this){
+static void calc(struct engineLayoutViewPartsImageTextImplement *this, bool isCancel){
 	// 子要素計算
-	engineLayoutViewUtilChildrenCalc((struct engineLayoutView*)this);
+	engineLayoutViewUtilChildrenCalc((struct engineLayoutView*)this, isCancel);
 }
 
 // ----------------------------------------------------------------
@@ -241,7 +241,7 @@ struct engineLayoutViewPartsImageText *engineLayoutViewPartsImageTextCreate(char
 
 	struct engineLayoutView *view = (struct engineLayoutView*)this;
 	view->touch = (bool(*)(struct engineLayoutView*, int, double, double, bool, bool, bool))touch;
-	view->calc = (void(*)(struct engineLayoutView*))calc;
+	view->calc = (void(*)(struct engineLayoutView*, bool))calc;
 	view->draw = (void(*)(struct engineLayoutView*, struct engineMathMatrix44*, struct engineMathVector4*))draw;
 	view->pause = (void(*)(struct engineLayoutView*))pause;
 	view->dispose = (void(*)(struct engineLayoutView*))dispose;

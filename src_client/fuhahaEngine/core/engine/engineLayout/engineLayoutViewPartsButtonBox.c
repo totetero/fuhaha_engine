@@ -84,7 +84,7 @@ static bool touch(struct engineLayoutViewPartsButtonBoxImplement *this, int touc
 }
 
 // 計算
-static void calc(struct engineLayoutViewPartsButtonBoxImplement *this){
+static void calc(struct engineLayoutViewPartsButtonBoxImplement *this, bool isCancel){
 	// ボタンの見た目を状態に合わせて変える
 	this->super.frameNormal->super.family.isInvisible = true;
 	this->super.frameSelect->super.family.isInvisible = true;
@@ -113,7 +113,7 @@ static void calc(struct engineLayoutViewPartsButtonBoxImplement *this){
 	}
 
 	// 子要素計算
-	engineLayoutViewUtilChildrenCalc((struct engineLayoutView*)this);
+	engineLayoutViewUtilChildrenCalc((struct engineLayoutView*)this, isCancel);
 }
 
 // ----------------------------------------------------------------
@@ -160,7 +160,7 @@ struct engineLayoutViewPartsButtonBox *engineLayoutViewPartsButtonBoxCreate(){
 
 	struct engineLayoutView *view = (struct engineLayoutView*)this;
 	view->touch = (bool(*)(struct engineLayoutView*, int, double, double, bool, bool, bool))touch;
-	view->calc = (void(*)(struct engineLayoutView*))calc;
+	view->calc = (void(*)(struct engineLayoutView*, bool))calc;
 	view->draw = (void(*)(struct engineLayoutView*, struct engineMathMatrix44*, struct engineMathVector4*))draw;
 	view->pause = (void(*)(struct engineLayoutView*))pause;
 	view->dispose = (void(*)(struct engineLayoutView*))dispose;

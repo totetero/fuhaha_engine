@@ -28,7 +28,7 @@ void engineLayoutViewUtilFamilyDispose(struct engineLayoutView *this);
 // 表示要素構造体子要素 タッチ処理
 bool engineLayoutViewUtilChildrenTouch(struct engineLayoutView *this, int touchIndex, double x, double y, bool dn, bool mv, bool isCancel);
 // 表示要素構造体子要素 計算
-void engineLayoutViewUtilChildrenCalc(struct engineLayoutView *this);
+void engineLayoutViewUtilChildrenCalc(struct engineLayoutView *this, bool isCancel);
 // 表示要素構造体子要素 描画
 void engineLayoutViewUtilChildrenDraw(struct engineLayoutView *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color);
 // 表示要素構造体子要素 一時停止
