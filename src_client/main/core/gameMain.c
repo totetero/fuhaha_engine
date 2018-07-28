@@ -28,6 +28,7 @@ void gameMainSurfaceCreated(void){
 // opengl描画
 void gameMainSurfaceDrawFrame(void){
 	// 計算
+	engineUtilFrameCountCalc();
 	engineCtrlTouchCalc();
 	engineCartridgePageManagerCalc();
 	// 描画
