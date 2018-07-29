@@ -11,6 +11,7 @@ struct engineLayoutViewUtilFamily{
 	struct engineLayoutView *next;
 	struct engineLayoutView *childrenHead;
 	struct engineLayoutView *childrenTail;
+	struct{int frameCount; bool isFirstCalc;} addInfo;
 	double zIndex;
 	bool isInactive;
 	bool isInvisible;

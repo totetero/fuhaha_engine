@@ -1,4 +1,5 @@
 #include "../../library.h"
+#include "../../engine/engineUtil/engineUtil.h"
 #include "../../engine/engineLayout/engineLayout.h"
 
 // ----------------------------------------------------------------
@@ -104,6 +105,12 @@ void engineLayoutViewUtilFamilyAdd(struct engineLayoutView *this, struct engineL
 	if(child->family.parent == this){return;}
 	familyRemove(child->family.parent, child);
 	familyAdd(this, child);
+
+	// 要素を追加された時の情報を記録しておく
+	// 要素が追加されたフレームでは計算を行わず、次のフレームから計算を行う
+	// 要素が追加されてから一度でも計算を行わない限り描画は行わない
+	child->family.addInfo.frameCount = engineUtilFrameCountGet();
+	child->family.addInfo.isFirstCalc = false;
 }
 
 // 表示要素構造体子要素 子要素除外
@@ -185,7 +192,12 @@ void engineLayoutViewUtilChildrenCalc(struct engineLayoutView *this, bool isCanc
 	// 子要素の計算
 	struct engineLayoutView *temp = this->family.childrenHead;
 	while(temp != NULL){
-		if(!temp->family.isInactive){temp->calc(temp, isCancel);}
+		bool isCalc = !temp->family.isInactive;
+		isCalc = (isCalc && temp->family.addInfo.frameCount != engineUtilFrameCountGet());
+		if(isCalc){
+			temp->family.addInfo.isFirstCalc = true;
+			temp->calc(temp, isCancel);
+		}
 		temp = temp->family.next;
 	}
 }
@@ -196,7 +208,9 @@ void engineLayoutViewUtilChildrenDraw(struct engineLayoutView *this, struct engi
 	// 子要素の描画 表示奥から先に処理する
 	struct engineLayoutView *temp = this->family.childrenHead;
 	while(temp != NULL){
-		if(!temp->family.isInvisible){
+		bool isDraw = !temp->family.isInvisible;
+		isDraw = (isDraw && temp->family.addInfo.isFirstCalc);
+		if(isDraw){
 			struct engineMathVector4 tempColor1;
 			tempColor1.r = temp->color.r * color->r;
 			tempColor1.g = temp->color.g * color->g;
