@@ -36,6 +36,8 @@ struct engineCartridgePopup{
 // ポップアップ管理構造体
 struct engineCartridgePopupManager{
 	struct engineCartridgePopup *popupCartridgeList;
+	double backParam;
+	double backAlpha;
 };
 
 // ポップアップ管理構造体 初期化

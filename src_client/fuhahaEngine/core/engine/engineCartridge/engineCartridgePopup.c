@@ -75,6 +75,8 @@ bool engineCartridgePopupManagerCalc(struct engineCartridgePopupManager *this){
 	struct engineCartridgePopup *cartridge = this->popupCartridgeList;
 	while(cartridge != NULL){
 		bool isExist = popupCalc(cartridge);
+		this->backParam = cartridge->backParam;
+		this->backAlpha = cartridge->backAlpha;
 		if(isExist){break;}
 
 		// 中断処理
