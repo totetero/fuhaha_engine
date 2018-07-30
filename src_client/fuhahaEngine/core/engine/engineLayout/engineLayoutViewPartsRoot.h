@@ -10,7 +10,7 @@ struct engineLayoutViewPartsRoot{
 };
 
 // ルート構造体 作成
-struct engineLayoutViewPartsRoot *engineLayoutViewPartsRootCreate();
+struct engineLayoutViewPartsRoot *engineLayoutViewPartsRootCreate(void);
 // ルート構造体 運用
 void engineLayoutViewPartsRootTouch(struct engineLayoutViewPartsRoot *this, bool isCancel);
 void engineLayoutViewPartsRootCalc(struct engineLayoutViewPartsRoot *this, bool isCancel);

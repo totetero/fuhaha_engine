@@ -17,7 +17,7 @@ struct engineLayoutViewPartsSwipePager{
 };
 
 // ページャー構造体 作成
-struct engineLayoutViewPartsSwipePager *engineLayoutViewPartsSwipePagerCreate();
+struct engineLayoutViewPartsSwipePager *engineLayoutViewPartsSwipePagerCreate(void);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

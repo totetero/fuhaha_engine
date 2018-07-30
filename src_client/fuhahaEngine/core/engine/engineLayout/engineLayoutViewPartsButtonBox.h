@@ -17,7 +17,7 @@ struct engineLayoutViewPartsButtonBox{
 };
 
 // 標準ボタン構造体 作成
-struct engineLayoutViewPartsButtonBox *engineLayoutViewPartsButtonBoxCreate();
+struct engineLayoutViewPartsButtonBox *engineLayoutViewPartsButtonBoxCreate(void);
 struct engineLayoutViewPartsButtonBox *engineLayoutViewPartsButtonBoxCreateText(char *text);
 
 // ----------------------------------------------------------------

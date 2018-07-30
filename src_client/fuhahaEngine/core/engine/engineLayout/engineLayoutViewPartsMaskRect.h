@@ -10,7 +10,7 @@ struct engineLayoutViewPartsMaskRect{
 };
 
 // 長方形マスク構造体 作成
-struct engineLayoutViewPartsMaskRect *engineLayoutViewPartsMaskRectCreate();
+struct engineLayoutViewPartsMaskRect *engineLayoutViewPartsMaskRectCreate(void);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

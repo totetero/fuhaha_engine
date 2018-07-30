@@ -22,7 +22,7 @@ struct engineLayoutViewPartsArrowKey{
 };
 
 // 十字キー構造体 作成
-struct engineLayoutViewPartsArrowKey *engineLayoutViewPartsArrowKeyCreate();
+struct engineLayoutViewPartsArrowKey *engineLayoutViewPartsArrowKeyCreate(void);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

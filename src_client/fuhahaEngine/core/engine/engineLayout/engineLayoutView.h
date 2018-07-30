@@ -26,7 +26,7 @@ void engineLayoutViewUtilInit(struct engineLayoutView *this);
 void engineLayoutViewUtilDispose(struct engineLayoutView *this);
 
 // 表示要素構造体 作成
-struct engineLayoutView *engineLayoutViewCreate();
+struct engineLayoutView *engineLayoutViewCreate(void);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

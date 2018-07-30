@@ -44,9 +44,9 @@ struct engineLayoutViewUtilPosition{
 };
 
 // 表示要素構造体位置関係 計算モード設定
-void engineLayoutViewUtilPositionModeSetCalc();
+void engineLayoutViewUtilPositionModeSetCalc(void);
 // 表示要素構造体位置関係 描画モード設定
-void engineLayoutViewUtilPositionModeSetDraw();
+void engineLayoutViewUtilPositionModeSetDraw(void);
 
 // レイアウトを明示的に計算
 void engineLayoutViewUtilPositionCalcLayoutAll(struct engineLayoutView *this);

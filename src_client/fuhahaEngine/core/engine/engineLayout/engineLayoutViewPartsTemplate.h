@@ -10,7 +10,7 @@ struct engineLayoutViewPartsTemplate{
 };
 
 // テンプレート構造体 作成
-struct engineLayoutViewPartsTemplate *engineLayoutViewPartsTemplateCreate();
+struct engineLayoutViewPartsTemplate *engineLayoutViewPartsTemplateCreate(void);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

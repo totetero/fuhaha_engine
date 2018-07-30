@@ -13,7 +13,7 @@ struct engineLayoutViewPartsFilterColor{
 };
 
 // カラーマトリクスフィルタ構造体 作成
-struct engineLayoutViewPartsFilterColor *engineLayoutViewPartsFilterColorCreate();
+struct engineLayoutViewPartsFilterColor *engineLayoutViewPartsFilterColorCreate(void);
 // カラーマトリクスフィルタ構造体 色行列設定
 void engineLayoutViewPartsFilterColorCreateSetNegative1(struct engineLayoutViewPartsFilterColor *this);
 void engineLayoutViewPartsFilterColorCreateSetNegative2(struct engineLayoutViewPartsFilterColor *this);

@@ -10,7 +10,7 @@ struct engineLayoutViewPartsButtonOuter{
 };
 
 // 外枠ボタン構造体 作成
-struct engineLayoutViewPartsButtonOuter *engineLayoutViewPartsButtonOuterCreate();
+struct engineLayoutViewPartsButtonOuter *engineLayoutViewPartsButtonOuterCreate(void);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

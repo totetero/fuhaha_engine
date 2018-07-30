@@ -12,7 +12,7 @@ struct engineLayoutViewPartsRect{
 
 // 画像描画構造体 作成
 struct engineLayoutViewPartsRect *engineLayoutViewPartsRectCreate(char *src, int imgw, int imgh, int tu, int tv, int tw, int th);
-struct engineLayoutViewPartsRect *engineLayoutViewPartsRectCreateWhite();
+struct engineLayoutViewPartsRect *engineLayoutViewPartsRectCreateWhite(void);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

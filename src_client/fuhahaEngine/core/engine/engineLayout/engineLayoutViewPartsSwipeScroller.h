@@ -17,7 +17,7 @@ struct engineLayoutViewPartsSwipeScroller{
 };
 
 // スクローラ構造体 作成
-struct engineLayoutViewPartsSwipeScroller *engineLayoutViewPartsSwipeScrollerCreate();
+struct engineLayoutViewPartsSwipeScroller *engineLayoutViewPartsSwipeScrollerCreate(void);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

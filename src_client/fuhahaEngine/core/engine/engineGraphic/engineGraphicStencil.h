@@ -43,11 +43,11 @@ void engineGraphicStencilClear(void);
 void engineGraphicStencilSetMode(enum engineGraphicStencilMode mode);
 
 // ステンシルスタックマスク設定
-void engineGraphicStencilStackMaskRead();
+void engineGraphicStencilStackMaskRead(void);
 // ステンシルスタックマスク加算描画
-void engineGraphicStencilStackMaskWriteIncrement();
+void engineGraphicStencilStackMaskWriteIncrement(void);
 // ステンシルスタックマスク減算描画
-void engineGraphicStencilStackMaskWriteDecrement();
+void engineGraphicStencilStackMaskWriteDecrement(void);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

@@ -13,7 +13,7 @@ struct engineLayoutViewPartsFrame{
 };
 
 // 枠付描画構造体 作成
-struct engineLayoutViewPartsFrame *engineLayoutViewPartsFrameCreate();
+struct engineLayoutViewPartsFrame *engineLayoutViewPartsFrameCreate(void);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
