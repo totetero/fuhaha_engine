@@ -106,7 +106,7 @@ struct engineLayoutViewPartsFilterColor *engineLayoutViewPartsFilterColorCreate(
 // ----------------------------------------------------------------
 
 // カラーマトリクスフィルタ構造体 色行列設定 よくわからないけど色反転っぽい変換
-void engineLayoutViewPartsFilterColorCreateSetNegative1(struct engineLayoutViewPartsFilterColor *this){
+void engineLayoutViewPartsFilterColorSetNegative1(struct engineLayoutViewPartsFilterColor *this){
 	struct engineMathMatrix44 *m = &this->matrix;
 	struct engineMathVector4 *v = &this->vector;
 	m->m00 = 0.0; m->m01 = 1.0; m->m02 = 1.0; m->m03 = 0.0; v->r = 0.0;
@@ -116,7 +116,7 @@ void engineLayoutViewPartsFilterColorCreateSetNegative1(struct engineLayoutViewP
 }
 
 // カラーマトリクスフィルタ構造体 色行列設定 よくわからないけど明度反転っぽい変換
-void engineLayoutViewPartsFilterColorCreateSetNegative2(struct engineLayoutViewPartsFilterColor *this){
+void engineLayoutViewPartsFilterColorSetNegative2(struct engineLayoutViewPartsFilterColor *this){
 	struct engineMathMatrix44 *m = &this->matrix;
 	struct engineMathVector4 *v = &this->vector;
 	m->m00 =  0.0; m->m01 = -1.0; m->m02 = -1.0; m->m03 = 0.0; v->r = 2.0;
@@ -126,7 +126,7 @@ void engineLayoutViewPartsFilterColorCreateSetNegative2(struct engineLayoutViewP
 }
 
 // カラーマトリクスフィルタ構造体 色行列設定 グレースケール
-void engineLayoutViewPartsFilterColorCreateSetGrayscale(struct engineLayoutViewPartsFilterColor *this){
+void engineLayoutViewPartsFilterColorSetGrayscale(struct engineLayoutViewPartsFilterColor *this){
 	struct engineMathMatrix44 *m = &this->matrix;
 	struct engineMathVector4 *v = &this->vector;
 	m->m00 = 0.33; m->m01 = 0.59; m->m02 = 0.11; m->m03 = 0.0; v->r = 0.0;
@@ -136,7 +136,7 @@ void engineLayoutViewPartsFilterColorCreateSetGrayscale(struct engineLayoutViewP
 }
 
 // カラーマトリクスフィルタ構造体 色行列設定 セピア
-void engineLayoutViewPartsFilterColorCreateSetSepia(struct engineLayoutViewPartsFilterColor *this){
+void engineLayoutViewPartsFilterColorSetSepia(struct engineLayoutViewPartsFilterColor *this){
 	struct engineMathMatrix44 *m = &this->matrix;
 	struct engineMathVector4 *v = &this->vector;
 	m->m00 = 0.393; m->m01 = 0.769; m->m02 = 0.189; m->m03 = 0.0; v->r = 0.0;

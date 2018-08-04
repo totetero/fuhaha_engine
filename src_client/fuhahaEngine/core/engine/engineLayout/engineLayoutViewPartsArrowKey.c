@@ -191,7 +191,7 @@ static void dispose(struct engineLayoutViewPartsArrowKeyImplement *this){
 
 // ----------------------------------------------------------------
 
-// 画像描画構造体 作成
+// 十字キー構造体 作成
 struct engineLayoutViewPartsArrowKey *engineLayoutViewPartsArrowKeyCreate(){
 	struct engineLayoutViewPartsArrowKeyImplement *this = (struct engineLayoutViewPartsArrowKeyImplement*)engineUtilMemoryInfoCalloc("engineLayoutViewPartsArrowKey", 1, sizeof(struct engineLayoutViewPartsArrowKeyImplement));
 	init(this);

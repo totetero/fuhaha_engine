@@ -71,7 +71,7 @@ static void dispose(struct engineLayoutViewPartsTemplateImplement *this){
 
 // ----------------------------------------------------------------
 
-// 表示要素構造体 作成
+// テンプレート構造体 作成
 struct engineLayoutViewPartsTemplate *engineLayoutViewPartsTemplateCreate(){
 	struct engineLayoutViewPartsTemplateImplement *this = (struct engineLayoutViewPartsTemplateImplement*)engineUtilMemoryInfoCalloc("engineLayoutViewPartsTemplate", 1, sizeof(struct engineLayoutViewPartsTemplateImplement));
 	init(this);
