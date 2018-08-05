@@ -43,7 +43,7 @@ struct engineLayoutViewPartsFontTextImplement{
 			int xalign;
 		} fontStyle;
 	} bufferCompare;
-	engineGraphicTextureId egoIdTexTest;
+	engineGraphicTextureId egoIdTexFont;
 
 	int generationCount;
 	struct{
@@ -130,16 +130,16 @@ static void checkTexture(struct engineLayoutViewPartsFontTextImplement *this){
 		this->fontInfo.codeListLength = 0;
 		this->generationCount++;
 		// 文字列作成開始
-		engineGraphicTextureDispose(this->egoIdTexTest);
-		this->egoIdTexTest = (this->textInfo.buff != NULL) ? engineGraphicTextureCreateFont(this->textInfo.fontSetId, this->textInfo.buff, this->textInfo.textureType) : 0;
+		engineGraphicTextureDispose(this->egoIdTexFont);
+		this->egoIdTexFont = (this->textInfo.buff != NULL) ? engineGraphicTextureCreateFont(this->textInfo.fontSetId, this->textInfo.buff, this->textInfo.textureType) : 0;
 	}
 
 	// プラットフォーム文字列作成 完了確認
-	if(this->egoIdTexTest > 0 && this->fontInfo.codeListIndex < 0){
+	if(this->egoIdTexFont > 0 && this->fontInfo.codeListIndex < 0){
 		int codeListIndex = -1;
 		int codeListLength = 0;
 		enum engineGraphicTextureType type = this->textInfo.textureType;
-		engineGraphicTextureGetCodeList(this->egoIdTexTest, &codeListIndex, &codeListLength, &type);
+		engineGraphicTextureGetCodeList(this->egoIdTexFont, &codeListIndex, &codeListLength, &type);
 		if(codeListIndex >= 0){
 			this->fontInfo.codeListIndex = codeListIndex;
 			this->fontInfo.codeListLength = codeListLength;
@@ -315,7 +315,7 @@ static void createBufferArrayText(struct engineLayoutViewPartsFontTextImplement 
 // バッファ作成
 static void bufferCreate(struct engineLayoutViewPartsFontTextImplement *this){
 	// バッファ配列作成
-	if(this->egoIdTexTest > 0 && this->fontInfo.codeListIndex >= 0){
+	if(this->egoIdTexFont > 0 && this->fontInfo.codeListIndex >= 0){
 		struct pluginTextureFontCode *codeList = corePluginTextureFontCodeListGet(this->fontInfo.codeListIndex);
 		prepareCreateBufferArrayText1(this, codeList);
 		prepareCreateBufferArrayText2(this, codeList);
@@ -352,7 +352,7 @@ static void drawText(struct engineLayoutViewPartsFontTextImplement *this, struct
 
 // 描画
 static void draw(struct engineLayoutViewPartsFontTextImplement *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
-	if(this->egoIdTexTest > 0 && this->fontInfo.codeListIndex >= 0){
+	if(this->egoIdTexFont > 0 && this->fontInfo.codeListIndex >= 0){
 		// 情報取得
 		struct pluginTextureFontCode *codeList = corePluginTextureFontCodeListGet(this->fontInfo.codeListIndex);
 
@@ -407,7 +407,7 @@ static void dispose(struct engineLayoutViewPartsFontTextImplement *this){
 	engineLayoutViewUtilChildrenDispose((struct engineLayoutView*)this);
 
 	// 自要素破棄
-	engineGraphicTextureDispose(this->egoIdTexTest);
+	engineGraphicTextureDispose(this->egoIdTexFont);
 	if(this->textInfo.buff != NULL){engineUtilMemoryInfoFree("engineLayoutViewPartsFontText textBuff", this->textInfo.buff);}
 	engineLayoutViewUtilDispose((struct engineLayoutView*)this);
 	engineUtilMemoryInfoFree("engineLayoutViewPartsFontText", this);

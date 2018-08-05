@@ -15,7 +15,7 @@ struct engineLayoutViewPartsMaskRectImplement{
 	struct engineLayoutViewPartsMaskRectBufferCompare{
 		int generationCount;
 	} bufferCompare;
-	engineGraphicTextureId egoIdTexTest;
+	engineGraphicTextureId egoIdTexSystem;
 
 	int generationCount;
 
@@ -101,7 +101,7 @@ static void draw(struct engineLayoutViewPartsMaskRectImplement *this, struct eng
 	engineMathMat4Scale(&tempMat1, w, h, 1.0);
 
 	// バッファ登録
-	engineGraphicEngineBindTexture(this->egoIdTexTest);
+	engineGraphicEngineBindTexture(this->egoIdTexSystem);
 	engineGraphicEngineBindVertVBO(this->super.super.graphicObject.egoIdVert);
 	engineGraphicEngineBindTexcVBO(this->super.super.graphicObject.egoIdTexc);
 	engineGraphicEngineBindFaceIBO(this->super.super.graphicObject.egoIdFace);
@@ -117,7 +117,7 @@ static void draw(struct engineLayoutViewPartsMaskRectImplement *this, struct eng
 	engineLayoutViewUtilChildrenDraw((struct engineLayoutView*)this, mat, color);
 
 	// バッファ登録
-	engineGraphicEngineBindTexture(this->egoIdTexTest);
+	engineGraphicEngineBindTexture(this->egoIdTexSystem);
 	engineGraphicEngineBindVertVBO(this->super.super.graphicObject.egoIdVert);
 	engineGraphicEngineBindTexcVBO(this->super.super.graphicObject.egoIdTexc);
 	engineGraphicEngineBindFaceIBO(this->super.super.graphicObject.egoIdFace);
@@ -144,7 +144,7 @@ static void dispose(struct engineLayoutViewPartsMaskRectImplement *this){
 	engineLayoutViewUtilChildrenDispose((struct engineLayoutView*)this);
 
 	// 自要素破棄
-	engineGraphicTextureDispose(this->egoIdTexTest);
+	engineGraphicTextureDispose(this->egoIdTexSystem);
 	engineLayoutViewUtilDispose((struct engineLayoutView*)this);
 	engineUtilMemoryInfoFree("engineLayoutViewPartsMaskRect", this);
 }
@@ -156,7 +156,7 @@ struct engineLayoutViewPartsMaskRect *engineLayoutViewPartsMaskRectCreate(){
 	struct engineLayoutViewPartsMaskRectImplement *this = (struct engineLayoutViewPartsMaskRectImplement*)engineUtilMemoryInfoCalloc("engineLayoutViewPartsMaskRect", 1, sizeof(struct engineLayoutViewPartsMaskRectImplement));
 	init(this);
 	// 画像読み込み
-	this->egoIdTexTest = engineGraphicTextureCreateLocal("img/system.png", ENGINEGRAPHICTEXTURETYPE_LINEAR);
+	this->egoIdTexSystem = engineGraphicTextureCreateLocal("img/system.png", ENGINEGRAPHICTEXTURETYPE_LINEAR);
 
 	struct engineLayoutView *view = (struct engineLayoutView*)this;
 	view->touch = (bool(*)(struct engineLayoutView*, int, double, double, bool, bool, bool))touch;

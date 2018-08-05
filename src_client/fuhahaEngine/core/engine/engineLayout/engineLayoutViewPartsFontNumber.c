@@ -16,7 +16,7 @@ struct engineLayoutViewPartsFontNumberImplement{
 	struct engineLayoutViewPartsFontNumberBufferCompare{
 		int generationCount;
 	} bufferCompare;
-	engineGraphicTextureId egoIdTexTest;
+	engineGraphicTextureId egoIdTexFont;
 
 	int generationCount;
 	struct{
@@ -96,16 +96,16 @@ static void checkTexture(struct engineLayoutViewPartsFontNumberImplement *this){
 		this->fontInfo.codeListLength = 0;
 		this->generationCount++;
 		// 文字列作成開始
-		engineGraphicTextureDispose(this->egoIdTexTest);
-		this->egoIdTexTest = engineGraphicTextureCreateFont(this->textInfo.fontSetId, "0123456789", this->textInfo.textureType);
+		engineGraphicTextureDispose(this->egoIdTexFont);
+		this->egoIdTexFont = engineGraphicTextureCreateFont(this->textInfo.fontSetId, "0123456789", this->textInfo.textureType);
 	}
 
 	// プラットフォーム文字列作成 完了確認
-	if(this->egoIdTexTest > 0 && this->fontInfo.codeListIndex < 0){
+	if(this->egoIdTexFont > 0 && this->fontInfo.codeListIndex < 0){
 		int codeListIndex = -1;
 		int codeListLength = 0;
 		enum engineGraphicTextureType type = this->textInfo.textureType;
-		engineGraphicTextureGetCodeList(this->egoIdTexTest, &codeListIndex, &codeListLength, &type);
+		engineGraphicTextureGetCodeList(this->egoIdTexFont, &codeListIndex, &codeListLength, &type);
 		if(codeListIndex >= 0){
 			this->fontInfo.codeListIndex = codeListIndex;
 			this->fontInfo.codeListLength = codeListLength;
@@ -158,7 +158,7 @@ static void createBufferArrayText(struct engineLayoutViewPartsFontNumberImplemen
 // バッファ作成
 static void bufferCreate(struct engineLayoutViewPartsFontNumberImplement *this){
 	// バッファ配列作成
-	if(this->egoIdTexTest > 0 && this->fontInfo.codeListIndex >= 0){
+	if(this->egoIdTexFont > 0 && this->fontInfo.codeListIndex >= 0){
 		struct pluginTextureFontCode *codeList = corePluginTextureFontCodeListGet(this->fontInfo.codeListIndex);
 		createBufferArrayText(this, codeList);
 	}else{
@@ -190,7 +190,7 @@ static void drawText(struct engineLayoutViewPartsFontNumberImplement *this, stru
 
 // 描画
 static void draw(struct engineLayoutViewPartsFontNumberImplement *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
-	if(this->egoIdTexTest > 0 && this->fontInfo.codeListIndex >= 0){
+	if(this->egoIdTexFont > 0 && this->fontInfo.codeListIndex >= 0){
 		// 情報取得
 		struct pluginTextureFontCode *codeList = corePluginTextureFontCodeListGet(this->fontInfo.codeListIndex);
 
@@ -266,7 +266,7 @@ static void dispose(struct engineLayoutViewPartsFontNumberImplement *this){
 	engineLayoutViewUtilChildrenDispose((struct engineLayoutView*)this);
 
 	// 自要素破棄
-	engineGraphicTextureDispose(this->egoIdTexTest);
+	engineGraphicTextureDispose(this->egoIdTexFont);
 	engineLayoutViewUtilDispose((struct engineLayoutView*)this);
 	engineUtilMemoryInfoFree("engineLayoutViewPartsFontNumber", this);
 }

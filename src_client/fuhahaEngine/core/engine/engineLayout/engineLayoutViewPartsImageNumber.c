@@ -19,7 +19,7 @@ struct engineLayoutViewPartsImageNumberImplement{
 			int yalign;
 		} fontStyle;
 	} bufferCompare;
-	engineGraphicTextureId egoIdTexTest;
+	engineGraphicTextureId egoIdTexImage;
 
 	int faceIndex;
 	int faceNum;
@@ -103,7 +103,7 @@ static void bufferCreate(struct engineLayoutViewPartsImageNumberImplement *this)
 // 描画
 static void draw(struct engineLayoutViewPartsImageNumberImplement *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
 	// バッファ登録
-	engineGraphicEngineBindTexture(this->egoIdTexTest);
+	engineGraphicEngineBindTexture(this->egoIdTexImage);
 	engineGraphicEngineBindVertVBO(this->super.super.graphicObject.egoIdVert);
 	engineGraphicEngineBindTexcVBO(this->super.super.graphicObject.egoIdTexc);
 	engineGraphicEngineBindFaceIBO(this->super.super.graphicObject.egoIdFace);
@@ -153,7 +153,7 @@ static void dispose(struct engineLayoutViewPartsImageNumberImplement *this){
 	engineLayoutViewUtilChildrenDispose((struct engineLayoutView*)this);
 
 	// 自要素破棄
-	engineGraphicTextureDispose(this->egoIdTexTest);
+	engineGraphicTextureDispose(this->egoIdTexImage);
 	engineLayoutViewUtilDispose((struct engineLayoutView*)this);
 	engineUtilMemoryInfoFree("engineLayoutViewPartsImageNumber", this);
 }
@@ -165,7 +165,7 @@ struct engineLayoutViewPartsImageNumber *engineLayoutViewPartsImageNumberCreate(
 	struct engineLayoutViewPartsImageNumberImplement *this = (struct engineLayoutViewPartsImageNumberImplement*)engineUtilMemoryInfoCalloc("engineLayoutViewPartsImageNumber", 1, sizeof(struct engineLayoutViewPartsImageNumberImplement));
 	init(this);
 	// 画像読み込み
-	this->egoIdTexTest = engineGraphicTextureCreateLocal(src, ENGINEGRAPHICTEXTURETYPE_LINEAR);
+	this->egoIdTexImage = engineGraphicTextureCreateLocal(src, ENGINEGRAPHICTEXTURETYPE_LINEAR);
 	this->super.number.imgw = imgw;
 	this->super.number.imgh = imgh;
 	this->super.number.tu = tu;

@@ -16,7 +16,7 @@ struct engineLayoutViewPartsFrameImplement{
 		struct{int imgw; int imgh; int tu; int tv; int tw; int th;} texture;
 		struct{int bt; int bb; int br; int bl;} border;
 	} bufferCompare;
-	engineGraphicTextureId egoIdTexTest;
+	engineGraphicTextureId egoIdTexImage;
 
 	int faceIndex;
 	int faceNum;
@@ -29,7 +29,7 @@ static void init(struct engineLayoutViewPartsFrameImplement *this){
 	engineLayoutViewUtilInit((struct engineLayoutView*)this);
 
 	// 画像読み込み
-	this->egoIdTexTest = engineGraphicTextureCreateLocal("img/system.png", ENGINEGRAPHICTEXTURETYPE_LINEAR);
+	this->egoIdTexImage = engineGraphicTextureCreateLocal("img/system.png", ENGINEGRAPHICTEXTURETYPE_LINEAR);
 
 	// デフォルトパラメータ設定
 	this->super.texture.imgw = TEXSIZ_SYSTEM_W;
@@ -135,7 +135,7 @@ static void bufferCreate(struct engineLayoutViewPartsFrameImplement *this){
 // 描画
 static void draw(struct engineLayoutViewPartsFrameImplement *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
 	// バッファ登録
-	engineGraphicEngineBindTexture(this->egoIdTexTest);
+	engineGraphicEngineBindTexture(this->egoIdTexImage);
 	engineGraphicEngineBindVertVBO(this->super.super.graphicObject.egoIdVert);
 	engineGraphicEngineBindTexcVBO(this->super.super.graphicObject.egoIdTexc);
 	engineGraphicEngineBindFaceIBO(this->super.super.graphicObject.egoIdFace);
@@ -243,7 +243,7 @@ static void dispose(struct engineLayoutViewPartsFrameImplement *this){
 	engineLayoutViewUtilChildrenDispose((struct engineLayoutView*)this);
 
 	// 自要素破棄
-	engineGraphicTextureDispose(this->egoIdTexTest);
+	engineGraphicTextureDispose(this->egoIdTexImage);
 	engineLayoutViewUtilDispose((struct engineLayoutView*)this);
 	engineUtilMemoryInfoFree("engineLayoutViewPartsFrame", this);
 }
