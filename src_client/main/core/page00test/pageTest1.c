@@ -77,7 +77,7 @@ static void createBuffer(struct pageCartridgeTest1 *this){
 
 // 描画
 static void draw(struct pageCartridgeTest1 *this){
-	engineGraphicEngineViewport(0, 0, global.screen.w, global.screen.h);
+	engineGraphicEngineViewport(0, 0, global.window.w, global.window.h);
 	engineGraphicEngineClearAll();
 
 	// 描画準備
