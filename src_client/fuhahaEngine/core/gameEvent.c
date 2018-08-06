@@ -47,7 +47,7 @@ void gameMainEventInit(void){
 void gameMainEventScreen(int width, int height, double pixelRatio){
 	global.window.w = width;
 	global.window.h = height;
-	glViewport(0, 0, width * pixelRatio, height * pixelRatio);
+	global.window.pixelRatio = pixelRatio;
 	if(DEFINESETTING_SCREEN_W > 0 && DEFINESETTING_SCREEN_H > 0){
 		// スクリーンサイズ固定 
 		global.screen.w = DEFINESETTING_SCREEN_W;

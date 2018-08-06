@@ -77,6 +77,7 @@ static void createBuffer(struct pageCartridgeTest1 *this){
 
 // 描画
 static void draw(struct pageCartridgeTest1 *this){
+	engineGraphicEngineViewport(0, 0, global.screen.w, global.screen.h);
 	engineGraphicEngineClearAll();
 
 	// 描画準備
@@ -132,6 +133,7 @@ static struct engineCartridgePage *pageTest1Create(){
 
 // ページ状態初期化
 void pageTest1PushPage(){
+	// ページカートリッジ装填
 	engineCartridgePageManagerPush(pageTest1Create());
 }
 

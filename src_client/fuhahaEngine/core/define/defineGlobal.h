@@ -31,6 +31,7 @@ extern struct globalVariable{
 	struct{
 		int w;
 		int h;
+		double pixelRatio;
 	} window;
 	// スクリーン 主要描画領域
 	struct{

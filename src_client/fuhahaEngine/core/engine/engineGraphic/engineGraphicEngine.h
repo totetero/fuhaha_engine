@@ -22,6 +22,9 @@ void engineGraphicEngineInit(void);
 // 解放
 void engineGraphicEngineExit(void);
 
+// ビューポート設定
+void engineGraphicEngineViewport(int x, int y, int w, int h);
+
 // グラフィックエンジン命令 描画のクリア
 void engineGraphicEngineClearAll(void);
 // グラフィックエンジン命令 深度バッファのクリア

@@ -109,6 +109,18 @@ void engineGraphicEngineExit(void){
 
 // ----------------------------------------------------------------
 
+// ビューポート設定
+void engineGraphicEngineViewport(int x, int y, int w, int h){
+	double pixelRatio = global.window.pixelRatio;
+	GLint vx = (GLint)(x * pixelRatio);
+	GLint vy = (GLint)((global.window.h - y - h) * pixelRatio);
+	GLsizei vw = (GLsizei)(w * pixelRatio);
+	GLsizei vh = (GLsizei)(h * pixelRatio);
+	glViewport(vx, vy, vw, vh);
+}
+
+// ----------------------------------------------------------------
+
 // グラフィックエンジン命令 描画のクリア
 void engineGraphicEngineClearAll(void){
 	if(!localGlobal.memory.modeDepthMask){glDepthMask(GL_TRUE);}
