@@ -6,10 +6,11 @@
 
 // 各ページカートリッジ装填のコンストラクタ
 void pageTest1PushPage(void);
+void pageTest2PushPage(void);
 
 // 最初のページカートリッジ作成
 void createFirstCartridge(void){
-	pageTest1PushPage();
+	pageTest2PushPage();
 }
 
 // ----------------------------------------------------------------
