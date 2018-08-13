@@ -24,11 +24,15 @@ struct pageTest2PartsPagerImplement{
 static void init(struct pageTest2PartsPagerImplement *this){
 	engineLayoutViewUtilInit((struct engineLayoutView*)this);
 
+	// ページャーマスク作成
+	struct engineLayoutViewPartsMaskRect *viewPagerMask = engineLayoutViewPartsMaskRectCreate();
+	engineLayoutViewUtilPositionSetLtRtTpBm((struct engineLayoutView*)viewPagerMask, 0, 0, 40, 0);
+	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)this, (struct engineLayoutView*)viewPagerMask);
+	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)this, (struct engineLayoutView*)viewPagerMask);
 	// ページャー作成
 	this->stat->viewPager = engineLayoutViewPartsSwipePagerCreate();
-	engineLayoutViewUtilPositionSetLtRtTpBm((struct engineLayoutView*)this->stat->viewPager, 0, 0, 40, 0);
-	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)this, (struct engineLayoutView*)this->stat->viewPager);
-	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)this, (struct engineLayoutView*)this->stat->viewPager);
+	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)viewPagerMask, (struct engineLayoutView*)this->stat->viewPager);
+	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)viewPagerMask, (struct engineLayoutView*)this->stat->viewPager);
 
 	// ページ作成
 	this->pages[0].viewPage = (struct engineLayoutView*)pageTest2PartsPagerPage1Create(this->stat);
