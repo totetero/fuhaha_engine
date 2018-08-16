@@ -1,7 +1,6 @@
 #include "../core/library.h"
 #include "./native.h"
 #include "../core/plugin/pluginUtil.h"
-#include <time.h>
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -33,15 +32,6 @@ char *platformPluginUtilUidGet(void){
 	strcpy(buff, value);
 	(*env)->ReleaseStringUTFChars(env, str, value);
 	return buff;
-}
-
-// ----------------------------------------------------------------
-
-// unix時間取得
-int64_t platformPluginUtilTimeGet(void){
-	time_t timer;
-	time(&timer);
-	return (int64_t)timer;
 }
 
 // ----------------------------------------------------------------

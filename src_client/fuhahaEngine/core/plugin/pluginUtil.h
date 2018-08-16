@@ -45,9 +45,6 @@ char *platformPluginUtilPlatformGet(void);
 // ユーザーID取得 返値文字列は揮発性バッファで解放禁止
 char *platformPluginUtilUidGet(void);
 
-// unix時間取得
-int64_t platformPluginUtilTimeGet(void);
-
 // 読み込み中確認
 bool platformPluginUtilIsLoading(void);
 

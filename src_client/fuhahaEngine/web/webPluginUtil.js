@@ -53,13 +53,6 @@ mergeInto(LibraryManager.library, {
 
 	// ----------------------------------------------------------------
 
-	// unix時間取得
-	platformPluginUtilTimeGet: function(){
-		return Math.floor((new Date()).getTime() / 1000);
-	},
-
-	// ----------------------------------------------------------------
-
 	// 読み込み中確認
 	platformPluginUtilIsLoading: function(){
 		return (Module.privatePluginUtilCounter > 0);
