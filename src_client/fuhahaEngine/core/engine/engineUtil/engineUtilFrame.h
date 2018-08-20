@@ -1,28 +1,24 @@
-#include "../../library.h"
-#include "../../engine/engineUtil/engineUtil.h"
-#include "../../game.h"
+#pragma once
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-static struct{
-	int frameCount;
-} localGlobal = {0};
+// フレームレート計算
+double engineUtilFrameRateCalc(void);
+
+// フレームレートから処理回数を求める
+int engineUtilFrameRepeatCalc(double frameRate);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
 // フレームカウント取得
-int engineUtilFrameCountGet(void){
-	return localGlobal.frameCount;
-}
+int engineUtilFrameCountGet(void);
 
 // フレームカウント計算
-void engineUtilFrameCountCalc(void){
-	localGlobal.frameCount++;
-}
+void engineUtilFrameCountCalc(void);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

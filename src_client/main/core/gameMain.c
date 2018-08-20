@@ -25,10 +25,17 @@ void gameMainSurfaceCreated(void){
 
 // opengl描画
 void gameMainSurfaceDrawFrame(void){
+	// 計算回数を求める
+	double frameRate = engineUtilFrameRateCalc();
+	int frameRepeat = engineUtilFrameRepeatCalc(frameRate);
+
 	// 計算
-	engineUtilFrameCountCalc();
-	engineCtrlTouchCalc();
-	engineCartridgePageManagerCalc();
+	for(int i = 0; i < frameRepeat; i++){
+		engineCtrlTouchCalc();
+		engineUtilFrameCountCalc();
+		engineCartridgePageManagerCalc();
+	}
+
 	// 描画
 	engineCartridgePageManagerDraw();
 }
