@@ -102,7 +102,6 @@ static void init(struct engineLayoutViewPartsArrowKeyImplement *this){
 
 // ----------------------------------------------------------------
 
-
 // タッチ処理
 static bool touch(struct engineLayoutViewPartsArrowKeyImplement *this, int touchIndex, double x, double y, bool dn, bool mv, bool isCancel){
 	bool isActive = false;
