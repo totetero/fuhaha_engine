@@ -27,31 +27,6 @@ static void init(struct engineLayoutViewPartsFilterColorImplement *this){
 
 // ----------------------------------------------------------------
 
-// タッチ処理
-static bool touch(struct engineLayoutViewPartsFilterColorImplement *this, int touchIndex, double x, double y, bool dn, bool mv, bool isCancel){
-	bool isActive = false;
-	bool isActiveChild = engineLayoutViewUtilChildrenTouch((struct engineLayoutView*)this, touchIndex, x, y, dn, mv, isCancel || isActive); isActive = isActiveChild || isActive;
-	bool isActiveLocal = engineLayoutViewUtilInteractTouch((struct engineLayoutView*)this, touchIndex, x, y, dn, mv, isCancel || isActive); isActive = isActiveLocal || isActive;
-	return isActive;
-}
-
-// 計算
-static void calc(struct engineLayoutViewPartsFilterColorImplement *this, bool isCancel){
-	// 子要素計算
-	engineLayoutViewUtilChildrenCalc((struct engineLayoutView*)this, isCancel);
-}
-
-// ----------------------------------------------------------------
-
-// バッファ更新確認
-static bool shouldBufferCreate(struct engineLayoutViewPartsFilterColorImplement *this){
-	return false;
-}
-
-// バッファ作成
-static void bufferCreate(struct engineLayoutViewPartsFilterColorImplement *this){
-}
-
 // 描画
 static void draw(struct engineLayoutViewPartsFilterColorImplement *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
 	// モード変更
@@ -69,37 +44,19 @@ static void draw(struct engineLayoutViewPartsFilterColorImplement *this, struct 
 
 // ----------------------------------------------------------------
 
-// 一時停止
-static void pause(struct engineLayoutViewPartsFilterColorImplement *this){
-	// 子要素一時停止
-	engineLayoutViewUtilChildrenPause((struct engineLayoutView*)this);
-}
-
-// 破棄
-static void dispose(struct engineLayoutViewPartsFilterColorImplement *this){
-	// 子要素破棄
-	engineLayoutViewUtilChildrenDispose((struct engineLayoutView*)this);
-
-	// 自要素破棄
-	engineLayoutViewUtilDispose((struct engineLayoutView*)this);
-	engineUtilMemoryInfoFree("engineLayoutViewPartsFilterColor", this);
-}
-
-// ----------------------------------------------------------------
-
 // カラーマトリクスフィルタ構造体 作成
 struct engineLayoutViewPartsFilterColor *engineLayoutViewPartsFilterColorCreate(){
 	struct engineLayoutViewPartsFilterColorImplement *this = (struct engineLayoutViewPartsFilterColorImplement*)engineUtilMemoryInfoCalloc("engineLayoutViewPartsFilterColor", 1, sizeof(struct engineLayoutViewPartsFilterColorImplement));
 	init(this);
 
 	struct engineLayoutView *view = (struct engineLayoutView*)this;
-	view->touch = (bool(*)(struct engineLayoutView*, int, double, double, bool, bool, bool))touch;
-	view->calc = (void(*)(struct engineLayoutView*, bool))calc;
+	view->touch = engineLayoutViewDefaultTouch;
+	view->calc = engineLayoutViewDefaultCalc;
 	view->draw = (void(*)(struct engineLayoutView*, struct engineMathMatrix44*, struct engineMathVector4*))draw;
-	view->pause = (void(*)(struct engineLayoutView*))pause;
-	view->dispose = (void(*)(struct engineLayoutView*))dispose;
-	view->graphicObject.shouldBufferCreate = (bool(*)(struct engineLayoutView*))shouldBufferCreate;
-	view->graphicObject.bufferCreate = (void(*)(struct engineLayoutView*))bufferCreate;
+	view->pause = engineLayoutViewDefaultPause;
+	view->dispose = engineLayoutViewDefaultDispose;
+	view->graphicObject.shouldBufferCreate = engineLayoutViewUtilGraphicObjectDefaultShouldBufferCreate;
+	view->graphicObject.bufferCreate = engineLayoutViewUtilGraphicObjectDefaultBufferCreate;
 	return (struct engineLayoutViewPartsFilterColor*)this;
 }
 

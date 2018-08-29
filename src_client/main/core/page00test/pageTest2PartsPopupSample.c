@@ -65,14 +65,6 @@ static void init(struct pageTest2PartsPopupSampleImplement *this){
 
 // ----------------------------------------------------------------
 
-// タッチ処理
-static bool touch(struct pageTest2PartsPopupSampleImplement *this, int touchIndex, double x, double y, bool dn, bool mv, bool isCancel){
-	bool isActive = false;
-	bool isActiveChild = engineLayoutViewUtilChildrenTouch((struct engineLayoutView*)this, touchIndex, x, y, dn, mv, isCancel || isActive); isActive = isActiveChild || isActive;
-	bool isActiveLocal = engineLayoutViewUtilInteractTouch((struct engineLayoutView*)this, touchIndex, x, y, dn, mv, isCancel || isActive); isActive = isActiveLocal || isActive;
-	return isActive;
-}
-
 // 計算
 static void calc(struct pageTest2PartsPopupSampleImplement *this, bool isCancel){
 	// 遷移中のウインドウフェード
@@ -105,41 +97,6 @@ static void calc(struct pageTest2PartsPopupSampleImplement *this, bool isCancel)
 
 // ----------------------------------------------------------------
 
-// バッファ更新確認
-static bool shouldBufferCreate(struct pageTest2PartsPopupSampleImplement *this){
-	return false;
-}
-
-// バッファ作成
-static void bufferCreate(struct pageTest2PartsPopupSampleImplement *this){
-}
-
-// 描画
-static void draw(struct pageTest2PartsPopupSampleImplement *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
-	// 子要素描画
-	engineLayoutViewUtilChildrenDraw((struct engineLayoutView*)this, mat, color);
-}
-
-// ----------------------------------------------------------------
-
-// 一時停止
-static void pause(struct pageTest2PartsPopupSampleImplement *this){
-	// 子要素一時停止
-	engineLayoutViewUtilChildrenPause((struct engineLayoutView*)this);
-}
-
-// 破棄
-static void dispose(struct pageTest2PartsPopupSampleImplement *this){
-	// 子要素破棄
-	engineLayoutViewUtilChildrenDispose((struct engineLayoutView*)this);
-
-	// 自要素破棄
-	engineLayoutViewUtilDispose((struct engineLayoutView*)this);
-	engineUtilMemoryInfoFree("pageTest2PartsPopupSample", this);
-}
-
-// ----------------------------------------------------------------
-
 // サンプルポップアップ構造体 作成
 struct pageTest2PartsPopupSample *pageTest2PartsPopupSampleCreate(struct pageTest2CartridgePopup *popup, struct pageTest2Status *stat){
 	struct pageTest2PartsPopupSampleImplement *this = (struct pageTest2PartsPopupSampleImplement*)engineUtilMemoryInfoCalloc("pageTest2PartsPopupSample", 1, sizeof(struct pageTest2PartsPopupSampleImplement));
@@ -148,13 +105,13 @@ struct pageTest2PartsPopupSample *pageTest2PartsPopupSampleCreate(struct pageTes
 	init(this);
 
 	struct engineLayoutView *view = (struct engineLayoutView*)this;
-	view->touch = (bool(*)(struct engineLayoutView*, int, double, double, bool, bool, bool))touch;
+	view->touch = engineLayoutViewDefaultTouch;
 	view->calc = (void(*)(struct engineLayoutView*, bool))calc;
-	view->draw = (void(*)(struct engineLayoutView*, struct engineMathMatrix44*, struct engineMathVector4*))draw;
-	view->pause = (void(*)(struct engineLayoutView*))pause;
-	view->dispose = (void(*)(struct engineLayoutView*))dispose;
-	view->graphicObject.shouldBufferCreate = (bool(*)(struct engineLayoutView*))shouldBufferCreate;
-	view->graphicObject.bufferCreate = (void(*)(struct engineLayoutView*))bufferCreate;
+	view->draw = engineLayoutViewDefaultDraw;
+	view->pause = engineLayoutViewDefaultPause;
+	view->dispose = engineLayoutViewDefaultDispose;
+	view->graphicObject.shouldBufferCreate = engineLayoutViewUtilGraphicObjectDefaultShouldBufferCreate;
+	view->graphicObject.bufferCreate = engineLayoutViewUtilGraphicObjectDefaultBufferCreate;
 	return (struct pageTest2PartsPopupSample*)this;
 }
 

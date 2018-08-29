@@ -22,31 +22,6 @@ static void init(struct engineLayoutViewPartsRootImplement *this){
 
 // ----------------------------------------------------------------
 
-// タッチ処理
-static bool touch(struct engineLayoutViewPartsRootImplement *this, int touchIndex, double x, double y, bool dn, bool mv, bool isCancel){
-	bool isActive = false;
-	bool isActiveChild = engineLayoutViewUtilChildrenTouch((struct engineLayoutView*)this, touchIndex, x, y, dn, mv, isCancel || isActive); isActive = isActiveChild || isActive;
-	bool isActiveLocal = engineLayoutViewUtilInteractTouch((struct engineLayoutView*)this, touchIndex, x, y, dn, mv, isCancel || isActive); isActive = isActiveLocal || isActive;
-	return isActive;
-}
-
-// 計算
-static void calc(struct engineLayoutViewPartsRootImplement *this, bool isCancel){
-	// 子要素計算
-	engineLayoutViewUtilChildrenCalc((struct engineLayoutView*)this, isCancel);
-}
-
-// ----------------------------------------------------------------
-
-// バッファ更新確認
-static bool shouldBufferCreate(struct engineLayoutViewPartsRootImplement *this){
-	return false;
-}
-
-// バッファ作成
-static void bufferCreate(struct engineLayoutViewPartsRootImplement *this){
-}
-
 // 描画
 static void draw(struct engineLayoutViewPartsRootImplement *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
 	// レイアウトモード変更 描画モード
@@ -80,37 +55,19 @@ static void draw(struct engineLayoutViewPartsRootImplement *this, struct engineM
 
 // ----------------------------------------------------------------
 
-// 一時停止
-static void pause(struct engineLayoutViewPartsRootImplement *this){
-	// 子要素一時停止
-	engineLayoutViewUtilChildrenPause((struct engineLayoutView*)this);
-}
-
-// 破棄
-static void dispose(struct engineLayoutViewPartsRootImplement *this){
-	// 子要素破棄
-	engineLayoutViewUtilChildrenDispose((struct engineLayoutView*)this);
-
-	// 自要素破棄
-	engineLayoutViewUtilDispose((struct engineLayoutView*)this);
-	engineUtilMemoryInfoFree("engineLayoutViewPartsRoot", this);
-}
-
-// ----------------------------------------------------------------
-
 // ルート構造体 作成
 struct engineLayoutViewPartsRoot *engineLayoutViewPartsRootCreate(){
 	struct engineLayoutViewPartsRootImplement *this = (struct engineLayoutViewPartsRootImplement*)engineUtilMemoryInfoCalloc("engineLayoutViewPartsRoot", 1, sizeof(struct engineLayoutViewPartsRootImplement));
 	init(this);
 
 	struct engineLayoutView *view = (struct engineLayoutView*)this;
-	view->touch = (bool(*)(struct engineLayoutView*, int, double, double, bool, bool, bool))touch;
-	view->calc = (void(*)(struct engineLayoutView*, bool))calc;
+	view->touch = engineLayoutViewDefaultTouch;
+	view->calc = engineLayoutViewDefaultCalc;
 	view->draw = (void(*)(struct engineLayoutView*, struct engineMathMatrix44*, struct engineMathVector4*))draw;
-	view->pause = (void(*)(struct engineLayoutView*))pause;
-	view->dispose = (void(*)(struct engineLayoutView*))dispose;
-	view->graphicObject.shouldBufferCreate = (bool(*)(struct engineLayoutView*))shouldBufferCreate;
-	view->graphicObject.bufferCreate = (void(*)(struct engineLayoutView*))bufferCreate;
+	view->pause = engineLayoutViewDefaultPause;
+	view->dispose = engineLayoutViewDefaultDispose;
+	view->graphicObject.shouldBufferCreate = engineLayoutViewUtilGraphicObjectDefaultShouldBufferCreate;
+	view->graphicObject.bufferCreate = engineLayoutViewUtilGraphicObjectDefaultBufferCreate;
 	return (struct engineLayoutViewPartsRoot*)this;
 }
 

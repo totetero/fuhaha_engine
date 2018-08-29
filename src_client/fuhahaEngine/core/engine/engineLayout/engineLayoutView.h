@@ -25,6 +25,13 @@ void engineLayoutViewUtilInit(struct engineLayoutView *this);
 // 表示要素構造体 ユーティリティの破棄
 void engineLayoutViewUtilDispose(struct engineLayoutView *this);
 
+// 表示要素構造体 デフォルト関数
+bool engineLayoutViewDefaultTouch(struct engineLayoutView *this, int touchIndex, double x, double y, bool dn, bool mv, bool isCancel);
+void engineLayoutViewDefaultCalc(struct engineLayoutView *this, bool isCancel);
+void engineLayoutViewDefaultDraw(struct engineLayoutView *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color);
+void engineLayoutViewDefaultPause(struct engineLayoutView *this);
+void engineLayoutViewDefaultDispose(struct engineLayoutView *this);
+
 // 表示要素構造体 作成
 struct engineLayoutView *engineLayoutViewCreate(void);
 

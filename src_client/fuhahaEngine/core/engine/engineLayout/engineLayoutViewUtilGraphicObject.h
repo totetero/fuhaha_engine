@@ -31,6 +31,10 @@ void engineLayoutViewUtilGraphicObjectBufferCreate(struct engineLayoutView *this
 void engineLayoutViewUtilGraphicObjectBufferCreateAll(struct engineLayoutView *this);
 void engineLayoutViewUtilGraphicObjectBufferActiveAll(struct engineLayoutView *this);
 
+// 表示要素構造体描画情報 デフォルト関数
+bool engineLayoutViewUtilGraphicObjectDefaultShouldBufferCreate(struct engineLayoutView *this);
+void engineLayoutViewUtilGraphicObjectDefaultBufferCreate(struct engineLayoutView *this);
+
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

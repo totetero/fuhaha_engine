@@ -44,14 +44,6 @@ static void init(struct pageTest2PartsPopupActiveDisplayImplement *this){
 
 // ----------------------------------------------------------------
 
-// タッチ処理
-static bool touch(struct pageTest2PartsPopupActiveDisplayImplement *this, int touchIndex, double x, double y, bool dn, bool mv, bool isCancel){
-	bool isActive = false;
-	bool isActiveChild = engineLayoutViewUtilChildrenTouch((struct engineLayoutView*)this, touchIndex, x, y, dn, mv, isCancel || isActive); isActive = isActiveChild || isActive;
-	bool isActiveLocal = engineLayoutViewUtilInteractTouch((struct engineLayoutView*)this, touchIndex, x, y, dn, mv, isCancel || isActive); isActive = isActiveLocal || isActive;
-	return isActive;
-}
-
 // 計算
 static void calc(struct pageTest2PartsPopupActiveDisplayImplement *this, bool isCancel){
 	if(this->super.viewArrowKey != NULL){
@@ -73,15 +65,6 @@ static void calc(struct pageTest2PartsPopupActiveDisplayImplement *this, bool is
 }
 
 // ----------------------------------------------------------------
-
-// バッファ更新確認
-static bool shouldBufferCreate(struct pageTest2PartsPopupActiveDisplayImplement *this){
-	return false;
-}
-
-// バッファ作成
-static void bufferCreate(struct pageTest2PartsPopupActiveDisplayImplement *this){
-}
 
 // バッファ作成 必要なバッファが通常と違うために関数を分ける
 static void bufferCreatePhong(struct pageTest2PartsPopupActiveDisplayImplement *this){
@@ -181,12 +164,6 @@ static void draw(struct pageTest2PartsPopupActiveDisplayImplement *this, struct 
 
 // ----------------------------------------------------------------
 
-// 一時停止
-static void pause(struct pageTest2PartsPopupActiveDisplayImplement *this){
-	// 子要素一時停止
-	engineLayoutViewUtilChildrenPause((struct engineLayoutView*)this);
-}
-
 // 破棄
 static void dispose(struct pageTest2PartsPopupActiveDisplayImplement *this){
 	// 子要素破棄
@@ -207,13 +184,13 @@ struct pageTest2PartsPopupActiveDisplay *pageTest2PartsPopupActiveDisplayCreate(
 	init(this);
 
 	struct engineLayoutView *view = (struct engineLayoutView*)this;
-	view->touch = (bool(*)(struct engineLayoutView*, int, double, double, bool, bool, bool))touch;
+	view->touch = engineLayoutViewDefaultTouch;
 	view->calc = (void(*)(struct engineLayoutView*, bool))calc;
 	view->draw = (void(*)(struct engineLayoutView*, struct engineMathMatrix44*, struct engineMathVector4*))draw;
-	view->pause = (void(*)(struct engineLayoutView*))pause;
+	view->pause = engineLayoutViewDefaultPause;
 	view->dispose = (void(*)(struct engineLayoutView*))dispose;
-	view->graphicObject.shouldBufferCreate = (bool(*)(struct engineLayoutView*))shouldBufferCreate;
-	view->graphicObject.bufferCreate = (void(*)(struct engineLayoutView*))bufferCreate;
+	view->graphicObject.shouldBufferCreate = engineLayoutViewUtilGraphicObjectDefaultShouldBufferCreate;
+	view->graphicObject.bufferCreate = engineLayoutViewUtilGraphicObjectDefaultBufferCreate;
 	return (struct pageTest2PartsPopupActiveDisplay*)this;
 }
 

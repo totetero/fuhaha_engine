@@ -128,41 +128,6 @@ static void calc(struct engineLayoutViewPartsSwipeScrollerImplement *this, bool 
 
 // ----------------------------------------------------------------
 
-// バッファ更新確認
-static bool shouldBufferCreate(struct engineLayoutViewPartsSwipeScrollerImplement *this){
-	return false;
-}
-
-// バッファ作成
-static void bufferCreate(struct engineLayoutViewPartsSwipeScrollerImplement *this){
-}
-
-// 描画
-static void draw(struct engineLayoutViewPartsSwipeScrollerImplement *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
-	// 子要素描画
-	engineLayoutViewUtilChildrenDraw((struct engineLayoutView*)this, mat, color);
-}
-
-// ----------------------------------------------------------------
-
-// 一時停止
-static void pause(struct engineLayoutViewPartsSwipeScrollerImplement *this){
-	// 子要素一時停止
-	engineLayoutViewUtilChildrenPause((struct engineLayoutView*)this);
-}
-
-// 破棄
-static void dispose(struct engineLayoutViewPartsSwipeScrollerImplement *this){
-	// 子要素破棄
-	engineLayoutViewUtilChildrenDispose((struct engineLayoutView*)this);
-
-	// 自要素破棄
-	engineLayoutViewUtilDispose((struct engineLayoutView*)this);
-	engineUtilMemoryInfoFree("engineLayoutViewPartsSwipeScroller", this);
-}
-
-// ----------------------------------------------------------------
-
 // スクローラ構造体 作成
 struct engineLayoutViewPartsSwipeScroller *engineLayoutViewPartsSwipeScrollerCreate(){
 	struct engineLayoutViewPartsSwipeScrollerImplement *this = (struct engineLayoutViewPartsSwipeScrollerImplement*)engineUtilMemoryInfoCalloc("engineLayoutViewPartsSwipeScroller", 1, sizeof(struct engineLayoutViewPartsSwipeScrollerImplement));
@@ -171,11 +136,11 @@ struct engineLayoutViewPartsSwipeScroller *engineLayoutViewPartsSwipeScrollerCre
 	struct engineLayoutView *view = (struct engineLayoutView*)this;
 	view->touch = (bool(*)(struct engineLayoutView*, int, double, double, bool, bool, bool))touch;
 	view->calc = (void(*)(struct engineLayoutView*, bool))calc;
-	view->draw = (void(*)(struct engineLayoutView*, struct engineMathMatrix44*, struct engineMathVector4*))draw;
-	view->pause = (void(*)(struct engineLayoutView*))pause;
-	view->dispose = (void(*)(struct engineLayoutView*))dispose;
-	view->graphicObject.shouldBufferCreate = (bool(*)(struct engineLayoutView*))shouldBufferCreate;
-	view->graphicObject.bufferCreate = (void(*)(struct engineLayoutView*))bufferCreate;
+	view->draw = engineLayoutViewDefaultDraw;
+	view->pause = engineLayoutViewDefaultPause;
+	view->dispose = engineLayoutViewDefaultDispose;
+	view->graphicObject.shouldBufferCreate = engineLayoutViewUtilGraphicObjectDefaultShouldBufferCreate;
+	view->graphicObject.bufferCreate = engineLayoutViewUtilGraphicObjectDefaultBufferCreate;
 	return (struct engineLayoutViewPartsSwipeScroller*)this;
 }
 

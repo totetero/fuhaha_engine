@@ -156,41 +156,6 @@ static void calc(struct engineLayoutViewPartsArrowKeyImplement *this, bool isCan
 
 // ----------------------------------------------------------------
 
-// バッファ更新確認
-static bool shouldBufferCreate(struct engineLayoutViewPartsArrowKeyImplement *this){
-	return false;
-}
-
-// バッファ作成
-static void bufferCreate(struct engineLayoutViewPartsArrowKeyImplement *this){
-}
-
-// 描画
-static void draw(struct engineLayoutViewPartsArrowKeyImplement *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
-	// 子要素描画
-	engineLayoutViewUtilChildrenDraw((struct engineLayoutView*)this, mat, color);
-}
-
-// ----------------------------------------------------------------
-
-// 一時停止
-static void pause(struct engineLayoutViewPartsArrowKeyImplement *this){
-	// 子要素一時停止
-	engineLayoutViewUtilChildrenPause((struct engineLayoutView*)this);
-}
-
-// 破棄
-static void dispose(struct engineLayoutViewPartsArrowKeyImplement *this){
-	// 子要素破棄
-	engineLayoutViewUtilChildrenDispose((struct engineLayoutView*)this);
-
-	// 自要素破棄
-	engineLayoutViewUtilDispose((struct engineLayoutView*)this);
-	engineUtilMemoryInfoFree("engineLayoutViewPartsArrowKey", this);
-}
-
-// ----------------------------------------------------------------
-
 // 十字キー構造体 作成
 struct engineLayoutViewPartsArrowKey *engineLayoutViewPartsArrowKeyCreate(){
 	struct engineLayoutViewPartsArrowKeyImplement *this = (struct engineLayoutViewPartsArrowKeyImplement*)engineUtilMemoryInfoCalloc("engineLayoutViewPartsArrowKey", 1, sizeof(struct engineLayoutViewPartsArrowKeyImplement));
@@ -199,11 +164,11 @@ struct engineLayoutViewPartsArrowKey *engineLayoutViewPartsArrowKeyCreate(){
 	struct engineLayoutView *view = (struct engineLayoutView*)this;
 	view->touch = (bool(*)(struct engineLayoutView*, int, double, double, bool, bool, bool))touch;
 	view->calc = (void(*)(struct engineLayoutView*, bool))calc;
-	view->draw = (void(*)(struct engineLayoutView*, struct engineMathMatrix44*, struct engineMathVector4*))draw;
-	view->pause = (void(*)(struct engineLayoutView*))pause;
-	view->dispose = (void(*)(struct engineLayoutView*))dispose;
-	view->graphicObject.shouldBufferCreate = (bool(*)(struct engineLayoutView*))shouldBufferCreate;
-	view->graphicObject.bufferCreate = (void(*)(struct engineLayoutView*))bufferCreate;
+	view->draw = engineLayoutViewDefaultDraw;
+	view->pause = engineLayoutViewDefaultPause;
+	view->dispose = engineLayoutViewDefaultDispose;
+	view->graphicObject.shouldBufferCreate = engineLayoutViewUtilGraphicObjectDefaultShouldBufferCreate;
+	view->graphicObject.bufferCreate = engineLayoutViewUtilGraphicObjectDefaultBufferCreate;
 	return (struct engineLayoutViewPartsArrowKey*)this;
 }
 

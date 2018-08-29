@@ -182,3 +182,16 @@ void engineLayoutViewUtilGraphicObjectBufferActiveAll(struct engineLayoutView *t
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
+// 表示要素構造体描画情報 デフォルト関数
+bool engineLayoutViewUtilGraphicObjectDefaultShouldBufferCreate(struct engineLayoutView *this){
+	return false;
+}
+
+// 表示要素構造体描画情報 デフォルト関数
+void engineLayoutViewUtilGraphicObjectDefaultBufferCreate(struct engineLayoutView *this){
+}
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+

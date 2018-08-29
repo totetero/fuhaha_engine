@@ -37,22 +37,6 @@ static void init(struct engineLayoutViewPartsImageNumberImplement *this){
 
 // ----------------------------------------------------------------
 
-// タッチ処理
-static bool touch(struct engineLayoutViewPartsImageNumberImplement *this, int touchIndex, double x, double y, bool dn, bool mv, bool isCancel){
-	bool isActive = false;
-	bool isActiveChild = engineLayoutViewUtilChildrenTouch((struct engineLayoutView*)this, touchIndex, x, y, dn, mv, isCancel || isActive); isActive = isActiveChild || isActive;
-	bool isActiveLocal = engineLayoutViewUtilInteractTouch((struct engineLayoutView*)this, touchIndex, x, y, dn, mv, isCancel || isActive); isActive = isActiveLocal || isActive;
-	return isActive;
-}
-
-// 計算
-static void calc(struct engineLayoutViewPartsImageNumberImplement *this, bool isCancel){
-	// 子要素計算
-	engineLayoutViewUtilChildrenCalc((struct engineLayoutView*)this, isCancel);
-}
-
-// ----------------------------------------------------------------
-
 // バッファ更新確認
 static bool shouldBufferCreate(struct engineLayoutViewPartsImageNumberImplement *this){
 	struct engineLayoutViewPartsImageNumberBufferCompare bufferCompare;
@@ -141,12 +125,6 @@ static void draw(struct engineLayoutViewPartsImageNumberImplement *this, struct 
 
 // ----------------------------------------------------------------
 
-// 一時停止
-static void pause(struct engineLayoutViewPartsImageNumberImplement *this){
-	// 子要素一時停止
-	engineLayoutViewUtilChildrenPause((struct engineLayoutView*)this);
-}
-
 // 破棄
 static void dispose(struct engineLayoutViewPartsImageNumberImplement *this){
 	// 子要素破棄
@@ -174,10 +152,10 @@ struct engineLayoutViewPartsImageNumber *engineLayoutViewPartsImageNumberCreate(
 	this->super.number.th = th;
 
 	struct engineLayoutView *view = (struct engineLayoutView*)this;
-	view->touch = (bool(*)(struct engineLayoutView*, int, double, double, bool, bool, bool))touch;
-	view->calc = (void(*)(struct engineLayoutView*, bool))calc;
+	view->touch = engineLayoutViewDefaultTouch;
+	view->calc = engineLayoutViewDefaultCalc;
 	view->draw = (void(*)(struct engineLayoutView*, struct engineMathMatrix44*, struct engineMathVector4*))draw;
-	view->pause = (void(*)(struct engineLayoutView*))pause;
+	view->pause = engineLayoutViewDefaultPause;
 	view->dispose = (void(*)(struct engineLayoutView*))dispose;
 	view->graphicObject.shouldBufferCreate = (bool(*)(struct engineLayoutView*))shouldBufferCreate;
 	view->graphicObject.bufferCreate = (void(*)(struct engineLayoutView*))bufferCreate;
