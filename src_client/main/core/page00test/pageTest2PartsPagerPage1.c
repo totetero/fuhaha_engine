@@ -15,30 +15,30 @@ struct pageTest2PartsPagerPage1Implement{
 
 // 初期化
 static void init(struct pageTest2PartsPagerPage1Implement *this){
-	engineLayoutViewUtilInit((struct engineLayoutView*)this);
+	engineLayoutViewGearInit((struct engineLayoutView*)this);
 
 	// フレーム作成
-	struct engineLayoutViewPartsFrame *viewFrame = engineLayoutViewPartsFrameCreate();
-	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)this, (struct engineLayoutView*)viewFrame);
-	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)this, (struct engineLayoutView*)viewFrame);
+	struct engineLayoutPartsFrame *viewFrame = engineLayoutPartsFrameCreate();
+	engineLayoutViewGearFamilyAdd((struct engineLayoutView*)this, (struct engineLayoutView*)viewFrame);
+	engineLayoutViewGearGraphicObjectConnect((struct engineLayoutView*)this, (struct engineLayoutView*)viewFrame);
 
 	// テキスト描画
-	struct engineLayoutViewPartsFontText *viewText = engineLayoutViewPartsFontTextCreateDefault("1ページ目");
-	engineLayoutViewUtilPositionSetLtRtTpHt((struct engineLayoutView*)viewText, 0, 0, 20, 20);
-	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)viewFrame, (struct engineLayoutView*)viewText);
-	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)viewFrame, (struct engineLayoutView*)viewText);
+	struct engineLayoutPartsFontText *viewText = engineLayoutPartsFontTextCreateDefault("1ページ目");
+	engineLayoutViewGearPositionSetLtRtTpHt((struct engineLayoutView*)viewText, 0, 0, 20, 20);
+	engineLayoutViewGearFamilyAdd((struct engineLayoutView*)viewFrame, (struct engineLayoutView*)viewText);
+	engineLayoutViewGearGraphicObjectConnect((struct engineLayoutView*)viewFrame, (struct engineLayoutView*)viewText);
 
 	// レイアウト作成
 	struct engineLayoutView *viewImageLayout = engineLayoutViewCreate();
-	engineLayoutViewUtilPositionSetLtRtTpBm((struct engineLayoutView*)viewImageLayout, 0, 0, 50, 0);
-	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)viewFrame, (struct engineLayoutView*)viewImageLayout);
-	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)viewFrame, (struct engineLayoutView*)viewImageLayout);
+	engineLayoutViewGearPositionSetLtRtTpBm((struct engineLayoutView*)viewImageLayout, 0, 0, 50, 0);
+	engineLayoutViewGearFamilyAdd((struct engineLayoutView*)viewFrame, (struct engineLayoutView*)viewImageLayout);
+	engineLayoutViewGearGraphicObjectConnect((struct engineLayoutView*)viewFrame, (struct engineLayoutView*)viewImageLayout);
 	// 画像作成
-	struct engineLayoutViewPartsRect *viewImage = engineLayoutViewPartsRectCreate("test.png", 64, 64, 0, 0, 64, 64);
-	engineLayoutViewUtilPositionSetWidthValue((struct engineLayoutView*)viewImage, 120);
-	engineLayoutViewUtilPositionSetHeightValue((struct engineLayoutView*)viewImage, 120);
-	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)viewImageLayout, (struct engineLayoutView*)viewImage);
-	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)viewImageLayout, (struct engineLayoutView*)viewImage);
+	struct engineLayoutPartsRect *viewImage = engineLayoutPartsRectCreate("test.png", 64, 64, 0, 0, 64, 64);
+	engineLayoutViewGearPositionSetWidthValue((struct engineLayoutView*)viewImage, 120);
+	engineLayoutViewGearPositionSetHeightValue((struct engineLayoutView*)viewImage, 120);
+	engineLayoutViewGearFamilyAdd((struct engineLayoutView*)viewImageLayout, (struct engineLayoutView*)viewImage);
+	engineLayoutViewGearGraphicObjectConnect((struct engineLayoutView*)viewImageLayout, (struct engineLayoutView*)viewImage);
 
 }
 
@@ -56,8 +56,8 @@ struct pageTest2PartsPagerPage1 *pageTest2PartsPagerPage1Create(struct pageTest2
 	view->draw = engineLayoutViewDefaultDraw;
 	view->pause = engineLayoutViewDefaultPause;
 	view->dispose = engineLayoutViewDefaultDispose;
-	view->graphicObject.shouldBufferCreate = engineLayoutViewUtilGraphicObjectDefaultShouldBufferCreate;
-	view->graphicObject.bufferCreate = engineLayoutViewUtilGraphicObjectDefaultBufferCreate;
+	view->graphicObject.shouldBufferCreate = engineLayoutViewGearGraphicObjectDefaultShouldBufferCreate;
+	view->graphicObject.bufferCreate = engineLayoutViewGearGraphicObjectDefaultBufferCreate;
 	return (struct pageTest2PartsPagerPage1*)this;
 }
 

@@ -4,17 +4,20 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-// ページ状態構造体
-struct pageTest2Status{
-	struct pageTest2CartridgePage *cartridge;
-	struct engineLayoutPartsSwipePager *viewPager;
+// ページャー構造体
+struct engineLayoutPartsSwipePager{
+	struct engineLayoutView super;
+	struct engineLayoutUtilSwipe swipe;
+	struct{double x;} position;
+	struct{double x;} velocity;
+	struct engineLayoutView *viewInner;
+	bool isLoop;
+	int count;
+	int index;
 };
 
-// ページカートリッジ構造体 作成
-struct pageTest2Status *pageTest2StatusCreate(void);
-
-// ページカートリッジ構造体 破棄
-void pageTest2StatusDispose(struct pageTest2Status *this);
+// ページャー構造体 作成
+struct engineLayoutPartsSwipePager *engineLayoutPartsSwipePagerCreate(void);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

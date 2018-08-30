@@ -4,17 +4,13 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-// ページ状態構造体
-struct pageTest2Status{
-	struct pageTest2CartridgePage *cartridge;
-	struct engineLayoutPartsSwipePager *viewPager;
+// テンプレート構造体
+struct engineLayoutPartsTemplate{
+	struct engineLayoutView super;
 };
 
-// ページカートリッジ構造体 作成
-struct pageTest2Status *pageTest2StatusCreate(void);
-
-// ページカートリッジ構造体 破棄
-void pageTest2StatusDispose(struct pageTest2Status *this);
+// テンプレート構造体 作成
+struct engineLayoutPartsTemplate *engineLayoutPartsTemplateCreate(void);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

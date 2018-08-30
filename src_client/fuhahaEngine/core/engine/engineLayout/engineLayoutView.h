@@ -6,10 +6,10 @@
 
 // 表示要素構造体
 struct engineLayoutView{
-	struct engineLayoutViewUtilFamily family;
-	struct engineLayoutViewUtilPosition position;
-	struct engineLayoutViewUtilInteract interact;
-	struct engineLayoutViewUtilGraphicObject graphicObject;
+	struct engineLayoutViewGearFamily family;
+	struct engineLayoutViewGearPosition position;
+	struct engineLayoutViewGearInteract interact;
+	struct engineLayoutViewGearGraphicObject graphicObject;
 
 	struct engineMathVector4 color;
 
@@ -21,9 +21,9 @@ struct engineLayoutView{
 };
 
 // 表示要素構造体 ユーティリティの初期化
-void engineLayoutViewUtilInit(struct engineLayoutView *this);
+void engineLayoutViewGearInit(struct engineLayoutView *this);
 // 表示要素構造体 ユーティリティの破棄
-void engineLayoutViewUtilDispose(struct engineLayoutView *this);
+void engineLayoutViewGearDispose(struct engineLayoutView *this);
 
 // 表示要素構造体 デフォルト関数
 bool engineLayoutViewDefaultTouch(struct engineLayoutView *this, int touchIndex, double x, double y, bool dn, bool mv, bool isCancel);

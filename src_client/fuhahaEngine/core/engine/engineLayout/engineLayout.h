@@ -7,37 +7,37 @@
 // プロトタイプ宣言
 struct engineLayoutView;
 
-#include "./engineLayoutViewUtilFamily.h"
-#include "./engineLayoutViewUtilInteract.h"
-#include "./engineLayoutViewUtilPosition.h"
-#include "./engineLayoutViewUtilGraphicObject.h"
+#include "./engineLayoutViewGearFamily.h"
+#include "./engineLayoutViewGearInteract.h"
+#include "./engineLayoutViewGearPosition.h"
+#include "./engineLayoutViewGearGraphicObject.h"
 #include "./engineLayoutView.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-#include "./engineLayoutSwipe.h"
+#include "./engineLayoutUtilSwipe.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-#include "./engineLayoutViewPartsArrowKey.h"
-#include "./engineLayoutViewPartsButtonBox.h"
-#include "./engineLayoutViewPartsButtonOuter.h"
-#include "./engineLayoutViewPartsFilterColor.h"
-#include "./engineLayoutViewPartsFontNumber.h"
-#include "./engineLayoutViewPartsFontText.h"
-#include "./engineLayoutViewPartsFrame.h"
-#include "./engineLayoutViewPartsImageNumber.h"
-#include "./engineLayoutViewPartsImageText.h"
-#include "./engineLayoutViewPartsMaskRect.h"
-#include "./engineLayoutViewPartsRect.h"
-#include "./engineLayoutViewPartsRoot.h"
-#include "./engineLayoutViewPartsSwipePager.h"
-#include "./engineLayoutViewPartsSwipeScroller.h"
-#include "./engineLayoutViewPartsTemplate.h"
+#include "./engineLayoutPartsArrowKey.h"
+#include "./engineLayoutPartsButtonBox.h"
+#include "./engineLayoutPartsButtonOuter.h"
+#include "./engineLayoutPartsFilterColor.h"
+#include "./engineLayoutPartsFontNumber.h"
+#include "./engineLayoutPartsFontText.h"
+#include "./engineLayoutPartsFrame.h"
+#include "./engineLayoutPartsImageNumber.h"
+#include "./engineLayoutPartsImageText.h"
+#include "./engineLayoutPartsMaskRect.h"
+#include "./engineLayoutPartsRect.h"
+#include "./engineLayoutPartsRoot.h"
+#include "./engineLayoutPartsSwipePager.h"
+#include "./engineLayoutPartsSwipeScroller.h"
+#include "./engineLayoutPartsTemplate.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

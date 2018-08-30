@@ -8,8 +8,8 @@
 // 構造体実体
 struct pageTest2CartridgePopupImplement{
 	struct pageTest2CartridgePopup super;
-	struct engineLayoutViewPartsRoot *viewRoot;
-	struct engineLayoutViewPartsRect *viewCover;
+	struct engineLayoutPartsRoot *viewRoot;
+	struct engineLayoutPartsRect *viewCover;
 	struct{
 		void *param;
 		struct engineLayoutView*(*viewCreate)(struct pageTest2CartridgePopup *popup, void *param);
@@ -23,17 +23,17 @@ struct pageTest2CartridgePopupImplement{
 // 初期化
 static void init(struct pageTest2CartridgePopupImplement *this){
 	// ルート作成
-	this->viewRoot = engineLayoutViewPartsRootCreate();
+	this->viewRoot = engineLayoutPartsRootCreate();
 
 	// 内部要素作成
 	struct engineLayoutView *viewInner = (struct engineLayoutView*)this->viewCreator.viewCreate((struct pageTest2CartridgePopup*)this, this->viewCreator.param);
-	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)this->viewRoot, (struct engineLayoutView*)viewInner);
-	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)this->viewRoot, (struct engineLayoutView*)viewInner);
+	engineLayoutViewGearFamilyAdd((struct engineLayoutView*)this->viewRoot, (struct engineLayoutView*)viewInner);
+	engineLayoutViewGearGraphicObjectConnect((struct engineLayoutView*)this->viewRoot, (struct engineLayoutView*)viewInner);
 
 	// ポップアップ背景作成
-	this->viewCover = engineLayoutViewPartsRectCreateWhite();
-	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)this->viewRoot, (struct engineLayoutView*)this->viewCover);
-	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)this->viewRoot, (struct engineLayoutView*)this->viewCover);
+	this->viewCover = engineLayoutPartsRectCreateWhite();
+	engineLayoutViewGearFamilyAdd((struct engineLayoutView*)this->viewRoot, (struct engineLayoutView*)this->viewCover);
+	engineLayoutViewGearGraphicObjectConnect((struct engineLayoutView*)this->viewRoot, (struct engineLayoutView*)this->viewCover);
 
 	// ポップアップマネージャ作成
 	engineCartridgePopupManagerInit(&this->super.popupManager);
@@ -50,10 +50,10 @@ static void calc(struct pageTest2CartridgePopupImplement *this){
 	if(isPopup){engineMathVec4Set(&this->viewCover->super.color, 0.0, 0.0, 0.0, this->super.popupManager.backAlpha);}
 
 	// ルートタッチ処理
-	engineLayoutViewPartsRootTouch(this->viewRoot, isPopup);
+	engineLayoutPartsRootTouch(this->viewRoot, isPopup);
 
 	// ルート計算処理
-	engineLayoutViewPartsRootCalc(this->viewRoot, isPopup);
+	engineLayoutPartsRootCalc(this->viewRoot, isPopup);
 }
 
 // ----------------------------------------------------------------
@@ -61,7 +61,7 @@ static void calc(struct pageTest2CartridgePopupImplement *this){
 // 描画
 static void draw(struct pageTest2CartridgePopupImplement *this){
 	// ルート描画処理
-	engineLayoutViewPartsRootDraw(this->viewRoot);
+	engineLayoutPartsRootDraw(this->viewRoot);
 
 	// ポップアップ描画
 	engineCartridgePopupManagerDraw(&this->super.popupManager);
@@ -72,13 +72,13 @@ static void draw(struct pageTest2CartridgePopupImplement *this){
 // 一時停止
 static void pause(struct pageTest2CartridgePopupImplement *this){
 	engineCartridgePopupManagerPause(&this->super.popupManager);
-	engineLayoutViewPartsRootPause(this->viewRoot);
+	engineLayoutPartsRootPause(this->viewRoot);
 }
 
 // 破棄
 static void dispose(struct pageTest2CartridgePopupImplement *this){
 	engineCartridgePopupManagerDispose(&this->super.popupManager);
-	engineLayoutViewPartsRootDispose(this->viewRoot);
+	engineLayoutPartsRootDispose(this->viewRoot);
 	if(this->viewCreator.paramDispose != NULL){this->viewCreator.paramDispose(this->viewCreator.param);}
 	engineUtilMemoryFree(this);
 }

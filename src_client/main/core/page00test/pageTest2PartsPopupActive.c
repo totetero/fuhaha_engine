@@ -11,59 +11,59 @@ struct pageTest2PartsPopupActiveImplement{
 	struct pageTest2CartridgePopup *popup;
 	struct pageTest2Status *stat;
 
-	struct engineLayoutViewPartsMaskRect *viewDisplayMask;
+	struct engineLayoutPartsMaskRect *viewDisplayMask;
 	struct pageTest2PartsPopupActiveDisplay *viewDisplay;
-	struct engineLayoutViewPartsFrame *viewTitle;
-	struct engineLayoutViewPartsButtonBox *viewButtonClose;
-	struct engineLayoutViewPartsArrowKey *viewArrowKey;
+	struct engineLayoutPartsFrame *viewTitle;
+	struct engineLayoutPartsButtonBox *viewButtonClose;
+	struct engineLayoutPartsArrowKey *viewArrowKey;
 };
 
 // ----------------------------------------------------------------
 
 // 初期化
 static void init(struct pageTest2PartsPopupActiveImplement *this){
-	engineLayoutViewUtilInit((struct engineLayoutView*)this);
+	engineLayoutViewGearInit((struct engineLayoutView*)this);
 
 	// ディスプレイマスク作成
-	this->viewDisplayMask = engineLayoutViewPartsMaskRectCreate();
-	engineLayoutViewUtilPositionSetLtRtTpBm((struct engineLayoutView*)this->viewDisplayMask, 10, 10, 60, 154);
-	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)this, (struct engineLayoutView*)this->viewDisplayMask);
-	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)this, (struct engineLayoutView*)this->viewDisplayMask);
+	this->viewDisplayMask = engineLayoutPartsMaskRectCreate();
+	engineLayoutViewGearPositionSetLtRtTpBm((struct engineLayoutView*)this->viewDisplayMask, 10, 10, 60, 154);
+	engineLayoutViewGearFamilyAdd((struct engineLayoutView*)this, (struct engineLayoutView*)this->viewDisplayMask);
+	engineLayoutViewGearGraphicObjectConnect((struct engineLayoutView*)this, (struct engineLayoutView*)this->viewDisplayMask);
 	//// ディスプレイバック作成
-	//struct engineLayoutViewPartsRect *viewDisplayBack = engineLayoutViewPartsRectCreateWhite();
-	//engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)this->viewDisplayMask, (struct engineLayoutView*)viewDisplayBack);
-	//engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)this->viewDisplayMask, (struct engineLayoutView*)viewDisplayBack);
+	//struct engineLayoutPartsRect *viewDisplayBack = engineLayoutPartsRectCreateWhite();
+	//engineLayoutViewGearFamilyAdd((struct engineLayoutView*)this->viewDisplayMask, (struct engineLayoutView*)viewDisplayBack);
+	//engineLayoutViewGearGraphicObjectConnect((struct engineLayoutView*)this->viewDisplayMask, (struct engineLayoutView*)viewDisplayBack);
 	// ディスプレイ作成
 	this->viewDisplay = pageTest2PartsPopupActiveDisplayCreate(this->stat);
-	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)this->viewDisplayMask, (struct engineLayoutView*)this->viewDisplay);
-	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)this->viewDisplayMask, (struct engineLayoutView*)this->viewDisplay);
+	engineLayoutViewGearFamilyAdd((struct engineLayoutView*)this->viewDisplayMask, (struct engineLayoutView*)this->viewDisplay);
+	engineLayoutViewGearGraphicObjectConnect((struct engineLayoutView*)this->viewDisplayMask, (struct engineLayoutView*)this->viewDisplay);
 
 	// フレーム作成
-	this->viewTitle = engineLayoutViewPartsFrameCreate();
-	engineLayoutViewUtilPositionSetLtRtTpHt((struct engineLayoutView*)this->viewTitle, 10, 80, 10, 40);
-	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)this, (struct engineLayoutView*)this->viewTitle);
-	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)this, (struct engineLayoutView*)this->viewTitle);
+	this->viewTitle = engineLayoutPartsFrameCreate();
+	engineLayoutViewGearPositionSetLtRtTpHt((struct engineLayoutView*)this->viewTitle, 10, 80, 10, 40);
+	engineLayoutViewGearFamilyAdd((struct engineLayoutView*)this, (struct engineLayoutView*)this->viewTitle);
+	engineLayoutViewGearGraphicObjectConnect((struct engineLayoutView*)this, (struct engineLayoutView*)this->viewTitle);
 
 	// テキスト描画
-	struct engineLayoutViewPartsFontText *viewTestText = engineLayoutViewPartsFontTextCreateDefault("アクティブポップアップ");
-	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)this->viewTitle, (struct engineLayoutView*)viewTestText);
-	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)this->viewTitle, (struct engineLayoutView*)viewTestText);
+	struct engineLayoutPartsFontText *viewTestText = engineLayoutPartsFontTextCreateDefault("アクティブポップアップ");
+	engineLayoutViewGearFamilyAdd((struct engineLayoutView*)this->viewTitle, (struct engineLayoutView*)viewTestText);
+	engineLayoutViewGearGraphicObjectConnect((struct engineLayoutView*)this->viewTitle, (struct engineLayoutView*)viewTestText);
 
 	// 閉じるボタン描画
-	this->viewButtonClose = engineLayoutViewPartsButtonBoxCreateText("close");
-	engineLayoutViewUtilPositionSetRight((struct engineLayoutView*)this->viewButtonClose, 10);
-	engineLayoutViewUtilPositionSetTop((struct engineLayoutView*)this->viewButtonClose, 10);
-	engineLayoutViewUtilPositionSetWidthValue((struct engineLayoutView*)this->viewButtonClose, 60);
-	engineLayoutViewUtilPositionSetHeightValue((struct engineLayoutView*)this->viewButtonClose, 40);
-	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)this, (struct engineLayoutView*)this->viewButtonClose);
-	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)this, (struct engineLayoutView*)this->viewButtonClose);
+	this->viewButtonClose = engineLayoutPartsButtonBoxCreateText("close");
+	engineLayoutViewGearPositionSetRight((struct engineLayoutView*)this->viewButtonClose, 10);
+	engineLayoutViewGearPositionSetTop((struct engineLayoutView*)this->viewButtonClose, 10);
+	engineLayoutViewGearPositionSetWidthValue((struct engineLayoutView*)this->viewButtonClose, 60);
+	engineLayoutViewGearPositionSetHeightValue((struct engineLayoutView*)this->viewButtonClose, 40);
+	engineLayoutViewGearFamilyAdd((struct engineLayoutView*)this, (struct engineLayoutView*)this->viewButtonClose);
+	engineLayoutViewGearGraphicObjectConnect((struct engineLayoutView*)this, (struct engineLayoutView*)this->viewButtonClose);
 
 	// 十字キー作成
-	this->viewArrowKey = engineLayoutViewPartsArrowKeyCreate();
-	engineLayoutViewUtilPositionSetLeft((struct engineLayoutView*)this->viewArrowKey, 0);
-	engineLayoutViewUtilPositionSetBottom((struct engineLayoutView*)this->viewArrowKey, 0);
-	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)this, (struct engineLayoutView*)this->viewArrowKey);
-	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)this, (struct engineLayoutView*)this->viewArrowKey);
+	this->viewArrowKey = engineLayoutPartsArrowKeyCreate();
+	engineLayoutViewGearPositionSetLeft((struct engineLayoutView*)this->viewArrowKey, 0);
+	engineLayoutViewGearPositionSetBottom((struct engineLayoutView*)this->viewArrowKey, 0);
+	engineLayoutViewGearFamilyAdd((struct engineLayoutView*)this, (struct engineLayoutView*)this->viewArrowKey);
+	engineLayoutViewGearGraphicObjectConnect((struct engineLayoutView*)this, (struct engineLayoutView*)this->viewArrowKey);
 
 	// ディスプレイに十字キーを紐づける
 	this->viewDisplay->viewArrowKey = this->viewArrowKey;
@@ -74,25 +74,25 @@ static void init(struct pageTest2PartsPopupActiveImplement *this){
 // 計算
 static void calc(struct pageTest2PartsPopupActiveImplement *this, bool isCancel){
 	// 遷移中のディスプレイフェード
-	engineLayoutViewUtilPositionUnsetTransform((struct engineLayoutView*)this->viewDisplayMask);
-	engineLayoutViewUtilPositionSetTransformScale((struct engineLayoutView*)this->viewDisplayMask, 1.0, this->popup->super.openAlpha);
+	engineLayoutViewGearPositionUnsetTransform((struct engineLayoutView*)this->viewDisplayMask);
+	engineLayoutViewGearPositionSetTransformScale((struct engineLayoutView*)this->viewDisplayMask, 1.0, this->popup->super.openAlpha);
 
 	// 遷移中の要素位置
-	double titleTop = (this->popup->super.openAlpha - 1) * (engineLayoutViewUtilPositionGetH((struct engineLayoutView*)this->viewTitle) + 10) + 10;
-	double buttonCloseRight = (this->popup->super.openAlpha - 1) * (engineLayoutViewUtilPositionGetW((struct engineLayoutView*)this->viewButtonClose) + 10) + 10;
-	double arrowKeyLeft = (this->popup->super.openAlpha - 1) * engineLayoutViewUtilPositionGetW((struct engineLayoutView*)this->viewArrowKey);
-	engineLayoutViewUtilPositionSetTop((struct engineLayoutView*)this->viewTitle, titleTop);
-	engineLayoutViewUtilPositionSetRight((struct engineLayoutView*)this->viewButtonClose, buttonCloseRight);
-	engineLayoutViewUtilPositionSetLeft((struct engineLayoutView*)this->viewArrowKey, arrowKeyLeft);
+	double titleTop = (this->popup->super.openAlpha - 1) * (engineLayoutViewGearPositionGetH((struct engineLayoutView*)this->viewTitle) + 10) + 10;
+	double buttonCloseRight = (this->popup->super.openAlpha - 1) * (engineLayoutViewGearPositionGetW((struct engineLayoutView*)this->viewButtonClose) + 10) + 10;
+	double arrowKeyLeft = (this->popup->super.openAlpha - 1) * engineLayoutViewGearPositionGetW((struct engineLayoutView*)this->viewArrowKey);
+	engineLayoutViewGearPositionSetTop((struct engineLayoutView*)this->viewTitle, titleTop);
+	engineLayoutViewGearPositionSetRight((struct engineLayoutView*)this->viewButtonClose, buttonCloseRight);
+	engineLayoutViewGearPositionSetLeft((struct engineLayoutView*)this->viewArrowKey, arrowKeyLeft);
 
 	// 子要素計算
-	engineLayoutViewUtilChildrenCalc((struct engineLayoutView*)this, isCancel);
+	engineLayoutViewGearChildrenCalc((struct engineLayoutView*)this, isCancel);
 
 	// ポップアップ遷移中の処理スキップ
 	if(this->popup->super.openStep != 0){return;}
 
 	// ボタン処理 閉じる
-	if(engineLayoutViewUtilInteractIsTriggerUp((struct engineLayoutView*)this->viewButtonClose)){
+	if(engineLayoutViewGearInteractIsTriggerUp((struct engineLayoutView*)this->viewButtonClose)){
 		// ポップアップを閉じる
 		this->popup->super.isExist = false;
 		return;
@@ -114,8 +114,8 @@ struct pageTest2PartsPopupActive *pageTest2PartsPopupActiveCreate(struct pageTes
 	view->draw = engineLayoutViewDefaultDraw;
 	view->pause = engineLayoutViewDefaultPause;
 	view->dispose = engineLayoutViewDefaultDispose;
-	view->graphicObject.shouldBufferCreate = engineLayoutViewUtilGraphicObjectDefaultShouldBufferCreate;
-	view->graphicObject.bufferCreate = engineLayoutViewUtilGraphicObjectDefaultBufferCreate;
+	view->graphicObject.shouldBufferCreate = engineLayoutViewGearGraphicObjectDefaultShouldBufferCreate;
+	view->graphicObject.bufferCreate = engineLayoutViewGearGraphicObjectDefaultBufferCreate;
 	return (struct pageTest2PartsPopupActive*)this;
 }
 

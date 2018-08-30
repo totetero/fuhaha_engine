@@ -4,17 +4,16 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-// ページ状態構造体
-struct pageTest2Status{
-	struct pageTest2CartridgePage *cartridge;
-	struct engineLayoutPartsSwipePager *viewPager;
+// 枠付描画構造体
+struct engineLayoutPartsFrame{
+	struct engineLayoutView super;
+	struct{int imgw; int imgh; int tu; int tv; int tw; int th;} texture;
+	struct{int bt; int bb; int br; int bl;} border;
+	double scale;
 };
 
-// ページカートリッジ構造体 作成
-struct pageTest2Status *pageTest2StatusCreate(void);
-
-// ページカートリッジ構造体 破棄
-void pageTest2StatusDispose(struct pageTest2Status *this);
+// 枠付描画構造体 作成
+struct engineLayoutPartsFrame *engineLayoutPartsFrameCreate(void);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

@@ -15,69 +15,69 @@ struct pageTest2PartsPagerPage2Implement{
 
 // 初期化
 static void init(struct pageTest2PartsPagerPage2Implement *this){
-	engineLayoutViewUtilInit((struct engineLayoutView*)this);
+	engineLayoutViewGearInit((struct engineLayoutView*)this);
 
 	// フレーム作成
-	struct engineLayoutViewPartsFrame *viewFrame = engineLayoutViewPartsFrameCreate();
-	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)this, (struct engineLayoutView*)viewFrame);
-	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)this, (struct engineLayoutView*)viewFrame);
+	struct engineLayoutPartsFrame *viewFrame = engineLayoutPartsFrameCreate();
+	engineLayoutViewGearFamilyAdd((struct engineLayoutView*)this, (struct engineLayoutView*)viewFrame);
+	engineLayoutViewGearGraphicObjectConnect((struct engineLayoutView*)this, (struct engineLayoutView*)viewFrame);
 
 	// スクローラマスク作成
-	struct engineLayoutViewPartsMaskRect *viewScrollerMask = engineLayoutViewPartsMaskRectCreate();
-	engineLayoutViewUtilPositionSetLtRtTpBm((struct engineLayoutView*)viewScrollerMask, 10, 10, 10, 10);
-	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)viewFrame, (struct engineLayoutView*)viewScrollerMask);
-	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)viewFrame, (struct engineLayoutView*)viewScrollerMask);
+	struct engineLayoutPartsMaskRect *viewScrollerMask = engineLayoutPartsMaskRectCreate();
+	engineLayoutViewGearPositionSetLtRtTpBm((struct engineLayoutView*)viewScrollerMask, 10, 10, 10, 10);
+	engineLayoutViewGearFamilyAdd((struct engineLayoutView*)viewFrame, (struct engineLayoutView*)viewScrollerMask);
+	engineLayoutViewGearGraphicObjectConnect((struct engineLayoutView*)viewFrame, (struct engineLayoutView*)viewScrollerMask);
 	// スクローラ作成
-	struct engineLayoutViewPartsSwipeScroller *viewScroller = engineLayoutViewPartsSwipeScrollerCreate();
-	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)viewScrollerMask, (struct engineLayoutView*)viewScroller);
-	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)viewScrollerMask, (struct engineLayoutView*)viewScroller);
+	struct engineLayoutPartsSwipeScroller *viewScroller = engineLayoutPartsSwipeScrollerCreate();
+	engineLayoutViewGearFamilyAdd((struct engineLayoutView*)viewScrollerMask, (struct engineLayoutView*)viewScroller);
+	engineLayoutViewGearGraphicObjectConnect((struct engineLayoutView*)viewScrollerMask, (struct engineLayoutView*)viewScroller);
 	viewScroller->swipe.parentSwipe = &this->stat->viewPager->swipe;
 	viewScroller->super.interact.setting.isMoveableY = false;
 	viewScroller->inner.h = 10;
 	// 垂直軸スクロールバー作成
-	struct engineLayoutViewPartsRect *viewScrollBarY = engineLayoutViewPartsRectCreateWhite();
-	engineLayoutViewUtilPositionSetRight((struct engineLayoutView*)viewScrollBarY, 0);
-	engineLayoutViewUtilPositionSetTop((struct engineLayoutView*)viewScrollBarY, 0);
-	engineLayoutViewUtilPositionSetBottom((struct engineLayoutView*)viewScrollBarY, 0);
-	engineLayoutViewUtilPositionSetWidthValue((struct engineLayoutView*)viewScrollBarY, 6);
-	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)viewScroller->viewBarY, (struct engineLayoutView*)viewScrollBarY);
-	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)viewScroller->viewBarY, (struct engineLayoutView*)viewScrollBarY);
+	struct engineLayoutPartsRect *viewScrollBarY = engineLayoutPartsRectCreateWhite();
+	engineLayoutViewGearPositionSetRight((struct engineLayoutView*)viewScrollBarY, 0);
+	engineLayoutViewGearPositionSetTop((struct engineLayoutView*)viewScrollBarY, 0);
+	engineLayoutViewGearPositionSetBottom((struct engineLayoutView*)viewScrollBarY, 0);
+	engineLayoutViewGearPositionSetWidthValue((struct engineLayoutView*)viewScrollBarY, 6);
+	engineLayoutViewGearFamilyAdd((struct engineLayoutView*)viewScroller->viewBarY, (struct engineLayoutView*)viewScrollBarY);
+	engineLayoutViewGearGraphicObjectConnect((struct engineLayoutView*)viewScroller->viewBarY, (struct engineLayoutView*)viewScrollBarY);
 
 	// スクローラ内部テキスト描画
 	double viewTextTop = viewScroller->inner.h;
 	double viewTextHeight = 20;
 	viewScroller->inner.h += viewTextHeight + 10;
-	struct engineLayoutViewPartsFontText *viewText = engineLayoutViewPartsFontTextCreateDefault("2ページ目");
-	engineLayoutViewUtilPositionSetLtRtTpHt((struct engineLayoutView*)viewText, 0, 0, viewTextTop, viewTextHeight);
-	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)viewScroller->viewInner, (struct engineLayoutView*)viewText);
-	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)viewScroller->viewInner, (struct engineLayoutView*)viewText);
+	struct engineLayoutPartsFontText *viewText = engineLayoutPartsFontTextCreateDefault("2ページ目");
+	engineLayoutViewGearPositionSetLtRtTpHt((struct engineLayoutView*)viewText, 0, 0, viewTextTop, viewTextHeight);
+	engineLayoutViewGearFamilyAdd((struct engineLayoutView*)viewScroller->viewInner, (struct engineLayoutView*)viewText);
+	engineLayoutViewGearGraphicObjectConnect((struct engineLayoutView*)viewScroller->viewInner, (struct engineLayoutView*)viewText);
 
 	// ページャーマスク作成
 	double viewPagerMaskTop = viewScroller->inner.h;
 	double viewPagerMaskHeight = 200;
 	viewScroller->inner.h += viewPagerMaskHeight + 10;
-	struct engineLayoutViewPartsMaskRect *viewPagerMask = engineLayoutViewPartsMaskRectCreate();
-	engineLayoutViewUtilPositionSetLtRtTpHt((struct engineLayoutView*)viewPagerMask, 0, 10, viewPagerMaskTop, viewPagerMaskHeight);
-	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)viewScroller->viewInner, (struct engineLayoutView*)viewPagerMask);
-	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)viewScroller->viewInner, (struct engineLayoutView*)viewPagerMask);
+	struct engineLayoutPartsMaskRect *viewPagerMask = engineLayoutPartsMaskRectCreate();
+	engineLayoutViewGearPositionSetLtRtTpHt((struct engineLayoutView*)viewPagerMask, 0, 10, viewPagerMaskTop, viewPagerMaskHeight);
+	engineLayoutViewGearFamilyAdd((struct engineLayoutView*)viewScroller->viewInner, (struct engineLayoutView*)viewPagerMask);
+	engineLayoutViewGearGraphicObjectConnect((struct engineLayoutView*)viewScroller->viewInner, (struct engineLayoutView*)viewPagerMask);
 	// スクローラ内部ページャー作成
-	struct engineLayoutViewPartsSwipePager *viewPager = engineLayoutViewPartsSwipePagerCreate();
-	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)viewPagerMask, (struct engineLayoutView*)viewPager);
-	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)viewPagerMask, (struct engineLayoutView*)viewPager);
+	struct engineLayoutPartsSwipePager *viewPager = engineLayoutPartsSwipePagerCreate();
+	engineLayoutViewGearFamilyAdd((struct engineLayoutView*)viewPagerMask, (struct engineLayoutView*)viewPager);
+	engineLayoutViewGearGraphicObjectConnect((struct engineLayoutView*)viewPagerMask, (struct engineLayoutView*)viewPager);
 	viewPager->swipe.parentSwipe = &viewScroller->swipe;
 	viewPager->isLoop = true;
 	// バナー1作成
-	struct engineLayoutViewPartsButtonBox *viewBanner1 = engineLayoutViewPartsButtonBoxCreateText("バナー1");
-	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)viewPager->viewInner, (struct engineLayoutView*)viewBanner1);
-	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)viewPager->viewInner, (struct engineLayoutView*)viewBanner1);
+	struct engineLayoutPartsButtonBox *viewBanner1 = engineLayoutPartsButtonBoxCreateText("バナー1");
+	engineLayoutViewGearFamilyAdd((struct engineLayoutView*)viewPager->viewInner, (struct engineLayoutView*)viewBanner1);
+	engineLayoutViewGearGraphicObjectConnect((struct engineLayoutView*)viewPager->viewInner, (struct engineLayoutView*)viewBanner1);
 	// バナー2作成
-	struct engineLayoutViewPartsButtonBox *viewBanner2 = engineLayoutViewPartsButtonBoxCreateText("バナー2");
-	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)viewPager->viewInner, (struct engineLayoutView*)viewBanner2);
-	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)viewPager->viewInner, (struct engineLayoutView*)viewBanner2);
+	struct engineLayoutPartsButtonBox *viewBanner2 = engineLayoutPartsButtonBoxCreateText("バナー2");
+	engineLayoutViewGearFamilyAdd((struct engineLayoutView*)viewPager->viewInner, (struct engineLayoutView*)viewBanner2);
+	engineLayoutViewGearGraphicObjectConnect((struct engineLayoutView*)viewPager->viewInner, (struct engineLayoutView*)viewBanner2);
 	// バナー3作成
-	struct engineLayoutViewPartsButtonBox *viewBanner3 = engineLayoutViewPartsButtonBoxCreateText("バナー3");
-	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)viewPager->viewInner, (struct engineLayoutView*)viewBanner3);
-	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)viewPager->viewInner, (struct engineLayoutView*)viewBanner3);
+	struct engineLayoutPartsButtonBox *viewBanner3 = engineLayoutPartsButtonBoxCreateText("バナー3");
+	engineLayoutViewGearFamilyAdd((struct engineLayoutView*)viewPager->viewInner, (struct engineLayoutView*)viewBanner3);
+	engineLayoutViewGearGraphicObjectConnect((struct engineLayoutView*)viewPager->viewInner, (struct engineLayoutView*)viewBanner3);
 
 	// スクロール要素作成
 	for(int i = 0; i < 5; i++){
@@ -86,10 +86,10 @@ static void init(struct pageTest2PartsPagerPage2Implement *this){
 		double viewScrollItemTop = viewScroller->inner.h;
 		double viewScrollItemHeight = 100;
 		viewScroller->inner.h += viewScrollItemHeight + 10;
-		struct engineLayoutViewPartsButtonBox *viewScrollItem = engineLayoutViewPartsButtonBoxCreateText(label);
-		engineLayoutViewUtilPositionSetLtRtTpHt((struct engineLayoutView*)viewScrollItem, 0, 10, viewScrollItemTop, viewScrollItemHeight);
-		engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)viewScroller->viewInner, (struct engineLayoutView*)viewScrollItem);
-		engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)viewScroller->viewInner, (struct engineLayoutView*)viewScrollItem);
+		struct engineLayoutPartsButtonBox *viewScrollItem = engineLayoutPartsButtonBoxCreateText(label);
+		engineLayoutViewGearPositionSetLtRtTpHt((struct engineLayoutView*)viewScrollItem, 0, 10, viewScrollItemTop, viewScrollItemHeight);
+		engineLayoutViewGearFamilyAdd((struct engineLayoutView*)viewScroller->viewInner, (struct engineLayoutView*)viewScrollItem);
+		engineLayoutViewGearGraphicObjectConnect((struct engineLayoutView*)viewScroller->viewInner, (struct engineLayoutView*)viewScrollItem);
 	}
 }
 
@@ -107,8 +107,8 @@ struct pageTest2PartsPagerPage2 *pageTest2PartsPagerPage2Create(struct pageTest2
 	view->draw = engineLayoutViewDefaultDraw;
 	view->pause = engineLayoutViewDefaultPause;
 	view->dispose = engineLayoutViewDefaultDispose;
-	view->graphicObject.shouldBufferCreate = engineLayoutViewUtilGraphicObjectDefaultShouldBufferCreate;
-	view->graphicObject.bufferCreate = engineLayoutViewUtilGraphicObjectDefaultBufferCreate;
+	view->graphicObject.shouldBufferCreate = engineLayoutViewGearGraphicObjectDefaultShouldBufferCreate;
+	view->graphicObject.bufferCreate = engineLayoutViewGearGraphicObjectDefaultBufferCreate;
 	return (struct pageTest2PartsPagerPage2*)this;
 }
 

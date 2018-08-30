@@ -32,7 +32,7 @@ struct pageTest2PartsPopupActiveDisplayImplement{
 
 // 初期化
 static void init(struct pageTest2PartsPopupActiveDisplayImplement *this){
-	engineLayoutViewUtilInit((struct engineLayoutView*)this);
+	engineLayoutViewGearInit((struct engineLayoutView*)this);
 
 	// 画像読み込み
 	this->egoIdTexSystem = engineGraphicTextureCreateLocal("img/system.png", ENGINEGRAPHICTEXTURETYPE_LINEAR);
@@ -61,7 +61,7 @@ static void calc(struct pageTest2PartsPopupActiveDisplayImplement *this, bool is
 	this->step++;
 
 	// 子要素計算
-	engineLayoutViewUtilChildrenCalc((struct engineLayoutView*)this, isCancel);
+	engineLayoutViewGearChildrenCalc((struct engineLayoutView*)this, isCancel);
 }
 
 // ----------------------------------------------------------------
@@ -98,9 +98,9 @@ static void draw(struct pageTest2PartsPopupActiveDisplayImplement *this, struct 
 	struct engineMathMatrix44 tempMat1;
 	struct engineMathMatrix44 tempMat2;
 	// 透視投影からサイズ調整して平行投影を行い、3D物体を2Dの任意の位置に投影する
-	double w = engineLayoutViewUtilPositionGetW((struct engineLayoutView*)this);
-	double h = engineLayoutViewUtilPositionGetH((struct engineLayoutView*)this);
-	engineLayoutViewUtilPositionTransformCalcMatrix((struct engineLayoutView*)this, &tempMat1, mat);
+	double w = engineLayoutViewGearPositionGetW((struct engineLayoutView*)this);
+	double h = engineLayoutViewGearPositionGetH((struct engineLayoutView*)this);
+	engineLayoutViewGearPositionTransformCalcMatrix((struct engineLayoutView*)this, &tempMat1, mat);
 	engineMathMat4Scale(&tempMat1, w, -h, -1.0);
 	engineMathMat4Scale(&tempMat1, 0.5, 0.5, 1.0);
 	engineMathMat4Translate(&tempMat1, 1, -1, 0);
@@ -159,7 +159,7 @@ static void draw(struct pageTest2PartsPopupActiveDisplayImplement *this, struct 
 	engineGraphicEngineSetDrawMode(ENGINEGRAPHICENGINEMODEDRAW_2D_ALPHA_NORMAL);
 
 	// 子要素描画
-	engineLayoutViewUtilChildrenDraw((struct engineLayoutView*)this, mat, color);
+	engineLayoutViewGearChildrenDraw((struct engineLayoutView*)this, mat, color);
 }
 
 // ----------------------------------------------------------------
@@ -167,11 +167,11 @@ static void draw(struct pageTest2PartsPopupActiveDisplayImplement *this, struct 
 // 破棄
 static void dispose(struct pageTest2PartsPopupActiveDisplayImplement *this){
 	// 子要素破棄
-	engineLayoutViewUtilChildrenDispose((struct engineLayoutView*)this);
+	engineLayoutViewGearChildrenDispose((struct engineLayoutView*)this);
 
 	// 自要素破棄
 	engineGraphicTextureDispose(this->egoIdTexSystem);
-	engineLayoutViewUtilDispose((struct engineLayoutView*)this);
+	engineLayoutViewGearDispose((struct engineLayoutView*)this);
 	engineUtilMemoryInfoFree("pageTest2PartsPopupActiveDisplay", this);
 }
 
@@ -189,8 +189,8 @@ struct pageTest2PartsPopupActiveDisplay *pageTest2PartsPopupActiveDisplayCreate(
 	view->draw = (void(*)(struct engineLayoutView*, struct engineMathMatrix44*, struct engineMathVector4*))draw;
 	view->pause = engineLayoutViewDefaultPause;
 	view->dispose = (void(*)(struct engineLayoutView*))dispose;
-	view->graphicObject.shouldBufferCreate = engineLayoutViewUtilGraphicObjectDefaultShouldBufferCreate;
-	view->graphicObject.bufferCreate = engineLayoutViewUtilGraphicObjectDefaultBufferCreate;
+	view->graphicObject.shouldBufferCreate = engineLayoutViewGearGraphicObjectDefaultShouldBufferCreate;
+	view->graphicObject.bufferCreate = engineLayoutViewGearGraphicObjectDefaultBufferCreate;
 	return (struct pageTest2PartsPopupActiveDisplay*)this;
 }
 

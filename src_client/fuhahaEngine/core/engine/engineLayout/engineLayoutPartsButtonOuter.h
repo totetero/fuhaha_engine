@@ -4,17 +4,13 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-// ページ状態構造体
-struct pageTest2Status{
-	struct pageTest2CartridgePage *cartridge;
-	struct engineLayoutPartsSwipePager *viewPager;
+// 外枠ボタン構造体
+struct engineLayoutPartsButtonOuter{
+	struct engineLayoutView super;
 };
 
-// ページカートリッジ構造体 作成
-struct pageTest2Status *pageTest2StatusCreate(void);
-
-// ページカートリッジ構造体 破棄
-void pageTest2StatusDispose(struct pageTest2Status *this);
+// 外枠ボタン構造体 作成
+struct engineLayoutPartsButtonOuter *engineLayoutPartsButtonOuterCreate(void);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

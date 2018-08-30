@@ -10,38 +10,38 @@ struct pageTest2PartsPagerPage3Implement{
 	struct pageTest2PartsPagerPage3 super;
 	struct pageTest2Status *stat;
 
-	struct engineLayoutViewPartsButtonBox *viewTestButton1;
-	struct engineLayoutViewPartsButtonBox *viewTestButton2;
+	struct engineLayoutPartsButtonBox *viewTestButton1;
+	struct engineLayoutPartsButtonBox *viewTestButton2;
 };
 
 // ----------------------------------------------------------------
 
 // 初期化
 static void init(struct pageTest2PartsPagerPage3Implement *this){
-	engineLayoutViewUtilInit((struct engineLayoutView*)this);
+	engineLayoutViewGearInit((struct engineLayoutView*)this);
 
 	// フレーム作成
-	struct engineLayoutViewPartsFrame *viewTestFrame = engineLayoutViewPartsFrameCreate();
-	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)this, (struct engineLayoutView*)viewTestFrame);
-	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)this, (struct engineLayoutView*)viewTestFrame);
+	struct engineLayoutPartsFrame *viewTestFrame = engineLayoutPartsFrameCreate();
+	engineLayoutViewGearFamilyAdd((struct engineLayoutView*)this, (struct engineLayoutView*)viewTestFrame);
+	engineLayoutViewGearGraphicObjectConnect((struct engineLayoutView*)this, (struct engineLayoutView*)viewTestFrame);
 
 	// テキスト描画
-	struct engineLayoutViewPartsFontText *viewTestText = engineLayoutViewPartsFontTextCreateDefault("3ページ目");
-	engineLayoutViewUtilPositionSetLtRtTpHt((struct engineLayoutView*)viewTestText, 0, 0, 20, 20);
-	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)viewTestFrame, (struct engineLayoutView*)viewTestText);
-	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)viewTestFrame, (struct engineLayoutView*)viewTestText);
+	struct engineLayoutPartsFontText *viewTestText = engineLayoutPartsFontTextCreateDefault("3ページ目");
+	engineLayoutViewGearPositionSetLtRtTpHt((struct engineLayoutView*)viewTestText, 0, 0, 20, 20);
+	engineLayoutViewGearFamilyAdd((struct engineLayoutView*)viewTestFrame, (struct engineLayoutView*)viewTestText);
+	engineLayoutViewGearGraphicObjectConnect((struct engineLayoutView*)viewTestFrame, (struct engineLayoutView*)viewTestText);
 
 	// ボタン描画
-	this->viewTestButton1 = engineLayoutViewPartsButtonBoxCreateText("サンプルポップアップ表示");
-	engineLayoutViewUtilPositionSetLtRtTpHt((struct engineLayoutView*)this->viewTestButton1, 10, 10, 50, 100);
-	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)viewTestFrame, (struct engineLayoutView*)this->viewTestButton1);
-	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)viewTestFrame, (struct engineLayoutView*)this->viewTestButton1);
+	this->viewTestButton1 = engineLayoutPartsButtonBoxCreateText("サンプルポップアップ表示");
+	engineLayoutViewGearPositionSetLtRtTpHt((struct engineLayoutView*)this->viewTestButton1, 10, 10, 50, 100);
+	engineLayoutViewGearFamilyAdd((struct engineLayoutView*)viewTestFrame, (struct engineLayoutView*)this->viewTestButton1);
+	engineLayoutViewGearGraphicObjectConnect((struct engineLayoutView*)viewTestFrame, (struct engineLayoutView*)this->viewTestButton1);
 
 	// ボタン描画
-	this->viewTestButton2 = engineLayoutViewPartsButtonBoxCreateText("アクティブポップアップ表示");
-	engineLayoutViewUtilPositionSetLtRtTpHt((struct engineLayoutView*)this->viewTestButton2, 10, 10, 160, 100);
-	engineLayoutViewUtilFamilyAdd((struct engineLayoutView*)viewTestFrame, (struct engineLayoutView*)this->viewTestButton2);
-	engineLayoutViewUtilGraphicObjectConnect((struct engineLayoutView*)viewTestFrame, (struct engineLayoutView*)this->viewTestButton2);
+	this->viewTestButton2 = engineLayoutPartsButtonBoxCreateText("アクティブポップアップ表示");
+	engineLayoutViewGearPositionSetLtRtTpHt((struct engineLayoutView*)this->viewTestButton2, 10, 10, 160, 100);
+	engineLayoutViewGearFamilyAdd((struct engineLayoutView*)viewTestFrame, (struct engineLayoutView*)this->viewTestButton2);
+	engineLayoutViewGearGraphicObjectConnect((struct engineLayoutView*)viewTestFrame, (struct engineLayoutView*)this->viewTestButton2);
 }
 
 // ----------------------------------------------------------------
@@ -83,16 +83,16 @@ static void openPopupActive(struct pageTest2PartsPagerPage3Implement *this){
 // 計算
 static void calc(struct pageTest2PartsPagerPage3Implement *this, bool isCancel){
 	// 子要素計算
-	engineLayoutViewUtilChildrenCalc((struct engineLayoutView*)this, isCancel);
+	engineLayoutViewGearChildrenCalc((struct engineLayoutView*)this, isCancel);
 
 	// サンプルポップアップボタン処理
-	if(engineLayoutViewUtilInteractIsTriggerUp((struct engineLayoutView*)this->viewTestButton1)){
+	if(engineLayoutViewGearInteractIsTriggerUp((struct engineLayoutView*)this->viewTestButton1)){
 		// サンプルポップアップを開く
 		openPopupSample(this);
 	}
 
 	// アクティブポップアップボタン処理
-	if(engineLayoutViewUtilInteractIsTriggerUp((struct engineLayoutView*)this->viewTestButton2)){
+	if(engineLayoutViewGearInteractIsTriggerUp((struct engineLayoutView*)this->viewTestButton2)){
 		// アクティブポップアップを開く
 		openPopupActive(this);
 	}
@@ -112,8 +112,8 @@ struct pageTest2PartsPagerPage3 *pageTest2PartsPagerPage3Create(struct pageTest2
 	view->draw = engineLayoutViewDefaultDraw;
 	view->pause = engineLayoutViewDefaultPause;
 	view->dispose = engineLayoutViewDefaultDispose;
-	view->graphicObject.shouldBufferCreate = engineLayoutViewUtilGraphicObjectDefaultShouldBufferCreate;
-	view->graphicObject.bufferCreate = engineLayoutViewUtilGraphicObjectDefaultBufferCreate;
+	view->graphicObject.shouldBufferCreate = engineLayoutViewGearGraphicObjectDefaultShouldBufferCreate;
+	view->graphicObject.bufferCreate = engineLayoutViewGearGraphicObjectDefaultBufferCreate;
 	return (struct pageTest2PartsPagerPage3*)this;
 }
 
