@@ -26,6 +26,7 @@ struct engineLayoutView;
 #include "./engineLayoutPartsArrowKey.h"
 #include "./engineLayoutPartsButtonBox.h"
 #include "./engineLayoutPartsButtonOuter.h"
+#include "./engineLayoutPartsButtonPicker.h"
 #include "./engineLayoutPartsFilterColor.h"
 #include "./engineLayoutPartsFontNumber.h"
 #include "./engineLayoutPartsFontText.h"
