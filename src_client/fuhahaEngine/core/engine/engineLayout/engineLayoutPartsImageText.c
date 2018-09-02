@@ -247,7 +247,7 @@ struct engineLayoutPartsImageText *engineLayoutPartsImageTextCreateDefault(char 
 
 // 画像文字列描画構造体 文字列設定(utf8)
 void engineLayoutPartsImageTextSet(struct engineLayoutPartsImageText *that, char *text){
-	struct engineLayoutPartsImageTextImplement *this = (struct engineLayoutPartsImageTextImplement*)that;
+	struct engineLayoutPartsImageTextImplement *this = (struct engineLayoutPartsImageTextImplement*)((char*)that - offsetof(struct engineLayoutPartsImageTextImplement, super));
 	// 文字列領域作成
 	int textLength = (text != NULL) ? ((int)strlen(text) + 1) : 0;
 	if(this->textInfo.length < textLength){

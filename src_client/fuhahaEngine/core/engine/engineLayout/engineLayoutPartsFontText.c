@@ -420,7 +420,7 @@ struct engineLayoutPartsFontText *engineLayoutPartsFontTextCreateDefault(char *t
 
 // フォント文字列描画構造体 文字列設定
 void engineLayoutPartsFontTextSet(struct engineLayoutPartsFontText *that, char *text){
-	struct engineLayoutPartsFontTextImplement *this = (struct engineLayoutPartsFontTextImplement*)that;
+	struct engineLayoutPartsFontTextImplement *this = (struct engineLayoutPartsFontTextImplement*)((char*)that - offsetof(struct engineLayoutPartsFontTextImplement, super));
 	// 文字列領域作成
 	int textLength = (text != NULL) ? ((int)strlen(text) + 1) : 0;
 	if(this->textInfo.length < textLength){
