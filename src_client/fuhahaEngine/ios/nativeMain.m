@@ -1,5 +1,5 @@
 #import "./fuhaha-Swift.h"
-#include "../core/library.h"
+#include "fuhahaEngine.h"
 #include "./native.h"
 #include "../core/game.h"
 

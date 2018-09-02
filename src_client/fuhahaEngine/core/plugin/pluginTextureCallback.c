@@ -1,6 +1,4 @@
-#include "../library.h"
-#include "../plugin/pluginUtil.h"
-#include "../plugin/pluginTexture.h"
+#include "fuhahaEngine.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

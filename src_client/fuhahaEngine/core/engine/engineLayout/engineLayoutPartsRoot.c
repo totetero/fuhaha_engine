@@ -1,8 +1,4 @@
-#include "../../library.h"
-#include "../../engine/engineMath/engineMath.h"
-#include "../../engine/engineUtil/engineUtil.h"
-#include "../../engine/engineGraphic/engineGraphic.h"
-#include "../../engine/engineLayout/engineLayout.h"
+#include "fuhahaEngine.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

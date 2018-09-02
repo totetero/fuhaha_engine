@@ -1,5 +1,4 @@
-#include "./library.h"
-#include "./engine/engineMath/engineMath.h"
+#include "fuhahaEngine.h"
 #include "./game.h"
 
 // ----------------------------------------------------------------

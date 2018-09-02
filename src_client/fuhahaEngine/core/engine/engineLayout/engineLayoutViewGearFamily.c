@@ -1,6 +1,4 @@
-#include "../../library.h"
-#include "../../engine/engineUtil/engineUtil.h"
-#include "../../engine/engineLayout/engineLayout.h"
+#include "fuhahaEngine.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

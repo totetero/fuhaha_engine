@@ -1,4 +1,4 @@
-#include "../core/library.h"
+#include "fuhahaEngine.h"
 #include <GL/glfw.h>
 #include <emscripten/emscripten.h>
 #include "../core/game.h"

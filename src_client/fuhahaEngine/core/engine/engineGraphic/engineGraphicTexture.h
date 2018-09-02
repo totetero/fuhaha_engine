@@ -4,6 +4,19 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
+// テクスチャ識別子
+typedef int engineGraphicTextureId;
+
+// テクスチャタイプ列挙型
+enum engineGraphicTextureType{
+	ENGINEGRAPHICTEXTURETYPE_LINEAR,
+	ENGINEGRAPHICTEXTURETYPE_NEAREST,
+};
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+
 // テクスチャ作成
 engineGraphicTextureId engineGraphicTextureCreateLocal(char *src, enum engineGraphicTextureType type);
 engineGraphicTextureId engineGraphicTextureCreateFont(enum pluginTextureFontSetId fontSetId, char *letterList, enum engineGraphicTextureType type);

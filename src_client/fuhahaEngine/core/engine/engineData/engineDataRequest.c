@@ -1,7 +1,4 @@
-#include "../../library.h"
-#include "../../plugin/pluginData.h"
-#include "../../engine/engineUtil/engineUtil.h"
-#include "../../engine/engineData/engineData.h"
+#include "fuhahaEngine.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

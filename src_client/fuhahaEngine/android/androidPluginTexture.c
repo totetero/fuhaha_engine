@@ -1,6 +1,5 @@
-#include "../core/library.h"
+#include "fuhahaEngine.h"
 #include "./native.h"
-#include "../core/plugin/pluginTexture.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

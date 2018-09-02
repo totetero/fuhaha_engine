@@ -1,8 +1,6 @@
 #import "./fuhaha-Swift.h"
-#include "../core/library.h"
+#include "fuhahaEngine.h"
 #include "./native.h"
-#include "../core/plugin/pluginUtil.h"
-#include "../core/plugin/pluginTexture.h"
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
