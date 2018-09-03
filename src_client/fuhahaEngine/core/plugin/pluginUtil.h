@@ -31,6 +31,8 @@ void *corePluginUtilCallbackGet(pluginUtilCallbackId callbackId, void **param, b
 void *gamePluginUtilMemoryMalloc(char *info, size_t size);
 // 領域確保callocラッパ
 void *gamePluginUtilMemoryCalloc(char *info, size_t n, size_t size);
+// 領域確保確認
+void gamePluginUtilMemoryTrace(void);
 
 // url取得 返値文字列は揮発性バッファで解放禁止
 char *gamePluginUtilUrlGet(void);
