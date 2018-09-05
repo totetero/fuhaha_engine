@@ -10,7 +10,7 @@ struct pageTest2PartsPopupActive{
 };
 
 // アクティブポップアップ構造体 作成
-struct pageTest2PartsPopupActive *pageTest2PartsPopupActiveCreate(struct pageTest2CartridgePopup *popup, struct pageTest2Status *stat);
+struct pageTest2PartsPopupActive *pageTest2PartsPopupActiveCreate(struct engineCartridgeLayoutPopup *popup, struct pageTest2Status *stat);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

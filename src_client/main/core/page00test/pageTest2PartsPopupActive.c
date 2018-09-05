@@ -8,7 +8,7 @@
 // 構造体実体
 struct pageTest2PartsPopupActiveImplement{
 	struct pageTest2PartsPopupActive super;
-	struct pageTest2CartridgePopup *popup;
+	struct engineCartridgeLayoutPopup *popup;
 	struct pageTest2Status *stat;
 
 	struct engineLayoutPartsMaskRect *viewDisplayMask;
@@ -102,7 +102,7 @@ static void calc(struct pageTest2PartsPopupActiveImplement *this, bool isCancel)
 // ----------------------------------------------------------------
 
 // アクティブポップアップ構造体 作成
-struct pageTest2PartsPopupActive *pageTest2PartsPopupActiveCreate(struct pageTest2CartridgePopup *popup, struct pageTest2Status *stat){
+struct pageTest2PartsPopupActive *pageTest2PartsPopupActiveCreate(struct engineCartridgeLayoutPopup *popup, struct pageTest2Status *stat){
 	struct pageTest2PartsPopupActiveImplement *this = (struct pageTest2PartsPopupActiveImplement*)engineUtilMemoryInfoCalloc("pageTest2PartsPopupActive", 1, sizeof(struct pageTest2PartsPopupActiveImplement));
 	this->popup = popup;
 	this->stat = stat;

@@ -4,13 +4,13 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-// ページャー構造体
-struct pageTest2PartsPager{
+// ページルート構造体
+struct pageTest2PartsRoot{
 	struct engineLayoutView super;
 };
 
-// ページャー構造体 作成
-struct pageTest2PartsPager *pageTest2PartsPagerCreate(struct pageTest2CartridgePage *page, struct pageTest2Status *stat);
+// ページルート構造体 作成
+struct pageTest2PartsRoot *pageTest2PartsRootCreate(struct engineCartridgeLayoutPage *page);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

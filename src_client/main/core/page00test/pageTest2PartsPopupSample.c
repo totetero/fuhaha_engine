@@ -8,7 +8,7 @@
 // 構造体実体
 struct pageTest2PartsPopupSampleImplement{
 	struct pageTest2PartsPopupSample super;
-	struct pageTest2CartridgePopup *popup;
+	struct engineCartridgeLayoutPopup *popup;
 	struct pageTest2Status *stat;
 
 	struct engineLayoutPartsFrame *viewWindow;
@@ -81,7 +81,7 @@ static void calc(struct pageTest2PartsPopupSampleImplement *this, bool isCancel)
 	// ボタン処理 再オープン
 	if(engineLayoutViewGearInteractIsTriggerUp((struct engineLayoutView*)this->viewButtonReopen)){
 		// ポップアップを閉じる
-		pageTest2CartridgePopupResultSet(this->popup, 1);
+		this->popup->result = 1;
 		this->popup->super.isExist = false;
 		return;
 	}
@@ -89,7 +89,7 @@ static void calc(struct pageTest2PartsPopupSampleImplement *this, bool isCancel)
 	// ボタン処理 閉じる
 	if(engineLayoutViewGearInteractIsTriggerUp((struct engineLayoutView*)this->viewButtonClose) || engineLayoutViewGearInteractIsTriggerUp((struct engineLayoutView*)this->viewButtonOuter)){
 		// ポップアップを閉じる
-		pageTest2CartridgePopupResultSet(this->popup, 0);
+		this->popup->result = 0;
 		this->popup->super.isExist = false;
 		return;
 	}
@@ -98,7 +98,7 @@ static void calc(struct pageTest2PartsPopupSampleImplement *this, bool isCancel)
 // ----------------------------------------------------------------
 
 // サンプルポップアップ構造体 作成
-struct pageTest2PartsPopupSample *pageTest2PartsPopupSampleCreate(struct pageTest2CartridgePopup *popup, struct pageTest2Status *stat){
+struct pageTest2PartsPopupSample *pageTest2PartsPopupSampleCreate(struct engineCartridgeLayoutPopup *popup, struct pageTest2Status *stat){
 	struct pageTest2PartsPopupSampleImplement *this = (struct pageTest2PartsPopupSampleImplement*)engineUtilMemoryInfoCalloc("pageTest2PartsPopupSample", 1, sizeof(struct pageTest2PartsPopupSampleImplement));
 	this->popup = popup;
 	this->stat = stat;

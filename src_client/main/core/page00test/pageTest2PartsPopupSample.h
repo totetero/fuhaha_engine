@@ -10,7 +10,7 @@ struct pageTest2PartsPopupSample{
 };
 
 // サンプルポップアップ構造体 作成
-struct pageTest2PartsPopupSample *pageTest2PartsPopupSampleCreate(struct pageTest2CartridgePopup *popup, struct pageTest2Status *stat);
+struct pageTest2PartsPopupSample *pageTest2PartsPopupSampleCreate(struct engineCartridgeLayoutPopup *popup, struct pageTest2Status *stat);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

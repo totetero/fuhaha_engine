@@ -6,9 +6,8 @@
 // ----------------------------------------------------------------
 
 // 構造体実体
-struct pageTest2PartsPagerImplement{
-	struct pageTest2PartsPager super;
-	struct pageTest2CartridgePage *page;
+struct pageTest2PartsRootImplement{
+	struct pageTest2PartsRoot super;
 	struct pageTest2Status *stat;
 
 	int pageW;
@@ -21,7 +20,7 @@ struct pageTest2PartsPagerImplement{
 // ----------------------------------------------------------------
 
 // 初期化
-static void init(struct pageTest2PartsPagerImplement *this){
+static void init(struct pageTest2PartsRootImplement *this){
 	engineLayoutViewGearInit((struct engineLayoutView*)this);
 
 	// ページャーマスク作成
@@ -57,7 +56,7 @@ static void init(struct pageTest2PartsPagerImplement *this){
 // ----------------------------------------------------------------
 
 // 計算
-static void calc(struct pageTest2PartsPagerImplement *this, bool isCancel){
+static void calc(struct pageTest2PartsRootImplement *this, bool isCancel){
 	// 子要素計算
 	engineLayoutViewGearChildrenCalc((struct engineLayoutView*)this, isCancel);
 
@@ -87,11 +86,26 @@ static void calc(struct pageTest2PartsPagerImplement *this, bool isCancel){
 
 // ----------------------------------------------------------------
 
-// ページャー構造体 作成
-struct pageTest2PartsPager *pageTest2PartsPagerCreate(struct pageTest2CartridgePage *page, struct pageTest2Status *stat){
-	struct pageTest2PartsPagerImplement *this = (struct pageTest2PartsPagerImplement*)engineUtilMemoryInfoCalloc("pageTest2PartsPager", 1, sizeof(struct pageTest2PartsPagerImplement));
-	this->page = page;
-	this->stat = stat;
+// 破棄
+static void dispose(struct pageTest2PartsRootImplement *this){
+	// 子要素破棄
+	engineLayoutViewGearChildrenDispose((struct engineLayoutView*)this);
+
+	// ページ状態破棄
+	pageTest2StatusDispose(this->stat);
+
+	// 自要素破棄
+	engineLayoutViewGearDispose((struct engineLayoutView*)this);
+	engineUtilMemoryInfoFree("engineLayoutPartsTemplate", this);
+}
+
+// ----------------------------------------------------------------
+
+// ページルート構造体 作成
+struct pageTest2PartsRoot *pageTest2PartsRootCreate(struct engineCartridgeLayoutPage *cartridge){
+	struct pageTest2PartsRootImplement *this = (struct pageTest2PartsRootImplement*)engineUtilMemoryInfoCalloc("pageTest2PartsRoot", 1, sizeof(struct pageTest2PartsRootImplement));
+	this->stat = pageTest2StatusCreate();
+	this->stat->cartridge = cartridge;
 	init(this);
 
 	struct engineLayoutView *view = (struct engineLayoutView*)this;
@@ -99,10 +113,10 @@ struct pageTest2PartsPager *pageTest2PartsPagerCreate(struct pageTest2CartridgeP
 	view->calc = (void(*)(struct engineLayoutView*, bool))calc;
 	view->draw = engineLayoutViewDefaultDraw;
 	view->pause = engineLayoutViewDefaultPause;
-	view->dispose = engineLayoutViewDefaultDispose;
+	view->dispose = (void(*)(struct engineLayoutView*))dispose;
 	view->graphicObject.shouldBufferCreate = engineLayoutViewGearGraphicObjectDefaultShouldBufferCreate;
 	view->graphicObject.bufferCreate = engineLayoutViewGearGraphicObjectDefaultBufferCreate;
-	return (struct pageTest2PartsPager*)this;
+	return (struct pageTest2PartsRoot*)this;
 }
 
 // ----------------------------------------------------------------
