@@ -4,9 +4,6 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-#include "pageTest2CartridgePage.h"
-#include "pageTest2CartridgePopup.h"
-
 #include "pageTest2Status.h"
 
 #include "pageTest2PartsPager.h"

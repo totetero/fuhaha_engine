@@ -4,14 +4,17 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-// ページカートリッジ構造体
-struct pageTest2CartridgePage{
-	struct engineCartridgePage super;
+// ポップアップカートリッジ構造体
+struct engineCartridgeLayoutPopup{
+	struct engineCartridgePopup super;
 	struct engineCartridgePopupManager popupManager;
+	int result;
 };
 
-// ページカートリッジ構造体 作成
-struct pageTest2CartridgePage *pageTest2CartridgePageCreate(void *param, struct engineLayoutView*(*viewCreate)(struct pageTest2CartridgePage *page, void *param), void(*paramDispose)(void *param));
+// ポップアップカートリッジ構造体 作成
+struct engineCartridgeLayoutPopup *engineCartridgeLayoutPopupCreate(void);
+// ポップアップカートリッジ構造体 設定
+void engineCartridgeLayoutPopupSetView(struct engineCartridgeLayoutPopup *this, struct engineLayoutView *view);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
