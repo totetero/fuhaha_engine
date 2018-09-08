@@ -10,6 +10,9 @@ long long int engineUtilTimeGet(void);
 // ゲーム終了
 void engineUtilSystemExit(void);
 
+// ゲーム中止
+#define engineUtilSystemError(info) do{trace("error %s", engineUtilMemoryInfo(info, __FILE__, __LINE__)); engineUtilSystemExit();}while(false)
+
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
