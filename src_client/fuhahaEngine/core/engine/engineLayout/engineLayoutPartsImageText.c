@@ -193,16 +193,16 @@ static void dispose(struct engineLayoutPartsImageTextImplement *this){
 
 	// 自要素破棄
 	engineGraphicTextureDispose(this->egoIdTexImage);
-	if(this->textInfo.buff != NULL){engineUtilMemoryInfoFree("engineLayoutPartsImageText textBuff", this->textInfo.buff);}
+	if(this->textInfo.buff != NULL){engineUtilMemoryFree(this->textInfo.buff);}
 	engineLayoutViewGearDispose((struct engineLayoutView*)this);
-	engineUtilMemoryInfoFree("engineLayoutPartsImageText", this);
+	engineUtilMemoryFree(this);
 }
 
 // ----------------------------------------------------------------
 
 // 画像文字列描画構造体 作成
 struct engineLayoutPartsImageText *engineLayoutPartsImageTextCreate(char *src, int imgw, int imgh, int tu, int tv, int tw, int th){
-	struct engineLayoutPartsImageTextImplement *this = (struct engineLayoutPartsImageTextImplement*)engineUtilMemoryInfoCalloc("engineLayoutPartsImageText", 1, sizeof(struct engineLayoutPartsImageTextImplement));
+	struct engineLayoutPartsImageTextImplement *this = (struct engineLayoutPartsImageTextImplement*)engineUtilMemoryCalloc(1, sizeof(struct engineLayoutPartsImageTextImplement));
 	init(this);
 	// 画像読み込み
 	this->egoIdTexImage = engineGraphicTextureCreateLocal(src, ENGINEGRAPHICTEXTURETYPE_LINEAR);
@@ -247,8 +247,8 @@ void engineLayoutPartsImageTextSet(struct engineLayoutPartsImageText *that, char
 	// 文字列領域作成
 	int textLength = (text != NULL) ? ((int)strlen(text) + 1) : 0;
 	if(this->textInfo.length < textLength){
-		if(this->textInfo.buff != NULL){engineUtilMemoryInfoFree("engineLayoutPartsImageText textBuff", this->textInfo.buff);}
-		this->textInfo.buff = (char*)engineUtilMemoryInfoMalloc("engineLayoutPartsImageText textBuff", textLength * sizeof(char));
+		if(this->textInfo.buff != NULL){engineUtilMemoryFree(this->textInfo.buff);}
+		this->textInfo.buff = (char*)engineUtilMemoryMalloc(textLength * sizeof(char));
 		this->textInfo.length = textLength;
 	}
 	// 文字列保存

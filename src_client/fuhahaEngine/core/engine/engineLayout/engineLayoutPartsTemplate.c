@@ -64,14 +64,14 @@ static void dispose(struct engineLayoutPartsTemplateImplement *this){
 
 	// 自要素破棄
 	engineLayoutViewGearDispose((struct engineLayoutView*)this);
-	engineUtilMemoryInfoFree("engineLayoutPartsTemplate", this);
+	engineUtilMemoryFree(this);
 }
 
 // ----------------------------------------------------------------
 
 // テンプレート構造体 作成
 struct engineLayoutPartsTemplate *engineLayoutPartsTemplateCreate(){
-	struct engineLayoutPartsTemplateImplement *this = (struct engineLayoutPartsTemplateImplement*)engineUtilMemoryInfoCalloc("engineLayoutPartsTemplate", 1, sizeof(struct engineLayoutPartsTemplateImplement));
+	struct engineLayoutPartsTemplateImplement *this = (struct engineLayoutPartsTemplateImplement*)engineUtilMemoryCalloc(1, sizeof(struct engineLayoutPartsTemplateImplement));
 	init(this);
 
 	struct engineLayoutView *view = (struct engineLayoutView*)this;

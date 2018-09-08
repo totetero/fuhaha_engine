@@ -129,14 +129,14 @@ static void dispose(struct engineLayoutPartsImageNumberImplement *this){
 	// 自要素破棄
 	engineGraphicTextureDispose(this->egoIdTexImage);
 	engineLayoutViewGearDispose((struct engineLayoutView*)this);
-	engineUtilMemoryInfoFree("engineLayoutPartsImageNumber", this);
+	engineUtilMemoryFree(this);
 }
 
 // ----------------------------------------------------------------
 
 // 画像数字描画構造体 作成
 struct engineLayoutPartsImageNumber *engineLayoutPartsImageNumberCreate(char *src, int imgw, int imgh, int tu, int tv, int tw, int th){
-	struct engineLayoutPartsImageNumberImplement *this = (struct engineLayoutPartsImageNumberImplement*)engineUtilMemoryInfoCalloc("engineLayoutPartsImageNumber", 1, sizeof(struct engineLayoutPartsImageNumberImplement));
+	struct engineLayoutPartsImageNumberImplement *this = (struct engineLayoutPartsImageNumberImplement*)engineUtilMemoryCalloc(1, sizeof(struct engineLayoutPartsImageNumberImplement));
 	init(this);
 	// 画像読み込み
 	this->egoIdTexImage = engineGraphicTextureCreateLocal(src, ENGINEGRAPHICTEXTURETYPE_LINEAR);

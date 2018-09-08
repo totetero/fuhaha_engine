@@ -46,7 +46,7 @@ static void init(struct pageTest2PartsPagerPage1Implement *this){
 
 // ページ1構造体 作成
 struct pageTest2PartsPagerPage1 *pageTest2PartsPagerPage1Create(struct pageTest2Status *stat){
-	struct pageTest2PartsPagerPage1Implement *this = (struct pageTest2PartsPagerPage1Implement*)engineUtilMemoryInfoCalloc("pageTest2PartsPagerPage1", 1, sizeof(struct pageTest2PartsPagerPage1Implement));
+	struct pageTest2PartsPagerPage1Implement *this = (struct pageTest2PartsPagerPage1Implement*)engineUtilMemoryCalloc(1, sizeof(struct pageTest2PartsPagerPage1Implement));
 	this->stat = stat;
 	init(this);
 

@@ -151,7 +151,7 @@ static void calc(struct engineLayoutPartsButtonPickerImplement *this, bool isCan
 
 // ピッカーボタン構造体 作成
 struct engineLayoutPartsButtonPicker *engineLayoutPartsButtonPickerCreate(){
-	struct engineLayoutPartsButtonPickerImplement *this = (struct engineLayoutPartsButtonPickerImplement*)engineUtilMemoryInfoCalloc("engineLayoutPartsButtonPicker", 1, sizeof(struct engineLayoutPartsButtonPickerImplement));
+	struct engineLayoutPartsButtonPickerImplement *this = (struct engineLayoutPartsButtonPickerImplement*)engineUtilMemoryCalloc(1, sizeof(struct engineLayoutPartsButtonPickerImplement));
 	init(this);
 
 	struct engineLayoutView *view = (struct engineLayoutView*)this;

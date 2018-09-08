@@ -102,7 +102,7 @@ static void calc(struct pageTest2PartsPagerPage3Implement *this, bool isCancel){
 
 // ページ3構造体 作成
 struct pageTest2PartsPagerPage3 *pageTest2PartsPagerPage3Create(struct pageTest2Status *stat){
-	struct pageTest2PartsPagerPage3Implement *this = (struct pageTest2PartsPagerPage3Implement*)engineUtilMemoryInfoCalloc("pageTest2PartsPagerPage3", 1, sizeof(struct pageTest2PartsPagerPage3Implement));
+	struct pageTest2PartsPagerPage3Implement *this = (struct pageTest2PartsPagerPage3Implement*)engineUtilMemoryCalloc(1, sizeof(struct pageTest2PartsPagerPage3Implement));
 	this->stat = stat;
 	init(this);
 

@@ -100,7 +100,7 @@ static void calc(struct engineLayoutPartsButtonBoxImplement *this, bool isCancel
 
 // 標準ボタン構造体 作成
 struct engineLayoutPartsButtonBox *engineLayoutPartsButtonBoxCreate(){
-	struct engineLayoutPartsButtonBoxImplement *this = (struct engineLayoutPartsButtonBoxImplement*)engineUtilMemoryInfoCalloc("engineLayoutPartsButtonBox", 1, sizeof(struct engineLayoutPartsButtonBoxImplement));
+	struct engineLayoutPartsButtonBoxImplement *this = (struct engineLayoutPartsButtonBoxImplement*)engineUtilMemoryCalloc(1, sizeof(struct engineLayoutPartsButtonBoxImplement));
 	init(this);
 
 	struct engineLayoutView *view = (struct engineLayoutView*)this;

@@ -5,6 +5,7 @@
 // ----------------------------------------------------------------
 
 static struct{
+	char tempInfo[128];
 	struct engineUtilMemoryUnit{
 		void *ptr;
 		size_t size;
@@ -20,7 +21,19 @@ static struct{
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-static void* addDatList(char *info, void *ptr, size_t size){
+// 情報を整理
+char *engineUtilMemoryInfoImplement(char *info, char *filePath, int line){
+	char *fileName = strrchr(filePath, '/');
+	fileName = (fileName != NULL) ? (fileName + 1) : filePath;
+	snprintf(localGlobal.tempInfo, sizeof(localGlobal.tempInfo), (info == NULL) ? "%s:%d" : "%s:%d %s", fileName, line, info);
+	return localGlobal.tempInfo;
+}
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+
+static void *addDatList(char *info, void *ptr, size_t size){
 	if(ptr == NULL){trace("mem alloc error %s\n", info); return NULL;}
 
 	// データの挿入先を探す
@@ -62,20 +75,24 @@ static void* addDatList(char *info, void *ptr, size_t size){
 	return ptr;
 }
 
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+
 // 独自mallocの実装
-void* engineUtilMemoryMallocImplement(char *info, size_t size){
+void *engineUtilMemoryMallocImplement(char *info, size_t size){
 	if(size <= 0){trace("warning alloc size zero"); size = 1;}
 	return addDatList(info, malloc(size), size);
 }
 
 // 独自callocの実装
-void* engineUtilMemoryCallocImplement(char *info, size_t n, size_t size){
+void *engineUtilMemoryCallocImplement(char *info, size_t n, size_t size){
 	if(size <= 0){trace("warning alloc size zero"); size = 1;}
 	return addDatList(info, calloc(n, size), n * size);
 }
 
 // 独自strdupの実装
-char* engineUtilMemoryStrdupImplement(char *info, char *src){
+char *engineUtilMemoryStrdupImplement(char *info, char *src){
 	size_t length = (strlen(src) + 1) * sizeof(char);
 	char *dst = (char*)engineUtilMemoryMallocImplement(info, length);
 	strcpy(dst, src);
@@ -97,6 +114,10 @@ void engineUtilMemoryFreeImplement(char *info, void *ptr){
 	if(freeCount < 1){trace("mem free error -- no such pointer %s\n", info);}
 	if(freeCount > 1){trace("mem free error -- too meny pointer %s\n", info);}
 }
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
 
 // 並べ替え関数
 static int datList_sort(const void *a, const void *b){

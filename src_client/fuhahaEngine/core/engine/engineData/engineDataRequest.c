@@ -25,7 +25,7 @@ static struct{
 
 // リクエストデータ作成
 static struct engineDataRequestUnit *reqDataCreate(void){
-	struct engineDataRequestUnit *this = (struct engineDataRequestUnit*)engineUtilMemoryInfoCalloc("engineDataRequest body", 1, sizeof(struct engineDataRequestUnit));
+	struct engineDataRequestUnit *this = (struct engineDataRequestUnit*)engineUtilMemoryCalloc(1, sizeof(struct engineDataRequestUnit));
 	// リストにデータ追加
 	if(localGlobal.reqList == NULL){
 		localGlobal.reqList = this;
@@ -46,8 +46,8 @@ static struct engineDataRequestUnit *reqDataCreate(void){
 static void reqDataFree(struct engineDataRequestUnit *this){
 	if(this->status == ENGINEDATAREQUESTUNITSTATUS_LOADED){
 		// 解放
-		if(this->buff != NULL){engineUtilMemoryInfoFree("engineDataRequest buff", this->buff); this->buff = NULL;}
-		engineUtilMemoryInfoFree("engineDataRequest body", this);
+		if(this->buff != NULL){engineUtilMemoryFree(this->buff); this->buff = NULL;}
+		engineUtilMemoryFree(this);
 	}else{
 		// ロードが完了していないのでコールバックで破棄
 		this->status = ENGINEDATAREQUESTUNITSTATUS_CANCEL;

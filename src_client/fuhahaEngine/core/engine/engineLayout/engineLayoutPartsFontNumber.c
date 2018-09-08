@@ -241,14 +241,14 @@ static void dispose(struct engineLayoutPartsFontNumberImplement *this){
 	// 自要素破棄
 	engineGraphicTextureDispose(this->egoIdTexFont);
 	engineLayoutViewGearDispose((struct engineLayoutView*)this);
-	engineUtilMemoryInfoFree("engineLayoutPartsFontNumber", this);
+	engineUtilMemoryFree(this);
 }
 
 // ----------------------------------------------------------------
 
 // フォント数字描画構造体 作成
 struct engineLayoutPartsFontNumber *engineLayoutPartsFontNumberCreate(enum pluginTextureFontSetId fontSetId){
-	struct engineLayoutPartsFontNumberImplement *this = (struct engineLayoutPartsFontNumberImplement*)engineUtilMemoryInfoCalloc("engineLayoutPartsFontNumber", 1, sizeof(struct engineLayoutPartsFontNumberImplement));
+	struct engineLayoutPartsFontNumberImplement *this = (struct engineLayoutPartsFontNumberImplement*)engineUtilMemoryCalloc(1, sizeof(struct engineLayoutPartsFontNumberImplement));
 	init(this);
 	this->textInfo.fontSetId = fontSetId;
 	this->textInfo.textureType = ENGINEGRAPHICTEXTURETYPE_LINEAR;

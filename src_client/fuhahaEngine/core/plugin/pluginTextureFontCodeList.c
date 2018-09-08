@@ -33,16 +33,16 @@ int gamePluginTextureFontCodeListCreate(int codeListLength){
 		// 空きがなければ領域リストを拡張する
 		codeListIndex = localGlobal.length;
 		int length = localGlobal.length + 10;
-		struct pluginTextureFontCodeListCage *list = (struct pluginTextureFontCodeListCage*)engineUtilMemoryInfoCalloc("(permanent) pluginTextureFontCodeListCage", length, sizeof(struct pluginTextureFontCodeListCage));
+		struct pluginTextureFontCodeListCage *list = (struct pluginTextureFontCodeListCage*)engineUtilMemoryInfoCalloc("(permanent)", length, sizeof(struct pluginTextureFontCodeListCage));
 		if(localGlobal.length > 0){
 			memcpy(list, localGlobal.list, localGlobal.length * sizeof(struct pluginTextureFontCodeListCage));
-			engineUtilMemoryInfoFree("(permanent) pluginTextureFontCodeListCage", localGlobal.list);
+			engineUtilMemoryInfoFree("(permanent)", localGlobal.list);
 		}
 		localGlobal.length = length;
 		localGlobal.list = list;
 	}
 	// 文字リスト作成
-	localGlobal.list[codeListIndex].codeList = (struct pluginTextureFontCode*)engineUtilMemoryInfoCalloc("pluginTextureFontCodeList", codeListLength, sizeof(struct pluginTextureFontCode));
+	localGlobal.list[codeListIndex].codeList = (struct pluginTextureFontCode*)engineUtilMemoryCalloc(codeListLength, sizeof(struct pluginTextureFontCode));
 	return codeListIndex;
 }
 
@@ -66,7 +66,7 @@ void gamePluginTextureFontCodeListSet(int codeListIndex, int index, enum pluginT
 void gamePluginTextureFontCodeListDispose(int codeListIndex){
 	struct pluginTextureFontCode *codeList = corePluginTextureFontCodeListGet(codeListIndex);
 	if(codeList == NULL){return;}
-	engineUtilMemoryInfoFree("pluginTextureFontCodeList", codeList);
+	engineUtilMemoryFree(codeList);
 	localGlobal.list[codeListIndex].codeList = NULL;
 }
 

@@ -62,10 +62,10 @@ engineGraphicObjectVBOId engineGraphicObjectVBOCreate(int length, GLfloat *verti
 		// 空きがなければ領域リストを拡張する
 		egoIndex = localGlobal.egoVBOLength;
 		int egoVBOLength = localGlobal.egoVBOLength + 10;
-		struct engineGraphicObjectVBO *egoVBOList = (struct engineGraphicObjectVBO*)engineUtilMemoryInfoCalloc("(permanent) engineGraphicObject vbo1", egoVBOLength, sizeof(struct engineGraphicObjectVBO));
+		struct engineGraphicObjectVBO *egoVBOList = (struct engineGraphicObjectVBO*)engineUtilMemoryInfoCalloc("(permanent)", egoVBOLength, sizeof(struct engineGraphicObjectVBO));
 		if(localGlobal.egoVBOLength > 0){
 			memcpy(egoVBOList, localGlobal.egoVBOList, localGlobal.egoVBOLength * sizeof(struct engineGraphicObjectVBO));
-			engineUtilMemoryInfoFree("(permanent) engineGraphicObject vbo1", localGlobal.egoVBOList);
+			engineUtilMemoryInfoFree("(permanent)", localGlobal.egoVBOList);
 		}
 		localGlobal.egoVBOLength = egoVBOLength;
 		localGlobal.egoVBOList = egoVBOList;
@@ -75,7 +75,7 @@ engineGraphicObjectVBOId engineGraphicObjectVBOCreate(int length, GLfloat *verti
 	struct engineGraphicObjectVBO *obj = &localGlobal.egoVBOList[egoIndex];
 	obj->length = length;
 	size_t size = length * sizeof(GLfloat);
-	obj->vertices = (GLfloat*)engineUtilMemoryInfoMalloc("engineGraphicObject vbo2", size);
+	obj->vertices = (GLfloat*)engineUtilMemoryMalloc(size);
 	memcpy(obj->vertices, vertices, size);
 	//for(int i = 0; i < length; i++){obj->vertices[i] = (GLfloat)vertices[i];}
 	egoVBOLoad(obj);
@@ -92,10 +92,10 @@ engineGraphicObjectIBOId engineGraphicObjectIBOCreate(int length, GLushort *inde
 		// 空きがなければ領域リストを拡張する
 		egoIndex = localGlobal.egoIBOLength;
 		int egoIBOLength = localGlobal.egoIBOLength + 10;
-		struct engineGraphicObjectIBO *egoIBOList = (struct engineGraphicObjectIBO*)engineUtilMemoryInfoCalloc("(permanent) engineGraphicObject ibo1", egoIBOLength, sizeof(struct engineGraphicObjectIBO));
+		struct engineGraphicObjectIBO *egoIBOList = (struct engineGraphicObjectIBO*)engineUtilMemoryInfoCalloc("(permanent)", egoIBOLength, sizeof(struct engineGraphicObjectIBO));
 		if(localGlobal.egoIBOLength > 0){
 			memcpy(egoIBOList, localGlobal.egoIBOList, localGlobal.egoIBOLength * sizeof(struct engineGraphicObjectIBO));
-			engineUtilMemoryInfoFree("(permanent) engineGraphicObject ibo1", localGlobal.egoIBOList);
+			engineUtilMemoryInfoFree("(permanent)", localGlobal.egoIBOList);
 		}
 		localGlobal.egoIBOLength = egoIBOLength;
 		localGlobal.egoIBOList = egoIBOList;
@@ -105,7 +105,7 @@ engineGraphicObjectIBOId engineGraphicObjectIBOCreate(int length, GLushort *inde
 	struct engineGraphicObjectIBO *obj = &localGlobal.egoIBOList[egoIndex];
 	obj->length = length;
 	size_t size = length * sizeof(GLushort);
-	obj->indexes = (GLushort*)engineUtilMemoryInfoMalloc("engineGraphicObject ibo2", size);
+	obj->indexes = (GLushort*)engineUtilMemoryMalloc(size);
 	memcpy(obj->indexes, indexes, size);
 	//for(int i = 0; i < length; i++){obj->indexes[i] = (GLushort)indexes[i];}
 	egoIBOLoad(obj);
@@ -147,7 +147,7 @@ bool engineGraphicObjectIBOGetGLId(engineGraphicObjectIBOId egoId, GLuint *glId)
 static void egoVBOFree(struct engineGraphicObjectVBO *this){
 	if(this->vertices == NULL){return;}
 	glDeleteBuffers(1, &this->glId);
-	engineUtilMemoryInfoFree("engineGraphicObject vbo2", this->vertices);
+	engineUtilMemoryFree(this->vertices);
 	this->vertices = NULL;
 }
 
@@ -155,7 +155,7 @@ static void egoVBOFree(struct engineGraphicObjectVBO *this){
 static void egoIBOFree(struct engineGraphicObjectIBO *this){
 	if(this->indexes == NULL){return;}
 	glDeleteBuffers(1, &this->glId);
-	engineUtilMemoryInfoFree("engineGraphicObject ibo2", this->indexes);
+	engineUtilMemoryFree(this->indexes);
 	this->indexes = NULL;
 }
 
@@ -177,8 +177,8 @@ void engineGraphicObjectIBODispose(engineGraphicObjectIBOId egoId){
 void engineGraphicObjectDisposeAll(void){
 	for(int i = 0; i < localGlobal.egoVBOLength; i++){egoVBOFree(&localGlobal.egoVBOList[i]);}
 	for(int i = 0; i < localGlobal.egoIBOLength; i++){egoIBOFree(&localGlobal.egoIBOList[i]);}
-	engineUtilMemoryInfoFree("(permanent) engineGraphicObject vbo1", localGlobal.egoVBOList);
-	engineUtilMemoryInfoFree("(permanent) engineGraphicObject ibo1", localGlobal.egoIBOList);
+	engineUtilMemoryInfoFree("(permanent)", localGlobal.egoVBOList);
+	engineUtilMemoryInfoFree("(permanent)", localGlobal.egoIBOList);
 	localGlobal.egoVBOList = NULL;
 	localGlobal.egoIBOList = NULL;
 	localGlobal.egoVBOLength = 0;

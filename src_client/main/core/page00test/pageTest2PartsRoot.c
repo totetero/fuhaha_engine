@@ -96,14 +96,14 @@ static void dispose(struct pageTest2PartsRootImplement *this){
 
 	// 自要素破棄
 	engineLayoutViewGearDispose((struct engineLayoutView*)this);
-	engineUtilMemoryInfoFree("engineLayoutPartsTemplate", this);
+	engineUtilMemoryFree(this);
 }
 
 // ----------------------------------------------------------------
 
 // ページルート構造体 作成
 struct pageTest2PartsRoot *pageTest2PartsRootCreate(struct engineCartridgeLayoutPage *cartridge){
-	struct pageTest2PartsRootImplement *this = (struct pageTest2PartsRootImplement*)engineUtilMemoryInfoCalloc("pageTest2PartsRoot", 1, sizeof(struct pageTest2PartsRootImplement));
+	struct pageTest2PartsRootImplement *this = (struct pageTest2PartsRootImplement*)engineUtilMemoryCalloc(1, sizeof(struct pageTest2PartsRootImplement));
 	this->stat = pageTest2StatusCreate();
 	this->stat->cartridge = cartridge;
 	init(this);

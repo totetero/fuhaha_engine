@@ -66,9 +66,9 @@ static void texDataFree(struct engineGraphicTextureData *this){
 		if(this->status == ENGINEGRAPHICTEXTUREDATASTATUS_LOADED){
 			// 解放
 			if(this->pluginTextureLocal.glId != localGlobal.defaultTexture.glId){glDeleteTextures(1, &this->pluginTextureLocal.glId);}
-			engineUtilMemoryInfoFree("engineGraphicTexture tex3", this->arg.pluginTextureLocal.src);
+			engineUtilMemoryFree(this->arg.pluginTextureLocal.src);
 			this->arg.pluginTextureLocal.src = NULL;
-			engineUtilMemoryInfoFree("engineGraphicTexture tex2", this);
+			engineUtilMemoryFree(this);
 		}else{
 			// ロードが完了していないのでコールバックで破棄
 			this->status = ENGINEGRAPHICTEXTUREDATASTATUS_CANCEL;
@@ -77,16 +77,16 @@ static void texDataFree(struct engineGraphicTextureData *this){
 		if(this->status == ENGINEGRAPHICTEXTUREDATASTATUS_LOADED){
 			// 解放
 			platformPluginTextureFontDispose(this->pluginTextureFont.codeListIndex);
-			engineUtilMemoryInfoFree("engineGraphicTexture tex3", this->arg.pluginTextureFont.letterList);
+			engineUtilMemoryFree(this->arg.pluginTextureFont.letterList);
 			this->arg.pluginTextureFont.letterList = NULL;
-			engineUtilMemoryInfoFree("engineGraphicTexture tex2", this);
+			engineUtilMemoryFree(this);
 		}else{
 			// ロードが完了していないのでコールバックで破棄
 			this->status = ENGINEGRAPHICTEXTUREDATASTATUS_CANCEL;
 		}
 	}else if(this->arg.type == ENGINEGRAPHICTEXTUREARGTYPE_PLUGINTEST){
 		// 解放
-		engineUtilMemoryInfoFree("engineGraphicTexture tex2", this);
+		engineUtilMemoryFree(this);
 	}
 }
 
@@ -168,13 +168,13 @@ static struct engineGraphicTextureData *texDataCreate(struct engineGraphicTextur
 		temp = temp->next;
 	}
 	// 重複がなければ新規作成
-	struct engineGraphicTextureData *obj = (struct engineGraphicTextureData*)engineUtilMemoryInfoCalloc("engineGraphicTexture tex2", 1, sizeof(struct engineGraphicTextureData));
+	struct engineGraphicTextureData *obj = (struct engineGraphicTextureData*)engineUtilMemoryCalloc(1, sizeof(struct engineGraphicTextureData));
 	obj->arg.type = arg->type;
 	if(arg->type == ENGINEGRAPHICTEXTUREARGTYPE_PLUGINTEXTURELOCAL){
-		obj->arg.pluginTextureLocal.src = engineUtilMemoryInfoStrdup("engineGraphicTexture tex3", arg->pluginTextureLocal.src);
+		obj->arg.pluginTextureLocal.src = engineUtilMemoryStrdup(arg->pluginTextureLocal.src);
 	}else if(arg->type == ENGINEGRAPHICTEXTUREARGTYPE_PLUGINTEXTUREFONT){
 		obj->arg.pluginTextureFont.fontSetId = arg->pluginTextureFont.fontSetId;
-		obj->arg.pluginTextureFont.letterList = engineUtilMemoryInfoStrdup("engineGraphicTexture tex3", arg->pluginTextureFont.letterList);
+		obj->arg.pluginTextureFont.letterList = engineUtilMemoryStrdup(arg->pluginTextureFont.letterList);
 	}else if(arg->type == ENGINEGRAPHICTEXTUREARGTYPE_PLUGINTEST){
 	}
 	texDataLoad(obj);
@@ -199,10 +199,10 @@ static engineGraphicTextureId egtCageCreate(struct engineGraphicTextureArg *arg,
 		// 空きがなければ領域リストを拡張する
 		egtIndex = localGlobal.egtCageLength;
 		int egtCageLength = localGlobal.egtCageLength + 10;
-		struct engineGraphicTextureCage *egtCageList = (struct engineGraphicTextureCage*)engineUtilMemoryInfoCalloc("(permanent) engineGraphicTexture tex1", egtCageLength, sizeof(struct engineGraphicTextureCage));
+		struct engineGraphicTextureCage *egtCageList = (struct engineGraphicTextureCage*)engineUtilMemoryInfoCalloc("(permanent)", egtCageLength, sizeof(struct engineGraphicTextureCage));
 		if(localGlobal.egtCageLength > 0){
 			memcpy(egtCageList, localGlobal.egtCageList, localGlobal.egtCageLength * sizeof(struct engineGraphicTextureCage));
-			engineUtilMemoryInfoFree("(permanent) engineGraphicTexture tex1", localGlobal.egtCageList);
+			engineUtilMemoryInfoFree("(permanent)", localGlobal.egtCageList);
 		}
 		localGlobal.egtCageLength = egtCageLength;
 		localGlobal.egtCageList = egtCageList;
@@ -313,7 +313,7 @@ void engineGraphicTextureDispose(engineGraphicTextureId egtId){
 // 全テクスチャ除去
 void engineGraphicTextureDisposeAll(void){
 	for(int i = 0; i < localGlobal.egtCageLength; i++){egtCageFree(&localGlobal.egtCageList[i]);}
-	engineUtilMemoryInfoFree("(permanent) engineGraphicTexture tex1", localGlobal.egtCageList);
+	engineUtilMemoryInfoFree("(permanent)", localGlobal.egtCageList);
 	localGlobal.egtCageList = NULL;
 	localGlobal.egtCageLength = 0;
 

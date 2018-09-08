@@ -153,7 +153,7 @@ static void calc(struct engineLayoutPartsArrowKeyImplement *this, bool isCancel)
 
 // 十字キー構造体 作成
 struct engineLayoutPartsArrowKey *engineLayoutPartsArrowKeyCreate(){
-	struct engineLayoutPartsArrowKeyImplement *this = (struct engineLayoutPartsArrowKeyImplement*)engineUtilMemoryInfoCalloc("engineLayoutPartsArrowKey", 1, sizeof(struct engineLayoutPartsArrowKeyImplement));
+	struct engineLayoutPartsArrowKeyImplement *this = (struct engineLayoutPartsArrowKeyImplement*)engineUtilMemoryCalloc(1, sizeof(struct engineLayoutPartsArrowKeyImplement));
 	init(this);
 
 	struct engineLayoutView *view = (struct engineLayoutView*)this;

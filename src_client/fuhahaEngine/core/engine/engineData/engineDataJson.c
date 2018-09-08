@@ -17,10 +17,10 @@ static struct{
 static void tempBuffSetLength(int length){
 	if(localGlobal.tempBuffLength < localGlobal.tempBuffIndex + length){
 		int newBuffLength = localGlobal.tempBuffLength + (length > 1024 ? length : 1024);
-		char *newBuff = (char*)engineUtilMemoryInfoMalloc("(permanent) engineDataJson temp", newBuffLength * sizeof(char));
+		char *newBuff = (char*)engineUtilMemoryInfoMalloc("(permanent)", newBuffLength * sizeof(char));
 		if(localGlobal.tempBuffLength > 0){
 			memcpy(newBuff, localGlobal.tempBuff, localGlobal.tempBuffLength * sizeof(char));
-			engineUtilMemoryInfoFree("(permanent) engineDataJson temp", localGlobal.tempBuff);
+			engineUtilMemoryInfoFree("(permanent)", localGlobal.tempBuff);
 		}
 		localGlobal.tempBuffLength = newBuffLength;
 		localGlobal.tempBuff = newBuff;
@@ -297,7 +297,7 @@ static bool parseValue(struct engineDataJsonValue *this, char **c){
 	if(parseString(this, c)){
 		// 文字列読み取り成功 メモリ領域確保
 		int length = (int)strlen(this->jString);
-		char *buff = (char*)engineUtilMemoryInfoMalloc("engineDataJson string", (length + 1) * sizeof(char));
+		char *buff = (char*)engineUtilMemoryMalloc((length + 1) * sizeof(char));
 		strcpy(buff, this->jString);
 		this->jString = buff;
 		return true;
@@ -393,7 +393,7 @@ char *engineDataJsonStringify(struct engineDataJsonValue *this){
 	tempBuffPutChar('\0');
 
 	int length = (int)strlen(localGlobal.tempBuff);
-	char *buff = (char*)engineUtilMemoryInfoMalloc("engineDataJson json", (length + 1) * sizeof(char));
+	char *buff = (char*)engineUtilMemoryMalloc((length + 1) * sizeof(char));
 	strcpy(buff, localGlobal.tempBuff);
 	return buff;
 }
@@ -432,7 +432,7 @@ void engineDataJsonSetBool(struct engineDataJsonValue *this, bool value){
 // 文字列設定
 void engineDataJsonSetString(struct engineDataJsonValue *this, char *value){
 	int length = (int)strlen(value);
-	char *buff = (char*)engineUtilMemoryInfoMalloc("engineDataJson string", (length + 1) * sizeof(char));
+	char *buff = (char*)engineUtilMemoryMalloc((length + 1) * sizeof(char));
 	strcpy(buff, value);
 	this->type = ENGINEDATAJSONTYPE_STRING;
 	this->jString = buff;
@@ -441,7 +441,7 @@ void engineDataJsonSetString(struct engineDataJsonValue *this, char *value){
 // 連想配列要素作成
 static struct engineDataJsonArray *createObject(char *key){
 	int length = (int)strlen(key);
-	struct engineDataJsonArray *array = (struct engineDataJsonArray*)engineUtilMemoryInfoMalloc("engineDataJson object", sizeof(struct engineDataJsonArray) + length * sizeof(char));
+	struct engineDataJsonArray *array = (struct engineDataJsonArray*)engineUtilMemoryMalloc(sizeof(struct engineDataJsonArray) + length * sizeof(char));
 	strcpy(array->key, key);
 	array->value.type = ENGINEDATAJSONTYPE_NULL;
 	array->next = NULL;
@@ -468,7 +468,7 @@ struct engineDataJsonValue *engineDataJsonObjectCreateValue(struct engineDataJso
 
 // 配列要素を作成
 static struct engineDataJsonArray *createArray(void){
-	struct engineDataJsonArray *array = (struct engineDataJsonArray*)engineUtilMemoryInfoMalloc("engineDataJson array", sizeof(struct engineDataJsonArray));
+	struct engineDataJsonArray *array = (struct engineDataJsonArray*)engineUtilMemoryMalloc(sizeof(struct engineDataJsonArray));
 	array->key[0] = '\0';
 	array->value.type = ENGINEDATAJSONTYPE_NULL;
 	array->next = NULL;
@@ -578,7 +578,7 @@ void engineDataJsonObjectRemoveValue(struct engineDataJsonValue *this, char *key
 			else{prev->next = temp;}
 			// 要素の除去
 			engineDataJsonFree(&dispose->value);
-			engineUtilMemoryInfoFree("engineDataJson object", dispose);
+			engineUtilMemoryFree(dispose);
 		}else{
 			prev = temp;
 			temp = temp->next;
@@ -602,7 +602,7 @@ void engineDataJsonArrayRemoveValue(struct engineDataJsonValue *this, int index)
 			else{prev->next = temp;}
 			// 要素の除去
 			engineDataJsonFree(&dispose->value);
-			engineUtilMemoryInfoFree("engineDataJson array", dispose);
+			engineUtilMemoryFree(dispose);
 			return;
 		}else{
 			prev = temp;
@@ -616,7 +616,7 @@ void engineDataJsonFree(struct engineDataJsonValue *this){
 	if(this == NULL){return;}
 	switch(this->type){
 		case ENGINEDATAJSONTYPE_STRING:
-			engineUtilMemoryInfoFree("engineDataJson string", this->jString);
+			engineUtilMemoryFree(this->jString);
 			this->jString = NULL;
 			break;
 		case ENGINEDATAJSONTYPE_OBJECT:
@@ -627,7 +627,7 @@ void engineDataJsonFree(struct engineDataJsonValue *this){
 					struct engineDataJsonArray *dispose = temp;
 					temp = temp->next;
 					engineDataJsonFree(&dispose->value);
-					engineUtilMemoryInfoFree("engineDataJson array", dispose);
+					engineUtilMemoryFree(dispose);
 				}
 				this->jArray = NULL;
 			}

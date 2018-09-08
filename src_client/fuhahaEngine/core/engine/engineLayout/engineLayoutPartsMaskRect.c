@@ -120,14 +120,14 @@ static void dispose(struct engineLayoutPartsMaskRectImplement *this){
 	// 自要素破棄
 	engineGraphicTextureDispose(this->egoIdTexSystem);
 	engineLayoutViewGearDispose((struct engineLayoutView*)this);
-	engineUtilMemoryInfoFree("engineLayoutPartsMaskRect", this);
+	engineUtilMemoryFree(this);
 }
 
 // ----------------------------------------------------------------
 
 // 長方形マスク構造体 作成
 struct engineLayoutPartsMaskRect *engineLayoutPartsMaskRectCreate(){
-	struct engineLayoutPartsMaskRectImplement *this = (struct engineLayoutPartsMaskRectImplement*)engineUtilMemoryInfoCalloc("engineLayoutPartsMaskRect", 1, sizeof(struct engineLayoutPartsMaskRectImplement));
+	struct engineLayoutPartsMaskRectImplement *this = (struct engineLayoutPartsMaskRectImplement*)engineUtilMemoryCalloc(1, sizeof(struct engineLayoutPartsMaskRectImplement));
 	init(this);
 	// 画像読み込み
 	this->egoIdTexSystem = engineGraphicTextureCreateLocal("img/system.png", ENGINEGRAPHICTEXTURETYPE_LINEAR);

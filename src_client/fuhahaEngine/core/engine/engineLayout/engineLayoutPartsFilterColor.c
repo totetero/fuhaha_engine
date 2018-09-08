@@ -42,7 +42,7 @@ static void draw(struct engineLayoutPartsFilterColorImplement *this, struct engi
 
 // カラーマトリクスフィルタ構造体 作成
 struct engineLayoutPartsFilterColor *engineLayoutPartsFilterColorCreate(){
-	struct engineLayoutPartsFilterColorImplement *this = (struct engineLayoutPartsFilterColorImplement*)engineUtilMemoryInfoCalloc("engineLayoutPartsFilterColor", 1, sizeof(struct engineLayoutPartsFilterColorImplement));
+	struct engineLayoutPartsFilterColorImplement *this = (struct engineLayoutPartsFilterColorImplement*)engineUtilMemoryCalloc(1, sizeof(struct engineLayoutPartsFilterColorImplement));
 	init(this);
 
 	struct engineLayoutView *view = (struct engineLayoutView*)this;

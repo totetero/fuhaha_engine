@@ -97,7 +97,7 @@ static void init(struct pageTest2PartsPagerPage2Implement *this){
 
 // ページ2構造体 作成
 struct pageTest2PartsPagerPage2 *pageTest2PartsPagerPage2Create(struct pageTest2Status *stat){
-	struct pageTest2PartsPagerPage2Implement *this = (struct pageTest2PartsPagerPage2Implement*)engineUtilMemoryInfoCalloc("pageTest2PartsPagerPage2", 1, sizeof(struct pageTest2PartsPagerPage2Implement));
+	struct pageTest2PartsPagerPage2Implement *this = (struct pageTest2PartsPagerPage2Implement*)engineUtilMemoryCalloc(1, sizeof(struct pageTest2PartsPagerPage2Implement));
 	this->stat = stat;
 	init(this);
 

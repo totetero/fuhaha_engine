@@ -53,7 +53,7 @@ static void draw(struct engineLayoutPartsRootImplement *this, struct engineMathM
 
 // ルート構造体 作成
 struct engineLayoutPartsRoot *engineLayoutPartsRootCreate(){
-	struct engineLayoutPartsRootImplement *this = (struct engineLayoutPartsRootImplement*)engineUtilMemoryInfoCalloc("engineLayoutPartsRoot", 1, sizeof(struct engineLayoutPartsRootImplement));
+	struct engineLayoutPartsRootImplement *this = (struct engineLayoutPartsRootImplement*)engineUtilMemoryCalloc(1, sizeof(struct engineLayoutPartsRootImplement));
 	init(this);
 
 	struct engineLayoutView *view = (struct engineLayoutView*)this;

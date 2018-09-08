@@ -381,16 +381,16 @@ static void dispose(struct engineLayoutPartsFontTextImplement *this){
 
 	// 自要素破棄
 	engineGraphicTextureDispose(this->egoIdTexFont);
-	if(this->textInfo.buff != NULL){engineUtilMemoryInfoFree("engineLayoutPartsFontText textBuff", this->textInfo.buff);}
+	if(this->textInfo.buff != NULL){engineUtilMemoryFree(this->textInfo.buff);}
 	engineLayoutViewGearDispose((struct engineLayoutView*)this);
-	engineUtilMemoryInfoFree("engineLayoutPartsFontText", this);
+	engineUtilMemoryFree(this);
 }
 
 // ----------------------------------------------------------------
 
 // フォント文字列描画構造体 作成
 struct engineLayoutPartsFontText *engineLayoutPartsFontTextCreate(enum pluginTextureFontSetId fontSetId){
-	struct engineLayoutPartsFontTextImplement *this = (struct engineLayoutPartsFontTextImplement*)engineUtilMemoryInfoCalloc("engineLayoutPartsFontText", 1, sizeof(struct engineLayoutPartsFontTextImplement));
+	struct engineLayoutPartsFontTextImplement *this = (struct engineLayoutPartsFontTextImplement*)engineUtilMemoryCalloc(1, sizeof(struct engineLayoutPartsFontTextImplement));
 	init(this);
 	this->textInfo.fontSetId = fontSetId;
 	this->textInfo.textureType = ENGINEGRAPHICTEXTURETYPE_LINEAR;
@@ -419,8 +419,8 @@ void engineLayoutPartsFontTextSet(struct engineLayoutPartsFontText *that, char *
 	// 文字列領域作成
 	int textLength = (text != NULL) ? ((int)strlen(text) + 1) : 0;
 	if(this->textInfo.length < textLength){
-		if(this->textInfo.buff != NULL){engineUtilMemoryInfoFree("engineLayoutPartsFontText textBuff", this->textInfo.buff);}
-		this->textInfo.buff = (char*)engineUtilMemoryInfoMalloc("engineLayoutPartsFontText textBuff", textLength * sizeof(char));
+		if(this->textInfo.buff != NULL){engineUtilMemoryFree(this->textInfo.buff);}
+		this->textInfo.buff = (char*)engineUtilMemoryMalloc(textLength * sizeof(char));
 		this->textInfo.length = textLength;
 	}
 	// 文字列保存

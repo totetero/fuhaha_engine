@@ -172,14 +172,14 @@ static void dispose(struct pageTest2PartsPopupActiveDisplayImplement *this){
 	// 自要素破棄
 	engineGraphicTextureDispose(this->egoIdTexSystem);
 	engineLayoutViewGearDispose((struct engineLayoutView*)this);
-	engineUtilMemoryInfoFree("pageTest2PartsPopupActiveDisplay", this);
+	engineUtilMemoryFree(this);
 }
 
 // ----------------------------------------------------------------
 
 // アクティブポップアップディスプレイ構造体 作成
 struct pageTest2PartsPopupActiveDisplay *pageTest2PartsPopupActiveDisplayCreate(struct pageTest2Status *stat){
-	struct pageTest2PartsPopupActiveDisplayImplement *this = (struct pageTest2PartsPopupActiveDisplayImplement*)engineUtilMemoryInfoCalloc("pageTest2PartsPopupActiveDisplay", 1, sizeof(struct pageTest2PartsPopupActiveDisplayImplement));
+	struct pageTest2PartsPopupActiveDisplayImplement *this = (struct pageTest2PartsPopupActiveDisplayImplement*)engineUtilMemoryCalloc(1, sizeof(struct pageTest2PartsPopupActiveDisplayImplement));
 	this->stat = stat;
 	init(this);
 

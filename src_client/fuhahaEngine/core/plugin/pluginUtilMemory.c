@@ -16,9 +16,9 @@ static struct{
 // 揮発性一時バッファ 返値領域は解放禁止
 void *corePluginUtilMemoryTemporary(size_t size){
 	if(localGlobal.size < size){
-		if(localGlobal.size > 0){engineUtilMemoryInfoFree("(permanent) volatility buffer", localGlobal.buff);}
+		if(localGlobal.size > 0){engineUtilMemoryInfoFree("(permanent)", localGlobal.buff);}
 		localGlobal.size = size;
-		localGlobal.buff = engineUtilMemoryInfoMalloc("(permanent) volatility buffer", localGlobal.size);
+		localGlobal.buff = engineUtilMemoryInfoMalloc("(permanent)", localGlobal.size);
 	}
 	return localGlobal.buff;
 }

@@ -103,7 +103,7 @@ static void calc(struct pageTest2PartsPopupActiveImplement *this, bool isCancel)
 
 // アクティブポップアップ構造体 作成
 struct pageTest2PartsPopupActive *pageTest2PartsPopupActiveCreate(struct engineCartridgeLayoutPopup *popup, struct pageTest2Status *stat){
-	struct pageTest2PartsPopupActiveImplement *this = (struct pageTest2PartsPopupActiveImplement*)engineUtilMemoryInfoCalloc("pageTest2PartsPopupActive", 1, sizeof(struct pageTest2PartsPopupActiveImplement));
+	struct pageTest2PartsPopupActiveImplement *this = (struct pageTest2PartsPopupActiveImplement*)engineUtilMemoryCalloc(1, sizeof(struct pageTest2PartsPopupActiveImplement));
 	this->popup = popup;
 	this->stat = stat;
 	init(this);

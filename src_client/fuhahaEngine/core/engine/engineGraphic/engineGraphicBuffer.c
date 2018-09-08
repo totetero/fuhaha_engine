@@ -50,10 +50,10 @@ void engineGraphicBufferEnd(engineGraphicObjectVBOId *egoIdVert, engineGraphicOb
 void engineGraphicBufferPushVert(double x, double y, double z){
 	if(localGlobal.buffVertLength < localGlobal.buffVertIndex + 3){
 		int length = localGlobal.buffVertLength + 300;
-		GLfloat *array = (GLfloat*)engineUtilMemoryInfoMalloc("(permanent) engineGraphicBuffer vert", length * sizeof(GLfloat));
+		GLfloat *array = (GLfloat*)engineUtilMemoryInfoMalloc("(permanent)", length * sizeof(GLfloat));
 		if(localGlobal.buffVertLength > 0){
 			memcpy(array, localGlobal.buffVert, localGlobal.buffVertLength * sizeof(GLfloat));
-			engineUtilMemoryInfoFree("(permanent) engineGraphicBuffer vert", localGlobal.buffVert);
+			engineUtilMemoryInfoFree("(permanent)", localGlobal.buffVert);
 		}
 		localGlobal.buffVertLength = length;
 		localGlobal.buffVert = array;
@@ -67,10 +67,10 @@ void engineGraphicBufferPushVert(double x, double y, double z){
 void engineGraphicBufferPushNorm(double x, double y, double z){
 	if(localGlobal.buffNormLength < localGlobal.buffNormIndex + 3){
 		int length = localGlobal.buffNormLength + 300;
-		GLfloat *array = (GLfloat*)engineUtilMemoryInfoMalloc("(permanent) engineGraphicBuffer norm", length * sizeof(GLfloat));
+		GLfloat *array = (GLfloat*)engineUtilMemoryInfoMalloc("(permanent)", length * sizeof(GLfloat));
 		if(localGlobal.buffNormLength > 0){
 			memcpy(array, localGlobal.buffNorm, localGlobal.buffNormLength * sizeof(GLfloat));
-			engineUtilMemoryInfoFree("(permanent) engineGraphicBuffer norm", localGlobal.buffNorm);
+			engineUtilMemoryInfoFree("(permanent)", localGlobal.buffNorm);
 		}
 		localGlobal.buffNormLength = length;
 		localGlobal.buffNorm = array;
@@ -84,10 +84,10 @@ void engineGraphicBufferPushNorm(double x, double y, double z){
 void engineGraphicBufferPushClor(double r, double g, double b){
 	if(localGlobal.buffClorLength < localGlobal.buffClorIndex + 3){
 		int length = localGlobal.buffClorLength + 300;
-		GLfloat *array = (GLfloat*)engineUtilMemoryInfoMalloc("(permanent) engineGraphicBuffer clor", length * sizeof(GLfloat));
+		GLfloat *array = (GLfloat*)engineUtilMemoryInfoMalloc("(permanent)", length * sizeof(GLfloat));
 		if(localGlobal.buffClorLength > 0){
 			memcpy(array, localGlobal.buffClor, localGlobal.buffClorLength * sizeof(GLfloat));
-			engineUtilMemoryInfoFree("(permanent) engineGraphicBuffer clor", localGlobal.buffClor);
+			engineUtilMemoryInfoFree("(permanent)", localGlobal.buffClor);
 		}
 		localGlobal.buffClorLength = length;
 		localGlobal.buffClor = array;
@@ -101,10 +101,10 @@ void engineGraphicBufferPushClor(double r, double g, double b){
 void engineGraphicBufferPushTexc(double u, double v){
 	if(localGlobal.buffTexcLength < localGlobal.buffTexcIndex + 2){
 		int length = localGlobal.buffTexcLength + 200;
-		GLfloat *array = (GLfloat*)engineUtilMemoryInfoMalloc("(permanent) engineGraphicBuffer texc", length * sizeof(GLfloat));
+		GLfloat *array = (GLfloat*)engineUtilMemoryInfoMalloc("(permanent)", length * sizeof(GLfloat));
 		if(localGlobal.buffTexcLength > 0){
 			memcpy(array, localGlobal.buffTexc, localGlobal.buffTexcLength * sizeof(GLfloat));
-			engineUtilMemoryInfoFree("(permanent) engineGraphicBuffer texc", localGlobal.buffTexc);
+			engineUtilMemoryInfoFree("(permanent)", localGlobal.buffTexc);
 		}
 		localGlobal.buffTexcLength = length;
 		localGlobal.buffTexc = array;
@@ -117,10 +117,10 @@ void engineGraphicBufferPushTexc(double u, double v){
 void engineGraphicBufferPushFace(int index, int t0, int t1, int t2){
 	if(localGlobal.buffFaceLength < localGlobal.buffFaceIndex + 3){
 		int length = localGlobal.buffFaceLength + 150;
-		GLushort *array = (GLushort*)engineUtilMemoryInfoMalloc("(permanent) engineGraphicBuffer face", length * sizeof(GLushort));
+		GLushort *array = (GLushort*)engineUtilMemoryInfoMalloc("(permanent)", length * sizeof(GLushort));
 		if(localGlobal.buffFaceLength > 0){
 			memcpy(array, localGlobal.buffFace, localGlobal.buffFaceLength * sizeof(GLushort));
-			engineUtilMemoryInfoFree("(permanent) engineGraphicBuffer face", localGlobal.buffFace);
+			engineUtilMemoryInfoFree("(permanent)", localGlobal.buffFace);
 		}
 		localGlobal.buffFaceLength = length;
 		localGlobal.buffFace = array;
@@ -170,11 +170,11 @@ int engineGraphicBufferFaceIndexGet(void){
 
 // バッファ片付け
 void engineGraphicBufferClean(void){
-	engineUtilMemoryInfoFree("(permanent) engineGraphicBuffer vert", localGlobal.buffVert);
-	engineUtilMemoryInfoFree("(permanent) engineGraphicBuffer norm", localGlobal.buffNorm);
-	engineUtilMemoryInfoFree("(permanent) engineGraphicBuffer clor", localGlobal.buffClor);
-	engineUtilMemoryInfoFree("(permanent) engineGraphicBuffer texc", localGlobal.buffTexc);
-	engineUtilMemoryInfoFree("(permanent) engineGraphicBuffer face", localGlobal.buffFace);
+	engineUtilMemoryInfoFree("(permanent)", localGlobal.buffVert);
+	engineUtilMemoryInfoFree("(permanent)", localGlobal.buffNorm);
+	engineUtilMemoryInfoFree("(permanent)", localGlobal.buffClor);
+	engineUtilMemoryInfoFree("(permanent)", localGlobal.buffTexc);
+	engineUtilMemoryInfoFree("(permanent)", localGlobal.buffFace);
 	localGlobal.buffVert = NULL;
 	localGlobal.buffNorm = NULL;
 	localGlobal.buffClor = NULL;

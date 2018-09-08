@@ -32,7 +32,7 @@ pluginUtilCallbackId corePluginUtilCallbackSet(void *param, void *callback){
 		localGlobal.pool = new->next;
 	}else{
 		// 要素を新しく作成
-		new = (struct pluginUtilCallbackUnit*)engineUtilMemoryInfoCalloc("(permanent) pluginUtilCallback", 1, sizeof(struct pluginUtilCallbackUnit));
+		new = (struct pluginUtilCallbackUnit*)engineUtilMemoryInfoCalloc("(permanent)", 1, sizeof(struct pluginUtilCallbackUnit));
 	}
 
 	// 要素の設定
@@ -89,9 +89,9 @@ void *corePluginUtilCallbackGet(pluginUtilCallbackId callbackId, void **param, b
 //		struct pluginUtilCallbackUnit *dispose = tempList;
 //		tempList = tempList->next;
 //		// 要素の除去
-//		engineUtilMemoryInfoFree("(permanent) pluginUtilCallback param", dispose->param);
+//		engineUtilMemoryInfoFree("(permanent)", dispose->param);
 //		dispose->param = NULL;
-//		engineUtilMemoryInfoFree("(permanent) pluginUtilCallback", dispose);
+//		engineUtilMemoryInfoFree("(permanent)", dispose);
 //	}
 //	localGlobal.list = NULL;
 //
@@ -100,7 +100,7 @@ void *corePluginUtilCallbackGet(pluginUtilCallbackId callbackId, void **param, b
 //		struct pluginUtilCallbackUnit *dispose = tempPool;
 //		tempPool = tempPool->next;
 //		// 要素の除去
-//		engineUtilMemoryInfoFree("(permanent) pluginUtilCallback", dispose);
+//		engineUtilMemoryInfoFree("(permanent)", dispose);
 //	}
 //	localGlobal.pool = NULL;
 //}

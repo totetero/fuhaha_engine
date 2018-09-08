@@ -219,14 +219,14 @@ static void dispose(struct engineLayoutPartsFrameImplement *this){
 	// 自要素破棄
 	engineGraphicTextureDispose(this->egoIdTexImage);
 	engineLayoutViewGearDispose((struct engineLayoutView*)this);
-	engineUtilMemoryInfoFree("engineLayoutPartsFrame", this);
+	engineUtilMemoryFree(this);
 }
 
 // ----------------------------------------------------------------
 
 // 枠付描画構造体 作成
 struct engineLayoutPartsFrame *engineLayoutPartsFrameCreate(){
-	struct engineLayoutPartsFrameImplement *this = (struct engineLayoutPartsFrameImplement*)engineUtilMemoryInfoCalloc("engineLayoutPartsFrame", 1, sizeof(struct engineLayoutPartsFrameImplement));
+	struct engineLayoutPartsFrameImplement *this = (struct engineLayoutPartsFrameImplement*)engineUtilMemoryCalloc(1, sizeof(struct engineLayoutPartsFrameImplement));
 	init(this);
 
 	struct engineLayoutView *view = (struct engineLayoutView*)this;
