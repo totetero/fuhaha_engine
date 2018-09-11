@@ -102,10 +102,10 @@ static void dispose(struct pageTest2PartsRootImplement *this){
 // ----------------------------------------------------------------
 
 // ページルート構造体 作成
-struct pageTest2PartsRoot *pageTest2PartsRootCreate(struct engineCartridgeLayoutPage *cartridge){
+struct pageTest2PartsRoot *pageTest2PartsRootCreate(struct engineCartridgeLayoutPage *cartridgePage){
 	struct pageTest2PartsRootImplement *this = (struct pageTest2PartsRootImplement*)engineUtilMemoryCalloc(1, sizeof(struct pageTest2PartsRootImplement));
 	this->stat = pageTest2StatusCreate();
-	this->stat->cartridge = cartridge;
+	this->stat->cartridgePage = cartridgePage;
 	init(this);
 
 	struct engineLayoutView *view = (struct engineLayoutView*)this;

@@ -6,7 +6,7 @@
 
 // ページ状態構造体
 struct pageTest2Status{
-	struct engineCartridgeLayoutPage *cartridge;
+	struct engineCartridgeLayoutPage *cartridgePage;
 	struct engineLayoutPartsSwipePager *viewPager;
 };
 

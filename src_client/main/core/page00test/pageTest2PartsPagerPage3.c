@@ -49,22 +49,22 @@ static void init(struct pageTest2PartsPagerPage3Implement *this){
 static void openPopupSample(struct pageTest2PartsPagerPage3Implement *this);
 
 // サンプルポップアップ完了時
-static void onClosePopupSample(struct engineCartridgeLayoutPopup *cartridge){
-	int result = cartridge->result;
+static void onClosePopupSample(struct engineCartridgeLayoutPopup *cartridgePopup){
+	int result = cartridgePopup->result;
 	trace("popup2 %d", result);
 	// test もう一回ポップアップ
-	if(result == 1){openPopupSample(cartridge->super.param);}
+	if(result == 1){openPopupSample(cartridgePopup->super.param);}
 }
 
 // サンプルポップアップ展開
 static void openPopupSample(struct pageTest2PartsPagerPage3Implement *this){
 	// ポップアップカートリッジ作成
-	struct engineCartridgeLayoutPopup *cartridge = engineCartridgeLayoutPopupCreate();
-	engineCartridgeLayoutPopupSetView(cartridge, (struct engineLayoutView*)pageTest2PartsPopupSampleCreate(cartridge, this->stat));
-	cartridge->super.param = this;
-	cartridge->super.onClose = (void(*)(struct engineCartridgePopup*))onClosePopupSample;
+	struct engineCartridgeLayoutPopup *cartridgePopup = engineCartridgeLayoutPopupCreate();
+	engineCartridgeLayoutPopupSetView(cartridgePopup, (struct engineLayoutView*)pageTest2PartsPopupSampleCreate(cartridgePopup, this->stat));
+	cartridgePopup->super.param = this;
+	cartridgePopup->super.onClose = (void(*)(struct engineCartridgePopup*))onClosePopupSample;
 	// ポップアップカートリッジ装填
-	engineCartridgePopupManagerPush(&this->stat->cartridge->popupManager, (struct engineCartridgePopup*)cartridge);
+	engineCartridgePopupManagerPush(&this->stat->cartridgePage->popupManager, (struct engineCartridgePopup*)cartridgePopup);
 }
 
 // ----------------------------------------------------------------
@@ -72,10 +72,10 @@ static void openPopupSample(struct pageTest2PartsPagerPage3Implement *this){
 // アクティブポップアップ展開
 static void openPopupActive(struct pageTest2PartsPagerPage3Implement *this){
 	// ポップアップカートリッジ作成
-	struct engineCartridgeLayoutPopup *cartridge = engineCartridgeLayoutPopupCreate();
-	engineCartridgeLayoutPopupSetView(cartridge, (struct engineLayoutView*)pageTest2PartsPopupActiveCreate(cartridge, this->stat));
+	struct engineCartridgeLayoutPopup *cartridgePopup = engineCartridgeLayoutPopupCreate();
+	engineCartridgeLayoutPopupSetView(cartridgePopup, (struct engineLayoutView*)pageTest2PartsPopupActiveCreate(cartridgePopup, this->stat));
 	// ポップアップカートリッジ装填
-	engineCartridgePopupManagerPush(&this->stat->cartridge->popupManager, (struct engineCartridgePopup*)cartridge);
+	engineCartridgePopupManagerPush(&this->stat->cartridgePage->popupManager, (struct engineCartridgePopup*)cartridgePopup);
 }
 
 // ----------------------------------------------------------------

@@ -8,7 +8,7 @@
 // 構造体実体
 struct pageTest2PartsPopupSampleImplement{
 	struct pageTest2PartsPopupSample super;
-	struct engineCartridgeLayoutPopup *popup;
+	struct engineCartridgeLayoutPopup *cartridgePopup;
 	struct pageTest2Status *stat;
 
 	struct engineLayoutPartsFrame *viewWindow;
@@ -69,28 +69,28 @@ static void init(struct pageTest2PartsPopupSampleImplement *this){
 static void calc(struct pageTest2PartsPopupSampleImplement *this, bool isCancel){
 	// 遷移中のウインドウフェード
 	engineLayoutViewGearPositionUnsetTransform((struct engineLayoutView*)this->viewWindow);
-	engineLayoutViewGearPositionSetTransformScale((struct engineLayoutView*)this->viewWindow, this->popup->super.openSize, this->popup->super.openSize);
-	engineMathVec4Set(&this->viewWindow->super.color, 1.0, 1.0, 1.0, this->popup->super.openAlpha);
+	engineLayoutViewGearPositionSetTransformScale((struct engineLayoutView*)this->viewWindow, this->cartridgePopup->super.openSize, this->cartridgePopup->super.openSize);
+	engineMathVec4Set(&this->viewWindow->super.color, 1.0, 1.0, 1.0, this->cartridgePopup->super.openAlpha);
 
 	// 子要素計算
 	engineLayoutViewGearChildrenCalc((struct engineLayoutView*)this, isCancel);
 
 	// ポップアップ遷移中の処理スキップ
-	if(this->popup->super.openStep != 0){return;}
+	if(this->cartridgePopup->super.openStep != 0){return;}
 
 	// ボタン処理 再オープン
 	if(engineLayoutViewGearInteractIsTriggerUp((struct engineLayoutView*)this->viewButtonReopen)){
 		// ポップアップを閉じる
-		this->popup->result = 1;
-		this->popup->super.isExist = false;
+		this->cartridgePopup->result = 1;
+		this->cartridgePopup->super.isExist = false;
 		return;
 	}
 
 	// ボタン処理 閉じる
 	if(engineLayoutViewGearInteractIsTriggerUp((struct engineLayoutView*)this->viewButtonClose) || engineLayoutViewGearInteractIsTriggerUp((struct engineLayoutView*)this->viewButtonOuter)){
 		// ポップアップを閉じる
-		this->popup->result = 0;
-		this->popup->super.isExist = false;
+		this->cartridgePopup->result = 0;
+		this->cartridgePopup->super.isExist = false;
 		return;
 	}
 }
@@ -98,9 +98,9 @@ static void calc(struct pageTest2PartsPopupSampleImplement *this, bool isCancel)
 // ----------------------------------------------------------------
 
 // サンプルポップアップ構造体 作成
-struct pageTest2PartsPopupSample *pageTest2PartsPopupSampleCreate(struct engineCartridgeLayoutPopup *popup, struct pageTest2Status *stat){
+struct pageTest2PartsPopupSample *pageTest2PartsPopupSampleCreate(struct engineCartridgeLayoutPopup *cartridgePopup, struct pageTest2Status *stat){
 	struct pageTest2PartsPopupSampleImplement *this = (struct pageTest2PartsPopupSampleImplement*)engineUtilMemoryCalloc(1, sizeof(struct pageTest2PartsPopupSampleImplement));
-	this->popup = popup;
+	this->cartridgePopup = cartridgePopup;
 	this->stat = stat;
 	init(this);
 

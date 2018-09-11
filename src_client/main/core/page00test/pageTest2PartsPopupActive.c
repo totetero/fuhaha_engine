@@ -8,7 +8,7 @@
 // 構造体実体
 struct pageTest2PartsPopupActiveImplement{
 	struct pageTest2PartsPopupActive super;
-	struct engineCartridgeLayoutPopup *popup;
+	struct engineCartridgeLayoutPopup *cartridgePopup;
 	struct pageTest2Status *stat;
 
 	struct engineLayoutPartsMaskRect *viewDisplayMask;
@@ -75,12 +75,12 @@ static void init(struct pageTest2PartsPopupActiveImplement *this){
 static void calc(struct pageTest2PartsPopupActiveImplement *this, bool isCancel){
 	// 遷移中のディスプレイフェード
 	engineLayoutViewGearPositionUnsetTransform((struct engineLayoutView*)this->viewDisplayMask);
-	engineLayoutViewGearPositionSetTransformScale((struct engineLayoutView*)this->viewDisplayMask, 1.0, this->popup->super.openAlpha);
+	engineLayoutViewGearPositionSetTransformScale((struct engineLayoutView*)this->viewDisplayMask, 1.0, this->cartridgePopup->super.openAlpha);
 
 	// 遷移中の要素位置
-	double titleTop = (this->popup->super.openAlpha - 1) * (engineLayoutViewGearPositionGetH((struct engineLayoutView*)this->viewTitle) + 10) + 10;
-	double buttonCloseRight = (this->popup->super.openAlpha - 1) * (engineLayoutViewGearPositionGetW((struct engineLayoutView*)this->viewButtonClose) + 10) + 10;
-	double arrowKeyLeft = (this->popup->super.openAlpha - 1) * engineLayoutViewGearPositionGetW((struct engineLayoutView*)this->viewArrowKey);
+	double titleTop = (this->cartridgePopup->super.openAlpha - 1) * (engineLayoutViewGearPositionGetH((struct engineLayoutView*)this->viewTitle) + 10) + 10;
+	double buttonCloseRight = (this->cartridgePopup->super.openAlpha - 1) * (engineLayoutViewGearPositionGetW((struct engineLayoutView*)this->viewButtonClose) + 10) + 10;
+	double arrowKeyLeft = (this->cartridgePopup->super.openAlpha - 1) * engineLayoutViewGearPositionGetW((struct engineLayoutView*)this->viewArrowKey);
 	engineLayoutViewGearPositionSetTop((struct engineLayoutView*)this->viewTitle, titleTop);
 	engineLayoutViewGearPositionSetRight((struct engineLayoutView*)this->viewButtonClose, buttonCloseRight);
 	engineLayoutViewGearPositionSetLeft((struct engineLayoutView*)this->viewArrowKey, arrowKeyLeft);
@@ -89,12 +89,12 @@ static void calc(struct pageTest2PartsPopupActiveImplement *this, bool isCancel)
 	engineLayoutViewGearChildrenCalc((struct engineLayoutView*)this, isCancel);
 
 	// ポップアップ遷移中の処理スキップ
-	if(this->popup->super.openStep != 0){return;}
+	if(this->cartridgePopup->super.openStep != 0){return;}
 
 	// ボタン処理 閉じる
 	if(engineLayoutViewGearInteractIsTriggerUp((struct engineLayoutView*)this->viewButtonClose)){
 		// ポップアップを閉じる
-		this->popup->super.isExist = false;
+		this->cartridgePopup->super.isExist = false;
 		return;
 	}
 }
@@ -102,9 +102,9 @@ static void calc(struct pageTest2PartsPopupActiveImplement *this, bool isCancel)
 // ----------------------------------------------------------------
 
 // アクティブポップアップ構造体 作成
-struct pageTest2PartsPopupActive *pageTest2PartsPopupActiveCreate(struct engineCartridgeLayoutPopup *popup, struct pageTest2Status *stat){
+struct pageTest2PartsPopupActive *pageTest2PartsPopupActiveCreate(struct engineCartridgeLayoutPopup *cartridgePopup, struct pageTest2Status *stat){
 	struct pageTest2PartsPopupActiveImplement *this = (struct pageTest2PartsPopupActiveImplement*)engineUtilMemoryCalloc(1, sizeof(struct pageTest2PartsPopupActiveImplement));
-	this->popup = popup;
+	this->cartridgePopup = cartridgePopup;
 	this->stat = stat;
 	init(this);
 

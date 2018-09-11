@@ -10,7 +10,7 @@ struct pageTest2PartsRoot{
 };
 
 // ページルート構造体 作成
-struct pageTest2PartsRoot *pageTest2PartsRootCreate(struct engineCartridgeLayoutPage *page);
+struct pageTest2PartsRoot *pageTest2PartsRootCreate(struct engineCartridgeLayoutPage *cartridgePage);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
