@@ -7,10 +7,6 @@
 // 構造体実体
 struct engineLayoutPartsArrowKeyImplement{
 	struct engineLayoutPartsArrowKey super;
-	bool isTouchUp;
-	bool isTouchDn;
-	bool isTouchRt;
-	bool isTouchLt;
 };
 
 // ----------------------------------------------------------------
@@ -98,42 +94,31 @@ static void init(struct engineLayoutPartsArrowKeyImplement *this){
 
 // ----------------------------------------------------------------
 
-// タッチ処理
-static bool touch(struct engineLayoutPartsArrowKeyImplement *this, int touchIndex, double x, double y, bool dn, bool mv, bool isCancel){
-	bool isActive = false;
-	bool isActiveChild = engineLayoutViewGearChildrenTouch((struct engineLayoutView*)this, touchIndex, x, y, dn, mv, isCancel || isActive); isActive = isActiveChild || isActive;
-	bool isActiveLocal = engineLayoutViewGearInteractTouch((struct engineLayoutView*)this, touchIndex, x, y, dn, mv, isCancel || isActive); isActive = isActiveLocal || isActive;
-
-	if(isActiveLocal){
+// 計算
+static void calc(struct engineLayoutPartsArrowKeyImplement *this, bool isCancel){
+	bool isTouchUp = false;
+	bool isTouchDn = false;
+	bool isTouchRt = false;
+	bool isTouchLt = false;
+	if(this->super.super.interact.status.isActive){
 		// ローカル座標変換
 		struct engineMathVector3 tempVec1;
-		engineMathVec3Set(&tempVec1, x, y, 0);
+		engineMathVec3Set(&tempVec1, this->super.super.interact.status.currX, this->super.super.interact.status.currY, 0);
 		engineLayoutViewGearPositionTransformCalcInvert((struct engineLayoutView*)this, &tempVec1);
 		// 十字キーのタッチ確認
 		double x1 = tempVec1.x - this->super.super.position.layout.w * 0.5;
 		double y1 = tempVec1.y - this->super.super.position.layout.h * 0.5;
-		this->isTouchUp = this->super.super.interact.status.isHover && (y1 < 0 && x1 < y1 * y1 * 0.18 && x1 > y1 * y1 * -0.18);
-		this->isTouchDn = this->super.super.interact.status.isHover && (y1 > 0 && x1 < y1 * y1 * 0.18 && x1 > y1 * y1 * -0.18);
-		this->isTouchRt = this->super.super.interact.status.isHover && (x1 > 0 && y1 < x1 * x1 * 0.18 && y1 > x1 * x1 * -0.18);
-		this->isTouchLt = this->super.super.interact.status.isHover && (x1 < 0 && y1 < x1 * x1 * 0.18 && y1 > x1 * x1 * -0.18);
-	}else if(this->super.super.interact.status.touchIndex == touchIndex){
-		// タッチしていない時
-		this->isTouchUp = false;
-		this->isTouchDn = false;
-		this->isTouchRt = false;
-		this->isTouchLt = false;
+		isTouchUp = this->super.super.interact.status.isHover && (y1 < 0 && x1 < y1 * y1 * 0.18 && x1 > y1 * y1 * -0.18);
+		isTouchDn = this->super.super.interact.status.isHover && (y1 > 0 && x1 < y1 * y1 * 0.18 && x1 > y1 * y1 * -0.18);
+		isTouchRt = this->super.super.interact.status.isHover && (x1 > 0 && y1 < x1 * x1 * 0.18 && y1 > x1 * x1 * -0.18);
+		isTouchLt = this->super.super.interact.status.isHover && (x1 < 0 && y1 < x1 * x1 * 0.18 && y1 > x1 * x1 * -0.18);
 	}
 
-	return isActive;
-}
-
-// 計算
-static void calc(struct engineLayoutPartsArrowKeyImplement *this, bool isCancel){
 	// 十字キーの押下確認
-	this->super.isUp = (global.key.up.isActive || this->isTouchUp);
-	this->super.isDn = (global.key.dn.isActive || this->isTouchDn);
-	this->super.isRt = (global.key.rt.isActive || this->isTouchRt);
-	this->super.isLt = (global.key.lt.isActive || this->isTouchLt);
+	this->super.isUp = (global.key.up.isActive || isTouchUp);
+	this->super.isDn = (global.key.dn.isActive || isTouchDn);
+	this->super.isRt = (global.key.rt.isActive || isTouchRt);
+	this->super.isLt = (global.key.lt.isActive || isTouchLt);
 
 	// ボタンの見た目を状態に合わせて変える
 	this->super.buttonUpNormal->super.family.isInvisible = this->super.isUp;
@@ -157,7 +142,7 @@ struct engineLayoutPartsArrowKey *engineLayoutPartsArrowKeyCreate(){
 	init(this);
 
 	struct engineLayoutView *view = (struct engineLayoutView*)this;
-	view->touch = (bool(*)(struct engineLayoutView*, int, double, double, bool, bool, bool))touch;
+	view->touch = engineLayoutViewDefaultTouch;
 	view->calc = (void(*)(struct engineLayoutView*, bool))calc;
 	view->draw = engineLayoutViewDefaultDraw;
 	view->pause = engineLayoutViewDefaultPause;
