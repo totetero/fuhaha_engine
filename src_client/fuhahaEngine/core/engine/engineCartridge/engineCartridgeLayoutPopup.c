@@ -68,7 +68,7 @@ static void dispose(struct engineCartridgeLayoutPopupImplement *this){
 // ----------------------------------------------------------------
 
 // ポップアップカートリッジ構造体 作成
-struct engineCartridgeLayoutPopup *engineCartridgeLayoutPopupCreate(){
+struct engineCartridgeLayoutPopup *engineCartridgeLayoutPopupCreate(void){
 	struct engineCartridgeLayoutPopupImplement *this = (struct engineCartridgeLayoutPopupImplement*)engineUtilMemoryCalloc(1, sizeof(struct engineCartridgeLayoutPopupImplement));
 
 	struct engineCartridgePopup *cartridge = (struct engineCartridgePopup*)this;

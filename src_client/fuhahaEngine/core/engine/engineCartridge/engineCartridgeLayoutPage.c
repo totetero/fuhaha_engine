@@ -74,7 +74,7 @@ static void dispose(struct engineCartridgeLayoutPageImplement *this){
 // ----------------------------------------------------------------
 
 // ページカートリッジ構造体 作成
-struct engineCartridgeLayoutPage *engineCartridgeLayoutPageCreate(){
+struct engineCartridgeLayoutPage *engineCartridgeLayoutPageCreate(void){
 	struct engineCartridgeLayoutPageImplement *this = (struct engineCartridgeLayoutPageImplement*)engineUtilMemoryCalloc(1, sizeof(struct engineCartridgeLayoutPageImplement));
 
 	struct engineCartridgePage *cartridge = (struct engineCartridgePage*)this;

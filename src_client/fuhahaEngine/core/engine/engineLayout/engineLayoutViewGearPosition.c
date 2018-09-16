@@ -16,7 +16,7 @@ static struct{
 	int generationCount;
 } localGlobal = {0};
 
-static void localGlobalInit(){
+static void localGlobalInit(void){
 	if(localGlobal.isInit){return;}
 	localGlobal.isInit = true;
 
@@ -32,13 +32,13 @@ static void localGlobalInit(){
 // ----------------------------------------------------------------
 
 // 表示要素構造体位置関係 計算モード設定
-void engineLayoutViewGearPositionModeSetCalc(){
+void engineLayoutViewGearPositionModeSetCalc(void){
 	if(!localGlobal.isModeDraw){return;}
 	localGlobal.isModeDraw = false;
 }
 
 // 表示要素構造体位置関係 描画モード設定
-void engineLayoutViewGearPositionModeSetDraw(){
+void engineLayoutViewGearPositionModeSetDraw(void){
 	if(localGlobal.isModeDraw){return;}
 	localGlobal.isModeDraw = true;
 

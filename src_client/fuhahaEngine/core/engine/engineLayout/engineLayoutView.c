@@ -74,7 +74,7 @@ static void init(struct engineLayoutView *this){
 // ----------------------------------------------------------------
 
 // 表示要素構造体 作成
-struct engineLayoutView *engineLayoutViewCreate(){
+struct engineLayoutView *engineLayoutViewCreate(void){
 	struct engineLayoutView *this = (struct engineLayoutView*)engineUtilMemoryCalloc(1, sizeof(struct engineLayoutView));
 	init(this);
 

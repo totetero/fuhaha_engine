@@ -125,7 +125,7 @@ static void calc(struct engineLayoutPartsSwipePagerImplement *this, bool isCance
 // ----------------------------------------------------------------
 
 // ページャー構造体 作成
-struct engineLayoutPartsSwipePager *engineLayoutPartsSwipePagerCreate(){
+struct engineLayoutPartsSwipePager *engineLayoutPartsSwipePagerCreate(void){
 	struct engineLayoutPartsSwipePagerImplement *this = (struct engineLayoutPartsSwipePagerImplement*)engineUtilMemoryCalloc(1, sizeof(struct engineLayoutPartsSwipePagerImplement));
 	init(this);
 

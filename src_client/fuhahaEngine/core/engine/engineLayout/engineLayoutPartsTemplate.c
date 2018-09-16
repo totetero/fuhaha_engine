@@ -70,7 +70,7 @@ static void dispose(struct engineLayoutPartsTemplateImplement *this){
 // ----------------------------------------------------------------
 
 // テンプレート構造体 作成
-struct engineLayoutPartsTemplate *engineLayoutPartsTemplateCreate(){
+struct engineLayoutPartsTemplate *engineLayoutPartsTemplateCreate(void){
 	struct engineLayoutPartsTemplateImplement *this = (struct engineLayoutPartsTemplateImplement*)engineUtilMemoryCalloc(1, sizeof(struct engineLayoutPartsTemplateImplement));
 	init(this);
 

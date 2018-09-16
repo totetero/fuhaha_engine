@@ -36,7 +36,7 @@ static void init(struct engineLayoutPartsButtonOuterImplement *this){
 // ----------------------------------------------------------------
 
 // 外枠ボタン構造体 作成
-struct engineLayoutPartsButtonOuter *engineLayoutPartsButtonOuterCreate(){
+struct engineLayoutPartsButtonOuter *engineLayoutPartsButtonOuterCreate(void){
 	struct engineLayoutPartsButtonOuterImplement *this = (struct engineLayoutPartsButtonOuterImplement*)engineUtilMemoryCalloc(1, sizeof(struct engineLayoutPartsButtonOuterImplement));
 	init(this);
 

@@ -136,7 +136,7 @@ struct engineLayoutPartsRect *engineLayoutPartsRectCreate(char *src, int imgw, i
 }
 
 // 画像描画構造体 作成 白四角
-struct engineLayoutPartsRect *engineLayoutPartsRectCreateWhite(){
+struct engineLayoutPartsRect *engineLayoutPartsRectCreateWhite(void){
 	int imgw = TEXSIZ_SYSTEM_W;
 	int imgh = TEXSIZ_SYSTEM_H;
 	int tu = (int)engineMathRound(TEXPOS_SYSTEM_BOXWHITE_X + TEXPOS_SYSTEM_BOXWHITE_W * 0.25);

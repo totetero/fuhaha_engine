@@ -225,7 +225,7 @@ static void dispose(struct engineLayoutPartsFrameImplement *this){
 // ----------------------------------------------------------------
 
 // 枠付描画構造体 作成
-struct engineLayoutPartsFrame *engineLayoutPartsFrameCreate(){
+struct engineLayoutPartsFrame *engineLayoutPartsFrameCreate(void){
 	struct engineLayoutPartsFrameImplement *this = (struct engineLayoutPartsFrameImplement*)engineUtilMemoryCalloc(1, sizeof(struct engineLayoutPartsFrameImplement));
 	init(this);
 

@@ -13,7 +13,7 @@ static struct{
 // ----------------------------------------------------------------
 
 // 表示要素構造体子要素 全ての要素の親となる要素を取得
-static struct engineLayoutView *viewRootGet(){
+static struct engineLayoutView *viewRootGet(void){
 	return &localGlobal.viewRoot;
 }
 

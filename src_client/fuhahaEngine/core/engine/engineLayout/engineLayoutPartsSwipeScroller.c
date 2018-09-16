@@ -126,7 +126,7 @@ static void calc(struct engineLayoutPartsSwipeScrollerImplement *this, bool isCa
 // ----------------------------------------------------------------
 
 // スクローラ構造体 作成
-struct engineLayoutPartsSwipeScroller *engineLayoutPartsSwipeScrollerCreate(){
+struct engineLayoutPartsSwipeScroller *engineLayoutPartsSwipeScrollerCreate(void){
 	struct engineLayoutPartsSwipeScrollerImplement *this = (struct engineLayoutPartsSwipeScrollerImplement*)engineUtilMemoryCalloc(1, sizeof(struct engineLayoutPartsSwipeScrollerImplement));
 	init(this);
 

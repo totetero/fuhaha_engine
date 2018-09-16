@@ -126,7 +126,7 @@ static void dispose(struct engineLayoutPartsMaskRectImplement *this){
 // ----------------------------------------------------------------
 
 // 長方形マスク構造体 作成
-struct engineLayoutPartsMaskRect *engineLayoutPartsMaskRectCreate(){
+struct engineLayoutPartsMaskRect *engineLayoutPartsMaskRectCreate(void){
 	struct engineLayoutPartsMaskRectImplement *this = (struct engineLayoutPartsMaskRectImplement*)engineUtilMemoryCalloc(1, sizeof(struct engineLayoutPartsMaskRectImplement));
 	init(this);
 	// 画像読み込み

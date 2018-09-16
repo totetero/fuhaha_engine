@@ -139,7 +139,7 @@ void engineGraphicStencilSetMode(enum engineGraphicStencilMode mode){
 // ----------------------------------------------------------------
 
 // ステンシルスタックマスク設定
-void engineGraphicStencilStackMaskRead(){
+void engineGraphicStencilStackMaskRead(void){
 	localGlobal.memory.modeStencil = ENGINEGRAPHICSTENCILMODE_UNKNOWN;
 
 	// ステンシル有効設定
@@ -153,7 +153,7 @@ void engineGraphicStencilStackMaskRead(){
 }
 
 // ステンシルスタックマスク加算描画
-void engineGraphicStencilStackMaskWriteIncrement(){
+void engineGraphicStencilStackMaskWriteIncrement(void){
 	localGlobal.memory.modeStencil = ENGINEGRAPHICSTENCILMODE_UNKNOWN;
 
 	// ステンシル有効設定
@@ -170,7 +170,7 @@ void engineGraphicStencilStackMaskWriteIncrement(){
 }
 
 // ステンシルスタックマスク減算描画
-void engineGraphicStencilStackMaskWriteDecrement(){
+void engineGraphicStencilStackMaskWriteDecrement(void){
 	localGlobal.memory.modeStencil = ENGINEGRAPHICSTENCILMODE_UNKNOWN;
 
 	// ステンシル有効設定
