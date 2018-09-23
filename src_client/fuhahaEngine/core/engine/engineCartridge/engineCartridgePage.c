@@ -5,7 +5,7 @@
 // ----------------------------------------------------------------
 
 static struct{
-	void (*createFirstCartridge)();
+	void (*createFirstCartridge)(void);
 	struct engineCartridgePage *childPageList;
 	bool isLoadedSystem;
 } localGlobal = {0};
@@ -13,7 +13,7 @@ static struct{
 // ----------------------------------------------------------------
 
 // ゲームのページ管理 初期化
-void engineCartridgePageManagerInit(void(*createFirstCartridge)()){
+void engineCartridgePageManagerInit(void(*createFirstCartridge)(void)){
 	localGlobal.createFirstCartridge = createFirstCartridge;
 }
 
