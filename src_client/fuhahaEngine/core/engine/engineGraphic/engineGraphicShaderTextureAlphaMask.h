@@ -4,8 +4,8 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-extern char *externGlobal_shader_textureAlphaMask_vert_src;
-extern char *externGlobal_shader_textureAlphaMask_frag_src;
+// アルファマスク シェーダー 使用準備
+void engineGraphicShaderTextureAlphaMaskUse(void);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

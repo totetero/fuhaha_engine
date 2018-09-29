@@ -4,8 +4,8 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-extern char *externGlobal_shader_textureColorBlendAlphaMask_vert_src;
-extern char *externGlobal_shader_textureColorBlendAlphaMask_frag_src;
+// カラーブレンド アルファマスク シェーダー 使用準備
+void engineGraphicShaderTextureColorBlendAlphaMaskUse(void);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

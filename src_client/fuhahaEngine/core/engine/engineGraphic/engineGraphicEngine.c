@@ -4,90 +4,34 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-// グラフィックエンジンシェーダー構造体
-struct engineGraphicEngineShader{
-	GLint program;
-	GLint attr_pos;
-	GLint attr_nrm;
-	GLint attr_col;
-	GLint attr_uvc;
-	GLint unif_mat_pos;
-	GLint unif_mat_nrm;
-	GLint unif_col;
-	GLint unif_fil_col_alp;
-	GLint unif_fil_col_mat;
-	GLint unif_fil_col_vec;
-};
-
 static struct{
-	// グラフィックエンジンシェーダー
-	struct{
-		struct engineGraphicEngineShader texture;
-		struct engineGraphicEngineShader textureAlphaMask;
-		struct engineGraphicEngineShader textureFilterColor;
-		struct engineGraphicEngineShader textureColorBlendAlphaMask;
-		struct engineGraphicEngineShader colorBlend;
-		struct engineGraphicEngineShader phong;
-	} shader;
 	// 重複動作阻止のための状態記録
 	struct{
 		struct engineGraphicEngineShader *shader;
-		enum engineGraphicEngineModeDraw modeDraw;
-		bool modeDepthMask;
-		bool modeDepthTest;
 		enum engineGraphicTextureType texType;
-		struct engineMathVector4 color;
 		engineGraphicObjectVBOId vertVBO;
 		engineGraphicObjectVBOId normVBO;
 		engineGraphicObjectVBOId clorVBO;
 		engineGraphicObjectVBOId texcVBO;
 		engineGraphicObjectIBOId faceIBO;
+		struct engineMathVector4 color;
+		bool isDepthMask;
+		bool isDepthTest;
 	} memory;
 } localGlobal = {0};
 
 // ----------------------------------------------------------------
-
-// シェーダープログラム作成関数
-static void engineGraphicEngineShaderCreate(struct engineGraphicEngineShader *shader, char *vssrc, char *fsstr){
-	shader->program = glCreateProgram();
-	GLint vshader = glCreateShader(GL_VERTEX_SHADER);
-	GLint fshader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(vshader, 1, (const GLchar**)&vssrc, NULL);
-	glShaderSource(fshader, 1, (const GLchar**)&fsstr, NULL);
-	glCompileShader(vshader);
-	glCompileShader(fshader);
-	glAttachShader(shader->program, vshader);
-	glAttachShader(shader->program, fshader);
-	glLinkProgram(shader->program);
-	shader->attr_pos = glGetAttribLocation(shader->program, "vs_attr_pos");
-	shader->attr_nrm = glGetAttribLocation(shader->program, "vs_attr_nrm");
-	shader->attr_col = glGetAttribLocation(shader->program, "vs_attr_col");
-	shader->attr_uvc = glGetAttribLocation(shader->program, "vs_attr_uvc");
-	shader->unif_mat_pos = glGetUniformLocation(shader->program, "vs_unif_mat_pos");
-	shader->unif_mat_nrm = glGetUniformLocation(shader->program, "vs_unif_mat_nrm");
-	shader->unif_col = glGetUniformLocation(shader->program, "fs_unif_col");
-	shader->unif_fil_col_alp = glGetUniformLocation(shader->program, "fs_unif_fil_col_alp");
-	shader->unif_fil_col_mat = glGetUniformLocation(shader->program, "fs_unif_fil_col_mat");
-	shader->unif_fil_col_vec = glGetUniformLocation(shader->program, "fs_unif_fil_col_vec");
-}
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
 
 // 初期化
 void engineGraphicEngineInit(void){
-	engineGraphicEngineShaderCreate(&localGlobal.shader.texture, externGlobal_shader_texture_vert_src, externGlobal_shader_texture_frag_src);
-	engineGraphicEngineShaderCreate(&localGlobal.shader.textureAlphaMask, externGlobal_shader_textureAlphaMask_vert_src, externGlobal_shader_textureAlphaMask_frag_src);
-	engineGraphicEngineShaderCreate(&localGlobal.shader.textureFilterColor, externGlobal_shader_textureFilterColor_vert_src, externGlobal_shader_textureFilterColor_frag_src);
-	engineGraphicEngineShaderCreate(&localGlobal.shader.textureColorBlendAlphaMask, externGlobal_shader_textureColorBlendAlphaMask_vert_src, externGlobal_shader_textureColorBlendAlphaMask_frag_src);
-	engineGraphicEngineShaderCreate(&localGlobal.shader.colorBlend, externGlobal_shader_colorBlend_vert_src, externGlobal_shader_colorBlend_frag_src);
-	engineGraphicEngineShaderCreate(&localGlobal.shader.phong, externGlobal_shader_phong_vert_src, externGlobal_shader_phong_frag_src);
-
-	localGlobal.memory.shader = NULL;
-	localGlobal.memory.modeDraw = -1;
-	localGlobal.memory.modeDepthMask = true;
-	localGlobal.memory.modeDepthTest = true;
-	engineMathVec4Set(&localGlobal.memory.color, 0, 0, 0, -1);
 	engineGraphicEngineMemoryResetVBO();
 	engineGraphicEngineMemoryResetIBO();
 	engineGraphicEngineMemoryResetTex();
+	engineGraphicEngineMemoryResetColor();
+	localGlobal.memory.isDepthMask = true;
+	localGlobal.memory.isDepthTest = true;
 
 	glClearColor(DEFINESETTING_BACKGROUNDCOLOR);
 	glClearDepthf(1.0f);
@@ -98,12 +42,11 @@ void engineGraphicEngineInit(void){
 
 // 解放
 void engineGraphicEngineExit(void){
-	glDeleteProgram(localGlobal.shader.texture.program);
-	glDeleteProgram(localGlobal.shader.textureAlphaMask.program);
-	glDeleteProgram(localGlobal.shader.textureColorBlendAlphaMask.program);
-	glDeleteProgram(localGlobal.shader.colorBlend.program);
+	// TODO
 }
 
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
 // ビューポート設定
@@ -118,17 +61,139 @@ void engineGraphicEngineViewport(int x, int y, int w, int h){
 
 // ----------------------------------------------------------------
 
+// シェーダー使用を宣言する
+void engineGraphicEngineShaderUse(struct engineGraphicEngineShader *shader){
+	// 直前に使っていたシェーダーの使用完了設定
+	if(localGlobal.memory.shader != NULL && localGlobal.memory.shader->isUse){
+		localGlobal.memory.shader->unuse();
+		localGlobal.memory.shader->isUse = false;
+	}
+
+	// 準備前確認
+	bool isSetup = (shader->prev != NULL && shader->next != NULL);
+	if(!isSetup){
+		if(localGlobal.memory.shader == NULL){
+			// 最初の要素を設定
+			shader->prev = shader;
+			shader->next = shader;
+		}else{
+			// 双方向循環リストの要素を設定
+			struct engineGraphicEngineShader *shaderPrev = localGlobal.memory.shader->prev;
+			struct engineGraphicEngineShader *shaderNext = localGlobal.memory.shader;
+			shader->prev = shaderPrev;
+			shader->next = shaderNext;
+			shaderPrev->next = shader;
+			shaderNext->prev = shader;
+		}
+		// 準備
+		shader->setup();
+	}
+
+	// 使用設定 シェーダーをリストの先頭に持ってゆきフラグを立てる
+	localGlobal.memory.shader = shader;
+	localGlobal.memory.shader->isUse = true;
+	// 重複動作阻止のメモリーリセット
+	engineGraphicEngineMemoryResetVBO();
+	engineGraphicEngineMemoryResetColor();
+}
+
+// シェーダー使用中確認
+bool engineGraphicEngineShaderIsUse(struct engineGraphicEngineShader *shader){
+	return (localGlobal.memory.shader == shader && localGlobal.memory.shader->isUse);
+}
+
+// シェーダー破棄
+void engineGraphicEngineShaderDispose(struct engineGraphicEngineShader *shader){
+	//// 使用中のシェーダーは破棄できない TODO ダメだろ
+	//if(engineGraphicEngineShaderIsUse(shader)){return;}
+	
+	// 同じシェーダーがリストの先頭にある場合は先頭を変える
+	if(localGlobal.memory.shader == shader){localGlobal.memory.shader = shader->next;}
+	if(localGlobal.memory.shader == shader){localGlobal.memory.shader = NULL;}
+
+	// 双方向循環リストから外す
+	struct engineGraphicEngineShader *shaderPrev = shader->prev;
+	struct engineGraphicEngineShader *shaderNext = shader->next;
+	shaderPrev->next = shaderPrev;
+	shaderNext->prev = shaderNext;
+	shader->prev = NULL;
+	shader->next = NULL;
+}
+
+// ----------------------------------------------------------------
+
 // グラフィックエンジン命令 描画のクリア
 void engineGraphicEngineClearAll(void){
-	if(!localGlobal.memory.modeDepthMask){glDepthMask(GL_TRUE);}
+	if(!localGlobal.memory.isDepthMask){glDepthMask(GL_TRUE);}
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	if(!localGlobal.memory.modeDepthMask){glDepthMask(GL_FALSE);}
+	if(!localGlobal.memory.isDepthMask){glDepthMask(GL_FALSE);}
 }
 
 // グラフィックエンジン命令 深度バッファのクリア
 void engineGraphicEngineClearDepth(void){
 	glClear(GL_DEPTH_BUFFER_BIT);
 }
+
+// ----------------------------------------------------------------
+
+// グラフィックエンジン命令 描画モード設定
+void engineGraphicEngineSetDrawMode(enum engineGraphicEngineModeDraw mode){
+	switch(mode){
+		case ENGINEGRAPHICENGINEMODEDRAW_3D:                           engineGraphicShaderTextureAlphaMaskUse(); break;
+		case ENGINEGRAPHICENGINEMODEDRAW_3D_ALPHA_NORMAL:              engineGraphicShaderTextureUse3dAlphaNormal(); break;
+		case ENGINEGRAPHICENGINEMODEDRAW_3D_ALPHA_ADD:                 engineGraphicShaderTextureUse3dAlphaAdd(); break;
+		case ENGINEGRAPHICENGINEMODEDRAW_2D_ALPHA_NORMAL:              engineGraphicShaderTextureUse2dAlphaNormal(); break;
+		case ENGINEGRAPHICENGINEMODEDRAW_2D_ALPHA_ADD:                 engineGraphicShaderTextureUse2dAlphaAdd(); break;
+		case ENGINEGRAPHICENGINEMODEDRAW_2D_FILTER_COLOR_ALPHA_NORMAL: engineGraphicShaderTextureFilterColorUse(); break;
+		case ENGINEGRAPHICENGINEMODEDRAW_PHONG:                        engineGraphicShaderPhoneUse(); break;
+		case ENGINEGRAPHICENGINEMODEDRAW_HKNW:                         engineGraphicShaderTextureColorBlendAlphaMaskUse(); break;
+		case ENGINEGRAPHICENGINEMODEDRAW_SPHERE:                       engineGraphicShaderColorBlendrUse(); break;
+	}
+}
+
+// ----------------------------------------------------------------
+
+// グラフィックエンジン命令 深度バッファを設定
+void engineGraphicEngineSetDepthMask(bool isDepthMask){
+	localGlobal.memory.isDepthMask = isDepthMask;
+	if(localGlobal.memory.isDepthMask){
+		glDepthMask(GL_TRUE);
+	}else{
+		glDepthMask(GL_FALSE);
+	}
+}
+
+// グラフィックエンジン命令 深度バッファを設定
+void engineGraphicEngineSetDepthTest(bool isDepthTest){
+	localGlobal.memory.isDepthTest = isDepthTest;
+	if(localGlobal.memory.isDepthTest){
+		glEnable(GL_DEPTH_TEST);
+	}else{
+		glDisable(GL_DEPTH_TEST);
+	}
+}
+
+// グラフィックエンジン命令 深度バッファを一時的に無効化
+void engineGraphicEngineIgnoreDepthMask(bool isIgnore){
+	if(!localGlobal.memory.isDepthMask){return;}
+	if(isIgnore){
+		glDepthMask(GL_FALSE);
+	}else{
+		glDepthMask(GL_TRUE);
+	}
+}
+
+// グラフィックエンジン命令 深度バッファを一時的に無効化
+void engineGraphicEngineIgnoreDepthTest(bool isIgnore){
+	if(!localGlobal.memory.isDepthTest){return;}
+	if(isIgnore){
+		glDisable(GL_DEPTH_TEST);
+	}else{
+		glEnable(GL_DEPTH_TEST);
+	}
+}
+
+// ----------------------------------------------------------------
 
 // 重複動作阻止のためのVBO状態記録をリセット
 void engineGraphicEngineMemoryResetVBO(void){
@@ -148,112 +213,9 @@ void engineGraphicEngineMemoryResetTex(void){
 	localGlobal.memory.texType = -1;
 }
 
-// ----------------------------------------------------------------
-
-// グラフィックエンジン命令 描画モード設定
-void engineGraphicEngineSetDrawMode(enum engineGraphicEngineModeDraw mode){
-	if(localGlobal.memory.modeDraw == mode){return;}
-	localGlobal.memory.modeDraw = mode;
-
-	// シェーダー差し替え
-	struct engineGraphicEngineShader *oldShader = localGlobal.memory.shader;
-	switch(mode){
-		case ENGINEGRAPHICENGINEMODEDRAW_3D:                           localGlobal.memory.shader = &localGlobal.shader.textureAlphaMask; break;
-		case ENGINEGRAPHICENGINEMODEDRAW_3D_ALPHA_NORMAL:              localGlobal.memory.shader = &localGlobal.shader.texture; break;
-		case ENGINEGRAPHICENGINEMODEDRAW_3D_ALPHA_ADD:                 localGlobal.memory.shader = &localGlobal.shader.texture; break;
-		case ENGINEGRAPHICENGINEMODEDRAW_2D_ALPHA_NORMAL:              localGlobal.memory.shader = &localGlobal.shader.texture; break;
-		case ENGINEGRAPHICENGINEMODEDRAW_2D_ALPHA_ADD:                 localGlobal.memory.shader = &localGlobal.shader.texture; break;
-		case ENGINEGRAPHICENGINEMODEDRAW_2D_FILTER_COLOR_ALPHA_NORMAL: localGlobal.memory.shader = &localGlobal.shader.textureFilterColor; break;
-		case ENGINEGRAPHICENGINEMODEDRAW_PHONG:                        localGlobal.memory.shader = &localGlobal.shader.phong; break;
-		case ENGINEGRAPHICENGINEMODEDRAW_HKNW:                         localGlobal.memory.shader = &localGlobal.shader.textureColorBlendAlphaMask; break;
-		case ENGINEGRAPHICENGINEMODEDRAW_SPHERE:                       localGlobal.memory.shader = &localGlobal.shader.colorBlend; break;
-	}
-	if(localGlobal.memory.shader != oldShader){
-		if(oldShader != NULL && oldShader->attr_pos >= 0){glDisableVertexAttribArray(oldShader->attr_pos);}
-		if(oldShader != NULL && oldShader->attr_nrm >= 0){glDisableVertexAttribArray(oldShader->attr_nrm);}
-		if(oldShader != NULL && oldShader->attr_col >= 0){glDisableVertexAttribArray(oldShader->attr_col);}
-		if(oldShader != NULL && oldShader->attr_uvc >= 0){glDisableVertexAttribArray(oldShader->attr_uvc);}
-		glUseProgram(localGlobal.memory.shader->program);
-		if(localGlobal.memory.shader->attr_pos >= 0){glEnableVertexAttribArray(localGlobal.memory.shader->attr_pos);}
-		if(localGlobal.memory.shader->attr_nrm >= 0){glEnableVertexAttribArray(localGlobal.memory.shader->attr_nrm);}
-		if(localGlobal.memory.shader->attr_col >= 0){glEnableVertexAttribArray(localGlobal.memory.shader->attr_col);}
-		if(localGlobal.memory.shader->attr_uvc >= 0){glEnableVertexAttribArray(localGlobal.memory.shader->attr_uvc);}
-		engineMathVec4Set(&localGlobal.memory.color, 0, 0, 0, -1);
-		engineGraphicEngineMemoryResetVBO();
-	}
-
-	// oprnGL設定 深度バッファ
-	switch(mode){
-		case ENGINEGRAPHICENGINEMODEDRAW_3D:
-		case ENGINEGRAPHICENGINEMODEDRAW_PHONG:
-		case ENGINEGRAPHICENGINEMODEDRAW_HKNW:
-		case ENGINEGRAPHICENGINEMODEDRAW_SPHERE:
-			// 3次元通常描画
-			localGlobal.memory.modeDepthMask = true;
-			localGlobal.memory.modeDepthTest = true;
-			glEnable(GL_CULL_FACE);
-			break;
-		case ENGINEGRAPHICENGINEMODEDRAW_3D_ALPHA_NORMAL:
-		case ENGINEGRAPHICENGINEMODEDRAW_3D_ALPHA_ADD:
-			// 3次元エフェクト描画
-			localGlobal.memory.modeDepthMask = false;
-			localGlobal.memory.modeDepthTest = true;
-			glEnable(GL_CULL_FACE);
-			break;
-		case ENGINEGRAPHICENGINEMODEDRAW_2D_ALPHA_NORMAL:
-		case ENGINEGRAPHICENGINEMODEDRAW_2D_ALPHA_ADD:
-		case ENGINEGRAPHICENGINEMODEDRAW_2D_FILTER_COLOR_ALPHA_NORMAL:
-			// 2次元通常描画
-			localGlobal.memory.modeDepthMask = false;
-			localGlobal.memory.modeDepthTest = false;
-			glDisable(GL_CULL_FACE);
-			break;
-	}
-	// 深度設定
-	if(localGlobal.memory.modeDepthMask){glDepthMask(GL_TRUE);}else{glDepthMask(GL_FALSE);}
-	if(localGlobal.memory.modeDepthTest){glEnable(GL_DEPTH_TEST);}else{glDisable(GL_DEPTH_TEST);}
-
-	// oprnGL設定 アルファブレンド
-	switch(mode){
-		case ENGINEGRAPHICENGINEMODEDRAW_3D:
-		case ENGINEGRAPHICENGINEMODEDRAW_PHONG:
-		case ENGINEGRAPHICENGINEMODEDRAW_HKNW:
-			// アルファブレンド無視
-			glBlendFuncSeparate(GL_ONE, GL_ZERO, GL_ZERO, GL_ONE);
-			break;
-		case ENGINEGRAPHICENGINEMODEDRAW_3D_ALPHA_NORMAL:
-		case ENGINEGRAPHICENGINEMODEDRAW_2D_ALPHA_NORMAL:
-		case ENGINEGRAPHICENGINEMODEDRAW_2D_FILTER_COLOR_ALPHA_NORMAL:
-		case ENGINEGRAPHICENGINEMODEDRAW_SPHERE:
-			// 半透明アルファ合成
-			glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ZERO, GL_ONE);
-			break;
-		case ENGINEGRAPHICENGINEMODEDRAW_3D_ALPHA_ADD:
-		case ENGINEGRAPHICENGINEMODEDRAW_2D_ALPHA_ADD:
-			// 加算合成
-			glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE, GL_ZERO, GL_ONE);
-			break;
-	}
-}
-
-// グラフィックエンジン命令 深度バッファを一時的に無効化
-void engineGraphicEngineIgnoreDepthMask(bool isIgnore){
-	if(!localGlobal.memory.modeDepthMask){return;}
-	if(isIgnore){
-		glDepthMask(GL_FALSE);
-	}else{
-		glDepthMask(GL_TRUE);
-	}
-}
-
-// グラフィックエンジン命令 深度バッファを一時的に無効化
-void engineGraphicEngineIgnoreDepthTest(bool isIgnore){
-	if(!localGlobal.memory.modeDepthTest){return;}
-	if(isIgnore){
-		glDisable(GL_DEPTH_TEST);
-	}else{
-		glEnable(GL_DEPTH_TEST);
-	}
+// 重複動作阻止のための色をリセット
+void engineGraphicEngineMemoryResetColor(void){
+	engineMathVec4Set(&localGlobal.memory.color, 0, 0, 0, -1);
 }
 
 // ----------------------------------------------------------------
@@ -380,11 +342,6 @@ void engineGraphicEngineSetColorVec(struct engineMathVector4 *color){
 		glUniform4fv(localGlobal.memory.shader->unif_col, 1, color->v);
 	}
 }
-
-// グラフィックエンジン命令 カラーフィルタの設定
-void engineGraphicEngineSetFilterColorAlpha(double a){glUniform1f(localGlobal.memory.shader->unif_fil_col_alp, a);}
-void engineGraphicEngineSetFilterColorMatrix(struct engineMathMatrix44 *matrix){glUniformMatrix4fv(localGlobal.memory.shader->unif_fil_col_mat, 1, GL_FALSE, matrix->m);}
-void engineGraphicEngineSetFilterColorVector(struct engineMathVector4 *vector){glUniform4fv(localGlobal.memory.shader->unif_fil_col_vec, 1, vector->v);}
 
 // ----------------------------------------------------------------
 

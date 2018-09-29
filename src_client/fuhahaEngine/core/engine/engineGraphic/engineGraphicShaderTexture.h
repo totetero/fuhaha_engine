@@ -4,8 +4,11 @@
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-extern char *externGlobal_shader_texture_vert_src;
-extern char *externGlobal_shader_texture_frag_src;
+// アルファブレンド シェーダー 使用準備
+void engineGraphicShaderTextureUse2dAlphaNormal(void);
+void engineGraphicShaderTextureUse2dAlphaAdd(void);
+void engineGraphicShaderTextureUse3dAlphaNormal(void);
+void engineGraphicShaderTextureUse3dAlphaAdd(void);
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

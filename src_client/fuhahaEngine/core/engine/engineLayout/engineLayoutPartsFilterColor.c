@@ -27,9 +27,9 @@ static void init(struct engineLayoutPartsFilterColorImplement *this){
 static void draw(struct engineLayoutPartsFilterColorImplement *this, struct engineMathMatrix44 *mat, struct engineMathVector4 *color){
 	// モード変更
 	engineGraphicEngineSetDrawMode(ENGINEGRAPHICENGINEMODEDRAW_2D_FILTER_COLOR_ALPHA_NORMAL);
-	engineGraphicEngineSetFilterColorAlpha(this->super.alpha);
-	engineGraphicEngineSetFilterColorMatrix(&this->super.matrix);
-	engineGraphicEngineSetFilterColorVector(&this->super.vector);
+	engineGraphicShaderTextureFilterColorSetFilterColorAlpha(this->super.alpha);
+	engineGraphicShaderTextureFilterColorSetFilterColorMatrix(&this->super.matrix);
+	engineGraphicShaderTextureFilterColorSetFilterColorVector(&this->super.vector);
 
 	// 子要素描画
 	engineLayoutViewGearChildrenDraw((struct engineLayoutView*)this, mat, color);
