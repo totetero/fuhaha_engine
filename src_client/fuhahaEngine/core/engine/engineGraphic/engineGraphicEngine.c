@@ -42,7 +42,23 @@ void engineGraphicEngineInit(void){
 
 // 解放
 void engineGraphicEngineExit(void){
-	// TODO
+	if(localGlobal.memory.shader != NULL){
+		// 最後に使っていたシェーダーの使用完了
+		if(localGlobal.memory.shader->isUse){
+			localGlobal.memory.shader->unuse();
+			localGlobal.memory.shader->isUse = false;
+		}
+
+		// 全てのシェーダーを破棄
+		struct engineGraphicEngineShader *temp = localGlobal.memory.shader;
+		while(temp->prev != NULL && temp->next != NULL){
+			struct engineGraphicEngineShader *dispose = temp;
+			temp = temp->next;
+			dispose->dispose();
+			dispose->prev = NULL;
+			dispose->next = NULL;
+		}
+	}
 }
 
 // ----------------------------------------------------------------
@@ -63,7 +79,7 @@ void engineGraphicEngineViewport(int x, int y, int w, int h){
 
 // シェーダー使用を宣言する
 void engineGraphicEngineShaderUse(struct engineGraphicEngineShader *shader){
-	// 直前に使っていたシェーダーの使用完了設定
+	// 直前に使っていたシェーダーの使用完了
 	if(localGlobal.memory.shader != NULL && localGlobal.memory.shader->isUse){
 		localGlobal.memory.shader->unuse();
 		localGlobal.memory.shader->isUse = false;
@@ -104,9 +120,12 @@ bool engineGraphicEngineShaderIsUse(struct engineGraphicEngineShader *shader){
 
 // シェーダー破棄
 void engineGraphicEngineShaderDispose(struct engineGraphicEngineShader *shader){
-	//// 使用中のシェーダーは破棄できない TODO ダメだろ
-	//if(engineGraphicEngineShaderIsUse(shader)){return;}
-	
+	// シェーダー使用完了
+	if(engineGraphicEngineShaderIsUse(shader)){
+		shader->unuse();
+		shader->isUse = false;
+	}
+
 	// 同じシェーダーがリストの先頭にある場合は先頭を変える
 	if(localGlobal.memory.shader == shader){localGlobal.memory.shader = shader->next;}
 	if(localGlobal.memory.shader == shader){localGlobal.memory.shader = NULL;}
@@ -118,6 +137,9 @@ void engineGraphicEngineShaderDispose(struct engineGraphicEngineShader *shader){
 	shaderNext->prev = shaderNext;
 	shader->prev = NULL;
 	shader->next = NULL;
+
+	// シェーダーの破棄
+	shader->dispose();
 }
 
 // ----------------------------------------------------------------
