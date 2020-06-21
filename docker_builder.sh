@@ -6,7 +6,7 @@
 
 DOCKER_CONTAINER_NAME_01=docker-fuhaha-builder
 DOCKER_LINUX=ubuntu:16.04
-EMSCRIPTEN_VERSION=sdk-1.37.27-64bit
+EMSCRIPTEN_VERSION=sdk-fastcomp-1.37.27-64bit
 ANDROID_SDK_VERSION=r24.4.1
 ANDROID_NDK_VERSION=r10e
 PROJECT=${PWD##*/}
@@ -21,7 +21,7 @@ PROJECT=${PWD##*/}
 	MAKE_COMMAND+=" && export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64"
 	MAKE_COMMAND+=" && export ANDROID_HOME=/opt/android-sdk-${ANDROID_SDK_VERSION}"
 	MAKE_COMMAND+=" && export ANDROID_NDK_HOME=/opt/android-ndk-${ANDROID_NDK_VERSION}"
-	MAKE_COMMAND+=" && . /opt/emsdk-portable/emsdk_env.sh"
+	MAKE_COMMAND+=" && . /opt/emsdk/emsdk_env.sh"
 	MAKE_COMMAND+=" && make ${@:$((1 + 1))}"
 	docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c "${MAKE_COMMAND}"
 	echo -------- make exit --------
@@ -83,11 +83,10 @@ for ARG in "${@}" ; do
 			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs'
 			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'DEBIAN_FRONTEND=noninteractive apt-get install -y default-jre'
 			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'DEBIAN_FRONTEND=noninteractive apt-get install -y git-core'
-			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'cd /opt && wget https://s3.amazonaws.com/mozilla-games/emscripten/releases/emsdk-portable.tar.gz'
-			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'cd /opt && tar -zxvf emsdk-portable.tar.gz'
-			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'cd /opt/emsdk-portable && ./emsdk update'
-			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'cd /opt/emsdk-portable && ./emsdk install '${EMSCRIPTEN_VERSION}
-			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'cd /opt/emsdk-portable && ./emsdk activate '${EMSCRIPTEN_VERSION}
+			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'cd /opt && git clone https://github.com/emscripten-core/emsdk.git'
+			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'cd /opt/emsdk && ./emsdk update-tags'
+			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'cd /opt/emsdk && ./emsdk install '${EMSCRIPTEN_VERSION}
+			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'cd /opt/emsdk && ./emsdk activate '${EMSCRIPTEN_VERSION}
 			;;
 		install_android_sdk_ndk)
 			docker exec -it ${DOCKER_CONTAINER_NAME_01} /bin/bash -c 'DEBIAN_FRONTEND=noninteractive apt-get install -y wget'
