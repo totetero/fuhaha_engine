@@ -28,6 +28,7 @@ web: copy-web web-debug web-node
 
 web-node:
 	node src_server/node/main.js
+	#node src_server/test/fileServeHttps
 
 web-debug:
 	$(MAKE) -C src_client/platform_web debug
