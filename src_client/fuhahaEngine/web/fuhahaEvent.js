@@ -300,13 +300,29 @@ mergeInto(LibraryManager.library, {
 
 		var isAcceleration = ccall("gameMainEventIsAcceleration", "null", [], []);
 		if(isAcceleration){
-			window.addEventListener("devicemotion", function(e){
-				if(globalWebFuhahaSurface.isExit){return;}
-				var accx = e.accelerationIncludingGravity.x;
-				var accy = e.accelerationIncludingGravity.y;
-				var accz = e.accelerationIncludingGravity.z;
-				if(isIos){accx *= -1; accy *= -1; accz *= -1;}
-				ccall("gameMainEventAcceleration", "null", ["null", "null", "null"], [accx, accy, accz]);
+			(function(next){
+				if(window.DeviceMotionEvent && window.DeviceMotionEvent.requestPermission){
+					globalWebFuhahaSurface.deviceMotionTouch = function(){
+						if(globalWebFuhahaSurface.deviceMotionTrigger){
+							globalWebFuhahaSurface.deviceMotionTrigger = false;
+							window.DeviceMotionEvent.requestPermission().then(function(response){
+								if(response === 'granted'){next();}
+							});
+						}
+					};
+					globalWebFuhahaSurface.deviceMotionTrigger = true;
+				}else{
+					next();
+				}
+			})(function(){
+				window.addEventListener("devicemotion", function(e){
+					if(globalWebFuhahaSurface.isExit){return;}
+					var accx = e.accelerationIncludingGravity.x;
+					var accy = e.accelerationIncludingGravity.y;
+					var accz = e.accelerationIncludingGravity.z;
+					if(isIos){accx *= -1; accy *= -1; accz *= -1;}
+					ccall("gameMainEventAcceleration", "null", ["null", "null", "null"], [accx, accy, accz]);
+				});
 			});
 		}
 
