@@ -19,6 +19,11 @@ src_client/platform_android/assets
 
 src_client/platform_ios/assets
 
+src_server/test/mysslserver.key
+src_server/test/mysslserver.csr
+src_server/test/mysslserver.crt
+src_server/test/mysslserver.pfx
+
 # ----------------------------------------------------------------
 # ----------------------------------------------------------------
 # ----------------------------------------------------------------

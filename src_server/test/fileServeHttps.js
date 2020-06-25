@@ -13,7 +13,7 @@ var fuhahaFileServer = require("../node/fileServer");
 const isHttps = true;
 const port = 8080;
 (isHttps ? libHttps.createServer({
-	pfx: libFs.readFileSync("src_server/node/mysslserver.pfx"),
+	pfx: libFs.readFileSync("src_server/test/mysslserver.pfx"),
 	passphrase: "test"
 }) : libHttp.createServer()).on("request", (req, res) => {
 	var filePaths = [];
