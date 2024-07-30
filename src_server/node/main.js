@@ -15,6 +15,11 @@ var fuhahaFileServer = require("./fileServer");
 
 // サーバメイン処理
 libHttp.createServer(function(req, res){
+		if (libPath.normalize(decodeURI(req.url)) !== decodeURI(req.url)) {
+			res.statusCode = 403;
+			res.end();
+			return;
+		}
 	fuhahaUtil.sequence().add(function(next, value){
 		// POSTのjsonデータが存在すれば取得
 		if(req.method == "POST" && req.headers["content-type"] == "application/json"){
